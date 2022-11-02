@@ -19,26 +19,35 @@ int main()
     bn::sound_items::themesong.play(1);
 
     bn::sprite_ptr mytrog = bn::sprite_items::trog.create_sprite(0, 0);
-    bn::sprite_animate_action<4> action = bn::create_sprite_animate_action_forever(
+    bn::sprite_animate_action<4> walkcycle = bn::create_sprite_animate_action_forever(
                     mytrog, 5, bn::sprite_items::trog.tiles_item(), 0, 1, 2, 3);
     // bn::regular_bg_ptr regular_bg = bn::regular_bg_items::titlebg.create_bg(0, 0);
 
     while(true)
     {
+
+        
         if(bn::keypad::left_held()){
             mytrog.set_horizontal_flip(true);
             mytrog.set_x(mytrog.x() - 1);
+            walkcycle.set_wait_updates(5);
         }
         else if(bn::keypad::right_held()){
             mytrog.set_horizontal_flip(false);
             mytrog.set_x(mytrog.x() + 1);
+            walkcycle.set_wait_updates(5);
         }
 
         if(bn::keypad::up_held()){
             mytrog.set_y(mytrog.y() - 1);
+            walkcycle.set_wait_updates(5);
         }
         else if(bn::keypad::down_held()){
             mytrog.set_y(mytrog.y() + 1);
+            walkcycle.set_wait_updates(5);
+        }
+        if(!bn::keypad::down_held() && !bn::keypad::up_held() && !bn::keypad::right_held() && !bn::keypad::right_held()){
+            walkcycle.set_wait_updates(50000);
         }
 
         if(!kicked && bn::keypad::select_pressed()){
@@ -51,7 +60,7 @@ int main()
             bn::sound_items::trogador.play(1);
             kicked=false;
         }
-        action.update();
+        walkcycle.update();
         bn::core::update();
     }
 }
