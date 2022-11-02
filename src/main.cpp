@@ -3,10 +3,8 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_timer.h>
-#include <bn_sprite_actions.h>
-#include <bn_sprite_animate_actions.h>
 #include "bn_regular_bg_items_titlebg.h"
-#include "bn_sprite_items_trog.h"
+#include "Player.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -17,38 +15,15 @@ int main()
     bn::timer kicktimer;
     bool kicked=false;
     bn::sound_items::themesong.play(1);
+    Player tragdar = Player();
 
-    bn::sprite_ptr mytrog = bn::sprite_items::trog.create_sprite(0, 0);
-    bn::sprite_animate_action<4> walkcycle = bn::create_sprite_animate_action_forever(
-                    mytrog, 5, bn::sprite_items::trog.tiles_item(), 0, 1, 2, 3);
     // bn::regular_bg_ptr regular_bg = bn::regular_bg_items::titlebg.create_bg(0, 0);
 
     while(true)
     {
 
         
-        if(bn::keypad::left_held()){
-            mytrog.set_horizontal_flip(true);
-            mytrog.set_x(mytrog.x() - 1);
-            walkcycle.set_wait_updates(5);
-        }
-        else if(bn::keypad::right_held()){
-            mytrog.set_horizontal_flip(false);
-            mytrog.set_x(mytrog.x() + 1);
-            walkcycle.set_wait_updates(5);
-        }
-
-        if(bn::keypad::up_held()){
-            mytrog.set_y(mytrog.y() - 1);
-            walkcycle.set_wait_updates(5);
-        }
-        else if(bn::keypad::down_held()){
-            mytrog.set_y(mytrog.y() + 1);
-            walkcycle.set_wait_updates(5);
-        }
-        if(!bn::keypad::down_held() && !bn::keypad::up_held() && !bn::keypad::right_held() && !bn::keypad::right_held()){
-            walkcycle.set_wait_updates(50000);
-        }
+        
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
@@ -60,7 +35,7 @@ int main()
             bn::sound_items::trogador.play(1);
             kicked=false;
         }
-        walkcycle.update();
+        tragdar.update();
         bn::core::update();
     }
 }
