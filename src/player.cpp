@@ -1,11 +1,26 @@
 #include <bn_keypad.h>
-#include "Player.h"
+#include "player.h"
+namespace trog {
 
-Player::Player(){
-
+player::player(){
+    trogmeter = 0;
+    burninate_time = 0;
 }
 
-void Player::update(){
+bool player::burninating(){
+    return burninate_time != 0;
+}
+
+void player::update(){
+
+    //burnination logic
+    if(trogmeter == trogmeter_max) {
+        burninate_time = burninate_length;
+    }
+    if(burninate_time > 0) { 
+        burninate_time--;
+    }
+
     if(bn::keypad::left_held()){
             sprite.set_horizontal_flip(true);
             sprite.set_x(sprite.x() - 1);
@@ -31,4 +46,6 @@ void Player::update(){
             walkcycle.set_wait_updates(50000);
         }
         walkcycle.update();
+}
+
 }
