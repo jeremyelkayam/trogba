@@ -2,13 +2,15 @@
 #include <bn_sound_items.h>
 #include <bn_log.h>
 
-
+#include "bn_regular_bg_items_day.h"
 #include "play_scene.h"
 #include "scene_type.h"
 
 namespace trog {
 
-play_scene::play_scene(session_info& a_sesh) : sesh(a_sesh) {
+play_scene::play_scene(session_info& a_sesh) : 
+        sesh(a_sesh),
+        countryside(bn::regular_bg_items::day.create_bg(0, 58)){
 
 }
 

@@ -7,7 +7,7 @@ namespace trog{
 
     class instructions_scene : public scene{ 
     private:
-        bn::regular_bg_ptr title = bn::regular_bg_items::titlegraphic.create_bg(10, 58);
+        bn::regular_bg_ptr title;
     public:
         instructions_scene();
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

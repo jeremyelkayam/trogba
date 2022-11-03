@@ -10,7 +10,8 @@
 
 namespace trog {
 
-instructions_scene::instructions_scene(){
+instructions_scene::instructions_scene() : 
+        title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)){
 
     bn::sound_items::trogador.play(1);
     bn::sprite_text_generator text_generator(common::variable_8x8_sprite_font);

@@ -2,8 +2,6 @@
 #include <bn_regular_bg_ptr.h>
 #include "scene.h"
 #include "player.h"
-#include "bn_regular_bg_items_titlebg.h"
-#include "bn_regular_bg_items_titlegraphic.h"
 
 namespace trog{
 
@@ -16,6 +14,7 @@ namespace trog{
     private:
         session_info& sesh;
         player trogdor;
+        bn::regular_bg_ptr countryside;
     public:
         play_scene(session_info& a_sesh);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

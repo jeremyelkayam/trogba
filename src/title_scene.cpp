@@ -1,12 +1,17 @@
-#include "title_scene.h"
-#include "scene_type.h"
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_log.h>
 
+#include "bn_regular_bg_items_titlebg.h"
+#include "bn_regular_bg_items_titlegraphic.h"
+#include "title_scene.h"
+#include "scene_type.h"
+
 namespace trog {
 
-title_scene::title_scene(){
+title_scene::title_scene() : 
+        titlebg(bn::regular_bg_items::titlebg.create_bg(-3, 48)), 
+        title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)){
 
     bn::sound_items::themesong.play(1);
     frame_counter=0;
