@@ -11,6 +11,7 @@
 #include <bn_sound_items.h>
 #include <bn_sound.h>
 #include <bn_timer.h>
+#include <bn_bg_palettes.h>
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -29,6 +30,7 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
     trog::session_info sesh = {5, 0};
+    bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
     while(true)
     {
