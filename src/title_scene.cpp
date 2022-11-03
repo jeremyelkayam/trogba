@@ -1,5 +1,6 @@
 #include "title_scene.h"
 #include "scene_type.h"
+#include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_log.h>
 
@@ -16,7 +17,7 @@ bn::optional<scene_type> title_scene::update(){
     frame_counter++;
     // BN_LOG(frame_counter);
 
-    if(frame_counter > 440){
+    if(frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::INSTRUCTIONS;
     }
     

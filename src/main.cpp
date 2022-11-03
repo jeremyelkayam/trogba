@@ -9,10 +9,12 @@
 #include <bn_log.h>
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
+#include <bn_sound.h>
 #include <bn_timer.h>
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
+#include "play_scene.h"
 #include "scene_type.h"
 
 //debug settings for emulator
@@ -23,10 +25,10 @@ int main()
     bn::core::init();
     bn::timer kicktimer;
     bool kicked=false;
-    // trog::player tragdar = trog::player();
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
+    trog::session_info sesh = {5, 0};
 
     while(true)
     {
@@ -34,6 +36,7 @@ int main()
             next_scene = scene->update();
         }
         if(next_scene){
+            bn::sound::stop_all();
             switch(*next_scene){
                 case trog::scene_type::TITLE: { 
                     scene.reset(new trog::title_scene());
@@ -43,6 +46,10 @@ int main()
                     scene.reset(new trog::instructions_scene());
                     break;
                 }
+                case trog::scene_type::PLAY: { 
+                    scene.reset(new trog::play_scene(sesh));
+                    break;
+                }                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;

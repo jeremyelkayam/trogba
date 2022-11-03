@@ -2,6 +2,7 @@
 #include <bn_log.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_sprite_ptr.h>
+#include <bn_keypad.h>
 #include "common_variable_8x8_sprite_font.h"
 #include "instructions_scene.h"
 #include "scene_type.h"
@@ -22,6 +23,9 @@ instructions_scene::instructions_scene(){
 bn::optional<scene_type> instructions_scene::update(){
     bn::optional<scene_type> result;
     
+    if(bn::keypad::a_pressed()){
+        result = scene_type::PLAY;
+    }
     return result;
 }
 
