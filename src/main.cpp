@@ -12,6 +12,7 @@
 #include <bn_timer.h>
 #include "player.h"
 #include "title_scene.h"
+#include "instructions_scene.h"
 #include "scene_type.h"
 
 //debug settings for emulator
@@ -36,6 +37,10 @@ int main()
             switch(*next_scene){
                 case trog::scene_type::TITLE: { 
                     scene.reset(new trog::title_scene());
+                    break;
+                }
+                case trog::scene_type::INSTRUCTIONS: { 
+                    scene.reset(new trog::instructions_scene());
                     break;
                 }
                 default: { 

@@ -16,7 +16,7 @@ bn::optional<scene_type> title_scene::update(){
     frame_counter++;
     // BN_LOG(frame_counter);
 
-    if(frame_counter > 470){
+    if(frame_counter > 440){
         result = scene_type::INSTRUCTIONS;
     }
     
