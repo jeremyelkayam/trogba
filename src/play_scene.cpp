@@ -15,6 +15,7 @@ play_scene::play_scene(session_info& a_sesh) :
 
 bn::optional<scene_type> play_scene::update(){
     bn::optional<scene_type> result;
+
     trogdor.update();
 
     if(false){
