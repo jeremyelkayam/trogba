@@ -11,7 +11,6 @@ namespace trog {
 play_scene::play_scene(session_info& a_sesh) : 
         sesh(a_sesh),
         countryside(bn::regular_bg_items::day.create_bg(0, 58)){
-
 }
 
 bn::optional<scene_type> play_scene::update(){
