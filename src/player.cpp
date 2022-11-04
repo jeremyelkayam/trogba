@@ -6,7 +6,7 @@ namespace trog {
 
 player::player() : 
         pos(bn::fixed(0), bn::fixed(0)),
-        hitbox(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(30)),
+        hitbox(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(45)),
         speed(bn::fixed(1.5)),
         direction(bn::fixed(0)),
         sprite(bn::sprite_items::player.create_sprite(0, 0)),
@@ -69,10 +69,10 @@ void player::move(){
     hitbox.set_position(pos);
 }
 void player::check_collision(){
-    bn::fixed top_bound = -60;
-    bn::fixed bottom_bound = 75;
+    bn::fixed top_bound = -70;
+    bn::fixed bottom_bound = 80;
     bn::fixed left_bound = -120;
-    bn::fixed right_bound = 120.5;
+    bn::fixed right_bound = 120;
     //collision
     if(hitbox.top() < top_bound){
         pos.set_y(top_bound + hitbox.height() / 2);
