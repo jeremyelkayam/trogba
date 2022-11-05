@@ -35,9 +35,6 @@ void player::update(){
         burninate_time--;
     }
 
-    if(speed == 0){
-    }else{
-    }
 }
 
 void player::move(){

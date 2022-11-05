@@ -12,6 +12,8 @@
 #include <bn_sound.h>
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
+#include <bn_sprite_text_generator.h>
+#include "common_variable_8x8_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -30,7 +32,11 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
     trog::session_info sesh = {5, 0};
+    
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
+    bn::sprite_text_generator text_generator(common::variable_8x8_sprite_font);
+    text_generator.set_center_alignment();
+
 
     while(true)
     {
@@ -45,7 +51,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
-                    scene.reset(new trog::instructions_scene());
+                    scene.reset(new trog::instructions_scene(text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
