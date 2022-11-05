@@ -1,22 +1,23 @@
 #pragma once
 #include <bn_regular_bg_ptr.h>
+#include <bn_sprite_text_generator.h>
 #include "scene.h"
+#include "session_info.h"
 #include "player.h"
+#include "hud.h"
 
 namespace trog{
 
-    typedef struct session_info {
-        unsigned short mans;
-        unsigned int points;
-    };
+
 
     class play_scene : public scene{ 
     private:
-        session_info& sesh;
-        player trogdor;
-        bn::regular_bg_ptr countryside;
+        session_info& _sesh;
+        player _trogdor;
+        hud _hud;
+        bn::regular_bg_ptr _countryside;
     public:
-        play_scene(session_info& a_sesh);
+        play_scene(session_info& sesh, bn::sprite_text_generator& generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

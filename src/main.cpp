@@ -31,7 +31,7 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
-    trog::session_info sesh = {5, 0};
+    trog::session_info sesh = {5, 0, 1};
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(common::variable_8x8_sprite_font);
@@ -55,7 +55,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::PLAY: { 
-                    scene.reset(new trog::play_scene(sesh));
+                    scene.reset(new trog::play_scene(sesh, text_generator));
                     break;
                 }                
                 default: { 

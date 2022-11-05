@@ -8,15 +8,18 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& a_sesh) : 
-        sesh(a_sesh),
-        countryside(bn::regular_bg_items::day.create_bg(0, 58)){
+play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
+        _sesh(sesh),
+        _hud(sesh, generator),
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
 }
 
 bn::optional<scene_type> play_scene::update(){
+
     bn::optional<scene_type> result;
 
-    trogdor.update();
+    _trogdor.update();
+    _hud.update();
 
     if(false){
         result = scene_type::LEVELBEAT;
