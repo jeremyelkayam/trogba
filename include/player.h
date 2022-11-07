@@ -3,9 +3,10 @@
 #include <bn_sprite_animate_actions.h>
 #include <bn_fixed_rect.h>
 #include "bn_sprite_items_player.h"
+#include "entity.h"
 
 namespace trog {
-    class player { 
+    class player : public entity { 
         private:
             bn::fixed_point pos;
             bn::fixed_rect hitbox;
@@ -23,7 +24,7 @@ namespace trog {
             void check_collision();
         public:
             player();
-            void update();
+            virtual void update() final;
             bool burninating();
             void set_direction(bn::fixed new_direction) {direction = new_direction;};
     };
