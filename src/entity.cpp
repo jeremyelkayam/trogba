@@ -10,5 +10,4 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _sprite(sprite){
     BN_LOG("entity created at", xcor, ", ", ycor);
 }
-
 }

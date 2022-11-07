@@ -17,7 +17,8 @@ namespace trog{
         player _trogdor;
         hud _hud;
         bn::regular_bg_ptr _countryside;
-        cottage _cottages; // make this a vector later
+        //TODO check the max number of cottages in a trogdor level and set this to that 
+        bn::vector<cottage, 10> _cottages; 
     public:
         play_scene(session_info& sesh, bn::sprite_text_generator& generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

@@ -6,11 +6,12 @@ namespace trog {
 cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction) : 
         entity(xcor, ycor, bn::fixed(20), bn::fixed(45), bn::sprite_items::cottagedown.create_sprite(xcor, ycor)),
         _direction(direction) {
+    _sprite.set_z_order(MID_ZORDER);
 
 }
 
 void cottage::update(){
-    
+
 }
 
 }

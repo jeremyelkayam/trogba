@@ -10,8 +10,8 @@ namespace trog {
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
         _hud(sesh, generator),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _cottages(cottage(bn::fixed(-30), bn::fixed(-30), direction::DOWN)){
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
+    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-30), direction::DOWN);
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -19,6 +19,9 @@ bn::optional<scene_type> play_scene::update(){
     bn::optional<scene_type> result;
 
     _trogdor.update();
+    for(cottage &c : _cottages){
+        _trogdor.check_cottage_collision(c);
+    }
     _hud.update();
 
     if(false){

@@ -10,6 +10,8 @@ player::player() :
         speed(bn::fixed(1.5)),
         walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)){
+    _sprite.set_z_order(FRONT_ZORDER);
+
     trogmeter = 0;
     burninate_time = 0;
 }
@@ -20,7 +22,7 @@ bool player::burninating(){
 
 void player::update(){
     move();
-    check_collision();
+    check_boundary_collision();
 
 
     _sprite.set_position(_pos);
@@ -63,7 +65,8 @@ void player::move(){
 
     _hitbox.set_position(_pos);
 }
-void player::check_collision(){
+
+void player::check_boundary_collision(){
     bn::fixed top_bound = -70;
     bn::fixed bottom_bound = 81;
     bn::fixed left_bound = -120;
@@ -84,9 +87,13 @@ void player::check_collision(){
     
     _hitbox.set_position(_pos);
     
-    // BN_LOG("hitbox bottom", hitbox.bottom());
-    // BN_LOG("hitbox left", hitbox.left());
-    // BN_LOG("hitbox right", hitbox.right());
+}
+
+void player::check_cottage_collision(cottage &cottage){
+    bn::fixed_rect cottagebox = cottage.get_hitbox();
+    if(_hitbox.intersects(cottagebox)){
+        BN_LOG("collision lol make him stop");
+    }
 }
 
 
