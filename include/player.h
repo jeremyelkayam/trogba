@@ -1,19 +1,14 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include <bn_fixed_rect.h>
 #include "bn_sprite_items_player.h"
 #include "entity.h"
 
 namespace trog {
     class player : public entity { 
         private:
-            bn::fixed_point pos;
-            bn::fixed_rect hitbox;
             const bn::fixed speed;
-            bn::fixed direction;
  
-            bn::sprite_ptr sprite;
             bn::sprite_animate_action<4> walkcycle;
             
             unsigned short trogmeter;
@@ -26,6 +21,5 @@ namespace trog {
             player();
             virtual void update() final;
             bool burninating();
-            void set_direction(bn::fixed new_direction) {direction = new_direction;};
     };
 }
