@@ -5,7 +5,6 @@
 #include "bn_regular_bg_items_titlebg.h"
 #include "bn_regular_bg_items_titlegraphic.h"
 #include "title_scene.h"
-#include "scene_type.h"
 
 namespace trog {
 

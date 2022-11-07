@@ -18,7 +18,7 @@
 #include "title_scene.h"
 #include "instructions_scene.h"
 #include "play_scene.h"
-#include "scene_type.h"
+#include "enums.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true

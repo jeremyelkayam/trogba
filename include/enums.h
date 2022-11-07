@@ -1,5 +1,5 @@
 /*
- * scene_type.h
+ * enums.h
  * Patterned after fr_scene_type.h (2020-2022 Gustavo Valiente, gustavo.valiente@protonmail.com). Used under zlib License.
  */
 
@@ -16,5 +16,12 @@ namespace trog {
         LEVELBEAT,
         LOSE,
         MOVIE
+    };
+    enum class direction
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     };
 }
