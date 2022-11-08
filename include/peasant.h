@@ -28,9 +28,10 @@ namespace trog {
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction);
             virtual void update() final;
 
-            short stomp();
+            void stomp();
             void burninate();
-            bool dead();
+            bool dead(){return _time_dead > 0;}
+            bool remove_from_map();
 
     };
 }

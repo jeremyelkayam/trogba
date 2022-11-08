@@ -1,6 +1,7 @@
 #include <bn_keypad.h>
 #include <bn_math.h>
 #include <bn_log.h>
+#include <bn_sound_items.h>
 #include "player.h"
 #include "entity.h"
 namespace trog {
@@ -28,15 +29,11 @@ void player::update(){
 
     _sprite.set_position(_pos);
 
-    //burnination logic
-    if(trogmeter == trogmeter_max) {
-        burninate_time = burninate_length;
-        // breath.enable();
-    }
+
     if(burninate_time > 0) { 
         burninate_time--;
     }else{
-        // breath.disable();
+        breath.disable();
     }
     //update fire breath;
     short xoffset = TROG_FIREBREATH_XOFFSET;
@@ -111,8 +108,18 @@ void player::check_cottage_collision(cottage &cottage){
 
 void player::check_peasant_collision(peasant &peasant){
     bn::fixed_rect pbox = peasant.get_hitbox();
-    if(_hitbox.intersects(pbox)){
-        trogmeter+=peasant.stomp();
+    if(_hitbox.intersects(pbox) && !peasant.dead()){
+        BN_LOG("stomped.");
+        peasant.stomp();
+        ++trogmeter;
+        if(trogmeter == trogmeter_max){
+            //burnination logic
+            burninate_time = burninate_length;
+            breath.enable();
+
+            BN_LOG("aaron burrninate. got milk");
+            bn::sound_items::burninate.play(1);
+        }
     }
 }
 

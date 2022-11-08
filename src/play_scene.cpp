@@ -34,7 +34,7 @@ bn::optional<scene_type> play_scene::update(){
 
         peasant.update();
         _trogdor.check_peasant_collision(peasant);
-        if(peasant.dead()){
+        if(peasant.remove_from_map()){
             BN_LOG("dead peasant");
             if(_peasants.size() <= 1){
                 _peasants.pop_front();

@@ -85,7 +85,7 @@ void peasant::update(){
 
 }
 
-short peasant::stomp(){
+void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
@@ -94,12 +94,10 @@ short peasant::stomp(){
         _walkcycle.update();
         _time_dead=1;
         bn::sound_items::stomp.play(1);
-        return 1;
     }    
-    return 0;
 }
 
-bool peasant::dead(){
+bool peasant::remove_from_map(){
     //dead peasants should be removed and despawned 
     //peasants despawn 1s after being stomped, or after reentering their house
     return (_time_dead >= _despawn_delay) || (_currentdist < 0);

@@ -10,6 +10,7 @@ firebreath::firebreath() :
         _burningflames(bn::create_sprite_animate_action_forever(
                     _sprite, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)){
     _sprite.set_z_order(FRONT_ZORDER);
+    disable();
 
 }
 
