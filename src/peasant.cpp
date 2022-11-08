@@ -85,7 +85,7 @@ void peasant::update(){
 
 }
 
-void peasant::stomp(){
+short peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
@@ -94,7 +94,9 @@ void peasant::stomp(){
         _walkcycle.update();
         _time_dead=1;
         bn::sound_items::stomp.play(1);
+        return 1;
     }    
+    return 0;
 }
 
 bool peasant::dead(){

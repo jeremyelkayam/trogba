@@ -99,9 +99,7 @@ void player::check_cottage_collision(cottage &cottage){
 void player::check_peasant_collision(peasant &peasant){
     bn::fixed_rect pbox = peasant.get_hitbox();
     if(_hitbox.intersects(pbox)){
-        BN_LOG("sup");
-        peasant.stomp();
-        trogmeter++;
+        trogmeter+=peasant.stomp();
     }
 }
 

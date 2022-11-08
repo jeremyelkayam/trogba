@@ -55,6 +55,7 @@ bn::optional<scene_type> play_scene::update(){
     // }
 
     _hud.update();
+    _hud.update_trogmeter(_trogdor.get_trogmeter());
 
     if(level_complete()){
         result = scene_type::LEVELBEAT;
