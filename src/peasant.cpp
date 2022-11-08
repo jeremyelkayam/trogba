@@ -59,7 +59,16 @@ void peasant::burninate(){
 }
 
 void peasant::update(){
+    entity::update();
     
+
+    if(_time_waiting == _waittime){
+        _speed=-_speed;
+        _currentdist+=_speed;
+
+        //reset time waiting, probably should refactor this out later but w/e
+        _time_waiting = 0;
+    }
 
     if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
         _pos+=_direction.multiplication(_speed);
@@ -70,11 +79,10 @@ void peasant::update(){
         _time_dead++;
         
     }else {
+        BN_LOG("waiting", _time_waiting, " of ", _waittime);
         _time_waiting++;
     }
 
-
-    _sprite.set_position(_pos);
 }
 
 void peasant::stomp(){
@@ -87,6 +95,12 @@ void peasant::stomp(){
         _time_dead=1;
         bn::sound_items::stomp.play(1);
     }    
+}
+
+bool peasant::dead(){
+    //dead peasants should be removed and despawned 
+    //peasants despawn 1s after being stomped, or after reentering their house
+    return (_time_dead >= _despawn_delay) || (_currentdist < 0);
 }
 
 }

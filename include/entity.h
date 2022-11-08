@@ -11,7 +11,7 @@ namespace trog{
     class entity{ 
     public:
         virtual ~entity() = default;
-        virtual void update() = 0;
+        virtual void update();
         bn::fixed_rect get_hitbox() { return _hitbox; }
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}

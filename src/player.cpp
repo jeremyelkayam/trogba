@@ -21,6 +21,7 @@ bool player::burninating(){
 }
 
 void player::update(){
+    entity::update();
     move();
     check_boundary_collision();
 
@@ -63,7 +64,6 @@ void player::move(){
         walkcycle.update();
     }
 
-    _hitbox.set_position(_pos);
 }
 
 void player::check_boundary_collision(){

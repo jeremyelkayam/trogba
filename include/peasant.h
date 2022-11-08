@@ -30,7 +30,7 @@ namespace trog {
 
             void stomp();
             void burninate();
-            bool dead() {return _time_dead >= _despawn_delay;}
+            bool dead();
 
     };
 }
