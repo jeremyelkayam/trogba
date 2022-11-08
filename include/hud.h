@@ -19,6 +19,7 @@ namespace trog {
             hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
+            void hide_trogmeter();
             void update_burninatemeter(unsigned int burninate_time);
     };
 }

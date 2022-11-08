@@ -35,6 +35,12 @@ void hud::update_trogmeter(unsigned short trogmeter_value){
         }
     }
 }
+void hud::hide_trogmeter(){
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
+        peasanthead_sprite.set_visible(false);
+    }    
+}
 
 void hud::update_burninatemeter(unsigned int burninate_time){
 

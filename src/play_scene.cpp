@@ -56,6 +56,10 @@ bn::optional<scene_type> play_scene::update(){
 
     _hud.update();
     _hud.update_trogmeter(_trogdor.get_trogmeter());
+    if(_trogdor.burninating()){
+        _hud.hide_trogmeter();
+        _hud.update_burninatemeter(_trogdor.get_burninating_time());
+    }
 
     if(level_complete()){
         result = scene_type::LEVELBEAT;

@@ -31,10 +31,21 @@ void player::update(){
     //burnination logic
     if(trogmeter == trogmeter_max) {
         burninate_time = burninate_length;
+        // breath.enable();
     }
     if(burninate_time > 0) { 
         burninate_time--;
+    }else{
+        // breath.disable();
     }
+    //update fire breath;
+    short xoffset = TROG_FIREBREATH_XOFFSET;
+    if(_sprite.horizontal_flip()){
+        xoffset=-xoffset;
+    }
+    breath.set_x(_pos.x() + xoffset);
+    breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
+    breath.update();
 
 }
 
@@ -52,11 +63,13 @@ void player::move(){
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
+        breath.set_horizontal_flip(true);
         _pos.set_x(_pos.x() - speed);
         moving=true;
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
+        breath.set_horizontal_flip(false);
         _pos.set_x(_pos.x() + speed);
         moving=true;
     }
