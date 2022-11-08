@@ -85,7 +85,7 @@ void peasant::stomp(){
                         _sprite, 0, bn::sprite_items::peasant.tiles_item(), 2, 3);
         _walkcycle.update();
         _time_dead=1;
-        bn::sound_items::kick.play(1);
+        bn::sound_items::stomp.play(1);
     }    
 }
 
