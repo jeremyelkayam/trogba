@@ -2,6 +2,7 @@
 #include <bn_sound_items.h>
 #include <bn_log.h>
 
+#include "constants.h"
 #include "bn_regular_bg_items_day.h"
 #include "play_scene.h"
 
@@ -9,11 +10,10 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
-        _hud(sesh, generator),
+        _hud(sesh, generator, TROG_TROGMETER_MAX),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
     _cottages.emplace_front(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _peasants.emplace_front(bn::fixed(-30), bn::fixed(-30), bn::fixed(0.5), bn::fixed(90), direction::DOWN);
-
 
 }
 
@@ -47,6 +47,12 @@ bn::optional<scene_type> play_scene::update(){
         prev = cur;
         ++cur;
     }
+
+    // _peasant_spawn_counter++;
+    // if(_peasant_spawn_counter==_peasant_spawn_interval){
+    //     _peasant_spawn_counter=0;
+    //     _peasants.emplace_front(bn::fixed(-30), bn::fixed(-30), bn::fixed(0.5), bn::fixed(90), direction::DOWN);
+    // }
 
     _hud.update();
 

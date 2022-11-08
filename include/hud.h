@@ -13,11 +13,12 @@ namespace trog {
             bn::sprite_text_generator& _text_generator;            
             bn::vector<bn::sprite_ptr, 32> _score_text_sprites;     
             bn::vector<bn::sprite_ptr, 32> _mans_lv_text_sprites;
-            bn::optional<player> _trogdor;
-            int frames;
+            bn::vector<bn::sprite_ptr, 10> _trogmeter;
 
         public:
-            hud(session_info &sesh, bn::sprite_text_generator& generator);
+            hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();
+            void update_trogmeter(unsigned short trogmeter);
+            void update_burninatemeter(unsigned int burninate_time);
     };
 }

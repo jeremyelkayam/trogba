@@ -1,24 +1,36 @@
+#include <bn_log.h>
+#include <bn_color_effect.h>
+
 #include "bn_regular_bg_items_titlegraphic.h"
+#include "bn_sprite_items_peasanthead.h"
 #include "hud.h"
+
 
 namespace trog {
 
-hud::hud(session_info &sesh, bn::sprite_text_generator& generator) : 
+hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator){
-    frames = 0;
+    int trogmeter_start = -55;
+    for(int i = 0; i < trogmeter_max; i++){
+        _trogmeter.emplace_back(bn::sprite_items::peasanthead.create_sprite(trogmeter_start + i*9, -75));
+    }
+    BN_LOG("hi");
+}
+
+
+void hud::update_trogmeter(unsigned short trogmeter){
+
+}
+
+void hud::update_burninatemeter(unsigned int burninate_time){
+
 }
 
 void hud::update() {
     _score_text_sprites.clear();
     _mans_lv_text_sprites.clear();
 
-
-    if(frames == 60) { 
-        _sesh.level++;
-        frames = 0;
-    }
-    frames++;
 
     bn::string<64> score_str, mans_lv_str;
     bn::ostringstream score_string_stream(score_str);

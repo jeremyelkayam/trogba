@@ -15,6 +15,7 @@ namespace trog{
 
     class play_scene : public scene{ 
     private:
+            
         session_info& _sesh;
         player _trogdor;
         hud _hud;
