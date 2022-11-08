@@ -92,11 +92,18 @@ void player::check_boundary_collision(){
 void player::check_cottage_collision(cottage &cottage){
     bn::fixed_rect cottagebox = cottage.get_hitbox();
     if(_hitbox.intersects(cottagebox)){
-        BN_LOG("collision lol make him stop");
+        // BN_LOG("collision lol make him stop");
     }
 }
 
-
+void player::check_peasant_collision(peasant &peasant){
+    bn::fixed_rect pbox = peasant.get_hitbox();
+    if(_hitbox.intersects(pbox)){
+        BN_LOG("sup");
+        peasant.stomp();
+        trogmeter++;
+    }
+}
 
 
 }

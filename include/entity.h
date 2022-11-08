@@ -12,7 +12,9 @@ namespace trog{
     public:
         virtual ~entity() = default;
         virtual void update() = 0;
-        bn::fixed_rect get_hitbox() { return _hitbox; }; 
+        bn::fixed_rect get_hitbox() { return _hitbox; }
+        bn::fixed get_x() { return _pos.x();}
+        bn::fixed get_y() { return _pos.y();}
     protected:
         entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         bn::fixed_point _pos;

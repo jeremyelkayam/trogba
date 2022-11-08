@@ -4,6 +4,7 @@
 #include "bn_sprite_items_player.h"
 #include "entity.h"
 #include "cottage.h"
+#include "peasant.h"
 
 namespace trog {
     class player : public entity { 
@@ -23,6 +24,7 @@ namespace trog {
             virtual void update() final;
             bool burninating();
             void check_cottage_collision(cottage &cottage);
+            void check_peasant_collision(peasant &peasant);
 
     };
 }
