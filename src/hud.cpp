@@ -40,9 +40,15 @@ void hud::hide_trogmeter(){
         peasanthead_sprite.set_visible(false);
     }    
 }
+void hud::show_trogmeter(){
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
+        peasanthead_sprite.set_visible(true);
+    }    
+}
 
 void hud::update_burninatemeter(unsigned int burninate_time){
-
+    BN_LOG("burninate meter ", burninate_time, "/", TROG_BURNINATE_TIME);
 }
 
 void hud::update() {

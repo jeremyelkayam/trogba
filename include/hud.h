@@ -20,6 +20,7 @@ namespace trog {
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
             void hide_trogmeter();
+            void show_trogmeter();
             void update_burninatemeter(unsigned int burninate_time);
     };
 }

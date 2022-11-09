@@ -104,6 +104,9 @@ void player::check_cottage_collision(cottage &cottage){
     if(_hitbox.intersects(cottagebox)){
         // BN_LOG("collision lol make him stop");
     }
+    if(burninating()){
+        breath.check_cottage_collision(cottage);
+    }
 }
 
 void player::check_peasant_collision(peasant &peasant){

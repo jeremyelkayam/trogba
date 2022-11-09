@@ -6,7 +6,7 @@
 namespace trog {
 
 firebreath::firebreath() : 
-        entity(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(45), bn::sprite_items::firebreath.create_sprite(0, 0)),
+        entity(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(8), bn::sprite_items::firebreath.create_sprite(0, 0)),
         _burningflames(bn::create_sprite_animate_action_forever(
                     _sprite, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)){
     _sprite.set_z_order(FRONT_ZORDER);
@@ -31,4 +31,11 @@ bool firebreath::enabled(){
     return _sprite.visible();
 }
 
+void firebreath::check_cottage_collision(cottage &cottage){
+    BN_ASSERT(enabled());
+    bn::fixed_rect cottagebox = cottage.get_hitbox();
+    if(_hitbox.intersects(cottagebox)){
+        cottage.burninate();
+    }
+}
 }
