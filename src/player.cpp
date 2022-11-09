@@ -113,7 +113,6 @@ void player::check_peasant_collision(peasant &peasant){
         peasant.stomp();
         ++trogmeter;
         if(trogmeter == trogmeter_max){
-            //burnination logic
             burninate_time = burninate_length;
             breath.enable();
 

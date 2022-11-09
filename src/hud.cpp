@@ -2,8 +2,9 @@
 #include <bn_color_effect.h>
 #include <bn_sprite_palette_ptr.h>
 
-#include "bn_regular_bg_items_titlegraphic.h"
 #include "bn_sprite_items_peasanthead.h"
+#include "bn_sprite_items_peasanthead_grayscale.h"
+#include "bn_regular_bg_items_burninometer.h"
 #include "hud.h"
 
 
@@ -14,8 +15,7 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
         _text_generator(generator){
     int trogmeter_start = -55;
     for(int i = 0; i < trogmeter_max; i++){
-        //todo: change to grayscale peasant head
-        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead.create_sprite(trogmeter_start + i*9, -75);
+        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(trogmeter_start + i*9, -75);
         bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
         _trogmeter.emplace_back(peasanthead_sprite);
     }
@@ -30,8 +30,7 @@ void hud::update_trogmeter(unsigned short trogmeter_value){
         if(i < trogmeter_value) {
             peasanthead_sprite.set_item(bn::sprite_items::peasanthead);
         }else{
-            //change to grayscale peasant head.
-            peasanthead_sprite.set_item(bn::sprite_items::peasanthead);
+            peasanthead_sprite.set_item(bn::sprite_items::peasanthead_grayscale);
         }
     }
 }
