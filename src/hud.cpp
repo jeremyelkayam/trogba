@@ -1,24 +1,55 @@
+#include <bn_log.h>
+#include <bn_color_effect.h>
+#include <bn_sprite_palette_ptr.h>
+
 #include "bn_regular_bg_items_titlegraphic.h"
+#include "bn_sprite_items_peasanthead.h"
 #include "hud.h"
+
 
 namespace trog {
 
-hud::hud(session_info &sesh, bn::sprite_text_generator& generator) : 
+hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator){
-    frames = 0;
+    int trogmeter_start = -55;
+    for(int i = 0; i < trogmeter_max; i++){
+        //todo: change to grayscale peasant head
+        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead.create_sprite(trogmeter_start + i*9, -75);
+        bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
+        _trogmeter.emplace_back(peasanthead_sprite);
+    }
+    BN_LOG("hi");
+}
+
+
+void hud::update_trogmeter(unsigned short trogmeter_value){
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        // BN_LOG("trogmeter_value ", trogmeter_value);
+        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
+        if(i < trogmeter_value) {
+            peasanthead_sprite.set_item(bn::sprite_items::peasanthead);
+        }else{
+            //change to grayscale peasant head.
+            peasanthead_sprite.set_item(bn::sprite_items::peasanthead);
+        }
+    }
+}
+void hud::hide_trogmeter(){
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
+        peasanthead_sprite.set_visible(false);
+    }    
+}
+
+void hud::update_burninatemeter(unsigned int burninate_time){
+
 }
 
 void hud::update() {
     _score_text_sprites.clear();
     _mans_lv_text_sprites.clear();
 
-
-    if(frames == 60) { 
-        _sesh.level++;
-        frames = 0;
-    }
-    frames++;
 
     bn::string<64> score_str, mans_lv_str;
     bn::ostringstream score_string_stream(score_str);

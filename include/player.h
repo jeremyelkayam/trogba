@@ -1,30 +1,37 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include <bn_fixed_rect.h>
 #include "bn_sprite_items_player.h"
+#include "entity.h"
+#include "cottage.h"
+#include "peasant.h"
+#include "constants.h"
+#include "firebreath.h"
 
 namespace trog {
-    class player { 
+    class player : public entity { 
         private:
-            bn::fixed_point pos;
-            bn::fixed_rect hitbox;
             const bn::fixed speed;
-            bn::fixed direction;
  
-            bn::sprite_ptr sprite;
             bn::sprite_animate_action<4> walkcycle;
             
             unsigned short trogmeter;
             unsigned int burninate_time;
-            const int trogmeter_max = 10;
-            const int burninate_length = 600; //temporarily this can be 10 seconds 
+            const unsigned short trogmeter_max = TROG_TROGMETER_MAX;
+            const int burninate_length = TROG_BURNINATE_TIME; //temporarily this can be 10 seconds 
+
+            firebreath breath;
+
             void move();
-            void check_collision();
+            void check_boundary_collision();
         public:
             player();
-            void update();
+            virtual void update() final;
             bool burninating();
-            void set_direction(bn::fixed new_direction) {direction = new_direction;};
+            void check_cottage_collision(cottage &cottage);
+            void check_peasant_collision(peasant &peasant);
+            unsigned short get_trogmeter(){return trogmeter;}
+            unsigned short get_burninating_time(){return burninate_time;}
+
     };
 }

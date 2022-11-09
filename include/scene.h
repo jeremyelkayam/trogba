@@ -6,9 +6,9 @@
 #pragma once
 
 #include "bn_optional.h"
+#include "enums.h"
 
 namespace trog {
-    enum class scene_type;
 
     class scene {
 

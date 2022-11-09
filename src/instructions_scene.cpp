@@ -5,7 +5,6 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 #include "instructions_scene.h"
-#include "scene_type.h"
 
 
 namespace trog {
