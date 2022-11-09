@@ -82,22 +82,3 @@ int main()
     }
 }
 
-// void debug_adjust(bn::regular_bg_ptr bg){
-//     //debug adjustment -- move a background around with the dpad and log the coords
-//     if(bn::keypad::left_held()){
-//         bg.set_x(bg.x() - 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     else if(bn::keypad::right_held()){
-//         bg.set_x(bg.x() + 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     if(bn::keypad::up_held()){
-//         bg.set_y(bg.y() - 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-//     else if(bn::keypad::down_held()){
-//         bg.set_y(bg.y() + 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-// }
