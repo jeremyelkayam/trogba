@@ -31,6 +31,8 @@ bool firebreath::enabled(){
     return _sprite.visible();
 }
 
+
+// TODO add a burnable interface shared by these classes 
 void firebreath::check_cottage_collision(cottage &cottage){
     BN_ASSERT(enabled());
     bn::fixed_rect cottagebox = cottage.get_hitbox();
@@ -39,4 +41,14 @@ void firebreath::check_cottage_collision(cottage &cottage){
         cottage.burninate();
     }
 }
+
+void firebreath::check_peasant_collision(peasant &peasant){
+    BN_ASSERT(enabled());
+    bn::fixed_rect pbox = peasant.get_hitbox();
+    if(_hitbox.intersects(pbox)){
+        BN_LOG("burninate the peasant?");        
+        peasant.burninate();
+    }
+}
+
 }

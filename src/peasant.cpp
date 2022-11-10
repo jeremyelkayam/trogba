@@ -41,21 +41,23 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
 }
 
 void peasant::burninate(){
-    // set on fire
-    _onfire = true;
-    
-    // run fast
-    _speed = _speed.multiplication(2);
+    if(!_onfire){
+        // set on fire
+        _onfire = true;
+        
+        // run fast
+        _speed = _speed.multiplication(2);
 
-    //turn the other way
-    _direction = _direction.multiplication(-1);
+        //turn the other way
+        _direction = _direction.multiplication(-1);
 
-    //make them stop waiting if they are
-    _time_waiting = _waittime; 
+        //make them stop waiting if they are
+        _time_waiting = _waittime; 
 
-    // change animation to flaming
-    _walkcycle = bn::create_sprite_animate_action_forever(
-                    _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+        // change animation to flaming
+        _walkcycle = bn::create_sprite_animate_action_forever(
+                        _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+    }
 }
 
 void peasant::update(){
