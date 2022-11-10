@@ -12,13 +12,15 @@ namespace trog {
 
 hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
-        _text_generator(generator){
+        _text_generator(generator),
+        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(-10, -75)){
     int trogmeter_start = -55;
     for(int i = 0; i < trogmeter_max; i++){
         bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(trogmeter_start + i*9, -75);
         bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
         _trogmeter.emplace_back(peasanthead_sprite);
     }
+    _burninatemeter.set_visible(false);
     BN_LOG("hi");
 }
 
@@ -48,7 +50,14 @@ void hud::show_trogmeter(){
 }
 
 void hud::update_burninatemeter(unsigned int burninate_time){
-    BN_LOG("burninate meter ", burninate_time, "/", TROG_BURNINATE_TIME);
+    if(burninate_time == 0) { 
+        _burninatemeter.set_visible(false);
+        show_trogmeter();
+    }else{
+        _burninatemeter.set_visible(true);
+        hide_trogmeter();
+    }
+
 }
 
 void hud::update() {

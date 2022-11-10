@@ -5,6 +5,9 @@
 #include "bn_sprite_items_cottageup.h"
 #include "bn_sprite_items_cottageright.h"
 #include "bn_sprite_items_cottagefire.h"
+#include "bn_sprite_items_cottagedown_burninated.h"
+#include "bn_sprite_items_cottageup_burninated.h"
+#include "bn_sprite_items_cottageright_burninated.h"
 
 namespace trog {
 
@@ -41,6 +44,16 @@ void cottage::update(){
     }
     if(_time_burning > TROG_COTTAGEFIRE_TIME){
         _flames.set_visible(false);
+    }
+    if(burninated()){
+        //default can be the sideways one because it corresponds to 2 cases
+        bn::sprite_item newsprite = bn::sprite_items::cottageright_burninated;
+        if(_direction == direction::UP){
+            newsprite = bn::sprite_items::cottageup_burninated;
+        }else if(_direction == direction::DOWN){
+            newsprite = bn::sprite_items::cottagedown_burninated;
+        }
+        _sprite.set_item(newsprite);
     }
 }
 
