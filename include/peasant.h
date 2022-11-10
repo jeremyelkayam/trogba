@@ -32,7 +32,7 @@ namespace trog {
             void burninate();
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();
-            bool onfire(){return _onfire};
+            bool onfire(){return _onfire;}
 
     };
 }

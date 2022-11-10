@@ -13,8 +13,9 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
     _cottages.emplace_front(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
+    _cottages.emplace_front(bn::fixed(60), bn::fixed(-20), direction::RIGHT);
+    _cottages.emplace_front(bn::fixed(0), bn::fixed(60), direction::UP);
     _peasants.emplace_front(bn::fixed(-30), bn::fixed(-30), bn::fixed(0.5), bn::fixed(90), direction::DOWN);
-
 }
 
 bn::optional<scene_type> play_scene::update(){

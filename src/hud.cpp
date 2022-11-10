@@ -14,9 +14,10 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
         _sesh(sesh),
         _text_generator(generator),
         _burninatemeter(bn::regular_bg_items::burninometer.create_bg(-10, -75)){
-    int trogmeter_start = -55;
+    int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
     for(int i = 0; i < trogmeter_max; i++){
-        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(trogmeter_start + i*9, -75);
+        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(
+            trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR);
         bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
         _trogmeter.emplace_back(peasanthead_sprite);
     }
@@ -67,17 +68,17 @@ void hud::update() {
 
     bn::string<64> score_str, mans_lv_str;
     bn::ostringstream score_string_stream(score_str);
-    score_string_stream << " SCORE: ";
+    score_string_stream << "PTS:";
     score_string_stream << _sesh.score;
 
     _text_generator.set_left_alignment();
-    _text_generator.generate(-125, -75, score_str, _score_text_sprites);   
+    _text_generator.generate(-120, -75, score_str, _score_text_sprites);   
 
 
     bn::ostringstream mans_lv_string_stream(mans_lv_str);
-    mans_lv_string_stream << "MANS: ";
+    mans_lv_string_stream << "MANS:";
     mans_lv_string_stream << _sesh.mans;
-    mans_lv_string_stream << " LV: ";
+    mans_lv_string_stream << "LV:";
     mans_lv_string_stream << _sesh.level;
 
     _text_generator.set_right_alignment();
