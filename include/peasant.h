@@ -22,6 +22,7 @@ namespace trog {
 
             bn::fixed_point _direction;
             bool _onfire;
+            bool _returning;
  
             bn::sprite_animate_action<2> _walkcycle;
             

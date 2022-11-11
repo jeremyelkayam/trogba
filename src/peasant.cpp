@@ -20,6 +20,7 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
 
 
     _onfire = false;
+    _returning = false;
     switch(direction) {
         case direction::UP:
             _direction = bn::fixed_point(0,-1);
@@ -41,17 +42,22 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
 }
 
 void peasant::burninate(){
-    if(!_onfire){
+    if(!dead() && !_onfire){
         // set on fire
         _onfire = true;
         
         // run fast the other way 
-        _speed = -_speed*2;
+        if(_returning){
+            _speed = _speed*2;
+        }else{
+            _speed = _speed*-2;
+        }
         _currentdist+=_speed;
 
         // change animation to flaming
         _walkcycle = bn::create_sprite_animate_action_forever(
                         _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+        bn::sound_items::peasantscream.play(1);
     }
 }
 
@@ -62,6 +68,7 @@ void peasant::update(){
     if(_time_waiting == _waittime){
         _speed=-_speed;
         _currentdist+=_speed;
+        _returning = true;
 
         //reset time waiting, probably should refactor this out later but w/e
         _time_waiting = 0;
