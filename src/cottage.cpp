@@ -61,7 +61,7 @@ bool cottage::burninate(){
     if(_time_burning==0){
         _flames.set_visible(true);
         _time_burning=1;
-        bn::sound_items::burningcottage.play(1);
+        bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
         return true;
     }
     return false;

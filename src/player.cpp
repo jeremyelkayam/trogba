@@ -123,7 +123,7 @@ void player::check_peasant_collision(peasant &peasant){
             _breath.enable();
 
             BN_LOG("aaron burrninate. got milk");
-            bn::sound_items::burninate.play(1);
+            bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
         }
     }
 

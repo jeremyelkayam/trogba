@@ -7,6 +7,7 @@
 
 #include "bn_optional.h"
 #include "enums.h"
+#include "constants.h"
 
 namespace trog {
 

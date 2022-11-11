@@ -12,7 +12,7 @@ title_scene::title_scene() :
         titlebg(bn::regular_bg_items::titlebg.create_bg(-3, 48)), 
         title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)){
 
-    bn::sound_items::themesong.play(1);
+    bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
     frame_counter=0;
 }
 

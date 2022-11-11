@@ -14,7 +14,7 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
         text_generator(a_generator){
     flashing_text_counter = 0;
 
-    bn::sound_items::trogador.play(1);
+    bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
     text_generator.generate(0, -15, "use the dpad to move around y'all", instruction_text_sprites);   
 

@@ -58,7 +58,7 @@ void peasant::burninate(){
         // change animation to flaming
         _walkcycle = bn::create_sprite_animate_action_forever(
                         _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
-        bn::sound_items::peasantscream.play(1);
+        bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
     }
 }
 
@@ -100,7 +100,7 @@ void peasant::stomp(){
                         _sprite, 0, bn::sprite_items::peasant.tiles_item(), 2, 3);
         _walkcycle.update();
         _time_dead=1;
-        bn::sound_items::stomp.play(1);
+        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
         // return true;
     }    
     // return false;
