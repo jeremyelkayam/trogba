@@ -11,15 +11,16 @@ player::player(session_info &sesh) :
         _speed(bn::fixed(1.5)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+        _breath(sesh),
         _sesh(sesh){
     _sprite.set_z_order(FRONT_ZORDER);
 
     _trogmeter = 0;
-    burninate_time = 0;
+    _burninate_time = 0;
 }
 
 bool player::burninating(){
-    return burninate_time != 0;
+    return _burninate_time != 0;
 }
 
 void player::update(){
@@ -31,22 +32,22 @@ void player::update(){
     _sprite.set_position(_pos);
 
 
-    if(burninate_time > 0) { 
-        burninate_time--;
-    }else if(breath.enabled()){
+    if(_burninate_time > 0) { 
+        _burninate_time--;
+    }else if(_breath.enabled()){
         // if the breath is enabled AND our burninate timer has expired,
         // we need to end burnination
         _trogmeter = 0;
-        breath.disable();
+        _breath.disable();
     }
     //update fire breath;
     short xoffset = TROG_FIREBREATH_XOFFSET;
     if(_sprite.horizontal_flip()){
         xoffset=-xoffset;
     }
-    breath.set_x(_pos.x() + xoffset);
-    breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
-    breath.update();
+    _breath.set_x(_pos.x() + xoffset);
+    _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
+    _breath.update();
 
 }
 
@@ -64,13 +65,13 @@ void player::move(){
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
-        breath.set_horizontal_flip(true);
+        _breath.set_horizontal_flip(true);
         _pos.set_x(_pos.x() - _speed);
         moving=true;
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
-        breath.set_horizontal_flip(false);
+        _breath.set_horizontal_flip(false);
         _pos.set_x(_pos.x() + _speed);
         moving=true;
     }
@@ -105,7 +106,7 @@ void player::check_cottage_collision(cottage &cottage){
         // BN_LOG("collision lol make him stop");
     }
     if(burninating()){
-        breath.check_cottage_collision(cottage);
+        _breath.check_cottage_collision(cottage);
     }
 }
 
@@ -113,11 +114,13 @@ void player::check_peasant_collision(peasant &peasant){
     bn::fixed_rect pbox = peasant.get_hitbox();
     if(_hitbox.intersects(pbox) && !peasant.dead()){
         BN_LOG("stomped.");
-        peasant.stomp(_sesh);
+        peasant.stomp();
+        _sesh.score+=TROG_PEASANT_STOMP_SCORE;
+        
         ++_trogmeter;
-        if(_trogmeter == trogmeter_max){
-            burninate_time = burninate_length;
-            breath.enable();
+        if(_trogmeter == _trogmeter_max){
+            _burninate_time = _burninate_length;
+            _breath.enable();
 
             BN_LOG("aaron burrninate. got milk");
             bn::sound_items::burninate.play(1);
@@ -125,7 +128,7 @@ void player::check_peasant_collision(peasant &peasant){
     }
 
     if(burninating()){
-        breath.check_peasant_collision(peasant);
+        _breath.check_peasant_collision(peasant);
     }
 }
 

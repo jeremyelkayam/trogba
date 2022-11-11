@@ -6,15 +6,17 @@
 #include "cottage.h"
 #include "peasant.h"
 #include "constants.h"
+#include "session_info.h"
 
 namespace trog {
     class firebreath : public entity { 
         private:
  
             bn::sprite_animate_action<4> _burningflames;
+            session_info &_sesh;
             
         public:
-            firebreath();
+            firebreath(session_info &sesh);
             virtual void update() final;
             void check_cottage_collision(cottage &cottage);
             void check_peasant_collision(peasant &peasant);

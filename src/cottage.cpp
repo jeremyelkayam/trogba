@@ -57,12 +57,15 @@ void cottage::update(){
     }
 }
 
-void cottage::burninate(){
+bool cottage::burninate(){
     if(_time_burning==0){
         _flames.set_visible(true);
         _time_burning=1;
         bn::sound_items::burningcottage.play(1);
+        return true;
     }
+    return false;
+
 }
 
 }

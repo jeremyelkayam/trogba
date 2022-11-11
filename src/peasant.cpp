@@ -90,7 +90,7 @@ void peasant::update(){
 
 }
 
-void peasant::stomp(session_info &sesh){
+void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
@@ -99,8 +99,9 @@ void peasant::stomp(session_info &sesh){
         _walkcycle.update();
         _time_dead=1;
         bn::sound_items::stomp.play(1);
-        sesh.score+=TROG_PEASANT_STOMP_SCORE;
+        // return true;
     }    
+    // return false;
 }
 
 bool peasant::remove_from_map(){

@@ -31,7 +31,7 @@ namespace trog {
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction);
             virtual void update() final;
 
-            void stomp(session_info &sesh);
+            void stomp();
             void burninate();
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();

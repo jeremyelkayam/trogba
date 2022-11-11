@@ -16,7 +16,7 @@ namespace trog {
         public:
             cottage(bn::fixed xcor, bn::fixed ycor, direction direction);
             virtual void update() final;
-            void burninate();
+            bool burninate();
             bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
             direction get_direction() {return _direction;}
     };
