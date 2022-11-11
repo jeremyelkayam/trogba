@@ -14,9 +14,8 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _pfact(_cottages,_peasants),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
-    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::RIGHT);
+    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
-    // ;
 
 }
 
@@ -34,6 +33,8 @@ bn::optional<scene_type> play_scene::update(){
         p.update();
         _trogdor.check_peasant_collision(p);
     }
+
+    //kill off the peasant if we can
     _peasants.remove_if(peasant_deletable);
     
 
