@@ -33,6 +33,14 @@ bn::optional<scene_type> play_scene::update(){
     for(peasant &p : _peasants) {
         p.update();
         _trogdor.check_peasant_collision(p);
+        if(p.remove_from_map() && p.onfire()){
+            //check if it should burn any cottages
+            for(cottage &c : _cottages){
+                if(p.get_hitbox().intersects(c.get_hitbox())){
+                    c.burninate();
+                }
+            }
+        }
     }
 
     //kill off the peasant if we can
