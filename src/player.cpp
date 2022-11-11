@@ -81,22 +81,18 @@ void player::move(){
 }
 
 void player::check_boundary_collision(){
-    bn::fixed top_bound = -70;
-    bn::fixed bottom_bound = 81;
-    bn::fixed left_bound = -120;
-    bn::fixed right_bound = 120;
     //collision
-    if(_hitbox.top() < top_bound){
-        _pos.set_y(top_bound + _hitbox.height() / 2);
+    if(_hitbox.top() < TROG_COUNTRYSIDE_TOP_BOUND){
+        _pos.set_y(TROG_COUNTRYSIDE_TOP_BOUND + _hitbox.height() / 2);
     }
-    if(_hitbox.bottom() > bottom_bound){
-        _pos.set_y(bottom_bound - _hitbox.height() / 2);
+    if(_hitbox.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND){
+        _pos.set_y(TROG_COUNTRYSIDE_BOTTOM_BOUND - _hitbox.height() / 2);
     }
-    if(_hitbox.left() < left_bound){
-        _pos.set_x(left_bound + _hitbox.width() / 2);
+    if(_hitbox.left() < TROG_COUNTRYSIDE_LEFT_BOUND){
+        _pos.set_x(TROG_COUNTRYSIDE_LEFT_BOUND + _hitbox.width() / 2);
     }
-    if(_hitbox.right() > right_bound){
-        _pos.set_x(right_bound - _hitbox.width() / 2);
+    if(_hitbox.right() > TROG_COUNTRYSIDE_RIGHT_BOUND){
+        _pos.set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - _hitbox.width() / 2);
     }
     
     _hitbox.set_position(_pos);

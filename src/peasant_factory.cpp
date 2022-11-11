@@ -32,35 +32,39 @@ namespace trog
         {
             // decide randomly which cottage the peasant will come from
             cottage &home = _cottages.at(_random.get_int(0, _cottages.size()));
-            int xoffset = 0;
-            int yoffset = 0;         
+            bn::fixed spawn_xcor = home.get_x();
+            bn::fixed spawn_ycor = home.get_y();
 
+            int max_dist;
+            
             if (home.get_direction() == direction::LEFT)
             {
-                BN_LOG("home cottage direction: left");
-                yoffset = 10;
-                xoffset = -10;
+                //offset the spawn position
+                spawn_xcor -= 10;
+                spawn_ycor += 10;
+                max_dist = spawn_xcor.integer() + 120;
             }
             else if (home.get_direction() == direction::RIGHT)
             {
-                BN_LOG("home cottage direction: right");
-                yoffset = 10;
-                xoffset = 10;
+                spawn_xcor += 10;
+                spawn_ycor += 10;
+                max_dist = 120 - spawn_xcor.integer();
             }
             else if (home.get_direction() == direction::UP)
             {
-                BN_LOG("home cottage direction: up");
-                xoffset = 0;
-                yoffset = -10;
+                spawn_ycor -= 10;
+                max_dist = spawn_ycor.integer() - TROG_COUNTRYSIDE_TOP_BOUND;
             }
             else if (home.get_direction() == direction::DOWN)
             {
-                BN_LOG("home cottage direction: down");
-                xoffset = 0;
-                yoffset = 10;
-            }
+                spawn_ycor += 10;
+                max_dist = TROG_COUNTRYSIDE_BOTTOM_BOUND - spawn_ycor.integer();
+            }else BN_ASSERT(false, "invalid direction");
 
-            _peasants.emplace_front(home.get_x() + xoffset, home.get_y() + yoffset, bn::fixed(TROG_PEASANT_SPEED), bn::fixed(90), home.get_direction());
+            bn::fixed dist = _random.get_int(TROG_PEASANT_MIN_WALK_DISTANCE, max_dist);
+
+
+            _peasants.emplace_front(spawn_xcor, spawn_ycor, bn::fixed(TROG_PEASANT_SPEED), dist, home.get_direction());
         }
     }
 

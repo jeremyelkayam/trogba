@@ -3,6 +3,11 @@
 #define TROG_STARTING_LIVES 3
 #define TROG_STARTING_LEVEL 1
 
+#define TROG_COUNTRYSIDE_LEFT_BOUND -120
+#define TROG_COUNTRYSIDE_RIGHT_BOUND 120
+#define TROG_COUNTRYSIDE_TOP_BOUND -70
+#define TROG_COUNTRYSIDE_BOTTOM_BOUND 80
+
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
@@ -24,5 +29,6 @@
 
 #define TROG_PEASANT_MIN_SPAWN_INTERVAL 60
 #define TROG_PEASANT_MAX_SPAWN_INTERVAL 300
+#define TROG_PEASANT_MIN_WALK_DISTANCE 2
 #define TROG_PEASANT_SPEED 0.5
 #define TROG_PEASANT_STOMP_SCORE 2
