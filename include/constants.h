@@ -6,7 +6,7 @@
 #define TROG_COUNTRYSIDE_LEFT_BOUND -120
 #define TROG_COUNTRYSIDE_RIGHT_BOUND 120
 #define TROG_COUNTRYSIDE_TOP_BOUND -70
-#define TROG_COUNTRYSIDE_BOTTOM_BOUND 80
+#define TROG_COUNTRYSIDE_BOTTOM_BOUND 81
 
 
 // The maximum amount of peasants contained in your trogmeter.

@@ -37,7 +37,14 @@ bn::optional<scene_type> play_scene::update(){
             //check if it should burn any cottages
             for(cottage &c : _cottages){
                 if(p.get_hitbox().intersects(c.get_hitbox())){
-                    c.burninate();
+                    bool cottage_burninated = c.burninate();
+                    if(cottage_burninated) {
+                        //bonus points if the peasant burns his house down
+                        _sesh.score+=TROG_COTTAGE_PEASANTBURN_SCORE;
+                    }else{
+                        //the peasant is still dead so you get points
+                        _sesh.score+=TROG_PEASANT_STOMP_SCORE;
+                    }
                 }
             }
         }
