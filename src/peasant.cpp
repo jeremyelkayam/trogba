@@ -45,14 +45,9 @@ void peasant::burninate(){
         // set on fire
         _onfire = true;
         
-        // run fast
-        _speed = _speed.multiplication(2);
-
-        //turn the other way
-        _direction = _direction.multiplication(-1);
-
-        //make them stop waiting if they are
-        _time_waiting = _waittime; 
+        // run fast the other way 
+        _speed = -_speed*2;
+        _currentdist+=_speed;
 
         // change animation to flaming
         _walkcycle = bn::create_sprite_animate_action_forever(
@@ -73,6 +68,7 @@ void peasant::update(){
     }
 
     if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
+
         _pos+=_direction.multiplication(_speed);
 
         _currentdist+=_speed;
