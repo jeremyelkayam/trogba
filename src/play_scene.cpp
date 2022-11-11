@@ -34,7 +34,7 @@ bn::optional<scene_type> play_scene::update(){
         p.update();
         _trogdor.check_peasant_collision(p);
     }
-    // _peasants.erase_if(peasant_deletable);
+    _peasants.remove_if(peasant_deletable);
     
 
     _pfact.update();

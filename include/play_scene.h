@@ -28,7 +28,8 @@ namespace trog{
         bn::forward_list<peasant, 20> _peasants;
         bool level_complete();
 
-        bool peasant_deletable(peasant &p) {return p.remove_from_map();};
+        //probably would be better if i figured out how to harness friends for this.
+        static bool peasant_deletable(peasant &p) {return p.remove_from_map();}
 
     public:
         play_scene(session_info& sesh, bn::sprite_text_generator& generator);
