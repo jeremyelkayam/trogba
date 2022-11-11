@@ -78,7 +78,7 @@ void hud::update() {
     bn::ostringstream mans_lv_string_stream(mans_lv_str);
     mans_lv_string_stream << "MANS:";
     mans_lv_string_stream << _sesh.mans;
-    mans_lv_string_stream << "LV:";
+    mans_lv_string_stream << " LV:";
     mans_lv_string_stream << _sesh.level;
 
     _text_generator.set_right_alignment();

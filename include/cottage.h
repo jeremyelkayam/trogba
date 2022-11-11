@@ -18,5 +18,6 @@ namespace trog {
             virtual void update() final;
             void burninate();
             bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
+            direction get_direction() {return _direction;}
     };
 }
