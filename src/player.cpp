@@ -6,14 +6,15 @@
 #include "entity.h"
 namespace trog {
 
-player::player() : 
+player::player(session_info &sesh) : 
         entity(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(45), bn::sprite_items::player.create_sprite(0, 0)),
-        speed(bn::fixed(1.5)),
-        walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)){
+        _speed(bn::fixed(1.5)),
+        _walkcycle(bn::create_sprite_animate_action_forever(
+                    _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+        _sesh(sesh){
     _sprite.set_z_order(FRONT_ZORDER);
 
-    trogmeter = 0;
+    _trogmeter = 0;
     burninate_time = 0;
 }
 
@@ -32,7 +33,10 @@ void player::update(){
 
     if(burninate_time > 0) { 
         burninate_time--;
-    }else{
+    }else if(breath.enabled()){
+        // if the breath is enabled AND our burninate timer has expired,
+        // we need to end burnination
+        _trogmeter = 0;
         breath.disable();
     }
     //update fire breath;
@@ -51,27 +55,27 @@ void player::move(){
     bool moving = false;
     
     if(bn::keypad::up_held()){
-        _pos.set_y(_pos.y() - speed);
+        _pos.set_y(_pos.y() - _speed);
         moving=true;
     }
     if(bn::keypad::down_held()){
-        _pos.set_y(_pos.y() + speed);
+        _pos.set_y(_pos.y() + _speed);
         moving=true;
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
         breath.set_horizontal_flip(true);
-        _pos.set_x(_pos.x() - speed);
+        _pos.set_x(_pos.x() - _speed);
         moving=true;
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
         breath.set_horizontal_flip(false);
-        _pos.set_x(_pos.x() + speed);
+        _pos.set_x(_pos.x() + _speed);
         moving=true;
     }
     if(moving){
-        walkcycle.update();
+        _walkcycle.update();
     }
 
 }
@@ -113,15 +117,19 @@ void player::check_peasant_collision(peasant &peasant){
     bn::fixed_rect pbox = peasant.get_hitbox();
     if(_hitbox.intersects(pbox) && !peasant.dead()){
         BN_LOG("stomped.");
-        peasant.stomp();
-        ++trogmeter;
-        if(trogmeter == trogmeter_max){
+        peasant.stomp(_sesh);
+        ++_trogmeter;
+        if(_trogmeter == trogmeter_max){
             burninate_time = burninate_length;
             breath.enable();
 
             BN_LOG("aaron burrninate. got milk");
             bn::sound_items::burninate.play(1);
         }
+    }
+
+    if(burninating()){
+        breath.check_peasant_collision(peasant);
     }
 }
 

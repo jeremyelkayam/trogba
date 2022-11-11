@@ -1,7 +1,7 @@
 #pragma once
 
-#define TROG_STARTING_LIVES 5
-#define TROG_STARTING_LEVEL 100
+#define TROG_STARTING_LIVES 3
+#define TROG_STARTING_LEVEL 1
 
 
 // The maximum amount of peasants contained in your trogmeter.
@@ -24,3 +24,4 @@
 
 #define TROG_PEASANT_MIN_SPAWN_INTERVAL 60
 #define TROG_PEASANT_MAX_SPAWN_INTERVAL 300
+#define TROG_PEASANT_STOMP_SCORE 2

@@ -10,6 +10,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
+        _trogdor(sesh),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){

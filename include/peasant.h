@@ -4,6 +4,8 @@
 #include "bn_sprite_items_peasant.h"
 #include "entity.h"
 #include "enums.h"
+#include "session_info.h"
+#include "constants.h"
 
 namespace trog {
     class peasant : public entity { 
@@ -28,7 +30,7 @@ namespace trog {
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction);
             virtual void update() final;
 
-            void stomp();
+            void stomp(session_info &sesh);
             void burninate();
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();
