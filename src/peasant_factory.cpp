@@ -30,26 +30,37 @@ namespace trog
         }
         else
         {
-            // decide randomly which cottage the peasantwill come from
+            // decide randomly which cottage the peasant will come from
             cottage &home = _cottages.at(_random.get_int(0, _cottages.size()));
+            int xoffset = 0;
+            int yoffset = 0;         
+
             if (home.get_direction() == direction::LEFT)
             {
                 BN_LOG("home cottage direction: left");
+                yoffset = 10;
+                xoffset = -10;
             }
             else if (home.get_direction() == direction::RIGHT)
             {
                 BN_LOG("home cottage direction: right");
+                yoffset = 10;
+                xoffset = 10;
             }
             else if (home.get_direction() == direction::UP)
             {
                 BN_LOG("home cottage direction: up");
+                xoffset = 0;
+                yoffset = -10;
             }
             else if (home.get_direction() == direction::DOWN)
             {
                 BN_LOG("home cottage direction: down");
+                xoffset = 0;
+                yoffset = 10;
             }
 
-            _peasants.emplace_front(home.get_x(), home.get_y(), bn::fixed(0.5), bn::fixed(90), home.get_direction());
+            _peasants.emplace_front(home.get_x() + xoffset, home.get_y() + yoffset, bn::fixed(TROG_PEASANT_SPEED), bn::fixed(90), home.get_direction());
         }
     }
 
