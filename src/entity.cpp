@@ -15,4 +15,9 @@ void entity::update(){
     _hitbox.set_position(_pos);
     _sprite.set_position(_pos);
 }
+
+bool entity::collides_with(entity &e){
+    return _hitbox.intersects(e.get_hitbox());
+}
+
 }

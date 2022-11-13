@@ -13,6 +13,7 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _trogdor(sesh),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
+        _blueknight(30,30,1.5,bn::fixed_point(1,0)),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
@@ -27,12 +28,12 @@ bn::optional<scene_type> play_scene::update(){
     _trogdor.update();
     for(cottage &c : _cottages){
         c.update();
-        _trogdor.check_cottage_collision(c);
+        _trogdor.handle_cottage_collision(c);
     }
 
     for(peasant &p : _peasants) {
         p.update();
-        _trogdor.check_peasant_collision(p);
+        _trogdor.handle_peasant_collision(p);
         if(p.remove_from_map() && p.onfire()){
             //check if it should burn any cottages
             for(cottage &c : _cottages){

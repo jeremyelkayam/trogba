@@ -26,7 +26,6 @@ namespace trog {
  
             bn::sprite_animate_action<2> _walkcycle;
             
-            void check_boundary_collision();
         public:
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction);
             virtual void update() final;

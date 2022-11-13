@@ -8,6 +8,7 @@
 #include "constants.h"
 #include "firebreath.h"
 #include "session_info.h"
+#include "knight.h"
 
 namespace trog {
     class player : public entity { 
@@ -20,18 +21,27 @@ namespace trog {
             unsigned int _burninate_time;
             const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
             const int _burninate_length = TROG_BURNINATE_TIME; //temporarily this can be 10 seconds 
+            unsigned short _time_dead;
+            unsigned short _iframes;
 
             firebreath _breath;
             session_info &_sesh;
 
             void move();
             void check_boundary_collision();
+            void respawn();
+
+            // 
+            bool invincible() {return _iframes;}
+
         public:
             player(session_info &sesh);
             virtual void update() final;
             bool burninating();
-            void check_cottage_collision(cottage &cottage);
-            void check_peasant_collision(peasant &peasant);
+            void handle_cottage_collision(cottage &cottage);
+            void handle_peasant_collision(peasant &peasant);
+            void handle_knight_collision(knight &knight);
+            
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
 

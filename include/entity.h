@@ -13,6 +13,7 @@ namespace trog{
         virtual ~entity() = default;
         virtual void update();
         bn::fixed_rect get_hitbox() { return _hitbox; }
+        bool collides_with(entity &e);
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}
         void set_x(bn::fixed x) { _pos.set_x(x);}

@@ -18,8 +18,8 @@ namespace trog {
         public:
             firebreath(session_info &sesh);
             virtual void update() final;
-            void check_cottage_collision(cottage &cottage);
-            void check_peasant_collision(peasant &peasant);
+            void handle_cottage_collision(cottage &cottage);
+            void handle_peasant_collision(peasant &peasant);
             void enable();
             void disable();
             bool enabled();

@@ -13,8 +13,14 @@
 // After stomping this many peasants, burnination is achieved
 #define TROG_TROGMETER_MAX 10
 
+#define TROG_SPAWN_X 0
+#define TROG_SPAWN_Y 0
+
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME 600
+
+// the length of invulnerability post-respawn
+#define TROG_RESPAWN_INV_TIME 90
 
 #define TROG_FIREBREATH_XOFFSET 30
 #define TROG_FIREBREATH_YOFFSET -8
@@ -34,5 +40,9 @@
 #define TROG_PEASANT_MIN_WALK_DISTANCE 2
 #define TROG_PEASANT_SPEED 0.5
 #define TROG_PEASANT_STOMP_SCORE 2
+
+#define TROG_KNIGHT_WIDTH 16
+#define TROG_KNIGHT_HEIGHT 24
+
 
 #define TROG_DEFAULT_VOLUME 1

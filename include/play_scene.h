@@ -9,6 +9,7 @@
 #include "cottage.h"
 #include "peasant_factory.h"
 #include "peasant.h"
+#include "knight.h"
 
 namespace trog{
 
@@ -21,6 +22,7 @@ namespace trog{
         player _trogdor;
         hud _hud;
         peasant_factory _pfact;
+        knight _blueknight;
 
         bn::regular_bg_ptr _countryside;
 

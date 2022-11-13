@@ -7,7 +7,7 @@
 namespace trog {
 
 player::player(session_info &sesh) : 
-        entity(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(45), bn::sprite_items::player.create_sprite(0, 0)),
+        entity(bn::fixed(TROG_SPAWN_X), bn::fixed(TROG_SPAWN_Y), bn::fixed(20), bn::fixed(45), bn::sprite_items::player.create_sprite(0, 0)),
         _speed(bn::fixed(1.5)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
@@ -17,6 +17,8 @@ player::player(session_info &sesh) :
 
     _trogmeter = 0;
     _burninate_time = 0;
+    _time_dead = 0;
+    _iframes = 0;
 }
 
 bool player::burninating(){
@@ -48,6 +50,24 @@ void player::update(){
     _breath.set_x(_pos.x() + xoffset);
     _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
     _breath.update();
+
+    //update trogdor to show iframes
+    if(_iframes > 0){
+        //if we're on an odd iframe, hide the sprite.
+        //this creates a flicker effect
+        bool odd = _iframes % 2;
+        if(odd){
+            _sprite.set_visible(false);
+        }else{
+            _sprite.set_visible(true);
+        }
+    }
+
+    //once the iframes are over, return the sprite to normal
+    if(_iframes > TROG_RESPAWN_INV_TIME) {
+        _sprite.set_visible(true);
+        _iframes = 0;
+    }
 
 }
 
@@ -100,19 +120,18 @@ void player::check_boundary_collision(){
     
 }
 
-void player::check_cottage_collision(cottage &cottage){
+void player::handle_cottage_collision(cottage &cottage){
     bn::fixed_rect cottagebox = cottage.get_hitbox();
     if(_hitbox.intersects(cottagebox)){
         // BN_LOG("collision lol make him stop");
     }
     if(burninating()){
-        _breath.check_cottage_collision(cottage);
+        _breath.handle_cottage_collision(cottage);
     }
 }
 
-void player::check_peasant_collision(peasant &peasant){
-    bn::fixed_rect pbox = peasant.get_hitbox();
-    if(_hitbox.intersects(pbox) && !peasant.dead()){
+void player::handle_peasant_collision(peasant &peasant){
+    if(collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
         _sesh.score+=TROG_PEASANT_STOMP_SCORE;
@@ -128,9 +147,24 @@ void player::check_peasant_collision(peasant &peasant){
     }
 
     if(burninating()){
-        _breath.check_peasant_collision(peasant);
+        _breath.handle_peasant_collision(peasant);
     }
 }
 
+void player::handle_knight_collision(knight &knight){
+    if(collides_with(knight)) { 
+
+    }
+}
+
+void player::respawn(){
+    _time_dead=0;
+    --_sesh.mans;
+    _pos.set_x(TROG_SPAWN_X);
+    _pos.set_y(TROG_SPAWN_Y);
+    _burninate_time = 0;
+    _trogmeter = 0;
+    _iframes = 1;
+}
 
 }
