@@ -19,6 +19,7 @@ namespace trog{
         void set_x(bn::fixed x) { _pos.set_x(x);}
         void set_y(bn::fixed y) { _pos.set_y(y);}
         void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
+        bool out_of_bounds();
     protected:
         entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         bn::fixed_point _pos;

@@ -10,6 +10,7 @@
 #include "peasant_factory.h"
 #include "peasant.h"
 #include "knight.h"
+#include "archer.h"
 
 namespace trog{
 
@@ -28,6 +29,7 @@ namespace trog{
 
         bn::vector<cottage, 10> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
+        bn::forward_list<archer, 4> _archers;
         bool level_complete();
 
         //probably would be better if i figured out how to harness friends for this.

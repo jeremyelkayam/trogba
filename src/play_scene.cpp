@@ -18,6 +18,7 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
+    _archers.emplace_front(0,false);
 
 }
 
@@ -52,6 +53,9 @@ bn::optional<scene_type> play_scene::update(){
                 }
             }
         }
+    }
+    for(archer &a : _archers) {
+        a.update();
     }
 
 

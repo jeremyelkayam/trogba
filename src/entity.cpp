@@ -1,4 +1,6 @@
 #include <bn_log.h>
+#include <bn_display.h>
+
 #include "entity.h"
 
 
@@ -18,6 +20,10 @@ void entity::update(){
 
 bool entity::collides_with(entity &e){
     return _hitbox.intersects(e.get_hitbox());
+}
+
+bool entity::out_of_bounds(){
+    return !_hitbox.intersects(bn::fixed_rect(0, 0, bn::display::width(), bn::display::height()));
 }
 
 }
