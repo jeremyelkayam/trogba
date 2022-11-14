@@ -19,8 +19,10 @@
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME 600
 
-// the length of invulnerability post-respawn
+// the length of invulnerability post-respawn.
+// TODO: tweak these to be closer to the real deal
 #define TROG_RESPAWN_INV_TIME 90
+#define TROG_RESPAWN_TIME 60
 
 #define TROG_FIREBREATH_XOFFSET 30
 #define TROG_FIREBREATH_YOFFSET -8
@@ -35,14 +37,20 @@
 #define TROG_HUD_TROGMETER_LEFTBOUND -45
 #define TROG_HUD_TROGMETER_YCOR -75
 
+// TODO: change this 
 #define TROG_PEASANT_MIN_SPAWN_INTERVAL 60
 #define TROG_PEASANT_MAX_SPAWN_INTERVAL 300
+
+// TODO: also change this 
 #define TROG_PEASANT_MIN_WALK_DISTANCE 2
 #define TROG_PEASANT_SPEED 0.5
 #define TROG_PEASANT_STOMP_SCORE 2
 
-#define TROG_KNIGHT_WIDTH 16
-#define TROG_KNIGHT_HEIGHT 24
+
+#define TROG_KNIGHT_WIDTH 12
+#define TROG_KNIGHT_HEIGHT 18
+#define TROG_KNIGHT_SPEED 0.5
+
 
 
 #define TROG_DEFAULT_VOLUME 1

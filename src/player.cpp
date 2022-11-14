@@ -26,47 +26,56 @@ bool player::burninating(){
 }
 
 void player::update(){
-    entity::update();
-    move();
-    check_boundary_collision();
-
-
-    _sprite.set_position(_pos);
-
-
-    if(_burninate_time > 0) { 
-        _burninate_time--;
-    }else if(_breath.enabled()){
-        // if the breath is enabled AND our burninate timer has expired,
-        // we need to end burnination
-        _trogmeter = 0;
-        _breath.disable();
-    }
-    //update fire breath;
-    short xoffset = TROG_FIREBREATH_XOFFSET;
-    if(_sprite.horizontal_flip()){
-        xoffset=-xoffset;
-    }
-    _breath.set_x(_pos.x() + xoffset);
-    _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
-    _breath.update();
-
-    //update trogdor to show iframes
-    if(_iframes > 0){
-        //if we're on an odd iframe, hide the sprite.
-        //this creates a flicker effect
-        bool odd = _iframes % 2;
-        if(odd){
-            _sprite.set_visible(false);
-        }else{
-            _sprite.set_visible(true);
+    if(dead()){
+        ++_time_dead;
+        if(_time_dead == TROG_RESPAWN_TIME){
+            respawn();
         }
     }
+    // this cannot be an else if, because if the respawn method is called 
+    // then trogdor will be alive again.
+    if(!dead()){
+        entity::update();
+        move();
+        check_boundary_collision();
 
-    //once the iframes are over, return the sprite to normal
-    if(_iframes > TROG_RESPAWN_INV_TIME) {
-        _sprite.set_visible(true);
-        _iframes = 0;
+        if(_burninate_time > 0) { 
+            _burninate_time--;
+        }else if(_breath.enabled()){
+            // if the breath is enabled AND our burninate timer has expired,
+            // we need to end burnination
+            _trogmeter = 0;
+            _breath.disable();
+        }
+        //update fire breath;
+        short xoffset = TROG_FIREBREATH_XOFFSET;
+        if(_sprite.horizontal_flip()){
+            xoffset=-xoffset;
+        }
+        _breath.set_x(_pos.x() + xoffset);
+        _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
+        _breath.update();
+
+        //update trogdor to show iframes
+        if(invincible()){
+            //if we're on an odd iframe, hide the sprite.
+            //this creates a flicker effect
+            bool odd = _iframes % 2;
+            if(odd){
+                _sprite.set_visible(false);
+            }else{
+                _sprite.set_visible(true);
+            }
+            ++_iframes;
+        }
+
+        //once the iframes are over, return the sprite to normal
+        if(_iframes > TROG_RESPAWN_INV_TIME) {
+            BN_LOG("end invincibility");
+            _sprite.set_visible(true);
+            _iframes = 0;
+        }
+
     }
 
 }
@@ -152,8 +161,9 @@ void player::handle_peasant_collision(peasant &peasant){
 }
 
 void player::handle_knight_collision(knight &knight){
-    if(collides_with(knight)) { 
-
+    if(collides_with(knight) && !dead() && !invincible()) { 
+        bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
+        _time_dead = 1;
     }
 }
 

@@ -13,7 +13,7 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _trogdor(sesh),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
-        _blueknight(30,30,1.5,bn::fixed_point(1,0)),
+        _blueknight(35,35,TROG_KNIGHT_SPEED,bn::fixed_point(-1,0)),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
@@ -34,10 +34,13 @@ bn::optional<scene_type> play_scene::update(){
     for(peasant &p : _peasants) {
         p.update();
         _trogdor.handle_peasant_collision(p);
+
+        //TODO this nest goes too deep
+
         if(p.remove_from_map() && p.onfire()){
             //check if it should burn any cottages
             for(cottage &c : _cottages){
-                if(p.get_hitbox().intersects(c.get_hitbox())){
+                if(p.collides_with(c)){
                     bool cottage_burninated = c.burninate();
                     if(cottage_burninated) {
                         //bonus points if the peasant burns his house down
@@ -51,7 +54,11 @@ bn::optional<scene_type> play_scene::update(){
         }
     }
 
-    //kill off the peasant if we can
+
+    _blueknight.update();
+    _trogdor.handle_knight_collision(_blueknight);
+
+    //despawn any peasants that need to be despawned
     _peasants.remove_if(peasant_deletable);
     
 

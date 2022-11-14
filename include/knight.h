@@ -14,7 +14,8 @@ namespace trog {
             bn::fixed_point _direction;
  
             // bn::sprite_animate_action<3> _walkcycle;
-            
+            bool going_to_go_offscreen(bn::fixed_point pos, bn::fixed speed, bn::fixed_point direction);  
+
         public:
             knight(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed_point direction);
             virtual void update() final;

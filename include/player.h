@@ -33,6 +33,7 @@ namespace trog {
 
             // 
             bool invincible() {return _iframes;}
+            bool dead() {return _time_dead;}
 
         public:
             player(session_info &sesh);
