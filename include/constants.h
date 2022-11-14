@@ -13,8 +13,12 @@
 // After stomping this many peasants, burnination is achieved
 #define TROG_TROGMETER_MAX 10
 
-#define TROG_SPAWN_X 0
-#define TROG_SPAWN_Y 0
+#define TROG_PLAYER_SPAWN_X 0
+#define TROG_PLAYER_SPAWN_Y 0
+#define TROG_PLAYER_WIDTH 20
+#define TROG_PLAYER_HEIGHT 45
+
+#define TROG_PLAYER_SPEED 1.5
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME 600
@@ -51,8 +55,12 @@
 #define TROG_KNIGHT_HEIGHT 18
 #define TROG_KNIGHT_SPEED 0.5
 
-#define TROG_ARROW_SPEED 1
+#define TROG_ARCHER_DRAWBOW_WAITTIME 60
+#define TROG_ARCHER_SHOOT_WAITTIME 90
+#define TROG_ARCHER_DISAPPEAR_WAITTIME 120
 
-
+#define TROG_ARROW_SPEED TROG_PLAYER_SPEED
+#define TROG_ARROW_WIDTH 10
+#define TROG_ARROW_HEIGHT 3
 
 #define TROG_DEFAULT_VOLUME 1

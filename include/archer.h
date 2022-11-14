@@ -17,6 +17,6 @@ namespace trog {
         public:
             archer(bn::fixed ycor, bool facing_left);
             virtual void update() final;
-            bool remove_from_map() {return _arrow->out_of_bounds();}
+            bool remove_from_map();
     };
 }

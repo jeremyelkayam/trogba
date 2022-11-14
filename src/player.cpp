@@ -7,8 +7,8 @@
 namespace trog {
 
 player::player(session_info &sesh) : 
-        entity(bn::fixed(TROG_SPAWN_X), bn::fixed(TROG_SPAWN_Y), bn::fixed(20), bn::fixed(45), bn::sprite_items::player.create_sprite(0, 0)),
-        _speed(bn::fixed(1.5)),
+        entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
+        _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _breath(sesh),
@@ -150,7 +150,6 @@ void player::handle_peasant_collision(peasant &peasant){
             _burninate_time = _burninate_length;
             _breath.enable();
 
-            BN_LOG("aaron burrninate. got milk");
             bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
         }
     }
@@ -170,8 +169,8 @@ void player::handle_knight_collision(knight &knight){
 void player::respawn(){
     _time_dead=0;
     --_sesh.mans;
-    _pos.set_x(TROG_SPAWN_X);
-    _pos.set_y(TROG_SPAWN_Y);
+    _pos.set_x(TROG_PLAYER_SPAWN_X);
+    _pos.set_y(TROG_PLAYER_SPAWN_Y);
     _burninate_time = 0;
     _trogmeter = 0;
     _iframes = 1;

@@ -34,6 +34,7 @@ namespace trog{
 
         //probably would be better if i figured out how to harness friends for this.
         static bool peasant_deletable(peasant &p) {return p.remove_from_map();}
+        static bool archer_deletable(archer &a) {return a.remove_from_map();}
 
     public:
         play_scene(session_info& sesh, bn::sprite_text_generator& generator);

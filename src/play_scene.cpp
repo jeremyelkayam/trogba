@@ -64,7 +64,7 @@ bn::optional<scene_type> play_scene::update(){
 
     //despawn any peasants that need to be despawned
     _peasants.remove_if(peasant_deletable);
-    
+    _archers.remove_if(archer_deletable);
 
     _pfact.update();
 
