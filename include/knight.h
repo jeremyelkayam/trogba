@@ -5,21 +5,23 @@
 #include "entity.h"
 #include "session_info.h"
 #include "constants.h"
+#include "bn_math.h"
 
 namespace trog {
     class knight : public entity { 
         private:
-            bn::fixed _speed;
+            
+            unsigned short _frames_moving;
 
-            bn::fixed_point _direction;
+            bn::fixed _speed;
+            unsigned short _direction;
  
             // bn::sprite_animate_action<3> _walkcycle;
-            bool going_to_go_offscreen_x(bn::fixed_point pos, bn::fixed speed, bn::fixed_point direction);  
+            bool going_to_go_offscreen(bn::fixed_rect hitbox, bn::fixed speed, bn::fixed direction);  
 
-            bool going_to_go_offscreen_y(bn::fixed_point pos, bn::fixed speed, bn::fixed_point direction);  
-
+            bn::fixed_point unit_vector(bn::fixed angle){return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
         public:
-            knight(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed_point direction);
+            knight(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, unsigned short direction);
             virtual void update() final;
     };
 }
