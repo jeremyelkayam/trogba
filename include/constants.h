@@ -1,5 +1,12 @@
 #pragma once
 
+#define TROG_TITLE_TEXT_X 0
+#define TROG_TITLE_TEXT_Y 52
+#define TROG_TITLE_BG_X -3
+#define TROG_TITLE_BG_Y 48
+
+#define TROG_INSTRUCTION_TITLE_Y 57
+
 #define TROG_STARTING_LIVES 3
 #define TROG_STARTING_LEVEL 1
 

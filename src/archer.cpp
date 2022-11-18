@@ -22,7 +22,7 @@ void archer::update(){
     ++_time_since_spawn;
     if(TROG_ARCHER_SHOOT_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
-        _sprite.set_item(bn::sprite_items::archer);
+        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
     }else if (TROG_ARCHER_SHOOT_WAITTIME < _time_since_spawn && !_arrow){
         _sprite.set_item(bn::sprite_items::archer);
         shoot();

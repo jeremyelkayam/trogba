@@ -75,9 +75,6 @@ int main()
             bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
             kicked=false;
         }
-        // tragdar.update();
-        // BN_LOG("ticks elapsed: ", looptimer.elapsed_ticks());
-        // looptimer.restart();
         bn::core::update();
     }
 }

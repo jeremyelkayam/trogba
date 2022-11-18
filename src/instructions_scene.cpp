@@ -10,7 +10,7 @@
 namespace trog {
 
 instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) : 
-        title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)),
+        title(bn::regular_bg_items::titlegraphic.create_bg(TROG_TITLE_TEXT_X, TROG_INSTRUCTION_TITLE_Y)),
         text_generator(a_generator){
     flashing_text_counter = 0;
 
