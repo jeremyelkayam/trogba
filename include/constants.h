@@ -1,5 +1,7 @@
 #pragma once
 
+#define SECONDS * 60
+
 #define TROG_TITLE_TEXT_X 0
 #define TROG_TITLE_TEXT_Y 52
 #define TROG_TITLE_BG_X -3
@@ -18,7 +20,7 @@
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 10
+#define TROG_TROGMETER_MAX 1
 
 #define TROG_PLAYER_SPAWN_X 0
 #define TROG_PLAYER_SPAWN_Y 0
@@ -28,12 +30,12 @@
 #define TROG_PLAYER_SPEED 1.5
 
 // The length of burnination in frames.
-#define TROG_BURNINATE_TIME 600
+#define TROG_BURNINATE_TIME 10 SECONDS
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal
-#define TROG_RESPAWN_INV_TIME 90
-#define TROG_RESPAWN_TIME 60
+#define TROG_RESPAWN_INV_TIME 2 SECONDS
+#define TROG_RESPAWN_TIME 2 SECONDS
 
 #define TROG_FIREBREATH_XOFFSET 30
 #define TROG_FIREBREATH_YOFFSET -8
@@ -48,9 +50,12 @@
 #define TROG_HUD_TROGMETER_LEFTBOUND -55
 #define TROG_HUD_TROGMETER_YCOR -75
 
-// TODO: change this 
-#define TROG_PEASANT_MIN_SPAWN_INTERVAL 60
-#define TROG_PEASANT_MAX_SPAWN_INTERVAL 300
+#define TROG_HUD_BURNINATEMETER_LEFTBOUND -58
+#define TROG_HUD_BURNINATEMETER_WIDTH 98
+
+// TODO: change this to be more like the real trogdor
+#define TROG_PEASANT_MIN_SPAWN_INTERVAL 20
+#define TROG_PEASANT_MAX_SPAWN_INTERVAL 150
 
 // TODO: also change this 
 #define TROG_PEASANT_MIN_WALK_DISTANCE 2

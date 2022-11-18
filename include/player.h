@@ -34,9 +34,7 @@ namespace trog {
             void check_boundary_collision();
             void respawn();
 
-            // 
             bool invincible() {return _iframes;}
-            bool dead() {return _time_dead;}
             void die(bn::sprite_item item);
 
         public:
@@ -47,6 +45,7 @@ namespace trog {
             void handle_peasant_collision(peasant &peasant);
             void handle_knight_collision(knight &knight);
             void handle_arrow_collision(archer &archer);
+            bool dead() {return _time_dead;}
 
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}

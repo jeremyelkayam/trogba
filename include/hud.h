@@ -3,11 +3,10 @@
 #include <bn_sstream.h>
 #include <bn_string.h>
 #include <bn_regular_bg_ptr.h>
+#include <bn_rect_window.h>
 
 #include "player.h"
 #include "session_info.h"
-#include "bn_regular_bg_items_burninometer.h"
-
 namespace trog {
     class hud { 
         private:
@@ -17,7 +16,10 @@ namespace trog {
             bn::vector<bn::sprite_ptr, 32> _score_text_sprites;     
             bn::vector<bn::sprite_ptr, 32> _mans_lv_text_sprites;
             bn::vector<bn::sprite_ptr, 10> _trogmeter;
+
             bn::regular_bg_ptr _burninatemeter;            
+            bn::regular_bg_ptr _burninatemeter_invert;            
+            bn::rect_window _burninatemeter_window;
             void hide_trogmeter();
             void show_trogmeter();
             
