@@ -16,15 +16,26 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
+    // bn::string<64> instructions[] = {
+    //     "Use the squishy + to move",
+    //     "Stomp 10 peasants to achieve burnination.",
+    //     "Burn all cottages to advance a level.",
+    //     "Avoid knights and archers!",
+    //     "",
+    //     "Original by Jonathan Howe",
+    //     "GBA version by Jeremy Elkayam",
+    //     "Designed by Mike and Matt"
+    // };
+
     bn::string<64> instructions[] = {
-        "Use the squishy + to move",
-        "Stomp 10 peasants to achieve burnination.",
-        "Burn all cottages to advance a level.",
+        "use the squishy + to move",
+        "squish 10 guys to get fire",
+        "burn all cottages to win",
         "Avoid knights and archers!",
         "",
-        "Original by Jonathan Howe",
-        "GBA version by Jeremy Elkayam",
-        "Designed by Mike and Matt"
+        "",
+        "OG by Mike/Matt/Jonathan",
+        "GBA version by Jeremy Elkayam"
     };
     
     int ycor = -30;
@@ -41,7 +52,7 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     // text_generator.generate(0, 10, , instruction_text_sprites);   
 
-    text_generator.generate(0, -30+(14*4), "Press A to start 'em up ", start_text_sprites);    
+    text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", start_text_sprites);    
 
     // text_generator.generate(0, 30, , start_text_sprites);    
 
