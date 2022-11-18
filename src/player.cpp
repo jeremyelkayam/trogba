@@ -161,10 +161,20 @@ void player::handle_peasant_collision(peasant &peasant){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !dead() && !invincible()) { 
-        bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
-        _time_dead = 1;
-        _sprite.set_item(bn::sprite_items::trogdor_sworded);
+        die(bn::sprite_items::trogdor_sworded);
     }
+}
+
+void player::handle_arrow_collision(archer &archer){
+    if(collides_with(archer) && !dead() && !invincible()) { 
+        die(bn::sprite_items::trogdor_arrowed);
+    }
+}
+
+void player::die(bn::sprite_item item){
+    bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
+    _time_dead = 1;
+    _sprite.set_item(item);
 }
 
 //possibly just reconstruct a player if we need to respawn tbh

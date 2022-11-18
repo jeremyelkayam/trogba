@@ -46,4 +46,13 @@ bool archer::remove_from_map(){
     }else return false;
 }
 
+bn::fixed_rect archer::get_hitbox() {
+    if(_arrow){
+        return _arrow->get_hitbox();
+    }else{
+        //bogus rectangle that's way offscreen  
+        return bn::fixed_rect(-500,-500, 0, 0);
+    }
+}
+
 }

@@ -11,6 +11,7 @@
 #include "firebreath.h"
 #include "session_info.h"
 #include "knight.h"
+#include "archer.h"
 
 namespace trog {
     class player : public entity { 
@@ -36,6 +37,7 @@ namespace trog {
             // 
             bool invincible() {return _iframes;}
             bool dead() {return _time_dead;}
+            void die(bn::sprite_item item);
 
         public:
             player(session_info &sesh);
@@ -44,7 +46,8 @@ namespace trog {
             void handle_cottage_collision(cottage &cottage);
             void handle_peasant_collision(peasant &peasant);
             void handle_knight_collision(knight &knight);
-            
+            void handle_arrow_collision(archer &archer);
+
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
 
