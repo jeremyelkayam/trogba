@@ -6,7 +6,7 @@
 #include "entity.h"
 namespace trog {
 
-player::player(session_info &sesh) : 
+player::player(session_info &sesh, bool iframes) : 
         entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
@@ -18,7 +18,11 @@ player::player(session_info &sesh) :
     _trogmeter = 0;
     _burninate_time = 0;
     _time_dead = 0;
-    _iframes = 0;
+    if(iframes) {
+        _iframes = 1;
+    }else{
+        _iframes = 0;
+    }
 }
 
 bool player::burninating(){

@@ -37,7 +37,7 @@ namespace trog {
             void die(bn::sprite_item item);
 
         public:
-            player(session_info &sesh);
+            player(session_info &sesh, bool iframes);
             virtual void update() final;
             bool burninating();
             void handle_cottage_collision(cottage &cottage);

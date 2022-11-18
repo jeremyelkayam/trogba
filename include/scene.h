@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include "bn_optional.h"
+#include <bn_optional.h>
+#include <bn_regular_bg_ptr.h>
 #include "enums.h"
 #include "constants.h"
 
@@ -20,6 +21,7 @@ namespace trog {
 
         protected:
             scene() = default;
+            void move_background(bn::regular_bg_ptr bg);
     };
 
 }
