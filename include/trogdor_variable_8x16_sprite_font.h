@@ -137,7 +137,7 @@ constexpr auto variable_8x16_sprite_font_utf8_characters_map =
         bn::utf8_characters_map<variable_8x16_sprite_font_utf8_characters_span>();
 
 constexpr bn::sprite_font variable_8x16_sprite_font(
-        bn::sprite_items::common_variable_8x16_font, variable_8x16_sprite_font_utf8_characters_map.reference(),
+        bn::sprite_items::trogdor_variable_8x16_font, variable_8x16_sprite_font_utf8_characters_map.reference(),
         variable_8x16_sprite_font_character_widths);
 
 }

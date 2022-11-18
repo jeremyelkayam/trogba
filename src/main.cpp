@@ -13,7 +13,7 @@
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
 #include <bn_sprite_text_generator.h>
-#include "common_variable_8x8_sprite_font.h"
+#include "trogdor_fixed_8x16_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -34,7 +34,7 @@ int main()
     trog::session_info sesh = {TROG_STARTING_LIVES, 0, TROG_STARTING_LEVEL};
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
-    bn::sprite_text_generator text_generator(common::variable_8x8_sprite_font);
+    bn::sprite_text_generator text_generator(trog::fixed_8x16_sprite_font);
     text_generator.set_center_alignment();
 
 
