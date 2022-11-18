@@ -2,6 +2,8 @@
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
 #include "bn_sprite_items_player.h"
+#include "bn_sprite_items_trogdor_arrowed.h"
+#include "bn_sprite_items_trogdor_sworded.h"
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"

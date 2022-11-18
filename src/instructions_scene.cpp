@@ -22,9 +22,9 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     text_generator.generate(0, 15, "Burn all cottages to advance a level.", instruction_text_sprites);   
 
-    text_generator.generate(0, 30, "Avoid knights and archers", instruction_text_sprites);   
+    text_generator.generate(0, 30, "Avoid knights and archers!", instruction_text_sprites);   
 
-    text_generator.generate(0, 60, "press a to start 'em up... ", start_text_sprites);    
+    text_generator.generate(0, 60, "Press A to start 'em up ", start_text_sprites);    
 }
 
 bn::optional<scene_type> instructions_scene::update(){

@@ -163,10 +163,13 @@ void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !dead() && !invincible()) { 
         bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
         _time_dead = 1;
+        _sprite.set_item(bn::sprite_items::trogdor_sworded);
     }
 }
 
+//possibly just reconstruct a player if we need to respawn tbh
 void player::respawn(){
+    _sprite.set_item(bn::sprite_items::player);
     _time_dead=0;
     --_sesh.mans;
     _pos.set_x(TROG_PLAYER_SPAWN_X);

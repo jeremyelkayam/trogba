@@ -75,7 +75,7 @@ void hud::update() {
 
 
     bn::ostringstream mans_lv_string_stream(mans_lv_str);
-    mans_lv_string_stream << "Mx";
+    mans_lv_string_stream << "MANS ";
     mans_lv_string_stream << _sesh.mans;
     mans_lv_string_stream << " L";
     mans_lv_string_stream << _sesh.level;
