@@ -168,6 +168,7 @@ void player::handle_knight_collision(knight &knight){
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) && !dead() && !invincible()) { 
         die(bn::sprite_items::trogdor_arrowed);
+        archer.destroy_arrow();
     }
 }
 

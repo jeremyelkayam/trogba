@@ -20,5 +20,6 @@ namespace trog {
             virtual void update() final;
             bool remove_from_map();
             virtual bn::fixed_rect get_hitbox() final;
+            void destroy_arrow();
     };
 }

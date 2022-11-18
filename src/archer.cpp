@@ -23,7 +23,7 @@ void archer::update(){
     if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
         _sprite.set_item(bn::sprite_items::archer_bowdrawn);
-    }else if (TROG_ARCHER_SHOOT_WAITTIME < _time_since_spawn && !_arrow){
+    }else if (TROG_ARCHER_SHOOT_WAITTIME == _time_since_spawn && !_arrow){
         _sprite.set_item(bn::sprite_items::archer);
         shoot();
     }else if(TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
@@ -54,5 +54,7 @@ bn::fixed_rect archer::get_hitbox() {
         return bn::fixed_rect(-500,-500, 0, 0);
     }
 }
-
+void archer::destroy_arrow() {
+    _arrow.reset();
+}
 }

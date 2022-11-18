@@ -56,6 +56,7 @@ bn::optional<scene_type> play_scene::update(){
     }
     for(archer &a : _archers) {
         a.update();
+        _trogdor.handle_arrow_collision(a);
     }
 
 
