@@ -28,9 +28,6 @@ bool player::burninating(){
 void player::update(){
     if(dead()){
         ++_time_dead;
-        if(_time_dead == TROG_RESPAWN_TIME){
-            respawn();
-        }
     }
     // this cannot be an else if, because if the respawn method is called 
     // then trogdor will be alive again.
@@ -176,18 +173,20 @@ void player::die(bn::sprite_item item){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
     _sprite.set_item(item);
+    _burninate_time = 0;
+    _breath.disable();
 }
 
 //possibly just reconstruct a player if we need to respawn tbh
-void player::respawn(){
-    _sprite.set_item(bn::sprite_items::player);
-    _time_dead=0;
-    --_sesh.mans;
-    _pos.set_x(TROG_PLAYER_SPAWN_X);
-    _pos.set_y(TROG_PLAYER_SPAWN_Y);
-    _burninate_time = 0;
-    _trogmeter = 0;
-    _iframes = 1;
-}
+// void player::respawn(){
+//     _sprite.set_item(bn::sprite_items::player);
+//     _time_dead=0;
+//     --_sesh.mans;
+//     _pos.set_x(TROG_PLAYER_SPAWN_X);
+//     _pos.set_y(TROG_PLAYER_SPAWN_Y);
+//     _burninate_time = 0;
+//     _trogmeter = 0;
+//     _iframes = 1;
+// }
 
 }

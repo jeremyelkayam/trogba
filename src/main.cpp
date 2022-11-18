@@ -18,6 +18,7 @@
 #include "title_scene.h"
 #include "instructions_scene.h"
 #include "play_scene.h"
+#include "gameover_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -56,6 +57,10 @@ int main()
                 }
                 case trog::scene_type::PLAY: { 
                     scene.reset(new trog::play_scene(sesh, text_generator));
+                    break;
+                }
+                case trog::scene_type::LOSE: { 
+                    scene.reset(new trog::gameover_scene());
                     break;
                 }                
                 default: { 

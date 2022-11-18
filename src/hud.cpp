@@ -14,8 +14,8 @@ namespace trog {
 hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator),
-        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(-10, -75)),
-        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(-10, -75)),
+        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
+        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_window(bn::rect_window::internal()){
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
     for(int i = 0; i < trogmeter_max; i++){
@@ -24,6 +24,8 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
         bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
         _trogmeter.emplace_back(peasanthead_sprite);
     }
+
+    //need to set up a window to make the trogmeter run out
     bn::window outside_window = bn::window::outside();
     outside_window.set_show_bg(_burninatemeter, false);
 
@@ -32,7 +34,6 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
 
     _burninatemeter.set_visible(false);
     _burninatemeter_invert.set_visible(false);
-    BN_LOG("hi");
 }
 
 
@@ -71,7 +72,6 @@ void hud::update_burninatemeter(unsigned int burninate_time){
         bn::fixed time_percentage = burninate_time;
         time_percentage /= TROG_BURNINATE_TIME;
         _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
-
         hide_trogmeter();
     }
 

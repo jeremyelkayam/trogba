@@ -20,7 +20,7 @@ namespace trog{
     private:
         
         session_info& _sesh;
-        player _trogdor;
+        bn::unique_ptr<player> _trogdor;
         hud _hud;
         peasant_factory _pfact;
         knight _blueknight;

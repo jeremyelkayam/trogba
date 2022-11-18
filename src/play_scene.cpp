@@ -10,7 +10,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
-        _trogdor(sesh),
+        _trogdor(new player(sesh)),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
@@ -26,15 +26,15 @@ bn::optional<scene_type> play_scene::update(){
 
     bn::optional<scene_type> result;
 
-    _trogdor.update();
+    _trogdor->update();
     for(cottage &c : _cottages){
         c.update();
-        _trogdor.handle_cottage_collision(c);
+        _trogdor->handle_cottage_collision(c);
     }
 
     for(peasant &p : _peasants) {
         p.update();
-        _trogdor.handle_peasant_collision(p);
+        _trogdor->handle_peasant_collision(p);
 
         //TODO this nest goes too deep
 
@@ -56,12 +56,12 @@ bn::optional<scene_type> play_scene::update(){
     }
     for(archer &a : _archers) {
         a.update();
-        _trogdor.handle_arrow_collision(a);
+        _trogdor->handle_arrow_collision(a);
     }
 
 
     _blueknight.update();
-    _trogdor.handle_knight_collision(_blueknight);
+    _trogdor->handle_knight_collision(_blueknight);
 
     //despawn any peasants that need to be despawned
     _peasants.remove_if(peasant_deletable);
@@ -70,13 +70,21 @@ bn::optional<scene_type> play_scene::update(){
     _pfact.update();
 
     _hud.update();
-    _hud.update_burninatemeter(_trogdor.get_burninating_time());
-    _hud.update_trogmeter(_trogdor.get_trogmeter());
+    _hud.update_burninatemeter(_trogdor->get_burninating_time());
+    _hud.update_trogmeter(_trogdor->get_trogmeter());
 
     if(level_complete()){
         result = scene_type::LEVELBEAT;
-    }else if(false){
-        result = scene_type::LOSE;
+    }
+
+    if(_trogdor->ready_to_respawn()){
+        if(_sesh.mans == 0) {
+            result = scene_type::LOSE;
+            BN_LOG("YOU HAVE DIED");
+        }else{
+            _trogdor.reset(new player(_sesh));
+            --_sesh.mans;
+        }
     }
     
     return result;
