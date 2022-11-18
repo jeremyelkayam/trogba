@@ -16,6 +16,7 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
+    // original styles
     // bn::string<64> instructions[] = {
     //     "Use the squishy + to move",
     //     "Stomp 10 peasants to achieve burnination.",
@@ -52,7 +53,10 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     // text_generator.generate(0, 10, , instruction_text_sprites);   
 
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
     text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", start_text_sprites);    
+
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
     // text_generator.generate(0, 30, , start_text_sprites);    
 
