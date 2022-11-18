@@ -73,7 +73,8 @@ void hud::update() {
     _text_generator.set_left_alignment();
     _text_generator.generate(-120, -75, score_str, _score_text_sprites);   
 
-
+    //TODO: don't just right align this. The text should be right aligned and the numbers
+    // should be left aligned
     bn::ostringstream mans_lv_string_stream(mans_lv_str);
     mans_lv_string_stream << "MANS ";
     mans_lv_string_stream << _sesh.mans;
