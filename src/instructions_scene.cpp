@@ -16,15 +16,37 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
-    text_generator.generate(0, -15, "Use the squishy plus sign ", instruction_text_sprites);   
+    bn::string<64> instructions[] = {
+        "Use the squishy + to move",
+        "Stomp 10 peasants to achieve burnination.",
+        "Burn all cottages to advance a level.",
+        "Avoid knights and archers!",
+        "",
+        "Original by Jonathan Howe",
+        "GBA version by Jeremy Elkayam",
+        "Designed by Mike and Matt"
+    };
+    
+    int ycor = -30;
+    for(bn::string<64> line : instructions) { 
+        text_generator.generate(0, ycor, line, instruction_text_sprites);
+        ycor+=14;
+    }
 
-    text_generator.generate(0, 0, "to control Trogdor.", instruction_text_sprites);   
+    //    
 
-    text_generator.generate(0, 15, "Burn all cottages to advance a level.", instruction_text_sprites);   
+    // text_generator.generate(0, -6, , instruction_text_sprites);   
 
-    text_generator.generate(0, 30, "Avoid knights and archers!", instruction_text_sprites);   
+    // text_generator.generate(0, 0, , instruction_text_sprites);   
 
-    text_generator.generate(0, 60, "Press A to start 'em up ", start_text_sprites);    
+    // text_generator.generate(0, 10, , instruction_text_sprites);   
+
+    text_generator.generate(0, -30+(14*4), "Press A to start 'em up ", start_text_sprites);    
+
+    // text_generator.generate(0, 30, , start_text_sprites);    
+
+    // text_generator.generate(0, 40, , start_text_sprites);    
+
 }
 
 bn::optional<scene_type> instructions_scene::update(){
