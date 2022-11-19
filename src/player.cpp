@@ -38,7 +38,6 @@ void player::update(){
     if(!dead()){
         entity::update();
         move();
-        check_boundary_collision();
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -84,29 +83,40 @@ void player::update(){
 void player::move(){
 
     bool moving = false;
+    bn::fixed_point new_pos(_pos);
     
     if(bn::keypad::up_held()){
-        _pos.set_y(_pos.y() - _speed);
+        new_pos.set_y(new_pos.y() - _speed);
         moving=true;
     }
     if(bn::keypad::down_held()){
-        _pos.set_y(_pos.y() + _speed);
+        new_pos.set_y(new_pos.y() + _speed);
         moving=true;
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
         _breath.set_horizontal_flip(true);
-        _pos.set_x(_pos.x() - _speed);
+        new_pos.set_x(new_pos.x() - _speed);
         moving=true;
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
         _breath.set_horizontal_flip(false);
-        _pos.set_x(_pos.x() + _speed);
+        new_pos.set_x(new_pos.x() + _speed);
         moving=true;
     }
     if(moving){
         _walkcycle.update();
+    }
+
+
+    //separate clauses for x and y coords so that you can input a diagonal
+    //but still move along the sides of the screen
+    if(!going_to_go_offscreen_x(new_pos.x())){
+        _pos.set_x(new_pos.x());
+    }
+    if(!going_to_go_offscreen_y(new_pos.y())){
+        _pos.set_y(new_pos.y());
     }
 
 }

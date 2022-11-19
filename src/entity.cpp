@@ -1,6 +1,6 @@
 #include <bn_log.h>
 #include <bn_display.h>
-
+#include "constants.h"
 #include "entity.h"
 
 
@@ -25,5 +25,37 @@ bool entity::collides_with(entity &e){
 bool entity::out_of_bounds(){
     return !_hitbox.intersects(bn::fixed_rect(0, 0, bn::display::width(), bn::display::height()));
 }
+
+bool entity::going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox){
+    bool oob_left = new_hitbox.left() < TROG_COUNTRYSIDE_LEFT_BOUND; 
+    bool oob_right = new_hitbox.right() > TROG_COUNTRYSIDE_RIGHT_BOUND;
+    return (oob_left || oob_right);
+}
+
+bool entity::going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox){
+    bool oob_top = new_hitbox.top() < TROG_COUNTRYSIDE_TOP_BOUND;
+    bool oob_bottom =  new_hitbox.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND;
+    return (oob_top || oob_bottom);
+}
+
+
+// overloads
+bool entity::going_to_go_offscreen_x(const bn::fixed &new_x){
+    bn::fixed_point new_pos(new_x, _hitbox.y());
+    return going_to_go_offscreen_x(bn::fixed_rect(new_pos, _hitbox.dimensions()));
+}
+
+bool entity::going_to_go_offscreen_y(const bn::fixed &new_y){
+    bn::fixed_point new_pos(_hitbox.x(), new_y);
+    return going_to_go_offscreen_y(bn::fixed_rect(new_pos, _hitbox.dimensions()));
+}
+
+bool entity::going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction){
+    bn::fixed_rect new_hitbox = bn::fixed_rect(_hitbox.position() + (unit_vector(direction).multiplication(speed)), _hitbox.dimensions());
+    return going_to_go_offscreen_x(new_hitbox) || going_to_go_offscreen_y(new_hitbox);
+}
+
+
+
 
 }
