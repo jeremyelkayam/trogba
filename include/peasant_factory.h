@@ -5,11 +5,7 @@
 #include "peasant.h"
 #include "enemy_factory.h"
 
-
 namespace trog{
-
-
-
     class peasant_factory : public enemy_factory { 
     private:
             
