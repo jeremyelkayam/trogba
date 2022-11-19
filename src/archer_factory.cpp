@@ -21,8 +21,10 @@ namespace trog
         else
         {
             // decide randomly which side he will come from
+            // get_int will generate up to (but not including) the second value 
+            // so this generates 0 or 1
             // 1 = left, 0 = right
-            bool direction = _random.get_int(0, 1);
+            bool direction = _random.get_int(0, 2);
 
             bn::fixed spawn_ycor = _random.get_int(TROG_ARCHER_MIN_SPAWN_HEIGHT, TROG_ARCHER_MAX_SPAWN_HEIGHT);
 

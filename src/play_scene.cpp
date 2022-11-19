@@ -13,14 +13,13 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _trogdor(new player(sesh, false)),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
+        _afact(_archers),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
-
-
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -69,6 +68,7 @@ bn::optional<scene_type> play_scene::update(){
     _archers.remove_if(archer_deletable);
 
     _pfact.update();
+    _afact.update();
 
     _hud.update();
     _hud.update_burninatemeter(_trogdor->get_burninating_time());
