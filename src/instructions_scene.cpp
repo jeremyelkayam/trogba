@@ -29,9 +29,9 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
     // };
 
     bn::string<64> instructions[] = {
-        "use the squishy + to move",
-        "squish 10 guys to get fire",
-        "burn all cottages to win",
+        "Use the squishy + to move",
+        "Stomp 10 guys to burninate",
+        "Burn all cottages to win",
         "Avoid knights and archers!",
         "",
         "",
@@ -45,13 +45,6 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
         ycor+=14;
     }
 
-    //    
-
-    // text_generator.generate(0, -6, , instruction_text_sprites);   
-
-    // text_generator.generate(0, 0, , instruction_text_sprites);   
-
-    // text_generator.generate(0, 10, , instruction_text_sprites);   
 
     text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
     text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", start_text_sprites);    

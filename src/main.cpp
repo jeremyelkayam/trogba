@@ -60,7 +60,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::LOSE: { 
-                    scene.reset(new trog::gameover_scene(sesh));
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }                
                 default: { 
