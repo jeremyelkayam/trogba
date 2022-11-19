@@ -14,7 +14,8 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
+{
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
