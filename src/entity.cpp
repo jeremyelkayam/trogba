@@ -71,4 +71,11 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, entity &e){
     return e.get_hitbox().intersects(new_hitbox);
 }
 
+void entity::hide(){
+    _sprite.set_visible(false);
+}
+void entity::show(){
+    _sprite.set_visible(true);
+}
+
 }

@@ -13,6 +13,7 @@ namespace trog {
         TITLE,
         INSTRUCTIONS,
         PLAY,
+        BONUS,
         LEVELBEAT,
         LOSE,
         MOVIE

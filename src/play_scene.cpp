@@ -29,7 +29,10 @@ bn::optional<scene_type> play_scene::update(){
     _trogdor->update();
     for(cottage &c : _cottages){
         c.update();
-        _trogdor->handle_cottage_collision(c);
+        if(_trogdor->handle_cottage_collision(c)){
+            //the above if statement returns true if we hit a treasure hut
+            result = scene_type::BONUS;
+        }
     }
 
     for(peasant &p : _peasants) {
