@@ -50,7 +50,7 @@ namespace trog {
             player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
             virtual void update() final;
             bool burninating();
-            void handle_cottage_collision(cottage &cottage);
+            bool handle_cottage_collision(cottage &cottage);
             void handle_peasant_collision(peasant &peasant);
             void handle_knight_collision(knight &knight);
             void handle_arrow_collision(archer &archer);

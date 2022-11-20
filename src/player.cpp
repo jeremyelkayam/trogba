@@ -119,7 +119,7 @@ void player::move(){
     bool going_to_hit_cottage_y = false;
     
     for(cottage& c : _cottages){
-        if(!c.burninated()){
+        if(!c.burninated() && !c.has_treasure()){
             going_to_hit_cottage_x = 
                 going_to_hit_cottage_x || going_to_collide_x(new_pos.x(), c);
 
@@ -157,15 +157,16 @@ void player::check_boundary_collision(){
     
 }
 
-void player::handle_cottage_collision(cottage &cottage){
-    bn::fixed_rect cottagebox = cottage.get_hitbox();
+bool player::handle_cottage_collision(cottage &cottage){
 
-    if(_hitbox.intersects(cottagebox)){
-        
+    if(_hitbox.intersects(cottage.get_hitbox()) && cottage.has_treasure()){
+        //we need to go to the bonus game
+        return true;
     }
     if(burninating()){
         _breath.handle_cottage_collision(cottage);
     }
+    return false;
 }
 
 void player::handle_peasant_collision(peasant &peasant){
