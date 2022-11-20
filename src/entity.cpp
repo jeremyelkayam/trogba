@@ -26,6 +26,8 @@ bool entity::out_of_bounds(){
     return !_hitbox.intersects(bn::fixed_rect(0, 0, bn::display::width(), bn::display::height()));
 }
 
+
+//collision shit
 bool entity::going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox){
     bool oob_left = new_hitbox.left() < TROG_COUNTRYSIDE_LEFT_BOUND; 
     bool oob_right = new_hitbox.right() > TROG_COUNTRYSIDE_RIGHT_BOUND;
@@ -55,7 +57,18 @@ bool entity::going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &dire
     return going_to_go_offscreen_x(new_hitbox) || going_to_go_offscreen_y(new_hitbox);
 }
 
+bool entity::going_to_collide_x(const bn::fixed &new_x, entity &e){
+    bn::fixed_rect new_hitbox=_hitbox;
+    new_hitbox.set_x(new_x);
 
+    return e.get_hitbox().intersects(new_hitbox);
+}
 
+bool entity::going_to_collide_y(const bn::fixed &new_y, entity &e){
+    bn::fixed_rect new_hitbox=_hitbox;
+    new_hitbox.set_y(new_y);
+
+    return e.get_hitbox().intersects(new_hitbox);
+}
 
 }

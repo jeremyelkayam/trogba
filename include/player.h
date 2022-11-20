@@ -17,6 +17,8 @@ namespace trog {
     class player : public entity { 
         private:
             const bn::fixed _speed;
+
+            bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
             
@@ -30,14 +32,22 @@ namespace trog {
             firebreath _breath;
             session_info &_sesh;
 
+            //it's probably bad for this to have a reference to the cottage
+            // vector, but I just need to get this working!!
+            // TODO: Refactor trogdor to have direction
+            bn::vector<cottage, 10> &_cottages;
+
             void move();
             void check_boundary_collision();
 
             bool invincible() {return _iframes;}
             void die(bn::sprite_item item);
 
+            //todo: this doesn't need to be in this class
+            bool any_dpad_input();
+
         public:
-            player(session_info &sesh, bool iframes);
+            player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
             virtual void update() final;
             bool burninating();
             void handle_cottage_collision(cottage &cottage);
@@ -52,23 +62,3 @@ namespace trog {
 
     };
 }
-
-// void debug_adjust(bn::regular_bg_ptr bg){
-//     //debug adjustment -- move a background around with the dpad and log the coords
-//     if(bn::keypad::left_held()){
-//         bg.set_x(bg.x() - 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     else if(bn::keypad::right_held()){
-//         bg.set_x(bg.x() + 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     if(bn::keypad::up_held()){
-//         bg.set_y(bg.y() - 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-//     else if(bn::keypad::down_held()){
-//         bg.set_y(bg.y() + 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-// }

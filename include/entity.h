@@ -35,6 +35,8 @@ namespace trog{
         bool going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox);  
         bool going_to_go_offscreen_y(const bn::fixed &new_y);  
 
+        bool going_to_collide_x(const bn::fixed &new_x, entity &e);
+        bool going_to_collide_y(const bn::fixed &new_y, entity &e);
 
         bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction); 
 

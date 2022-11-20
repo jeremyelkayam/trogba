@@ -6,13 +6,15 @@
 #include "entity.h"
 namespace trog {
 
-player::player(session_info &sesh, bool iframes) : 
+player::player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
         entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _breath(sesh),
-        _sesh(sesh){
+        _sesh(sesh),
+        _cottages(cottages)
+        {
     _sprite.set_z_order(FRONT_ZORDER);
 
     _trogmeter = 0;
@@ -80,37 +82,46 @@ void player::update(){
 
 }
 
+bool player::any_dpad_input() {
+    return (
+        bn::keypad::up_held() ||
+        bn::keypad::down_held() ||
+        bn::keypad::left_held() ||
+        bn::keypad::right_held()
+    );
+}
+
 void player::move(){
 
-    bool moving = false;
     bn::fixed_point new_pos(_pos);
     
     if(bn::keypad::up_held()){
         new_pos.set_y(new_pos.y() - _speed);
-        moving=true;
     }
     if(bn::keypad::down_held()){
         new_pos.set_y(new_pos.y() + _speed);
-        moving=true;
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
         _breath.set_horizontal_flip(true);
         new_pos.set_x(new_pos.x() - _speed);
-        moving=true;
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
         _breath.set_horizontal_flip(false);
         new_pos.set_x(new_pos.x() + _speed);
-        moving=true;
     }
-    if(moving){
+    if(any_dpad_input()){
         _walkcycle.update();
     }
 
 
-    //separate clauses for x and y coords so that you can input a diagonal
+    
+    for(cottage& c : _cottages){
+
+    }
+
+    //separate clauses for x and y coords so that you can input a diago
     //but still move along the sides of the screen
     if(!going_to_go_offscreen_x(new_pos.x())){
         _pos.set_x(new_pos.x());
@@ -142,8 +153,9 @@ void player::check_boundary_collision(){
 
 void player::handle_cottage_collision(cottage &cottage){
     bn::fixed_rect cottagebox = cottage.get_hitbox();
+
     if(_hitbox.intersects(cottagebox)){
-        // BN_LOG("collision lol make him stop");
+        
     }
     if(burninating()){
         _breath.handle_cottage_collision(cottage);
