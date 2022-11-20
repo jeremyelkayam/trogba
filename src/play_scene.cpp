@@ -23,6 +23,7 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
 }
 
 bn::optional<scene_type> play_scene::update(){
+    set_visible(true);
 
     bn::optional<scene_type> result;
 
@@ -32,6 +33,7 @@ bn::optional<scene_type> play_scene::update(){
         if(_trogdor->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
+            set_visible(false);
         }
     }
 
@@ -96,6 +98,24 @@ bn::optional<scene_type> play_scene::update(){
 
 bool play_scene::level_complete(){
     return false;
+}
+
+void play_scene::set_visible(bool visible){
+    _trogdor->set_visible(visible);
+    for(cottage &c : _cottages){
+        c.set_visible(visible);
+    }
+    for(archer &a : _archers){
+        a.set_visible(visible);
+    }
+    for(peasant &p : _peasants){
+        BN_LOG("hiding peasant lolol");
+        p.set_visible(visible);
+    }
+
+    _blueknight.set_visible(visible);
+    _countryside.set_visible(visible);
+
 }
 
 }

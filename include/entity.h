@@ -22,8 +22,7 @@ namespace trog{
         void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
         bool out_of_bounds();
 
-        void hide();
-        void show();
+        void set_visible(bool visible) {_sprite.set_visible(visible);}
         
         
 

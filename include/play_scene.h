@@ -36,6 +36,8 @@ namespace trog{
         static bool peasant_deletable(peasant &p) {return p.remove_from_map();}
         static bool archer_deletable(archer &a) {return a.remove_from_map();}
 
+        void set_visible(bool visible);
+
     public:
         play_scene(session_info& sesh, bn::sprite_text_generator& generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
