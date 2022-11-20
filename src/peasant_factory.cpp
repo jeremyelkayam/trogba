@@ -5,23 +5,15 @@
 namespace trog
 {
 
-    peasant_factory::peasant_factory(bn::vector<cottage, 10> &cottages, bn::forward_list<peasant, 20> &peasants) : _cottages(cottages),
-                                                                                                                   _peasants(peasants)
+    peasant_factory::peasant_factory(bn::vector<cottage, 10> &cottages, bn::forward_list<peasant, 20> &peasants) : 
+        enemy_factory(TROG_PEASANT_MIN_SPAWN_INTERVAL, TROG_PEASANT_MAX_SPAWN_INTERVAL),
+        _cottages(cottages),
+        _peasants(peasants)
     {
-        reset_spawn_clock();
+        BN_LOG("new peasant factory");
     }
 
-    void peasant_factory::update()
-    {
-        ++_time_since_last_spawn;
-        if (_time_since_last_spawn == _next_spawn)
-        {
-            reset_spawn_clock();
-            spawn_peasant();
-        }
-    }
-
-    void peasant_factory::spawn_peasant()
+    void peasant_factory::spawn()
     {
         BN_LOG("spawn o'clock. number o' peasants pre-spawn: ", _peasants.size());
         if (_peasants.full())
@@ -68,9 +60,4 @@ namespace trog
         }
     }
 
-    void peasant_factory::reset_spawn_clock()
-    {
-        _time_since_last_spawn = 0;
-        _next_spawn = _random.get_int(TROG_PEASANT_MIN_SPAWN_INTERVAL, TROG_PEASANT_MAX_SPAWN_INTERVAL);
-    }
 }

@@ -86,7 +86,7 @@ void peasant::update(){
         _time_dead++;
         
     }else {
-        BN_LOG("waiting", _time_waiting, " of ", _waittime);
+        // BN_LOG("waiting", _time_waiting, " of ", _waittime);
         _time_waiting++;
     }
 

@@ -13,11 +13,12 @@
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
 #include <bn_sprite_text_generator.h>
-#include "common_variable_8x8_sprite_font.h"
+#include "trogdor_variable_8x16_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
 #include "play_scene.h"
+#include "gameover_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -34,7 +35,7 @@ int main()
     trog::session_info sesh = {TROG_STARTING_LIVES, 0, TROG_STARTING_LEVEL};
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
-    bn::sprite_text_generator text_generator(common::variable_8x8_sprite_font);
+    bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     text_generator.set_center_alignment();
 
 
@@ -57,6 +58,10 @@ int main()
                 case trog::scene_type::PLAY: { 
                     scene.reset(new trog::play_scene(sesh, text_generator));
                     break;
+                }
+                case trog::scene_type::LOSE: { 
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
+                    break;
                 }                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
@@ -75,9 +80,6 @@ int main()
             bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
             kicked=false;
         }
-        // tragdar.update();
-        // BN_LOG("ticks elapsed: ", looptimer.elapsed_ticks());
-        // looptimer.restart();
         bn::core::update();
     }
 }

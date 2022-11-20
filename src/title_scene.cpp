@@ -9,8 +9,8 @@
 namespace trog {
 
 title_scene::title_scene() : 
-        titlebg(bn::regular_bg_items::titlebg.create_bg(-3, 48)), 
-        title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)){
+        titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)), 
+        title(bn::regular_bg_items::titlegraphic.create_bg(TROG_TITLE_TEXT_X, TROG_TITLE_TEXT_Y)){
 
     bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
     frame_counter=0;

@@ -13,7 +13,7 @@ knight::knight(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, unsigned short d
 
 void knight::update(){
     entity::update();
-    if(going_to_go_offscreen(_hitbox, _speed, _direction)){
+    if(going_to_go_offscreen(_speed, _direction)){
        _direction+=180;
     }
     // probably refactor this into a base class
@@ -37,19 +37,6 @@ void knight::update(){
     // _direction = _direction % 360;
 
     // ++_frames_moving;
-}
-
-//need to use hitbox in this calculation
-bool knight::going_to_go_offscreen(bn::fixed_rect hitbox, bn::fixed speed, bn::fixed direction){
-    // should refactor this later
-    // also this wont work anyway because it needs to be mirrored in 2 directions
-    // depending what side he intersects with
-    bn::fixed_rect new_box = bn::fixed_rect(hitbox.position() + (unit_vector(direction).multiplication(speed)), hitbox.dimensions());
-    bool oob_left = new_box.left() < TROG_COUNTRYSIDE_LEFT_BOUND; 
-    bool oob_right = new_box.right() > TROG_COUNTRYSIDE_RIGHT_BOUND;
-    bool oob_top = new_box.top() < TROG_COUNTRYSIDE_TOP_BOUND;
-    bool oob_bottom =  new_box.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND;
-    return (oob_left || oob_right || oob_top || oob_bottom);
 }
 
 }

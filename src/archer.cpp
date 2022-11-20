@@ -20,10 +20,10 @@ void archer::update(){
     entity::update();
     _sprite.set_visible(true);
     ++_time_since_spawn;
-    if(TROG_ARCHER_SHOOT_WAITTIME < _time_since_spawn 
+    if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
-        _sprite.set_item(bn::sprite_items::archer);
-    }else if (TROG_ARCHER_SHOOT_WAITTIME < _time_since_spawn && !_arrow){
+        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+    }else if (TROG_ARCHER_SHOOT_WAITTIME == _time_since_spawn && !_arrow){
         _sprite.set_item(bn::sprite_items::archer);
         shoot();
     }else if(TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
@@ -46,4 +46,15 @@ bool archer::remove_from_map(){
     }else return false;
 }
 
+bn::fixed_rect archer::get_hitbox() {
+    if(_arrow){
+        return _arrow->get_hitbox();
+    }else{
+        //bogus rectangle that's way offscreen  
+        return bn::fixed_rect(-500,-500, 0, 0);
+    }
+}
+void archer::destroy_arrow() {
+    _arrow.reset();
+}
 }

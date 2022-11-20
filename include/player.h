@@ -2,6 +2,8 @@
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
 #include "bn_sprite_items_player.h"
+#include "bn_sprite_items_trogdor_arrowed.h"
+#include "bn_sprite_items_trogdor_sworded.h"
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"
@@ -9,11 +11,14 @@
 #include "firebreath.h"
 #include "session_info.h"
 #include "knight.h"
+#include "archer.h"
 
 namespace trog {
     class player : public entity { 
         private:
             const bn::fixed _speed;
+
+            bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
             
@@ -27,44 +32,33 @@ namespace trog {
             firebreath _breath;
             session_info &_sesh;
 
+            //it's probably bad for this to have a reference to the cottage
+            // vector, but I just need to get this working!!
+            // TODO: Refactor trogdor to have direction
+            bn::vector<cottage, 10> &_cottages;
+
             void move();
             void check_boundary_collision();
-            void respawn();
 
-            // 
             bool invincible() {return _iframes;}
-            bool dead() {return _time_dead;}
+            void die(bn::sprite_item item);
+
+            //todo: this doesn't need to be in this class
+            bool any_dpad_input();
 
         public:
-            player(session_info &sesh);
+            player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
             virtual void update() final;
             bool burninating();
-            void handle_cottage_collision(cottage &cottage);
+            bool handle_cottage_collision(cottage &cottage);
             void handle_peasant_collision(peasant &peasant);
             void handle_knight_collision(knight &knight);
-            
+            void handle_arrow_collision(archer &archer);
+            bool dead() {return _time_dead;}
+            bool ready_to_respawn() {return _time_dead == TROG_RESPAWN_TIME;}
+
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
 
     };
 }
-
-// void debug_adjust(bn::regular_bg_ptr bg){
-//     //debug adjustment -- move a background around with the dpad and log the coords
-//     if(bn::keypad::left_held()){
-//         bg.set_x(bg.x() - 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     else if(bn::keypad::right_held()){
-//         bg.set_x(bg.x() + 1);
-//         BN_LOG("xcor ", bg.x());
-//     }
-//     if(bn::keypad::up_held()){
-//         bg.set_y(bg.y() - 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-//     else if(bn::keypad::down_held()){
-//         bg.set_y(bg.y() + 1);
-//         BN_LOG("ycor", bg.y());
-//     }
-// }

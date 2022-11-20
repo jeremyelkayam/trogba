@@ -11,9 +11,10 @@
 
 namespace trog {
 
-cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction) : 
-        entity(xcor, ycor, bn::fixed(20), bn::fixed(45), bn::sprite_items::cottageleft.create_sprite(xcor, ycor)),
+cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure) : 
+        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottageleft.create_sprite(xcor, ycor)),
         _direction(direction),
+        _has_treasure(has_treasure),
         _flames(bn::sprite_items::cottagefire.create_sprite(xcor, ycor + TROG_COTTAGEFIRE_YOFFSET)),
         _burningflames(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)) {
@@ -65,7 +66,10 @@ bool cottage::burninate(){
         return true;
     }
     return false;
+}
 
+bool cottage::has_treasure(){
+    return _has_treasure && _time_burning==0;
 }
 
 }

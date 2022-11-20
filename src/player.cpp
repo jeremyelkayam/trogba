@@ -6,19 +6,25 @@
 #include "entity.h"
 namespace trog {
 
-player::player(session_info &sesh) : 
+player::player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
         entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _breath(sesh),
-        _sesh(sesh){
+        _sesh(sesh),
+        _cottages(cottages)
+        {
     _sprite.set_z_order(FRONT_ZORDER);
 
     _trogmeter = 0;
     _burninate_time = 0;
     _time_dead = 0;
-    _iframes = 0;
+    if(iframes) {
+        _iframes = 1;
+    }else{
+        _iframes = 0;
+    }
 }
 
 bool player::burninating(){
@@ -28,16 +34,12 @@ bool player::burninating(){
 void player::update(){
     if(dead()){
         ++_time_dead;
-        if(_time_dead == TROG_RESPAWN_TIME){
-            respawn();
-        }
     }
     // this cannot be an else if, because if the respawn method is called 
     // then trogdor will be alive again.
     if(!dead()){
         entity::update();
         move();
-        check_boundary_collision();
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -80,32 +82,58 @@ void player::update(){
 
 }
 
+bool player::any_dpad_input() {
+    return (
+        bn::keypad::up_held() ||
+        bn::keypad::down_held() ||
+        bn::keypad::left_held() ||
+        bn::keypad::right_held()
+    );
+}
+
 void player::move(){
 
-    bool moving = false;
+    bn::fixed_point new_pos(_pos);
     
     if(bn::keypad::up_held()){
-        _pos.set_y(_pos.y() - _speed);
-        moving=true;
+        new_pos.set_y(new_pos.y() - _speed);
     }
     if(bn::keypad::down_held()){
-        _pos.set_y(_pos.y() + _speed);
-        moving=true;
+        new_pos.set_y(new_pos.y() + _speed);
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
         _breath.set_horizontal_flip(true);
-        _pos.set_x(_pos.x() - _speed);
-        moving=true;
+        new_pos.set_x(new_pos.x() - _speed);
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
         _breath.set_horizontal_flip(false);
-        _pos.set_x(_pos.x() + _speed);
-        moving=true;
+        new_pos.set_x(new_pos.x() + _speed);
     }
-    if(moving){
+    if(any_dpad_input()){
         _walkcycle.update();
+    }
+
+    bool going_to_hit_cottage_x = false;
+    bool going_to_hit_cottage_y = false;
+    
+    for(cottage& c : _cottages){
+        if(!c.burninated() && !c.has_treasure()){
+            going_to_hit_cottage_x = 
+                going_to_hit_cottage_x || going_to_collide_x(new_pos.x(), c);
+
+            going_to_hit_cottage_y = 
+                going_to_hit_cottage_y || going_to_collide_y(new_pos.y(), c);
+        }
+    }
+    //separate clauses for x and y coords so that you can input a diago
+    //but still move along the sides of the screen
+    if(!going_to_go_offscreen_x(new_pos.x()) && !going_to_hit_cottage_x){
+        _pos.set_x(new_pos.x());
+    }
+    if(!going_to_go_offscreen_y(new_pos.y()) && !going_to_hit_cottage_y){
+        _pos.set_y(new_pos.y());
     }
 
 }
@@ -129,14 +157,16 @@ void player::check_boundary_collision(){
     
 }
 
-void player::handle_cottage_collision(cottage &cottage){
-    bn::fixed_rect cottagebox = cottage.get_hitbox();
-    if(_hitbox.intersects(cottagebox)){
-        // BN_LOG("collision lol make him stop");
+bool player::handle_cottage_collision(cottage &cottage){
+
+    if(_hitbox.intersects(cottage.get_hitbox()) && cottage.has_treasure()){
+        //we need to go to the bonus game
+        return true;
     }
     if(burninating()){
         _breath.handle_cottage_collision(cottage);
     }
+    return false;
 }
 
 void player::handle_peasant_collision(peasant &peasant){
@@ -161,19 +191,23 @@ void player::handle_peasant_collision(peasant &peasant){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !dead() && !invincible()) { 
-        bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
-        _time_dead = 1;
+        die(bn::sprite_items::trogdor_sworded);
     }
 }
 
-void player::respawn(){
-    _time_dead=0;
-    --_sesh.mans;
-    _pos.set_x(TROG_PLAYER_SPAWN_X);
-    _pos.set_y(TROG_PLAYER_SPAWN_Y);
+void player::handle_arrow_collision(archer &archer){
+    if(collides_with(archer) && !dead() && !invincible()) { 
+        die(bn::sprite_items::trogdor_arrowed);
+        archer.destroy_arrow();
+    }
+}
+
+void player::die(bn::sprite_item item){
+    bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
+    _time_dead = 1;
+    _sprite.set_item(item);
     _burninate_time = 0;
-    _trogmeter = 0;
-    _iframes = 1;
+    _breath.disable();
 }
 
 }

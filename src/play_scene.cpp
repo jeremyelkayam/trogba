@@ -10,31 +10,31 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
-        _trogdor(sesh),
+        _trogdor(new player(sesh, _cottages, false)),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
+        _afact(_archers),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58)){
-    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
-    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
-    _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
-    _archers.emplace_front(0,false);
-
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
+{
+    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
+    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
+    _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);
 }
 
 bn::optional<scene_type> play_scene::update(){
 
     bn::optional<scene_type> result;
 
-    _trogdor.update();
+    _trogdor->update();
     for(cottage &c : _cottages){
         c.update();
-        _trogdor.handle_cottage_collision(c);
+        _trogdor->handle_cottage_collision(c);
     }
 
     for(peasant &p : _peasants) {
         p.update();
-        _trogdor.handle_peasant_collision(p);
+        _trogdor->handle_peasant_collision(p);
 
         //TODO this nest goes too deep
 
@@ -56,26 +56,36 @@ bn::optional<scene_type> play_scene::update(){
     }
     for(archer &a : _archers) {
         a.update();
+        _trogdor->handle_arrow_collision(a);
     }
 
 
     _blueknight.update();
-    _trogdor.handle_knight_collision(_blueknight);
+    _trogdor->handle_knight_collision(_blueknight);
 
     //despawn any peasants that need to be despawned
     _peasants.remove_if(peasant_deletable);
     _archers.remove_if(archer_deletable);
 
     _pfact.update();
+    _afact.update();
 
     _hud.update();
-    _hud.update_burninatemeter(_trogdor.get_burninating_time());
-    _hud.update_trogmeter(_trogdor.get_trogmeter());
+    _hud.update_burninatemeter(_trogdor->get_burninating_time());
+    _hud.update_trogmeter(_trogdor->get_trogmeter());
 
     if(level_complete()){
         result = scene_type::LEVELBEAT;
-    }else if(false){
-        result = scene_type::LOSE;
+    }
+
+    if(_trogdor->ready_to_respawn()){
+        if(_sesh.mans == 0) {
+            result = scene_type::LOSE;
+            BN_LOG("YOU HAVE DIED");
+        }else{
+            _trogdor.reset(new player(_sesh, _cottages, false));
+            --_sesh.mans;
+        }
     }
     
     return result;

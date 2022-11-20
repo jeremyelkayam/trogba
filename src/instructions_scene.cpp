@@ -10,23 +10,51 @@
 namespace trog {
 
 instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) : 
-        title(bn::regular_bg_items::titlegraphic.create_bg(10, 58)),
+        title(bn::regular_bg_items::titlegraphic.create_bg(TROG_TITLE_TEXT_X, TROG_INSTRUCTION_TITLE_Y)),
         text_generator(a_generator){
     flashing_text_counter = 0;
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
-    text_generator.generate(0, -15, "use the dpad to move around y'all", instruction_text_sprites);   
+    // original styles
+    // bn::string<64> instructions[] = {
+    //     "Use the squishy + to move",
+    //     "Stomp 10 peasants to achieve burnination.",
+    //     "Burn all cottages to advance a level.",
+    //     "Avoid knights and archers!",
+    //     "",
+    //     "Original by Jonathan Howe",
+    //     "GBA version by Jeremy Elkayam",
+    //     "Designed by Mike and Matt"
+    // };
 
-    text_generator.generate(0, 0, "kill 10 peasants to get fire", instruction_text_sprites);   
+    bn::string<64> instructions[] = {
+        "Use the squishy + to move",
+        "Stomp 10 guys to burninate",
+        "Burn all cottages to win",
+        "Avoid knights and archers!",
+        "",
+        "",
+        "OG by Mike/Matt/Jonathan",
+        "GBA version by Jeremy Elkayam"
+    };
+    
+    int ycor = -30;
+    for(bn::string<64> line : instructions) { 
+        text_generator.generate(0, ycor, line, instruction_text_sprites);
+        ycor+=14;
+    }
 
-    text_generator.generate(0, 15, "fire burns cottages", instruction_text_sprites);   
 
-    text_generator.generate(0, 30, "burn all houses 2 win", instruction_text_sprites);   
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", start_text_sprites);    
 
-    text_generator.generate(0, 45, "watch out 4 archers and nites", instruction_text_sprites);   
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
-    text_generator.generate(0, 60, "press a to start 'em up... ", start_text_sprites);    
+    // text_generator.generate(0, 30, , start_text_sprites);    
+
+    // text_generator.generate(0, 40, , start_text_sprites);    
+
 }
 
 bn::optional<scene_type> instructions_scene::update(){
