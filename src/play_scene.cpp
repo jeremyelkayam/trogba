@@ -17,9 +17,9 @@ play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator)
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
-    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN);
-    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT);
-    _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP);
+    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
+    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
+    _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);
 }
 
 bn::optional<scene_type> play_scene::update(){

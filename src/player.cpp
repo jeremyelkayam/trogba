@@ -115,18 +115,24 @@ void player::move(){
         _walkcycle.update();
     }
 
-
+    bool going_to_hit_cottage_x = false;
+    bool going_to_hit_cottage_y = false;
     
     for(cottage& c : _cottages){
+        if(!c.burninated()){
+            going_to_hit_cottage_x = 
+                going_to_hit_cottage_x || going_to_collide_x(new_pos.x(), c);
 
+            going_to_hit_cottage_y = 
+                going_to_hit_cottage_y || going_to_collide_y(new_pos.y(), c);
+        }
     }
-
     //separate clauses for x and y coords so that you can input a diago
     //but still move along the sides of the screen
-    if(!going_to_go_offscreen_x(new_pos.x())){
+    if(!going_to_go_offscreen_x(new_pos.x()) && !going_to_hit_cottage_x){
         _pos.set_x(new_pos.x());
     }
-    if(!going_to_go_offscreen_y(new_pos.y())){
+    if(!going_to_go_offscreen_y(new_pos.y()) && !going_to_hit_cottage_y){
         _pos.set_y(new_pos.y());
     }
 
@@ -202,17 +208,5 @@ void player::die(bn::sprite_item item){
     _burninate_time = 0;
     _breath.disable();
 }
-
-//possibly just reconstruct a player if we need to respawn tbh
-// void player::respawn(){
-//     _sprite.set_item(bn::sprite_items::player);
-//     _time_dead=0;
-//     --_sesh.mans;
-//     _pos.set_x(TROG_PLAYER_SPAWN_X);
-//     _pos.set_y(TROG_PLAYER_SPAWN_Y);
-//     _burninate_time = 0;
-//     _trogmeter = 0;
-//     _iframes = 1;
-// }
 
 }
