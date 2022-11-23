@@ -8,8 +8,9 @@ namespace trog {
 bonus_scene::bonus_scene(session_info &sesh) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
         _exit(100,0,20,20),
-        _trogdor(sesh, _dummy, false),
+        _trogdor(80,0, sesh, _dummy, false),
         _sesh(sesh) {
+    _trogdor.set_horizontal_flip(true);
 
     _money.emplace_front(-80, 40);
     _money.emplace_front(-40, 20);

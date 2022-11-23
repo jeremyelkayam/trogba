@@ -10,7 +10,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
         _sesh(sesh),
-        _trogdor(new player(sesh, _cottages, false)),
+        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, _cottages, false)),
         _hud(sesh, generator, TROG_TROGMETER_MAX),
         _pfact(_cottages,_peasants),
         _afact(_archers),
@@ -91,7 +91,7 @@ bn::optional<scene_type> play_scene::update(){
             result = scene_type::LOSE;
             BN_LOG("YOU HAVE DIED");
         }else{
-            _trogdor.reset(new player(_sesh, _cottages, false));
+            _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, _cottages, true));
             --_sesh.mans;
         }
     }

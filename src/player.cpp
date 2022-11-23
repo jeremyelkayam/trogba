@@ -6,8 +6,8 @@
 #include "entity.h"
 namespace trog {
 
-player::player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
-        entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
