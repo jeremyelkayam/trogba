@@ -19,6 +19,7 @@
 #include "instructions_scene.h"
 #include "play_scene.h"
 #include "gameover_scene.h"
+#include "bonus_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -31,6 +32,7 @@ int main()
     bool kicked=false;
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
+    bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
     trog::session_info sesh = {TROG_STARTING_LIVES, 0, TROG_STARTING_LEVEL};
     
@@ -56,7 +58,20 @@ int main()
                     break;
                 }
                 case trog::scene_type::PLAY: { 
+                    if(previous_play_scene){
+                        //this means we are returning from an interruption
+                        //so we should go back to the play scene from before 
+                        scene = bn::move(previous_play_scene);
+                    }
                     scene.reset(new trog::play_scene(sesh, text_generator));
+                    break;
+                }
+                case trog::scene_type::BONUS: {
+                    //this is the treasure hut scene
+                    // we need to store the play scene so that we may return to it later.
+                    previous_play_scene = bn::move(scene);
+
+                    scene.reset(new trog::bonus_scene(sesh));
                     break;
                 }
                 case trog::scene_type::LOSE: { 

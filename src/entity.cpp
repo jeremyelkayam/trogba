@@ -71,4 +71,5 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, entity &e){
     return e.get_hitbox().intersects(new_hitbox);
 }
 
+
 }
