@@ -15,8 +15,10 @@ bonus_scene::bonus_scene(session_info &sesh) :
     _money.emplace_front(-90, 30);
     _money.emplace_front(-50, 0);
     _money.emplace_front(-50, 60);
-    _money.emplace_front(10, 30);
-
+    _money.emplace_front(-10, 30);
+    _money.emplace_front(30, 0);
+    _money.emplace_front(30, 60);
+    _money.emplace_front(70, 30);
 
 }
 
