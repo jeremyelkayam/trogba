@@ -33,6 +33,9 @@ bn::optional<scene_type> play_scene::update(){
         if(_trogdor->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
+
+            //this marks the cottage as visited so that we can no longer return
+            c.visit();
             set_visible(false);
         }
     }
@@ -109,7 +112,6 @@ void play_scene::set_visible(bool visible){
         a.set_visible(visible);
     }
     for(peasant &p : _peasants){
-        BN_LOG("hiding peasant lolol");
         p.set_visible(visible);
     }
 

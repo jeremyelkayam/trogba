@@ -21,5 +21,6 @@ namespace trog {
             bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
             direction get_direction() {return _direction;}
             bool has_treasure();
+            void visit() {BN_ASSERT(_has_treasure); _has_treasure = false;}
     };
 }
