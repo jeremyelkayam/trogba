@@ -47,7 +47,7 @@ namespace trog {
             bool any_dpad_input();
 
         public:
-            player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
+            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
             virtual void update() final;
             bool burninating();
             bool handle_cottage_collision(cottage &cottage);

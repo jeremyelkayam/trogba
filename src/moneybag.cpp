@@ -1,17 +1,23 @@
 #include <bn_log.h>
-#include "arrow.h"
+#include "moneybag.h"
+#include "bn_sprite_items_moneybag.h"
+#include "constants.h"
 
 namespace trog { 
 
-arrow::arrow(bn::fixed_point pos, bool facing_left) : 
-        entity(pos.x(), pos.y(), TROG_ARROW_WIDTH, TROG_ARROW_HEIGHT, bn::sprite_items::moneybag.create_sprite(pos)),
+moneybag::moneybag(bn::fixed xcor, bn::fixed ycor) : 
+        entity(xcor, ycor, TROG_MONEYBAG_WIDTH, TROG_MONEYBAG_HEIGHT, bn::sprite_items::moneybag.create_sprite(xcor, ycor)),
+        collected(false)
         {
-
+    _sprite.set_z_order(BACK_ZORDER);
 }
 
 
-void arrow::update(){
+void moneybag::update(){
     entity::update();
+}
+void moneybag::collect(){
+    collected = true;
 }
 
 }
