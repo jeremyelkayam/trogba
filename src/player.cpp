@@ -153,14 +153,13 @@ void player::check_boundary_collision(){
         _pos.set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - _hitbox.width() / 2);
     }
     
-    _hitbox.set_position(_pos);
-    
+    _hitbox.set_position(_pos);   
 }
 
 bool player::handle_cottage_collision(cottage &cottage){
     const bn::fixed_rect &cottagebox = cottage.get_hitbox();
 
-    if(_hitbox.intersects(cottagebox)){
+    if(_hitbox.intersects(cottagebox) && !cottage.burninated()){
         if(cottage.has_treasure()){
             return true;
         }else{

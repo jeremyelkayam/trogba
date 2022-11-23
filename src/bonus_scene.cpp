@@ -12,11 +12,11 @@ bonus_scene::bonus_scene(session_info &sesh) :
         _sesh(sesh) {
     _trogdor.set_horizontal_flip(true);
 
-    _money.emplace_front(-80, 40);
-    _money.emplace_front(-40, 20);
-    _money.emplace_front(0, 60);
-    _money.emplace_front(40, 40);
-    _money.emplace_front(0, 0);
+    _money.emplace_front(-90, 30);
+    _money.emplace_front(-50, 0);
+    _money.emplace_front(-50, 60);
+    _money.emplace_front(10, 30);
+
 
 }
 
