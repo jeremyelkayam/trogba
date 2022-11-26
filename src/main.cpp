@@ -61,9 +61,11 @@ int main()
                     if(previous_play_scene){
                         //this means we are returning from an interruption
                         //so we should go back to the play scene from before 
+                        BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
+                    }else{
+                        scene.reset(new trog::play_scene(sesh, text_generator));
                     }
-                    scene.reset(new trog::play_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::BONUS: {

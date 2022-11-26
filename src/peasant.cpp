@@ -14,14 +14,14 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _time_waiting(0),
         _despawn_delay(60),
         _time_dead(0),
+        _onfire(false),
+        _returning(false),
+        _just_spawned(true),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)){
     _sprite.set_visible(false);
     _sprite.set_z_order(MID_ZORDER);
 
-
-    _onfire = false;
-    _returning = false;
     switch(direction) {
         case direction::UP:
             _direction = bn::fixed_point(0,-1);
@@ -64,7 +64,13 @@ void peasant::burninate(){
 
 void peasant::update(){
     entity::update();
-    _sprite.set_visible(true);
+
+    //see the .h file for more info here
+    //but basically this exists to fix a visual bug
+    if(_just_spawned){
+        _just_spawned = false;
+        _sprite.set_visible(true);
+    }
     
 
     if(_time_waiting == _waittime){

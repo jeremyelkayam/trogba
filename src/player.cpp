@@ -6,8 +6,8 @@
 #include "entity.h"
 namespace trog {
 
-player::player(session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
-        entity(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
@@ -153,15 +153,41 @@ void player::check_boundary_collision(){
         _pos.set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - _hitbox.width() / 2);
     }
     
-    _hitbox.set_position(_pos);
-    
+    _hitbox.set_position(_pos);   
 }
 
 bool player::handle_cottage_collision(cottage &cottage){
+    const bn::fixed_rect &cottagebox = cottage.get_hitbox();
 
-    if(_hitbox.intersects(cottage.get_hitbox()) && cottage.has_treasure()){
-        //we need to go to the bonus game
-        return true;
+    if(_hitbox.intersects(cottagebox) && !cottage.burninated()){
+        if(cottage.has_treasure()){
+            return true;
+        }else{
+            //if you intersect a cottage that is unburninated, we need to warp you out
+
+            bn::fixed downdist,updist,leftdist,rightdist,min_dist;
+            downdist = bn::abs(cottagebox.bottom() - _hitbox.top());
+            updist = bn::abs(cottagebox.top() - _hitbox.bottom());
+            
+            leftdist = bn::abs(cottagebox.left() - _hitbox.right());
+            BN_LOG("left distance", leftdist);
+            rightdist = bn::abs(cottagebox.right() - _hitbox.left());
+            BN_LOG("right distance", rightdist);
+
+            // ah yes, 3 nested mins, very good coding jeremy
+            min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
+            if(min_dist == downdist) {
+                _pos.set_y(_pos.y() + downdist);
+            }else if(min_dist == updist) {
+                _pos.set_y(_pos.y() - updist);
+            }else if(min_dist == leftdist) {
+                _pos.set_x(_pos.x() - leftdist);
+            }else if(min_dist == rightdist) {
+                _pos.set_x(_pos.x() + rightdist);
+            }else{
+                BN_ASSERT(false, "error freeing player from cottage collision");
+            }
+        }
     }
     if(burninating()){
         _breath.handle_cottage_collision(cottage);
