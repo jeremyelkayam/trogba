@@ -14,6 +14,7 @@
 #include <bn_bg_palettes.h>
 #include <bn_sprite_text_generator.h>
 #include "trogdor_variable_8x16_sprite_font.h"
+#include "trogdor_variable_16x32_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -38,6 +39,7 @@ int main()
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
+    bn::sprite_text_generator big_text_generator(trog::variable_16x32_sprite_font);
     text_generator.set_center_alignment();
 
 
@@ -77,7 +79,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::LOSE: { 
-                    scene.reset(new trog::gameover_scene(sesh, text_generator));
+                    scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
                     break;
                 }                
                 default: { 
