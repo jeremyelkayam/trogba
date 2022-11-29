@@ -8,10 +8,11 @@ namespace trog {
 bonus_scene::bonus_scene(session_info &sesh) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
         _exit(100,0,20,20),
-        _trogdor(80,0, sesh, _dummy, false),
+        _trogdor(80,0, sesh, false),
         _sesh(sesh) {
     _trogdor.set_horizontal_flip(true);
 
+    //todo refactor this into an array of pairs with a for loop. would be cleaner
     _money.emplace_front(-90, 30);
     _money.emplace_front(-50, 0);
     _money.emplace_front(-50, 60);
@@ -19,7 +20,6 @@ bonus_scene::bonus_scene(session_info &sesh) :
     _money.emplace_front(30, 0);
     _money.emplace_front(30, 60);
     _money.emplace_front(70, 30);
-
 }
 
 
@@ -33,7 +33,6 @@ bn::optional<scene_type> bonus_scene::update(){
         result = scene_type::PLAY;
     }
 
-
     for(moneybag &bag : _money){
         if(_trogdor.get_hitbox().intersects(bag.get_hitbox())){
             //todo refactor this into trogdor
@@ -45,7 +44,6 @@ bn::optional<scene_type> bonus_scene::update(){
 
     _money.remove_if(moneybag_deletable);
 
-    
     return result;
 }
 

@@ -35,9 +35,8 @@ namespace trog {
             //it's probably bad for this to have a reference to the cottage
             // vector, but I just need to get this working!!
             // TODO: Refactor trogdor to have direction
-            bn::vector<cottage, 10> &_cottages;
+            // bn::vector<cottage, 10> &_cottages;
 
-            void move();
             void check_boundary_collision();
 
             bool invincible() {return _iframes;}
@@ -46,9 +45,17 @@ namespace trog {
             //todo: this doesn't need to be in this class
             bool any_dpad_input();
 
+            void free_from_collisionbox(const bn::fixed_rect &box);
+
+            void update_next_pos();
+            void update_pos() {_pos = _next_pos;}
+
+            bn::fixed_point _next_pos;
+
         public:
-            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes);
+            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes);
             virtual void update() final;
+
             bool burninating();
             bool handle_cottage_collision(cottage &cottage);
             void handle_peasant_collision(peasant &peasant);

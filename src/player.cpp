@@ -6,14 +6,13 @@
 #include "entity.h"
 namespace trog {
 
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bn::vector<cottage, 10> &cottages, bool iframes) : 
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
         entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _breath(sesh),
-        _sesh(sesh),
-        _cottages(cottages)
+        _sesh(sesh)
         {
     _sprite.set_z_order(FRONT_ZORDER);
 
@@ -38,8 +37,11 @@ void player::update(){
     // this cannot be an else if, because if the respawn method is called 
     // then trogdor will be alive again.
     if(!dead()){
+        update_pos();
         entity::update();
-        move();
+        if(any_dpad_input()){
+            _walkcycle.update();
+        }
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -77,9 +79,8 @@ void player::update(){
             _sprite.set_visible(true);
             _iframes = 0;
         }
-
     }
-
+    update_next_pos();
 }
 
 bool player::any_dpad_input() {
@@ -91,102 +92,102 @@ bool player::any_dpad_input() {
     );
 }
 
-void player::move(){
+void player::update_next_pos(){
+    _next_pos = _pos;
 
-    bn::fixed_point new_pos(_pos);
-    
     if(bn::keypad::up_held()){
-        new_pos.set_y(new_pos.y() - _speed);
+        _next_pos.set_y(_pos.y() - _speed);
     }
     if(bn::keypad::down_held()){
-        new_pos.set_y(new_pos.y() + _speed);
+        _next_pos.set_y(_pos.y() + _speed);
     }
     if(bn::keypad::left_held()){
         _sprite.set_horizontal_flip(true);
         _breath.set_horizontal_flip(true);
-        new_pos.set_x(new_pos.x() - _speed);
+        _next_pos.set_x(_pos.x() - _speed);
     }
     if(bn::keypad::right_held()){
         _sprite.set_horizontal_flip(false);
         _breath.set_horizontal_flip(false);
-        new_pos.set_x(new_pos.x() + _speed);
-    }
-    if(any_dpad_input()){
-        _walkcycle.update();
+        _next_pos.set_x(_pos.x() + _speed);
     }
 
-    bool going_to_hit_cottage_x = false;
-    bool going_to_hit_cottage_y = false;
-    
-    for(cottage& c : _cottages){
-        if(!c.burninated() && !c.has_treasure()){
-            going_to_hit_cottage_x = 
-                going_to_hit_cottage_x || going_to_collide_x(new_pos.x(), c);
-
-            going_to_hit_cottage_y = 
-                going_to_hit_cottage_y || going_to_collide_y(new_pos.y(), c);
-        }
-    }
-    //separate clauses for x and y coords so that you can input a diago
-    //but still move along the sides of the screen
-    if(!going_to_go_offscreen_x(new_pos.x()) && !going_to_hit_cottage_x){
-        _pos.set_x(new_pos.x());
-    }
-    if(!going_to_go_offscreen_y(new_pos.y()) && !going_to_hit_cottage_y){
-        _pos.set_y(new_pos.y());
-    }
+    // should check bounds while we r here
+    check_boundary_collision();
 
 }
 
 void player::check_boundary_collision(){
-    //collision
-    if(_hitbox.top() < TROG_COUNTRYSIDE_TOP_BOUND){
-        _pos.set_y(TROG_COUNTRYSIDE_TOP_BOUND + _hitbox.height() / 2);
+    if(going_to_go_offscreen_x(_next_pos.x())){
+        _next_pos.set_x(_pos.x());
     }
-    if(_hitbox.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND){
-        _pos.set_y(TROG_COUNTRYSIDE_BOTTOM_BOUND - _hitbox.height() / 2);
+    if(going_to_go_offscreen_y(_next_pos.y())){
+        _next_pos.set_y(_pos.y());
     }
-    if(_hitbox.left() < TROG_COUNTRYSIDE_LEFT_BOUND){
-        _pos.set_x(TROG_COUNTRYSIDE_LEFT_BOUND + _hitbox.width() / 2);
+}
+
+void player::free_from_collisionbox(const bn::fixed_rect &box){
+    //if you intersect a cottage that is unburninated, we need to warp you out
+    BN_ASSERT(_hitbox.intersects(box));
+
+    bn::fixed downdist,updist,leftdist,rightdist,min_dist;
+    downdist = bn::abs(box.bottom() - _hitbox.top());
+    BN_LOG("down distance ", downdist);
+    updist = bn::abs(box.top() - _hitbox.bottom());
+    BN_LOG("up distance ", updist);
+
+
+    leftdist = bn::abs(box.left() - _hitbox.right());
+    BN_LOG("left distance ", leftdist);
+    rightdist = bn::abs(box.right() - _hitbox.left());
+    BN_LOG("right distance ", rightdist);
+
+    // ah yes, 3 nested mins, very good coding jeremy
+    min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
+    if(min_dist == downdist) {
+        _next_pos.set_y(_pos.y() + downdist);
+    }else if(min_dist == updist) {
+        _next_pos.set_y(_pos.y() - updist);
+    }else if(min_dist == leftdist) {
+        _next_pos.set_x(_pos.x() - leftdist);
+    }else if(min_dist == rightdist) {
+        _next_pos.set_x(_pos.x() + rightdist);
+    }else{
+        BN_ASSERT(false, "error freeing player from cottage collision");
     }
-    if(_hitbox.right() > TROG_COUNTRYSIDE_RIGHT_BOUND){
-        _pos.set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - _hitbox.width() / 2);
-    }
-    
-    _hitbox.set_position(_pos);   
 }
 
 bool player::handle_cottage_collision(cottage &cottage){
     const bn::fixed_rect &cottagebox = cottage.get_hitbox();
 
+
+    bool going_to_hit_cottage_x = false;
+    bool going_to_hit_cottage_y = false;
+    
+    if(!cottage.burninated() && !cottage.has_treasure()){
+        going_to_hit_cottage_x = 
+            going_to_hit_cottage_x || going_to_collide_x(_next_pos.x(), cottagebox);
+
+        going_to_hit_cottage_y = 
+            going_to_hit_cottage_y || going_to_collide_y(_next_pos.y(), cottagebox);
+    }
+    
+    //separate clauses for x and y coords so that you can input a diagonal
+    //but still move along the sides of the screen
+    if(going_to_hit_cottage_x){
+        _next_pos.set_x(_pos.x());
+    }
+    if(going_to_hit_cottage_y){
+        _next_pos.set_y(_pos.y());
+    }
+
+
     if(_hitbox.intersects(cottagebox) && !cottage.burninated()){
         if(cottage.has_treasure()){
             return true;
         }else{
-            //if you intersect a cottage that is unburninated, we need to warp you out
-
-            bn::fixed downdist,updist,leftdist,rightdist,min_dist;
-            downdist = bn::abs(cottagebox.bottom() - _hitbox.top());
-            updist = bn::abs(cottagebox.top() - _hitbox.bottom());
-            
-            leftdist = bn::abs(cottagebox.left() - _hitbox.right());
-            BN_LOG("left distance", leftdist);
-            rightdist = bn::abs(cottagebox.right() - _hitbox.left());
-            BN_LOG("right distance", rightdist);
-
-            // ah yes, 3 nested mins, very good coding jeremy
-            min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
-            if(min_dist == downdist) {
-                _pos.set_y(_pos.y() + downdist);
-            }else if(min_dist == updist) {
-                _pos.set_y(_pos.y() - updist);
-            }else if(min_dist == leftdist) {
-                _pos.set_x(_pos.x() - leftdist);
-            }else if(min_dist == rightdist) {
-                _pos.set_x(_pos.x() + rightdist);
-            }else{
-                BN_ASSERT(false, "error freeing player from cottage collision");
-            }
+            //get him OUT of that box!!
+            free_from_collisionbox(cottagebox);
         }
     }
     if(burninating()){
@@ -232,7 +233,7 @@ void player::die(bn::sprite_item item){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
     _sprite.set_item(item);
-    _burninate_time = 0;
+    // _burninate_time = 0;
     _breath.disable();
 }
 
