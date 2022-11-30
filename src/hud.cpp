@@ -14,9 +14,10 @@ namespace trog {
 hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator),
-        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
-        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
-        _burninatemeter_window(bn::rect_window::internal()){
+        // _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
+        // _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
+        _burninatemeter_window(bn::rect_window::internal()),
+        _enabled(true) {
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
     for(int i = 0; i < trogmeter_max; i++){
         bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(
@@ -27,13 +28,13 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
 
     //need to set up a window to make the trogmeter run out
     bn::window outside_window = bn::window::outside();
-    outside_window.set_show_bg(_burninatemeter, false);
+    // outside_window.set_show_bg(_burninatemeter, false);
 
     _burninatemeter_window.set_boundaries(-80,TROG_HUD_BURNINATEMETER_LEFTBOUND,-72,TROG_HUD_TROGMETER_LEFTBOUND + TROG_HUD_BURNINATEMETER_WIDTH);
-    _burninatemeter_invert.put_below();
+    // _burninatemeter_invert.put_below();
 
-    _burninatemeter.set_visible(false);
-    _burninatemeter_invert.set_visible(false);
+    // _burninatemeter.set_visible(false);
+    // _burninatemeter_invert.set_visible(false);
 }
 
 
@@ -58,12 +59,12 @@ void hud::set_sprite_arr_visible(bn::vector<bn::sprite_ptr, 32> sprites, bool vi
 
 void hud::update_burninatemeter(unsigned int burninate_time){
     if(burninate_time == 0) { 
-        _burninatemeter.set_visible(false);
-        _burninatemeter_invert.set_visible(false);
+        // _burninatemeter.set_visible(false);
+        // _burninatemeter_invert.set_visible(false);
         set_sprite_arr_visible(_trogmeter, true);
     }else{
-        _burninatemeter.set_visible(true);
-        _burninatemeter_invert.set_visible(true);
+        // _burninatemeter.set_visible(true);
+        // _burninatemeter_invert.set_visible(true);
         bn::fixed time_percentage = burninate_time;
         time_percentage /= TROG_BURNINATE_TIME;
         _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
@@ -76,8 +77,9 @@ void hud::set_all_visible(bool visible){
     set_sprite_arr_visible(_score_text_sprites, visible);
     set_sprite_arr_visible(_mans_lv_text_sprites, visible);
     set_sprite_arr_visible(_trogmeter, visible);
-    _burninatemeter.set_visible(visible);
-    _burninatemeter_invert.set_visible(visible);
+    // _burninatemeter.set_visible(visible);
+    // _burninatemeter_invert.set_visible(visible);
+    _enabled = visible;
 }
 
 void hud::hide(){
@@ -89,6 +91,8 @@ void hud::show(){
 }
 
 void hud::update() {
+    if(_enabled){
+
     _score_text_sprites.clear();
     _mans_lv_text_sprites.clear();
 
@@ -114,6 +118,7 @@ void hud::update() {
     //_text_generator.generate(0, 0, "SWORDED!", _idk); 
     
 
+    }
 }
 
 

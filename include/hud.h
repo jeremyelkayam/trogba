@@ -18,12 +18,13 @@ namespace trog {
                                            _mans_lv_text_sprites,
                                            _trogmeter;
 
-            bn::regular_bg_ptr _burninatemeter;            
-            bn::regular_bg_ptr _burninatemeter_invert;            
+            // bn::regular_bg_ptr _burninatemeter;            
+            // bn::regular_bg_ptr _burninatemeter_invert;            
             bn::rect_window _burninatemeter_window;
             void set_all_visible(bool visible);
             void set_sprite_arr_visible(bn::vector<bn::sprite_ptr, 32> sprites, bool visible);
-            
+            bool _enabled;
+
         public:
             hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();

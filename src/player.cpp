@@ -28,7 +28,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 }
 
 bool player::burninating(){
-    return _burninate_time != 0;
+    return _burninate_time != 0 && !dead();
 }
 
 void player::update(){
@@ -237,7 +237,6 @@ void player::die(bn::sprite_item item){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
     _sprite.set_item(item);
-    // _burninate_time = 0;
     _breath.disable();
 }
 

@@ -50,6 +50,7 @@ int main()
     {
         if(scene){
             next_scene = scene->update();
+            hud.update();
         }
         if(next_scene){
             bn::sound::stop_all();
