@@ -2,6 +2,7 @@
 #include <bn_fixed_rect.h>
 #include <bn_sprite_ptr.h>
 #include <bn_math.h>
+#include "hitbox.h"
 #define FRONT_ZORDER 0
 #define MID_ZORDER 1
 #define BACK_ZORDER 2
@@ -13,7 +14,7 @@ namespace trog{
     public:
         virtual ~entity() = default;
         virtual void update();
-        virtual bn::fixed_rect get_hitbox() { return _hitbox; }
+        virtual hitbox& get_hitbox() { return _hitbox; }
         bool collides_with(entity &e);
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}
@@ -37,15 +38,15 @@ namespace trog{
         bool going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox);  
         bool going_to_go_offscreen_y(const bn::fixed &new_y);  
 
-        bool going_to_collide_x(const bn::fixed &new_x, const bn::fixed_rect &box);
-        bool going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &box);
+        bool going_to_collide_x(const bn::fixed &new_x, hitbox &box);
+        bool going_to_collide_y(const bn::fixed &new_y, hitbox &box);
 
         bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction); 
 
         bn::fixed_point unit_vector(bn::fixed angle){return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
 
         bn::fixed_point _pos;
-        bn::fixed_rect _hitbox;
+        hitbox _hitbox;
         bn::sprite_ptr _sprite;
     };
 

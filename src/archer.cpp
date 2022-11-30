@@ -4,7 +4,7 @@
 namespace trog { 
 
 archer::archer(bn::fixed ycor, bool facing_left) : 
-        entity(0, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(0, ycor)),
+        entity(0, ycor, 0, 0, bn::sprite_items::archer.create_sprite(0, ycor)),
         _facing_left(facing_left) {
     _sprite.set_visible(false);
     _sprite.set_horizontal_flip(facing_left);
@@ -46,12 +46,12 @@ bool archer::remove_from_map(){
     }else return false;
 }
 
-bn::fixed_rect archer::get_hitbox() {
+hitbox& archer::get_hitbox() {
     if(_arrow){
         return _arrow->get_hitbox();
     }else{
         //bogus rectangle that's way offscreen  
-        return bn::fixed_rect(-500,-500, 0, 0);
+        return _hitbox;
     }
 }
 void archer::destroy_arrow() {
