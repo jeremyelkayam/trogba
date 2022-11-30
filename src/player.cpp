@@ -7,7 +7,7 @@
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(xcor, ycor)),
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
@@ -158,7 +158,7 @@ void player::free_from_collisionbox(const bn::fixed_rect &box){
 }
 
 bool player::handle_cottage_collision(cottage &cottage){
-    hitbox &cottagebox = cottage.get_hitbox();
+    const bn::fixed_rect &cottagebox = cottage.get_hitbox();
 
 
     bool going_to_hit_cottage_x = false;
@@ -187,7 +187,7 @@ bool player::handle_cottage_collision(cottage &cottage){
             return true;
         }else{
             //get him OUT of that box!!
-            free_from_collisionbox(cottagebox.get_box());
+            free_from_collisionbox(cottagebox);
         }
     }
     if(burninating()){

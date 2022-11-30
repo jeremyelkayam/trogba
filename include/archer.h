@@ -19,7 +19,7 @@ namespace trog {
             archer(bn::fixed ycor, bool facing_left);
             virtual void update() final;
             bool remove_from_map();
-            virtual hitbox& get_hitbox() final;
+            virtual bn::fixed_rect get_hitbox() final;
             void destroy_arrow();
     };
 }
