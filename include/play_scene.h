@@ -20,7 +20,7 @@ namespace trog{
         
         session_info& _sesh;
         bn::unique_ptr<player> _trogdor;
-        hud _hud;
+        hud& _hud;
         peasant_factory _pfact;
         archer_factory _afact;
         knight _blueknight;
@@ -39,7 +39,7 @@ namespace trog{
         void set_visible(bool visible);
 
     public:
-        play_scene(session_info& sesh, bn::sprite_text_generator& generator);
+        play_scene(session_info& sesh, hud& hud);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

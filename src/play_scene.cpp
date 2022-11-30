@@ -8,10 +8,10 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud) : 
         _sesh(sesh),
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
-        _hud(sesh, generator, TROG_TROGMETER_MAX),
+        _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
@@ -78,7 +78,6 @@ bn::optional<scene_type> play_scene::update(){
     _pfact.update();
     _afact.update();
 
-    _hud.update();
     _hud.update_burninatemeter(_trogdor->get_burninating_time());
     _hud.update_trogmeter(_trogdor->get_trogmeter());
 

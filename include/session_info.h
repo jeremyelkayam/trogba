@@ -1,6 +1,7 @@
 #pragma once
 
-namespace trog{
+namespace trog
+{
     class session_info {
 
         public:
@@ -20,3 +21,5 @@ namespace trog{
             unsigned short _level;
     };
 }
+
+

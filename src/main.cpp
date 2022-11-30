@@ -42,6 +42,9 @@ int main()
     bn::sprite_text_generator big_text_generator(trog::variable_16x32_sprite_font);
     text_generator.set_center_alignment();
 
+    trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
+    hud.hide();
+
 
     while(true)
     {
@@ -52,25 +55,29 @@ int main()
             bn::sound::stop_all();
             switch(*next_scene){
                 case trog::scene_type::TITLE: { 
+                    hud.hide();
                     scene.reset(new trog::title_scene());
                     break;
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
+                    hud.hide();
                     scene.reset(new trog::instructions_scene(text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
+                    hud.show();
                     if(previous_play_scene){
                         //this means we are returning from an interruption
                         //so we should go back to the play scene from before 
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud));
                     }
                     break;
                 }
                 case trog::scene_type::BONUS: {
+                    hud.show();
                     //this is the treasure hut scene
                     // we need to store the play scene so that we may return to it later.
                     previous_play_scene = bn::move(scene);
@@ -79,6 +86,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::LOSE: { 
+                    hud.show();
                     scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
                     break;
                 }                

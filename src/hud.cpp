@@ -48,33 +48,44 @@ void hud::update_trogmeter(unsigned short trogmeter_value){
         }
     }
 }
-void hud::hide_trogmeter(){
-    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
-        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
-        peasanthead_sprite.set_visible(false);
-    }    
+
+void hud::set_sprite_arr_visible(bn::vector<bn::sprite_ptr, 32> sprites, bool visible) {
+    for(bn::sprite_ptr sprite : sprites) {
+        sprite.set_visible(visible);
+    }
 }
-void hud::show_trogmeter(){
-    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
-        bn::sprite_ptr peasanthead_sprite = _trogmeter.at(i);
-        peasanthead_sprite.set_visible(true);
-    }    
-}
+
 
 void hud::update_burninatemeter(unsigned int burninate_time){
     if(burninate_time == 0) { 
         _burninatemeter.set_visible(false);
         _burninatemeter_invert.set_visible(false);
-        show_trogmeter();
+        set_sprite_arr_visible(_trogmeter, true);
     }else{
         _burninatemeter.set_visible(true);
         _burninatemeter_invert.set_visible(true);
         bn::fixed time_percentage = burninate_time;
         time_percentage /= TROG_BURNINATE_TIME;
         _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
-        hide_trogmeter();
+        set_sprite_arr_visible(_trogmeter, false);
     }
 
+}
+
+void hud::set_all_visible(bool visible){
+    set_sprite_arr_visible(_score_text_sprites, visible);
+    set_sprite_arr_visible(_mans_lv_text_sprites, visible);
+    set_sprite_arr_visible(_trogmeter, visible);
+    _burninatemeter.set_visible(visible);
+    _burninatemeter_invert.set_visible(visible);
+}
+
+void hud::hide(){
+    set_all_visible(false);
+}
+
+void hud::show(){
+    set_all_visible(true);
 }
 
 void hud::update() {
