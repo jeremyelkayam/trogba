@@ -53,10 +53,10 @@ bn::optional<scene_type> play_scene::update(){
                     bool cottage_burninated = c.burninate();
                     if(cottage_burninated) {
                         //bonus points if the peasant burns his house down
-                        _sesh.score+=TROG_COTTAGE_PEASANTBURN_SCORE;
+                        _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
                     }else{
                         //the peasant is still dead so you get points
-                        _sesh.score+=TROG_PEASANT_STOMP_SCORE;
+                        _sesh.score(TROG_PEASANT_STOMP_SCORE);
                     }
                 }
             }
@@ -87,12 +87,12 @@ bn::optional<scene_type> play_scene::update(){
     }
 
     if(_trogdor->ready_to_respawn()){
-        if(_sesh.mans == 0) {
+        if(_sesh.get_mans() == 0) {
             result = scene_type::LOSE;
             BN_LOG("YOU HAVE DIED");
         }else{
             _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, true));
-            --_sesh.mans;
+            _sesh.die();
         }
     }
     

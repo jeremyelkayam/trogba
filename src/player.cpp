@@ -80,8 +80,9 @@ void player::update(){
             _sprite.set_visible(true);
             _iframes = 0;
         }
+        update_next_pos();
     }
-    update_next_pos();
+
 }
 
 bool player::any_dpad_input() {
@@ -200,10 +201,10 @@ bool player::handle_cottage_collision(cottage &cottage){
 }
 
 void player::handle_peasant_collision(peasant &peasant){
-    if(collides_with(peasant) && !peasant.dead()){
+    if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
-        _sesh.score+=TROG_PEASANT_STOMP_SCORE;
+        _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
         ++_trogmeter;
         if(_trogmeter == _trogmeter_max){

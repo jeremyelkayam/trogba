@@ -8,7 +8,7 @@ namespace trog {
 
 bonus_scene::bonus_scene(session_info &sesh) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
-        _exit(100,0,20,20),
+        _exit(110,0,20,20),
         _trogdor(80,10, sesh, false),
         _sesh(sesh) {
     _trogdor.set_horizontal_flip(true);
@@ -41,7 +41,7 @@ bn::optional<scene_type> bonus_scene::update(){
     for(moneybag &bag : _money){
         if(_trogdor.get_hitbox().intersects(bag.get_hitbox())){
             //todo refactor this into trogdor
-            _sesh.score += TROG_MONEYBAG_POINTS;
+            _sesh.score(TROG_MONEYBAG_POINTS);
             bn::sound_items::goldget.play(1);
             bag.collect();
         }

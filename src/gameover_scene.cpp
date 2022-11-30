@@ -39,9 +39,7 @@ bn::optional<scene_type> gameover_scene::update(){
     
     if(bn::keypad::a_pressed()){
         BN_LOG("help?");
-        _sesh.mans = TROG_STARTING_LIVES;
-        _sesh.score = 0;
-        _sesh.level = TROG_STARTING_LEVEL;
+        _sesh.reset();
         result = scene_type::PLAY;
     }
     // move_background(_dead_trogdor);
