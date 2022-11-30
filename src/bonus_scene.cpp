@@ -21,7 +21,10 @@ bonus_scene::bonus_scene(session_info &sesh) :
     _money.emplace_front(30, 0);
     _money.emplace_front(30, 60);
     _money.emplace_front(70, 30);
-    _wall_hitboxes.emplace_front(-30,-30,170,60);
+
+
+    _wall_hitboxes.emplace_front(0,-50,240,60);
+    _wall_hitboxes.emplace_front(-110,-10,20,40);
 }
 
 
@@ -44,7 +47,7 @@ bn::optional<scene_type> bonus_scene::update(){
         }
     }
     for(bn::fixed_rect &wall : _wall_hitboxes) {
-
+        _trogdor.handle_wall_collision(wall);
     }
 
     _money.remove_if(moneybag_deletable);
