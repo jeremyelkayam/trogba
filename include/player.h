@@ -61,6 +61,8 @@ namespace trog {
             void handle_peasant_collision(peasant &peasant);
             void handle_knight_collision(knight &knight);
             void handle_arrow_collision(archer &archer);
+            void handle_wall_collision(const bn::fixed_rect &wall_hitbox);
+            
             bool dead() {return _time_dead;}
             bool ready_to_respawn() {return _time_dead == TROG_RESPAWN_TIME;}
 

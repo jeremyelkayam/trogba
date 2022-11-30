@@ -7,12 +7,13 @@
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y)),
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(xcor, ycor)),
         _speed(TROG_PLAYER_SPEED),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _breath(sesh),
-        _sesh(sesh)
+        _sesh(sesh),
+        _next_pos(xcor,ycor)
         {
     _sprite.set_z_order(FRONT_ZORDER);
 
@@ -157,29 +158,31 @@ void player::free_from_collisionbox(const bn::fixed_rect &box){
     }
 }
 
-bool player::handle_cottage_collision(cottage &cottage){
-    const bn::fixed_rect &cottagebox = cottage.get_hitbox();
-
-
-    bool going_to_hit_cottage_x = false;
-    bool going_to_hit_cottage_y = false;
+void player::handle_wall_collision(const bn::fixed_rect &wall_hitbox){
+    bool going_to_hit_wall_x = false;
+    bool going_to_hit_wall_y = false;
     
-    if(!cottage.burninated() && !cottage.has_treasure()){
-        going_to_hit_cottage_x = 
-            going_to_hit_cottage_x || going_to_collide_x(_next_pos.x(), cottagebox);
+    going_to_hit_wall_x = 
+        going_to_hit_wall_x || going_to_collide_x(_next_pos.x(), wall_hitbox);
 
-        going_to_hit_cottage_y = 
-            going_to_hit_cottage_y || going_to_collide_y(_next_pos.y(), cottagebox);
-    }
-    
+    going_to_hit_wall_y = 
+        going_to_hit_wall_y || going_to_collide_y(_next_pos.y(), wall_hitbox);
+
     //separate clauses for x and y coords so that you can input a diagonal
     //but still move along the sides of the screen
-    if(going_to_hit_cottage_x){
+    if(going_to_hit_wall_x){
         _next_pos.set_x(_pos.x());
     }
-    if(going_to_hit_cottage_y){
+    if(going_to_hit_wall_y){
         _next_pos.set_y(_pos.y());
     }
+}
+
+bool player::handle_cottage_collision(cottage &cottage){
+    const bn::fixed_rect &cottagebox = cottage.get_hitbox();
+    if(!cottage.burninated() && !cottage.has_treasure()){
+        handle_wall_collision(cottagebox);
+    }    
 
 
     if(_hitbox.intersects(cottagebox) && !cottage.burninated()){
