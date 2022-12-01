@@ -15,14 +15,17 @@ namespace trog {
             bn::sprite_text_generator& _text_generator;  
 
             bn::vector<bn::sprite_ptr, 32> _score_text_sprites, 
-                                           _mans_lv_text_sprites,
-                                           _trogmeter;
+                                           _mans_lv_text_sprites;
+
+
+            bn::vector<bn::sprite_ptr, 10> _trogmeter_sprites;
+
 
             // bn::regular_bg_ptr _burninatemeter;            
             // bn::regular_bg_ptr _burninatemeter_invert;            
             bn::rect_window _burninatemeter_window;
             void set_all_visible(bool visible);
-            void set_sprite_arr_visible(bn::vector<bn::sprite_ptr, 32> sprites, bool visible);
+            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
             bool _enabled;
 
         public:
