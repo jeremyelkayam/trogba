@@ -14,6 +14,7 @@
 #include <bn_bg_palettes.h>
 #include <bn_sprite_text_generator.h>
 #include "trogdor_variable_8x16_sprite_font.h"
+#include "trogdor_variable_16x32_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -34,41 +35,50 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
-    trog::session_info sesh = {TROG_STARTING_LIVES, 0, TROG_STARTING_LEVEL};
+    trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
+    bn::sprite_text_generator big_text_generator(trog::variable_16x32_sprite_font);
     text_generator.set_center_alignment();
+
+    trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
+    hud.hide();
 
 
     while(true)
     {
         if(scene){
             next_scene = scene->update();
+            hud.update();
         }
         if(next_scene){
             bn::sound::stop_all();
             switch(*next_scene){
                 case trog::scene_type::TITLE: { 
+                    hud.hide();
                     scene.reset(new trog::title_scene());
                     break;
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
+                    hud.hide();
                     scene.reset(new trog::instructions_scene(text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
+                    hud.show();
                     if(previous_play_scene){
                         //this means we are returning from an interruption
                         //so we should go back to the play scene from before 
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud));
                     }
                     break;
                 }
                 case trog::scene_type::BONUS: {
+                    hud.show();
                     //this is the treasure hut scene
                     // we need to store the play scene so that we may return to it later.
                     previous_play_scene = bn::move(scene);
@@ -77,7 +87,8 @@ int main()
                     break;
                 }
                 case trog::scene_type::LOSE: { 
-                    scene.reset(new trog::gameover_scene(sesh, text_generator));
+                    hud.show();
+                    scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
                     break;
                 }                
                 default: { 

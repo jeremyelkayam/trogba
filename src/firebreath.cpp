@@ -41,7 +41,7 @@ void firebreath::handle_cottage_collision(cottage &cottage){
         BN_LOG("burninate the cottage?");        
         bool burninate_success = cottage.burninate();
         if(burninate_success){
-            _sesh.score+=TROG_COTTAGE_BREATHBURN_SCORE;
+            _sesh.score(TROG_COTTAGE_BREATHBURN_SCORE);
         }
     }
 }

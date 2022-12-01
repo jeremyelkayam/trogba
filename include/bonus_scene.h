@@ -15,16 +15,15 @@ namespace trog{
         bn::fixed_rect _exit;
         player _trogdor;
 
-        //ONLY NEEDED BECAUSE TROGDOR HAS A REFERENCE TO THE DAMN COTTAGE VECTOR
-        //and there ARE NO COTTAGES on the bonus screen
-        bn::vector<cottage, 10> _dummy;
         bn::forward_list<moneybag, 10> _money;
+        bn::forward_list<bn::fixed_rect, 5> _wall_hitboxes;
 
 
         static bool moneybag_deletable(moneybag &m) {return m.collected;}
-
-
         session_info &_sesh;
+
+
+
     public:
         bonus_scene(session_info &sesh);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

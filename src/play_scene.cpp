@@ -8,10 +8,10 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, bn::sprite_text_generator& generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, _cottages, false)),
-        _hud(sesh, generator, TROG_TROGMETER_MAX),
+        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
+        _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers),
         _blueknight(35,35,TROG_KNIGHT_SPEED,180),
@@ -53,10 +53,10 @@ bn::optional<scene_type> play_scene::update(){
                     bool cottage_burninated = c.burninate();
                     if(cottage_burninated) {
                         //bonus points if the peasant burns his house down
-                        _sesh.score+=TROG_COTTAGE_PEASANTBURN_SCORE;
+                        _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
                     }else{
                         //the peasant is still dead so you get points
-                        _sesh.score+=TROG_PEASANT_STOMP_SCORE;
+                        _sesh.score(TROG_PEASANT_STOMP_SCORE);
                     }
                 }
             }
@@ -78,7 +78,6 @@ bn::optional<scene_type> play_scene::update(){
     _pfact.update();
     _afact.update();
 
-    _hud.update();
     _hud.update_burninatemeter(_trogdor->get_burninating_time());
     _hud.update_trogmeter(_trogdor->get_trogmeter());
 
@@ -87,12 +86,12 @@ bn::optional<scene_type> play_scene::update(){
     }
 
     if(_trogdor->ready_to_respawn()){
-        if(_sesh.mans == 0) {
+        if(_sesh.get_mans() == 0) {
             result = scene_type::LOSE;
             BN_LOG("YOU HAVE DIED");
         }else{
-            _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, _cottages, true));
-            --_sesh.mans;
+            _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, true));
+            _sesh.die();
         }
     }
     
