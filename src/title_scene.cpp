@@ -9,8 +9,7 @@
 namespace trog {
 
 title_scene::title_scene() : 
-        titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)), 
-        title(bn::regular_bg_items::titlegraphic.create_bg(TROG_TITLE_TEXT_X, TROG_TITLE_TEXT_Y)){
+        titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)) {
 
     bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
     frame_counter=0;
@@ -22,7 +21,7 @@ bn::optional<scene_type> title_scene::update(){
     // BN_LOG(frame_counter);
 
     if(frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
-        result = scene_type::INSTRUCTIONS;
+        result = scene_type::LEVELBEAT;
     }
     
     return result;

@@ -25,11 +25,11 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
 
     _big_text_generator.set_center_alignment();
     _big_text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    _big_text_generator.generate(0, -60, "IT'S OVER!", _itsover_text_sprites);
+    _big_text_generator.generate(0, -50, "IT'S OVER!", _itsover_text_sprites);
 
     _text_generator.set_center_alignment();
     // _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    _text_generator.generate(0, -40, "CHALLENGE AGAIN!", _challengeagain_text_sprites);    
+    // _text_generator.generate(0, -30, "CHALLENGE AGAIN!", _challengeagain_text_sprites);    
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 }
 
