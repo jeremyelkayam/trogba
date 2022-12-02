@@ -21,8 +21,8 @@ namespace trog {
             bn::vector<bn::sprite_ptr, 10> _trogmeter_sprites;
 
 
-            // bn::regular_bg_ptr _burninatemeter;            
-            // bn::regular_bg_ptr _burninatemeter_invert;            
+            bn::regular_bg_ptr _burninatemeter;            
+            bn::regular_bg_ptr _burninatemeter_invert;            
             bn::rect_window _burninatemeter_window;
             void set_all_visible(bool visible);
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);

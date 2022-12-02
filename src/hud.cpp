@@ -15,6 +15,8 @@ namespace trog {
 hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator),
+        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
+        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_window(bn::rect_window::internal()),
         _enabled(true) {
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
@@ -28,13 +30,13 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
     //need to set up a window to make the trogmeter run out
     bn::window outside_window = bn::window::outside();
     
-    // outside_window.set_show_bg(_burninatemeter, false);
+    outside_window.set_show_bg(_burninatemeter, false);
 
     _burninatemeter_window.set_boundaries(-80,TROG_HUD_BURNINATEMETER_LEFTBOUND,-72,TROG_HUD_TROGMETER_LEFTBOUND + TROG_HUD_BURNINATEMETER_WIDTH);
-    // _burninatemeter_invert.put_below();
+    _burninatemeter_invert.put_below();
 
-    // _burninatemeter.set_visible(false);
-    // _burninatemeter_invert.set_visible(false);
+    _burninatemeter.set_visible(false);
+    _burninatemeter_invert.set_visible(false);
 }
 
 
@@ -59,12 +61,12 @@ void hud::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visi
 
 void hud::update_burninatemeter(unsigned int burninate_time){
     if(burninate_time == 0) { 
-        // _burninatemeter.set_visible(false);
-        // _burninatemeter_invert.set_visible(false);
+        _burninatemeter.set_visible(false);
+        _burninatemeter_invert.set_visible(false);
         set_sprite_arr_visible(_trogmeter_sprites, true);
     }else{
-        // _burninatemeter.set_visible(true);
-        // _burninatemeter_invert.set_visible(true);
+        _burninatemeter.set_visible(true);
+        _burninatemeter_invert.set_visible(true);
         bn::fixed time_percentage = burninate_time;
         time_percentage /= TROG_BURNINATE_TIME;
         _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
@@ -76,9 +78,9 @@ void hud::update_burninatemeter(unsigned int burninate_time){
 void hud::set_all_visible(bool visible){
     set_sprite_arr_visible(_score_text_sprites, visible);
     set_sprite_arr_visible(_mans_lv_text_sprites, visible);
-    set_sprite_arr_visible(_trogmeter_sprites, visible);
-    // _burninatemeter.set_visible(visible);
-    // _burninatemeter_invert.set_visible(visible);
+    if(!_burninatemeter.visible()){
+        set_sprite_arr_visible(_trogmeter_sprites, visible);        
+    }
     _enabled = visible;
 }
 
