@@ -20,6 +20,7 @@
 #include "instructions_scene.h"
 #include "play_scene.h"
 #include "gameover_scene.h"
+#include "level_win_scene.h"
 #include "bonus_scene.h"
 #include "enums.h"
 
@@ -89,6 +90,11 @@ int main()
                 case trog::scene_type::LOSE: { 
                     hud.show();
                     scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
+                    break;
+                }
+                case trog::scene_type::LEVELBEAT: {
+                    hud.show();
+                    scene.reset(new trog::level_win_scene(sesh, text_generator));
                     break;
                 }                
                 default: { 

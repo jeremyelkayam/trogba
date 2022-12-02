@@ -117,10 +117,6 @@ void hud::update() {
 
         _text_generator.set_right_alignment();
         _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
-
-        //_text_generator.generate(0, 0, "SWORDED!", _idk); 
-        
-
     }
 }
 

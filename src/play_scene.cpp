@@ -99,7 +99,11 @@ bn::optional<scene_type> play_scene::update(){
 }
 
 bool play_scene::level_complete(){
-    return false;
+    bool result = true;
+    for(cottage &c : _cottages) {
+        result = result & c.burninated();
+    }
+    return result;
 }
 
 void play_scene::set_visible(bool visible){
