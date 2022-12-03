@@ -21,5 +21,6 @@ namespace trog {
             bool remove_from_map();
             virtual bn::fixed_rect get_hitbox() final;
             void destroy_arrow();
+            void set_visible(bool visible);
     };
 }

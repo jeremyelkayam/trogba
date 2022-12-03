@@ -9,6 +9,7 @@ namespace trog {
         private:
             bool _facing_left;
             bn::fixed _speed;
+            bool _just_spawned;
 
         public:
             arrow(bn::fixed_point pos, bool facing_left);

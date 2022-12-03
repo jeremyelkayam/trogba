@@ -18,7 +18,10 @@ archer::archer(bn::fixed ycor, bool facing_left) :
 
 void archer::update(){
     entity::update();
-    _sprite.set_visible(true);
+    if(_time_since_spawn == 0) { 
+        //if he just spawned in we must make him visible
+        _sprite.set_visible(true);
+    }
     ++_time_since_spawn;
     if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
@@ -57,4 +60,11 @@ bn::fixed_rect archer::get_hitbox() {
 void archer::destroy_arrow() {
     _arrow.reset();
 }
+void archer::set_visible(bool visible){
+    entity::set_visible(visible);
+    if(_arrow){
+        _arrow->set_visible(visible);
+    }
+}
+
 }
