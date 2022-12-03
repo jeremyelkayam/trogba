@@ -117,6 +117,10 @@ void hud::update() {
 
         _text_generator.set_right_alignment();
         _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
+        for(bn::sprite_ptr sprite : _mans_lv_text_sprites) {
+            // need to do this for it to be covered up by the fire on the level win scene
+            sprite.put_below();
+        }
     }
 }
 
