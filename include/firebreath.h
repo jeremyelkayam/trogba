@@ -14,6 +14,7 @@ namespace trog {
  
             bn::sprite_animate_action<4> _burningflames;
             session_info &_sesh;
+            bool _enabled;
             
         public:
             firebreath(session_info &sesh);

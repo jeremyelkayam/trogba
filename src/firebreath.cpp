@@ -20,16 +20,20 @@ void firebreath::update(){
     _burningflames.update();
 }
 
+//due to the way the treasure hut works, an enabled firebreath can be 
+// invisible (weird i know)
 void firebreath::enable(){
     _sprite.set_visible(true);
+    _enabled = true;
 }
 
 void firebreath::disable(){
     _sprite.set_visible(false);
+    _enabled = false;
 }
 
 bool firebreath::enabled(){
-    return _sprite.visible();
+    return _enabled;
 }
 
 

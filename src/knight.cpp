@@ -19,27 +19,7 @@ void knight::update(){
     if(going_to_go_offscreen(_speed, _direction)){
        _direction+=180;
     }
-    // probably refactor this into a base class
-    // since i use it too dang much 
     _pos += unit_vector(_direction).multiplication(_speed);
-    // if(_frames_moving == 120){
-    //     //if moving diagonally
-    //     if(_direction % 90){
-    //         _speed/=2;
-    //         //change direction to horizontal
-    //         _direction+=45;            
-    //     }else{
-    //         _speed*=2;
-    //         _direction-=45;
-    //     }
-    //     _frames_moving = 0;
-    //         BN_LOG("lol");
-
-    // }
-    // //keep it under 360 to prevent weird overflows
-    // _direction = _direction % 360;
-
-    // ++_frames_moving;
 }
 
 }
