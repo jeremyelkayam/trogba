@@ -3,25 +3,29 @@
 #include <bn_log.h>
 
 #include "bn_regular_bg_items_titlebg.h"
-#include "bn_regular_bg_items_titlegraphic.h"
+#include "bn_sprite_items_titlegraphic.h"
 #include "title_scene.h"
 
 namespace trog {
 
 title_scene::title_scene() : 
-        titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)) {
+        _titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)),
+        _frame_counter(0) {
 
     bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
-    frame_counter=0;
+
+    for(int z = 0; z < 4 ; ++z){
+        _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_TITLE_TEXT_Y, z));
+    }
 }
 
 bn::optional<scene_type> title_scene::update(){
     bn::optional<scene_type> result;
-    frame_counter++;
+    _frame_counter++;
     // BN_LOG(frame_counter);
 
-    if(frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
-        result = scene_type::LEVELBEAT;
+    if(_frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
+        result = scene_type::INSTRUCTIONS;
     }
     
     return result;

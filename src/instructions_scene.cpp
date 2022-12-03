@@ -5,14 +5,19 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 #include "instructions_scene.h"
+#include "bn_sprite_items_titlegraphic.h"
+#include "constants.h"
 
 
 namespace trog {
 
 instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) : 
-        // title(bn::regular_bg_items::titlegraphic.create_bg(TROG_TITLE_TEXT_X, TROG_INSTRUCTION_TITLE_Y)),
-        text_generator(a_generator) {
-    flashing_text_counter = 0;
+        _text_generator(a_generator) {
+    _flashing_text_counter = 0;
+
+    for(int z = 0; z < 4 ; ++z){
+        _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_INSTRUCTION_TITLE_Y, z));
+    }
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
@@ -41,15 +46,15 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
     
     int ycor = -30;
     for(bn::string<64> line : instructions) { 
-        text_generator.generate(0, ycor, line, instruction_text_sprites);
+        _text_generator.generate(0, ycor, line, _instruction_text_sprites);
         ycor+=14;
     }
 
 
-    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", start_text_sprites);    
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    _text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", _start_text_sprites);    
 
-    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
     // text_generator.generate(0, 30, , start_text_sprites);    
 
@@ -60,17 +65,17 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 bn::optional<scene_type> instructions_scene::update(){
     
 
-    flashing_text_counter++;
-    if(flashing_text_counter > visible_text_time){
-        for(auto it : start_text_sprites) { 
+    _flashing_text_counter++;
+    if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
+        for(auto it : _start_text_sprites) { 
             it.set_visible(false);
         }
     }
-    if(flashing_text_counter > visible_text_time + invisible_text_time){
-        for(auto it : start_text_sprites) { 
+    if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
+        for(auto it : _start_text_sprites) { 
             it.set_visible(true);
         }
-        flashing_text_counter = 0;
+        _flashing_text_counter = 0;
     }
 
     // text stuff
