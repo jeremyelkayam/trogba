@@ -46,6 +46,11 @@ void archer::shoot(){
 bool archer::remove_from_map(){
     if(_arrow) {
         return _arrow->out_of_bounds();
+    }else if(!_arrow && TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
+        //at this point we've shot our arrow and it also got deleted
+        // possibly from hitting something
+        // so we need to despawn
+        return true;
     }else return false;
 }
 
@@ -57,9 +62,11 @@ bn::fixed_rect archer::get_hitbox() {
         return bn::fixed_rect(-500,-500, 0, 0);
     }
 }
+
 void archer::destroy_arrow() {
     _arrow.reset();
 }
+
 void archer::set_visible(bool visible){
     entity::set_visible(visible);
     if(_arrow){
