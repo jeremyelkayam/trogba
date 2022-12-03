@@ -33,7 +33,7 @@ bn::optional<scene_type> bonus_scene::update(){
     _trogdor.update();
 
     //if you walk to the exit you must return to play scene
-    if(_trogdor.get_hitbox().intersects(_exit)){
+    if(_trogdor.get_hitbox().intersects(_exit) && _money.empty()){
         BN_LOG("return to play scene");
         result = scene_type::PLAY;
     }
