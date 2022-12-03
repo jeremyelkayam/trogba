@@ -15,7 +15,7 @@ namespace trog {
             bn::fixed _speed;
             unsigned short _direction;
  
-            // bn::sprite_animate_action<3> _walkcycle;
+            bn::sprite_animate_action<4> _walkcycle;
         public:
             knight(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, unsigned short direction);
             virtual void update() final;
