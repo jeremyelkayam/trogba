@@ -13,7 +13,7 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
         _hud(hud),
         _pfact(_cottages,_peasants),
-        _afact(_archers),
+        _afact(_archers, sesh.get_level()),
         _blueknight(-59, 31, false),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {

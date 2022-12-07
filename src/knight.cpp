@@ -28,6 +28,8 @@ void knight::update(){
     bn::fixed xdist = 0;
     bn::fixed ydist = 0;
 
+    //todo i hate these 'while true' / 'break' loops
+    // change this one
     while(true){
         if(_timer < 150){
             xdist = speed;

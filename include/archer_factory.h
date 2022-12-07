@@ -14,7 +14,7 @@ namespace trog{
         virtual void spawn() final;
 
     public:
-        archer_factory(bn::forward_list<archer, 4>& archers);
+        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level);
     };
 
 }

@@ -8,6 +8,10 @@ namespace trog
         _min_spawn_interval(min),
         _max_spawn_interval(max)
     {
+        if(_min_spawn_interval == 0) {
+            _min_spawn_interval = 60;
+            _max_spawn_interval = 180;
+        }
         reset_spawn_clock();
     }
 

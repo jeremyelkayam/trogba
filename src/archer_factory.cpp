@@ -5,11 +5,16 @@
 namespace trog
 {
     //todo: make it scale based on level
-    archer_factory::archer_factory(bn::forward_list<archer, 4>& archers) : 
-        enemy_factory(TROG_ARCHER_MIN_SPAWN_INTERVAL, TROG_ARCHER_MAX_SPAWN_INTERVAL),
+    archer_factory::archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level) : 
+        enemy_factory(TROG_ARCHER_MIN_SPAWN_INTERVAL * (1 - (level / 10)*0.1), 
+                    TROG_ARCHER_MAX_SPAWN_INTERVAL * (1 - (level / 10)*0.1)),
         _archers(archers)
     {
-        BN_LOG("new peasant factory");
+
+        if(_min_spawn_interval == 0){
+            _min_spawn_interval = 1*60;
+            _max_spawn_interval = 5*60;
+        }
     }
 
     void archer_factory::spawn()
