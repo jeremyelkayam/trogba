@@ -14,12 +14,15 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
-        _blueknight(-59, 31, false),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);
+
+
+    _knights.emplace_front(-59, 31, false);
+    _knights.emplace_front(43,-40,true);
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -68,8 +71,10 @@ bn::optional<scene_type> play_scene::update(){
     }
 
 
-    _blueknight.update();
-    _trogdor->handle_knight_collision(_blueknight);
+    for(knight &k : _knights){
+        k.update();
+        _trogdor->handle_knight_collision(k);
+    }
 
     //despawn any peasants that need to be despawned
     _peasants.remove_if(peasant_deletable);
@@ -117,8 +122,10 @@ void play_scene::set_visible(bool visible){
     for(peasant &p : _peasants){
         p.set_visible(visible);
     }
+    for(knight &k : _knights){
+        k.set_visible(visible);
+    }
 
-    _blueknight.set_visible(visible);
     _countryside.set_visible(visible);
 
 }

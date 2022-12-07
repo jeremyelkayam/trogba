@@ -23,13 +23,17 @@ namespace trog{
         hud& _hud;
         peasant_factory _pfact;
         archer_factory _afact;
-        knight _blueknight;
 
         bn::regular_bg_ptr _countryside;
+
 
         bn::vector<cottage, 10> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
         bn::forward_list<archer, 4> _archers;
+
+        //there will be at most 3 knights: red knight, blue knight, troghammer.
+        bn::forward_list<knight, 3> _knights;
+
         bool level_complete();
 
         //probably would be better if i figured out how to harness friends for this.
