@@ -4,9 +4,6 @@
 
 #include "constants.h"
 #include "bn_regular_bg_items_day.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
-// #include "bn_affine_bg_items_burninatefire.h"
 #include "play_scene.h"
 
 namespace trog {
@@ -17,6 +14,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
+        _burninate_pause_time(0),
         _big_text_generator(big_text_generator),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
@@ -24,26 +22,25 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);
 
-
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
-
-    _big_text_generator.set_center_alignment();
-    _big_text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_black.palette_item());
-    _big_text_generator.generate(0, 0, "BURNINATE!", _burninate_text_sprites);
-
-    _hud.set_sprite_arr_visible(_burninate_text_sprites, false);
-
 }
 
 bn::optional<scene_type> play_scene::update(){
     set_visible(true);
 
     bn::optional<scene_type> result;
-    
+
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
+        BN_ASSERT(_burninate_text.has_value(), "If we are paused due to burnination, THERE MUST BE TEXT");
+        _burninate_text->update();
     }else{
+        //first update HUD info with trogdor's info from the last frame
+        _hud.update_burninatemeter(_trogdor->get_burninating_time());
+        _hud.update_trogmeter(_trogdor->get_trogmeter());
+
+        
         _trogdor->update();
         for(cottage &c : _cottages){
             c.update();
@@ -56,7 +53,8 @@ bn::optional<scene_type> play_scene::update(){
                 set_visible(false);
             }
         }
-
+        
+        
         bool was_burninating = _trogdor->burninating();
 
         for(peasant &p : _peasants) {
@@ -83,7 +81,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _hud.set_sprite_arr_visible(_burninate_text_sprites, true);
+            _burninate_text = burninate_text(_big_text_generator);
         }
 
         for(archer &a : _archers) {
@@ -104,9 +102,6 @@ bn::optional<scene_type> play_scene::update(){
         _pfact.update();
         _afact.update();
 
-        _hud.update_burninatemeter(_trogdor->get_burninating_time());
-        _hud.update_trogmeter(_trogdor->get_trogmeter());
-
         if(level_complete()){
             result = scene_type::LEVELBEAT;
         }
@@ -123,7 +118,7 @@ bn::optional<scene_type> play_scene::update(){
     }
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
         _burninate_pause_time = 0;
-        _hud.set_sprite_arr_visible(_burninate_text_sprites, false);
+        _burninate_text.reset();
     }
     
     return result;

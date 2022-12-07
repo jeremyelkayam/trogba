@@ -29,7 +29,7 @@
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 10
+#define TROG_TROGMETER_MAX 1
 
 #define TROG_PLAYER_SPAWN_X 0
 #define TROG_PLAYER_SPAWN_Y 0
@@ -40,7 +40,7 @@
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (10 SECONDS)
-#define TROG_BURNINATE_PAUSETIME (2 SECONDS)
+#define TROG_BURNINATE_PAUSETIME (1 SECONDS)
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal

@@ -1,6 +1,6 @@
 // knight.h
 // Purpose: represent the knight hazards present on every level.
-// Adapted from the Trogdor Reburninated Knight class by Mips96
+// Rotation logic adapted from the Trogdor Reburninated Knight class by Mips96
 
 #pragma once
 #include <bn_sprite_actions.h>
@@ -13,13 +13,6 @@
 #include "constants.h"
 
 namespace trog {
-// class Knight {
-// 	public:
-// 		
-// 		inline void updateCollision();
-// 		void updateHome(Sint8);
-// 		void updateFrameStateAndMove();
-// };
     class knight : public entity { 
         private:
             

@@ -1,5 +1,7 @@
 #pragma once
 #include <bn_regular_bg_ptr.h>
+#include <bn_affine_bg_ptr.h>
+#include <bn_affine_bg_actions.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_forward_list.h>
 #include "scene.h"
@@ -10,10 +12,9 @@
 #include "peasant_factory.h"
 #include "archer_factory.h"
 #include "knight.h"
+#include "burninate_text.h"
 
 namespace trog{
-
-
 
     class play_scene : public scene{ 
     private:
@@ -25,12 +26,15 @@ namespace trog{
         archer_factory _afact;
 
 
-        bn::sprite_text_generator& _big_text_generator;
-        bn::vector<bn::sprite_ptr, 10> _burninate_text_sprites;
+
+
 
         unsigned short _burninate_pause_time;
 
+        bn::sprite_text_generator &_big_text_generator;
         bn::regular_bg_ptr _countryside;
+
+        bn::optional<burninate_text> _burninate_text;
 
 
         bn::vector<cottage, 10> _cottages; 
