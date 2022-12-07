@@ -3,7 +3,6 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_affine_bg_items_burninatefire.h"
 
-
 namespace trog{ 
     
 
@@ -24,6 +23,7 @@ void burninate_text::update(){
 }
 
 void burninate_text::set_visible(bool visible){
+    big_text::set_visible(visible);
     _fire.set_visible(visible);
 }
 

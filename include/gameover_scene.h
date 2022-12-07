@@ -3,7 +3,7 @@
 #include <bn_sprite_text_generator.h>
 #include "scene.h"
 #include "session_info.h"
-#include "big_text.h"
+#include "bloody_text.h"
 
 
 namespace trog{
@@ -15,7 +15,7 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 10> _challengeagain_text_sprites;
         
         session_info &_sesh;
-        big_text _itsover_text;
+        bloody_text _itsover_text;
     public:
         explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &big_text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

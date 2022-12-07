@@ -17,7 +17,6 @@ namespace trog {
         private:
             
 		    unsigned short _timer;
-			// bool _diagonal_flip;
 			unsigned short _rotation;
 
         	bn::random _random; 

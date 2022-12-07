@@ -16,7 +16,7 @@ namespace trog {
         public:
             virtual ~big_text() = default;
             big_text(bn::sprite_text_generator &big_text_generator, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
-			virtual void update() {return;}
+			virtual void update()=0;
             virtual void set_visible(bool visible);
     };
 }
