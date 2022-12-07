@@ -24,6 +24,12 @@ namespace trog{
         peasant_factory _pfact;
         archer_factory _afact;
 
+
+        bn::sprite_text_generator& _big_text_generator;
+        bn::vector<bn::sprite_ptr, 10> _burninate_text_sprites;
+
+        unsigned short _burninate_pause_time;
+
         bn::regular_bg_ptr _countryside;
 
 
@@ -43,7 +49,7 @@ namespace trog{
         void set_visible(bool visible);
 
     public:
-        play_scene(session_info& sesh, hud& hud);
+        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &big_text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

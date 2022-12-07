@@ -25,10 +25,13 @@ namespace trog {
             bn::regular_bg_ptr _burninatemeter_invert;            
             bn::rect_window _burninatemeter_window;
             void set_all_visible(bool visible);
-            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
             bool _enabled;
 
         public:
+
+            //todo this shouldn't be in hud; maybe throw it in a common functions class
+            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
+
             hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);

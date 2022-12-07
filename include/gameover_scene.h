@@ -12,8 +12,8 @@ namespace trog{
         bn::regular_bg_ptr _dead_trogdor;
         bn::sprite_text_generator& _text_generator;
         bn::sprite_text_generator& _big_text_generator;
-        bn::vector<bn::sprite_ptr, 64> _itsover_text_sprites;
-        bn::vector<bn::sprite_ptr, 64> _challengeagain_text_sprites;
+        bn::vector<bn::sprite_ptr, 10> _itsover_text_sprites;
+        bn::vector<bn::sprite_ptr, 10> _challengeagain_text_sprites;
         
         session_info &_sesh;
 
