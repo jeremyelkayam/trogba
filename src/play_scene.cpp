@@ -14,7 +14,7 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers),
-        _blueknight(-59, 31, 1, false),
+        _blueknight(-59, 31, false),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
