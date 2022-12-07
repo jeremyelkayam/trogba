@@ -21,6 +21,11 @@
 #define TROG_COUNTRYSIDE_TOP_BOUND -70
 #define TROG_COUNTRYSIDE_BOTTOM_BOUND 81
 
+#define TROG_KNIGHT_LEFT_BOUND -110
+#define TROG_KNIGHT_RIGHT_BOUND 110
+#define TROG_KNIGHT_TOP_BOUND -58
+#define TROG_KNIGHT_BOTTOM_BOUND 69
+
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
@@ -69,8 +74,8 @@
 #define TROG_PEASANT_SPEED 0.5
 #define TROG_PEASANT_STOMP_SCORE 2
 
-#define TROG_KNIGHT_WIDTH 12
-#define TROG_KNIGHT_HEIGHT 18
+#define TROG_KNIGHT_WIDTH 9
+#define TROG_KNIGHT_HEIGHT 13
 #define TROG_KNIGHT_SPEED 0.5
 
 #define TROG_ARCHER_DRAWBOW_WAITTIME 60
