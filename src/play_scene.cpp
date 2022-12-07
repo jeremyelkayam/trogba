@@ -2,9 +2,13 @@
 #include <bn_sound_items.h>
 #include <bn_log.h>
 
-#include "constants.h"
 #include "bn_regular_bg_items_day.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
+
 #include "play_scene.h"
+#include "constants.h"
+#include "bloody_text.h"
+#include "burninate_text.h"
 
 namespace trog {
 
@@ -33,8 +37,8 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
-        BN_ASSERT(_burninate_text.has_value(), "If we are paused due to burnination, THERE MUST BE TEXT");
-        _burninate_text->update();
+        BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
+        _overlay_text->update();
     }else{
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());
@@ -81,19 +85,28 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _burninate_text = burninate_text(_big_text_generator);
+            _overlay_text.reset(new burninate_text(_big_text_generator));
         }
 
+        bool was_dead = _trogdor->dead();        
         for(archer &a : _archers) {
             a.update();
             _trogdor->handle_arrow_collision(a);
         }
+        if(_trogdor->dead() && !was_dead) {
+            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+        }
 
-
+        was_dead = _trogdor->dead();  
         for(knight &k : _knights){
             k.update();
             _trogdor->handle_knight_collision(k);
         }
+        
+        if(_trogdor->dead() && !was_dead) {
+            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "SWORDED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+        }
+
 
         //despawn any peasants that need to be despawned
         _peasants.remove_if(peasant_deletable);
@@ -107,9 +120,9 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_trogdor->ready_to_respawn()){
+            _overlay_text.reset();
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
-                BN_LOG("YOU HAVE DIED");
             }else{
                 _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, true));
                 _sesh.die();
@@ -118,7 +131,7 @@ bn::optional<scene_type> play_scene::update(){
     }
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
         _burninate_pause_time = 0;
-        _burninate_text.reset();
+        _overlay_text.reset();
     }
     
     return result;

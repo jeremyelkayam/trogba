@@ -12,7 +12,7 @@
 #include "peasant_factory.h"
 #include "archer_factory.h"
 #include "knight.h"
-#include "burninate_text.h"
+#include "big_text.h"
 
 namespace trog{
 
@@ -34,7 +34,7 @@ namespace trog{
         bn::sprite_text_generator &_big_text_generator;
         bn::regular_bg_ptr _countryside;
 
-        bn::optional<burninate_text> _burninate_text;
+        bn::unique_ptr<big_text> _overlay_text;
 
 
         bn::vector<cottage, 10> _cottages; 
