@@ -58,7 +58,48 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             BN_ERROR("Invalid background ID in level_data.h");
     }
 
-    
+    // 6 = max cottages
+    for (int i = 0; i < _cottages.max_size(); i++) {
+        BN_LOG("cottage #", i);
+
+        //Index 1 in level data refers to the number of the treasure hut from 1-6
+        // 0 if no treasure hut 
+        bool treasurehut = (i == (levels[level_index][1] - 1));
+        BN_LOG("treasure hut? ", treasurehut);
+
+		int j = (i * 3) + 2;
+        BN_LOG("direction: ", levels[level_index][j]);
+
+		if (levels[level_index][j] > 0) {
+
+            direction enumdir;
+            switch(levels[level_index][j]){
+                case 1:
+                    enumdir = direction::UP;
+                break;
+                case 2:
+                    enumdir = direction::DOWN;
+                break;
+                case 3:
+                    enumdir = direction::LEFT;
+                break;
+                case 4:
+                    enumdir = direction::RIGHT;
+                break;
+                default:
+                    BN_ERROR("invalid direction in levelData.h");
+                break;
+            }
+
+
+			_cottages.emplace_back(
+				(240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120,
+				(160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80,
+				enumdir,
+                treasurehut
+			);
+		}
+	}
 
 
     _knights.emplace_front(-59, 31, false);

@@ -5,6 +5,7 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_forward_list.h>
 #include "scene.h"
+#include "constants.h"
 #include "session_info.h"
 #include "player.h"
 #include "hud.h"
@@ -37,7 +38,7 @@ namespace trog{
         bn::unique_ptr<big_text> _overlay_text;
 
 
-        bn::vector<cottage, 10> _cottages; 
+        bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
         bn::forward_list<archer, 4> _archers;
 
