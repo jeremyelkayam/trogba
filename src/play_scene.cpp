@@ -3,12 +3,16 @@
 #include <bn_log.h>
 
 #include "bn_regular_bg_items_day.h"
+#include "bn_regular_bg_items_night.h"
+#include "bn_regular_bg_items_dawn.h"
+#include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 
 #include "play_scene.h"
 #include "constants.h"
 #include "bloody_text.h"
 #include "burninate_text.h"
+#include "level_data.h"
 
 namespace trog {
 
@@ -22,6 +26,33 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _big_text_generator(big_text_generator),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
+
+    //Level loading logic cribbed from Trogdor Reburninated by Mips96.
+    int level_index;
+    if (_sesh.get_level() == 1) {
+		level_index = 0;
+	} else {
+        //weird, idk 
+		level_index = ((_sesh.get_level() - 2) % 32 + 2) - 1;
+	}
+    switch(levels[level_index][0]){
+        case 1:
+            _countryside.set_item(bn::regular_bg_items::day);
+            break;
+        case 2:
+            _countryside.set_item(bn::regular_bg_items::dusk);
+            break;
+        case 3:
+            _countryside.set_item(bn::regular_bg_items::night);
+            break;
+        case 4:
+            _countryside.set_item(bn::regular_bg_items::dawn);
+            break;
+        default:
+            BN_ERROR("Invalid background ID in level_data.h");
+    }
+
+
     _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
     _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
     _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);

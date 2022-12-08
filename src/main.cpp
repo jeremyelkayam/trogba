@@ -96,7 +96,7 @@ int main()
                     hud.show();
                     scene.reset(new trog::level_win_scene(sesh, text_generator));
                     break;
-                }                
+                }
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;
