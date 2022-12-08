@@ -1,6 +1,24 @@
-//level_data.h 
-// Author: Mips96
-// Level data header from Trogdor-Reburninated project by Mips96.
+/* level_data.h 
+ * Author: Mips96
+ * Level data header from Trogdor-Reburninated project by Mips96.
+ * 
+ * Stores data for all Trogdor level layouts in a huge array. There are only
+ * 33 layouts, so after level 33 they begin to repeat.
+ * 
+ * 
+ * Array contents explanation by Mips96 below:
+ * 
+ * Byte 1:      Background (1, 2, 3, 4) (default to 1)
+ * Byte 2:      Treasure Hut Index (1, 2, 3, 4, 5, 6) (0 = no treasure hut)
+ * Byte 3:      Cottage #1 Direction (1, 2, 3, 4) (0 = does not exist)
+ * Bytes 4-5:   Cottage #1 X (dstrect.x = OBJ_TO_SCREEN_AT_FRACTION_X(gameWidth, cottage, (VAL+2466)/5000.0))
+ * Bytes 6-7:   Cottage #1 Y (dstrect.y = OBJ_TO_SCREEN_AT_FRACTION_Y(gameHeight, cottage, (VAL+2183)/3600.0))
+ * ...
+ * Byte 28:     Cottage #6 Direction
+ * Bytes 29-30: Cottage #6 X
+ * Bytes 31-32: Cottage #6 Y
+ */
+// negative decimal to Sint16: https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
 
 
 #include "enums.h"
@@ -14,18 +32,6 @@ constexpr auto DIR_DOWN = 2;
 constexpr auto DIR_LEFT = 3;
 constexpr auto DIR_RIGHT = 4;
 
-/*
- * Byte 1:      Background (1, 2, 3, 4) (default to 1)
- * Byte 2:      Treasure Hut Index (1, 2, 3, 4, 5, 6) (0 = no treasure hut)
- * Byte 3:      Cottage #1 Direction (1, 2, 3, 4) (0 = does not exist)
- * Bytes 4-5:   Cottage #1 X (dstrect.x = OBJ_TO_SCREEN_AT_FRACTION_X(gameWidth, cottage, (VAL+2466)/5000.0))
- * Bytes 6-7:   Cottage #1 Y (dstrect.y = OBJ_TO_SCREEN_AT_FRACTION_Y(gameHeight, cottage, (VAL+2183)/3600.0))
- * ...
- * Byte 28:     Cottage #6 Direction
- * Bytes 29-30: Cottage #6 X
- * Bytes 31-32: Cottage #6 Y
- */
-// negative decimal to Sint16: https://www.mathsisfun.com/binary-decimal-hexadecimal-converter.html
 const int levels[33][20] = {
 	/* 1 */ { 1, 0,
 	DIR_LEFT, 1585, -666,

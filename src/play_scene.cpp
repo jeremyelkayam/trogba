@@ -1,3 +1,9 @@
+/* play_scene.cpp 
+ * Author: Jeremy Elkayam
+ * Purpose: Contain logic for the play scene (y'know, the one in the countryside
+ * with the cottages and stuff)
+ */
+
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_log.h>
@@ -52,10 +58,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             BN_ERROR("Invalid background ID in level_data.h");
     }
 
+    
 
-    _cottages.emplace_back(bn::fixed(-30), bn::fixed(-40), direction::DOWN, true);
-    _cottages.emplace_back(bn::fixed(60), bn::fixed(-20), direction::LEFT, false);
-    _cottages.emplace_back(bn::fixed(0), bn::fixed(60), direction::UP, false);
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
