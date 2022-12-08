@@ -33,10 +33,12 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
     outside_window.set_show_bg(_burninatemeter, false);
 
     _burninatemeter_window.set_boundaries(-80,TROG_HUD_BURNINATEMETER_LEFTBOUND,-72,TROG_HUD_TROGMETER_LEFTBOUND + TROG_HUD_BURNINATEMETER_WIDTH);
-    _burninatemeter_invert.put_below();
 
     _burninatemeter.set_visible(false);
+
     _burninatemeter_invert.set_visible(false);
+    _burninatemeter_invert.put_below();
+
 }
 
 
@@ -65,6 +67,7 @@ void hud::update_burninatemeter(unsigned int burninate_time){
         _burninatemeter_invert.set_visible(false);
         set_sprite_arr_visible(_trogmeter_sprites, true);
     }else{
+        BN_LOG("burninate meter visible");
         _burninatemeter.set_visible(true);
         _burninatemeter_invert.set_visible(true);
         bn::fixed time_percentage = burninate_time;

@@ -32,6 +32,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _big_text_generator(big_text_generator),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
+    //make the background appear underneath all other backgroundlayers
+    _countryside.put_below();
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
     int level_index;
