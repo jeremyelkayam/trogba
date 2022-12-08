@@ -39,8 +39,8 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
 }
 
 void cottage::update(){
-    _burningflames.update();
     if(_flames.visible()){
+        _burningflames.update();
         ++_time_burning;
     }
     if(_time_burning > TROG_COTTAGEFIRE_TIME){
@@ -74,7 +74,7 @@ bool cottage::has_treasure(){
 
 void cottage::set_visible(bool visible){
     entity::set_visible(visible);
-    if(_time_burning > 0) { //if the cottage is enabled
+    if(_time_burning > 0) { //if the cottage is on fire
         _flames.set_visible(visible);
     }
 }

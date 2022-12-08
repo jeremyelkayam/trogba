@@ -123,19 +123,7 @@ bn::optional<scene_type> play_scene::update(){
         _hud.update_trogmeter(_trogdor->get_trogmeter());
 
         
-        _trogdor->update();
-        for(cottage &c : _cottages){
-            c.update();
-            if(_trogdor->handle_cottage_collision(c)){
-                //the above if statement returns true if we hit a treasure hut
-                result = scene_type::BONUS;
-
-                //this marks the cottage as visited so that we can no longer return
-                c.visit();
-                set_visible(false);
-            }
-        }
-        
+        _trogdor->update();        
         
         bool was_burninating = _trogdor->burninating();
 
@@ -211,6 +199,22 @@ bn::optional<scene_type> play_scene::update(){
         _burninate_pause_time = 0;
         _overlay_text.reset();
     }
+
+
+    //had to move this out to fix a bug where cottage fire was visible while paused.
+    // since you can't move while paused, we should be fine....
+    for(cottage &c : _cottages){
+        c.update();
+        if(_trogdor->handle_cottage_collision(c)){
+            //the above if statement returns true if we hit a treasure hut
+            result = scene_type::BONUS;
+
+            //this marks the cottage as visited so that we can no longer return
+            c.visit();
+            set_visible(false);
+        }
+    }
+
     
     return result;
 }
