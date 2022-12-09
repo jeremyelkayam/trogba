@@ -41,6 +41,7 @@
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (10 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)
+#define TROG_BURNINATE_ANIM_TIME_BTWN_FRAMES 6 
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal

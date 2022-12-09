@@ -12,6 +12,7 @@ namespace trog {
         private:
             bn::affine_bg_ptr _fire;
             bn::affine_bg_scale_loop_action _scaler;
+            unsigned short _timer;
 
         public:
             burninate_text(bn::sprite_text_generator &big_text_generator);
