@@ -39,7 +39,7 @@ namespace trog {
 
             void check_boundary_collision();
 
-            bool invincible() {return _iframes;}
+            bool invincible();
             void die(bn::sprite_item item);
 
             //todo: this doesn't need to be in this class

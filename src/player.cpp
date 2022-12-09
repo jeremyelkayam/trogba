@@ -221,13 +221,13 @@ void player::handle_peasant_collision(peasant &peasant){
 }
 
 void player::handle_knight_collision(knight &knight){
-    if(collides_with(knight) && !dead() && !invincible()) { 
+    if(collides_with(knight) && !invincible()) { 
         die(bn::sprite_items::trogdor_sworded);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
-    if(collides_with(archer) && !dead() && !invincible()) { 
+    if(collides_with(archer) &&  !invincible()) { 
         die(bn::sprite_items::trogdor_arrowed);
         archer.destroy_arrow();
     }
@@ -246,5 +246,13 @@ void player::set_visible(bool visible){
         _breath.set_visible(visible);
     }
 }
+
+bool player::invincible(){
+    //if you're dead you're invincible. 
+    // If you're burninating you're invincible.
+    // If you have post-respawn invulnerability, you are also invincible.
+    return _iframes || dead() || burninating();
+}
+
 
 }

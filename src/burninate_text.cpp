@@ -22,6 +22,8 @@ burninate_text::burninate_text(bn::sprite_text_generator &big_text_generator) :
 
 void burninate_text::update(){
     _scaler.update();
+
+    //animate the flame effect
     ++_timer;
     if(_timer == TROG_BURNINATE_ANIM_TIME_BTWN_FRAMES){
         _fire.set_item(bn::affine_bg_items::burninatefire1);
