@@ -181,9 +181,7 @@ bn::optional<scene_type> play_scene::update(){
         _pfact.update();
         _afact.update();
 
-        if(level_complete()){
-            result = scene_type::LEVELBEAT;
-        }
+
 
         if(_trogdor->ready_to_respawn()){
             _overlay_text.reset();
@@ -199,7 +197,10 @@ bn::optional<scene_type> play_scene::update(){
         _burninate_pause_time = 0;
         _overlay_text.reset();
     }
-
+    
+    if(level_complete()){
+        result = scene_type::LEVELBEAT;
+    }
 
     //had to move this out to fix a bug where cottage fire was visible while paused.
     // since you can't move while paused, we should be fine....
@@ -224,6 +225,10 @@ bool play_scene::level_complete(){
     for(cottage &c : _cottages) {
         result = result & c.burninated();
     }
+    #ifdef DEBUG 
+        //Instantly win level by pressing A
+        if(bn::keypad::a_pressed()) return true;
+    #endif
     return result;
 }
 

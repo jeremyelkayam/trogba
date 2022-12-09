@@ -62,7 +62,7 @@ void player::update(){
         _breath.update();
 
         //update trogdor to show iframes
-        if(invincible()){
+        if(_iframes){
             //if we're on an odd iframe, hide the sprite.
             //this creates a flicker effect
             bool odd = _iframes % 2;
@@ -81,6 +81,13 @@ void player::update(){
             _iframes = 0;
         }
         update_next_pos();
+
+        #ifdef DEBUG
+            //Insta-burninate by pressing b
+            if(bn::keypad::b_pressed()){
+                start_burninating();   
+            }
+        #endif
     }
 
 }
@@ -208,16 +215,20 @@ void player::handle_peasant_collision(peasant &peasant){
         
         ++_trogmeter;
         if(_trogmeter == _trogmeter_max){
-            _burninate_time = _burninate_length;
-            _breath.enable();
-
-            bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
+            start_burninating();
         }
     }
 
     if(burninating()){
         _breath.handle_peasant_collision(peasant);
     }
+}
+
+void player::start_burninating(){
+    _burninate_time = _burninate_length;
+    _breath.enable();
+
+    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 }
 
 void player::handle_knight_collision(knight &knight){
