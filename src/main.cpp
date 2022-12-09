@@ -63,7 +63,7 @@ int main()
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
                     hud.hide();
-                    scene.reset(new trog::instructions_scene(text_generator));
+                    scene.reset(new trog::instructions_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 

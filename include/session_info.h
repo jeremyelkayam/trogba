@@ -11,6 +11,8 @@ namespace trog
             void advance_level(){++_level;}
             void reset();
 
+            void set_level(unsigned short level){_level=level;}
+
             unsigned short get_mans() {return _mans;}
             unsigned int get_score() {return _score;}
             unsigned short get_level() {return _level;}

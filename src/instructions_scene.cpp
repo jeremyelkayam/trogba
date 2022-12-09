@@ -11,8 +11,10 @@
 
 namespace trog {
 
-instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) : 
-        _text_generator(a_generator) {
+instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
+        _text_generator(text_generator),
+        _level_select(false),
+        _sesh(sesh) {
     _flashing_text_counter = 0;
 
     for(int z = 0; z < 4 ; ++z){
@@ -54,7 +56,7 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
     _text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", _start_text_sprites);    
 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    // _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
     // text_generator.generate(0, 30, , start_text_sprites);    
 
@@ -65,25 +67,62 @@ instructions_scene::instructions_scene(bn::sprite_text_generator& a_generator) :
 bn::optional<scene_type> instructions_scene::update(){
     
 
-    _flashing_text_counter++;
-    if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
-        for(auto it : _start_text_sprites) { 
-            it.set_visible(false);
+    if(_level_select){
+        short current_level = _sesh.get_level();
+        if(bn::keypad::up_pressed()){
+            current_level += 10;
         }
-    }
-    if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
-        for(auto it : _start_text_sprites) { 
-            it.set_visible(true);
+        if(bn::keypad::down_pressed()){
+            current_level -= 10;
         }
-        _flashing_text_counter = 0;
+        if(bn::keypad::right_pressed()){
+            current_level += 1;
+        }
+        if(bn::keypad::left_pressed()){
+            current_level -= 1;
+        }
+        if(current_level <= 0){
+            current_level+=100;
+        }else if(current_level > 100){
+            current_level-=100;
+        }
+        _sesh.set_level(current_level);
+
+        _start_text_sprites.clear();
+        bn::string<10> lv_str;
+        bn::ostringstream lv_string_stream(lv_str);
+        lv_string_stream << "Lv " <<  _sesh.get_level();        
+        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+        _text_generator.generate(0, -30+(14*4)+7, lv_str, _start_text_sprites);    
+
+    }else{
+        _flashing_text_counter++;
+        if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
+            for(auto it : _start_text_sprites) { 
+                it.set_visible(false);
+            }
+        }
+        if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
+            for(auto it : _start_text_sprites) { 
+                it.set_visible(true);
+            }
+            _flashing_text_counter = 0;
+        }        
     }
 
     // text stuff
     bn::optional<scene_type> result;
     
     if(bn::keypad::a_pressed()){
-        result = scene_type::PLAY;
+        #ifdef DEBUG
+            if(_level_select) result = scene_type::PLAY;
+            _level_select=true;
+        #endif 
+        #ifndef DEBUG
+            result = scene_type::PLAY;
+        #endif
     }
+
     return result;
 }
 
