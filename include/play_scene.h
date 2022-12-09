@@ -1,8 +1,11 @@
 #pragma once
 #include <bn_regular_bg_ptr.h>
+#include <bn_affine_bg_ptr.h>
+#include <bn_affine_bg_actions.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_forward_list.h>
 #include "scene.h"
+#include "constants.h"
 #include "session_info.h"
 #include "player.h"
 #include "hud.h"
@@ -10,10 +13,9 @@
 #include "peasant_factory.h"
 #include "archer_factory.h"
 #include "knight.h"
+#include "big_text.h"
 
 namespace trog{
-
-
 
     class play_scene : public scene{ 
     private:
@@ -23,13 +25,26 @@ namespace trog{
         hud& _hud;
         peasant_factory _pfact;
         archer_factory _afact;
-        knight _blueknight;
 
+
+
+
+
+        unsigned short _burninate_pause_time;
+
+        bn::sprite_text_generator &_big_text_generator;
         bn::regular_bg_ptr _countryside;
 
-        bn::vector<cottage, 10> _cottages; 
+        bn::unique_ptr<big_text> _overlay_text;
+
+
+        bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
         bn::forward_list<archer, 4> _archers;
+
+        //there will be at most 3 knights: red knight, blue knight, troghammer.
+        bn::forward_list<knight, 3> _knights;
+
         bool level_complete();
 
         //probably would be better if i figured out how to harness friends for this.
@@ -39,7 +54,7 @@ namespace trog{
         void set_visible(bool visible);
 
     public:
-        play_scene(session_info& sesh, hud& hud);
+        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &big_text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

@@ -240,4 +240,11 @@ void player::die(bn::sprite_item item){
     _breath.disable();
 }
 
+void player::set_visible(bool visible){
+    entity::set_visible(visible);
+    if(_breath.enabled()){
+        _breath.set_visible(visible);
+    }
+}
+
 }

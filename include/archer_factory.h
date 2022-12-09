@@ -1,3 +1,9 @@
+/* archer_factory.h
+ * Author: Jeremy Elkayam
+ * Purpose: Manage the random creation of archers 
+ * 
+ */
+
 #pragma once 
 
 #include <bn_forward_list.h>
@@ -11,10 +17,21 @@ namespace trog{
     private:
 
         bn::forward_list<archer, 4>& _archers;
+
+        /*
+         * Spawn a new archer into the archer array.
+         */
         virtual void spawn() final;
 
     public:
-        archer_factory(bn::forward_list<archer, 4>& archers);
+        /**
+         * Constructor for archer_factory.
+         * 
+         * @param archers   A preallocated list containing the archers 
+         *                  spawned by the factory.
+         * @param level     The level currently being played.
+         */
+        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level);
     };
 
 }

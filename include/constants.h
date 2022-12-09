@@ -21,10 +21,15 @@
 #define TROG_COUNTRYSIDE_TOP_BOUND -70
 #define TROG_COUNTRYSIDE_BOTTOM_BOUND 81
 
+#define TROG_KNIGHT_LEFT_BOUND -110
+#define TROG_KNIGHT_RIGHT_BOUND 110
+#define TROG_KNIGHT_TOP_BOUND -58
+#define TROG_KNIGHT_BOTTOM_BOUND 69
+
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 10
+#define TROG_TROGMETER_MAX 1
 
 #define TROG_PLAYER_SPAWN_X 0
 #define TROG_PLAYER_SPAWN_Y 0
@@ -35,6 +40,7 @@
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (10 SECONDS)
+#define TROG_BURNINATE_PAUSETIME (1 SECONDS)
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal
@@ -43,6 +49,8 @@
 
 #define TROG_FIREBREATH_XOFFSET 30
 #define TROG_FIREBREATH_YOFFSET -8
+
+#define TROG_MAX_COTTAGES 6
 
 #define TROG_COTTAGEFIRE_YOFFSET -10
 #define TROG_COTTAGEFIRE_TIME (2 SECONDS)
@@ -69,8 +77,8 @@
 #define TROG_PEASANT_SPEED 0.5
 #define TROG_PEASANT_STOMP_SCORE 2
 
-#define TROG_KNIGHT_WIDTH 12
-#define TROG_KNIGHT_HEIGHT 18
+#define TROG_KNIGHT_WIDTH 9
+#define TROG_KNIGHT_HEIGHT 13
 #define TROG_KNIGHT_SPEED 0.5
 
 #define TROG_ARCHER_DRAWBOW_WAITTIME 60
@@ -81,8 +89,8 @@
 #define TROG_ARCHER_MAX_SPAWN_HEIGHT 70
 
 // TODO change this
-#define TROG_ARCHER_MIN_SPAWN_INTERVAL (5 SECONDS)
-#define TROG_ARCHER_MAX_SPAWN_INTERVAL (10 SECONDS)
+#define TROG_ARCHER_MIN_SPAWN_INTERVAL (20 SECONDS)
+#define TROG_ARCHER_MAX_SPAWN_INTERVAL (40 SECONDS)
 
 #define TROG_ARROW_SPEED TROG_PLAYER_SPEED
 #define TROG_ARROW_WIDTH 10

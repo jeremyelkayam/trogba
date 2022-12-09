@@ -74,7 +74,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud));
+                        scene.reset(new trog::play_scene(sesh, hud, big_text_generator));
                     }
                     break;
                 }
@@ -96,7 +96,7 @@ int main()
                     hud.show();
                     scene.reset(new trog::level_win_scene(sesh, text_generator));
                     break;
-                }                
+                }
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;

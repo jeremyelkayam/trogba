@@ -52,6 +52,7 @@ namespace trog {
 
             bn::fixed_point _next_pos;
 
+
         public:
             player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes);
             virtual void update() final;
@@ -68,6 +69,8 @@ namespace trog {
 
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
+            void set_visible(bool visible);
+
 
     };
 }

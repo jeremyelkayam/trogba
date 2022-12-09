@@ -72,4 +72,11 @@ bool cottage::has_treasure(){
     return _has_treasure && _time_burning==0;
 }
 
+void cottage::set_visible(bool visible){
+    entity::set_visible(visible);
+    if(_time_burning > 0) { //if the cottage is enabled
+        _flames.set_visible(visible);
+    }
+}
+
 }

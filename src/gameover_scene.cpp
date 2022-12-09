@@ -18,14 +18,11 @@ namespace trog {
 gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &big_text_generator) : 
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(8, 43)),
         _text_generator(text_generator),
-        _big_text_generator(big_text_generator),
-        _sesh(sesh) {
+        _sesh(sesh),
+        _itsover_text(big_text_generator, 0, -50, "IT'S OVER!",
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()) {
 
     bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-
-    _big_text_generator.set_center_alignment();
-    _big_text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    _big_text_generator.generate(0, -50, "IT'S OVER!", _itsover_text_sprites);
 
     _text_generator.set_center_alignment();
     // _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
