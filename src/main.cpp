@@ -114,6 +114,14 @@ int main()
             bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
             kicked=false;
         }
+
+        // soft reset code
+        if(bn::keypad::start_held() && bn::keypad::select_held() &&
+                bn::keypad::a_held() && bn::keypad::b_held()){
+            bn::core::reset();
+        }
+
+
         bn::core::update();
     }
 }
