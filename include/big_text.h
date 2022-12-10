@@ -11,11 +11,12 @@
 namespace trog {
     class big_text { 
         private:
+            bool _bigger;
             bn::vector<bn::sprite_ptr, 64>_text_sprites;
 
         public:
             virtual ~big_text() = default;
-            big_text(bn::sprite_text_generator &big_text_generator, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
+            big_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
 			virtual void update()=0;
             virtual void set_visible(bool visible);
     };

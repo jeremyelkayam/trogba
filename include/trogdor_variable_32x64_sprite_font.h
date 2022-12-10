@@ -16,7 +16,7 @@ constexpr bn::utf8_character variable_32x64_sprite_font_utf8_characters[] = {
     "Á", "É", "Í", "Ó", "Ú", "Ü", "Ñ", "á", "é", "í", "ó", "ú", "ü", "ñ", "¡", "¿"
 };
 
-constexpr int8_t variable_16x32_sprite_font_character_widths[] = {
+constexpr int8_t variable_32x64_sprite_font_character_widths[] = {
     18,  // 32
     6,  // 33 !
     14,  // 34 "
@@ -138,6 +138,6 @@ constexpr auto variable_32x64_sprite_font_utf8_characters_map =
 
 constexpr bn::sprite_font variable_32x64_sprite_font(
         bn::sprite_items::trogdor_variable_32x64_font, variable_32x64_sprite_font_utf8_characters_map.reference(),
-        variable_16x32_sprite_font_character_widths);
+        variable_32x64_sprite_font_character_widths);
 
 }

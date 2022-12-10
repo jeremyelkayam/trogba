@@ -10,10 +10,10 @@ namespace trog {
     class bloody_text : public big_text { 
         private:
             bn::vector<bn::sprite_ptr, 8> _blood_droplets;
-            bn::vector<bn::sprite_animate_action, 8> _blood_droplets;
+            bn::vector<bn::sprite_animate_action<5>, 8> _blood_droplet_anim;
 
         public:
-            bloody_text(bn::sprite_text_generator &big_text_generator, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
+            bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
 			virtual void update() final;
             virtual void set_visible(bool visible) final;
     };

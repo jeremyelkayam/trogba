@@ -15,7 +15,7 @@ namespace trog {
             unsigned short _timer;
 
         public:
-            burninate_text(bn::sprite_text_generator &big_text_generator);
+            burninate_text();
 			virtual void update() final;
             virtual void set_visible(bool visible) final;
     };

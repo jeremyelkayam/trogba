@@ -153,7 +153,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _overlay_text.reset(new burninate_text(_big_text_generator));
+            _overlay_text.reset(new burninate_text());
         }
 
         bool was_dead = _trogdor->dead();        
@@ -162,7 +162,7 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         was_dead = _trogdor->dead();  
@@ -177,7 +177,7 @@ bn::optional<scene_type> play_scene::update(){
             if(rand() % 33 == 0){
                 str = "SORDID!";
             }
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         if(_troghammer){
