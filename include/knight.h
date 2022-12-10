@@ -14,7 +14,7 @@
 
 namespace trog {
     class knight : public entity { 
-        private:
+        protected:
             
 		    unsigned short _timer;
 			unsigned short _rotation;

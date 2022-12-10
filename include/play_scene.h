@@ -13,6 +13,7 @@
 #include "peasant_factory.h"
 #include "archer_factory.h"
 #include "knight.h"
+#include "troghammer.h"
 #include "big_text.h"
 
 namespace trog{
@@ -42,8 +43,9 @@ namespace trog{
         bn::forward_list<peasant, 20> _peasants;
         bn::forward_list<archer, 4> _archers;
 
-        //there will be at most 3 knights: red knight, blue knight, troghammer.
-        bn::forward_list<knight, 3> _knights;
+        //there will be at most 2 knights: red knight, blue knight.
+        bn::forward_list<knight, 2> _knights;
+        bn::optional<troghammer> _troghammer;
 
         bool level_complete();
 

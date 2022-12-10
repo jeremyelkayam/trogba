@@ -107,6 +107,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
+    // _troghammer = troghammer(0, 0, false);
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -177,6 +178,12 @@ bn::optional<scene_type> play_scene::update(){
                 str = "SORDID!";
             }
             _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+        }
+
+        if(_troghammer){
+            was_dead = _trogdor->dead();  
+            _troghammer->update();
+            // _trogdor->handle_knight_collision(_troghammer);
         }
 
 
