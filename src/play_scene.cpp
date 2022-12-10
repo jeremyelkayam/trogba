@@ -170,7 +170,12 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "SWORDED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            bn::string<13> str = "SWORDED!";
+            //3% chance to get it wrong
+            if(rand() % 33 == 0){
+                str = "SORDID!";
+            }
+            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
 
