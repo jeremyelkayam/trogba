@@ -15,6 +15,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _sesh(sesh),
         _next_pos(xcor,ycor)
         {
+    _top_bound = TROG_COUNTRYSIDE_PLAYER_TOP_BOUND;
     _sprite.set_z_order(FRONT_ZORDER);
 
     _trogmeter = 0;

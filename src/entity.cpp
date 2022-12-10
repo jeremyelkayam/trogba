@@ -9,7 +9,8 @@ namespace trog {
 entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite) : 
         _pos(xcor, ycor),
         _hitbox(xcor, ycor, width, height),
-        _sprite(sprite){
+        _sprite(sprite),
+        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND){
     BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
@@ -35,7 +36,7 @@ bool entity::going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox){
 }
 
 bool entity::going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox){
-    bool oob_top = new_hitbox.top() < TROG_COUNTRYSIDE_TOP_BOUND;
+    bool oob_top = new_hitbox.top() < _top_bound;
     bool oob_bottom =  new_hitbox.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND;
     return (oob_top || oob_bottom);
 }

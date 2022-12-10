@@ -8,6 +8,9 @@
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
 
+#define RED_PALETTE bn::sprite_items::trogdor_variable_8x16_font_red.palette_item()
+#define WHITE_PALETTE bn::sprite_items::trogdor_variable_8x16_font.palette_item()
+
 
 namespace trog {
 
@@ -15,7 +18,8 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _text_generator(text_generator),
         _level_select(false),
         _show_secret_hints(false),
-        _sesh(sesh) {
+        _sesh(sesh),
+        _text_ycor(-30) {
     _flashing_text_counter = 0;
 
     for(int z = 0; z < 4 ; ++z){
@@ -50,10 +54,10 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
 void instructions_scene::clear_text(){
     _instruction_text_sprites.clear();
     _start_text_sprites.clear();
+    _text_ycor = -30;
 }
 
 void instructions_scene::setup_instructions(){
-    //todo refactor the text setup into a function
     bn::string<64> instructions[] = {
         "Use the squishy + to move",
         "Stomp 10 guys to burninate",
@@ -64,27 +68,19 @@ void instructions_scene::setup_instructions(){
         "OG by Mike/Matt/Jonathan",
         "GBA version by Jeremy Elkayam"
     };
-    
-    int ycor = -30;
-
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
     for(bn::string<64> line : instructions) { 
-        _text_generator.generate(0, ycor, line, _instruction_text_sprites);
-        ycor+=14;
+        write_instruction(line.c_str(), WHITE_PALETTE, 14);
     }
 
 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    _text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", _start_text_sprites);    
+    _text_generator.set_palette_item(RED_PALETTE);
+    _text_generator.generate(0, 33, "Press A to start 'em up ", _start_text_sprites);
 }
 
 void instructions_scene::setup_secret_hints(){
 
-    int ycor = -30;
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    _text_generator.generate(0, ycor, "SECRET HINTS!!", _start_text_sprites);    
-    ycor+=16;
+    write_instruction("SECRET HINTS!!", RED_PALETTE, 16);
 
     bn::string<64> instructions[] = {
         "-Don't let peasants return home",
@@ -93,16 +89,18 @@ void instructions_scene::setup_secret_hints(){
         "-Extra man every 300pts"
     };
     
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     for(bn::string<64> line : instructions) { 
-        _text_generator.generate(0, ycor, line, _instruction_text_sprites);
-        ycor+=16;
+        write_instruction(line.c_str(), WHITE_PALETTE, 16);
     }
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    _text_generator.generate(0, ycor, "-What's a treasure hut?!?!", _instruction_text_sprites);
-    ycor+=16;
-    _text_generator.generate(0, ycor, "-Secret Code?!?!", _instruction_text_sprites);
+    
+    write_instruction("-What's a treasure hut?!?!", RED_PALETTE, 16);
+    write_instruction("-Secret Code?!?!", RED_PALETTE, 16);
+}
 
+void instructions_scene::write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing){
+    _text_generator.set_palette_item(palette);
+    _text_generator.generate(0, _text_ycor, str, _instruction_text_sprites);    
+    _text_ycor += line_spacing;
 }
 
 bn::optional<scene_type> instructions_scene::update(){
@@ -166,7 +164,7 @@ bn::optional<scene_type> instructions_scene::update(){
             result = scene_type::PLAY;
         #endif
     }
-    if(bn::keypad::l_pressed()){
+    if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints
         clear_text();
         _show_secret_hints = !_show_secret_hints;

@@ -45,7 +45,7 @@ namespace trog
             else if (home.get_direction() == direction::UP)
             {
                 spawn_ycor -= 10;
-                max_dist = spawn_ycor.integer() - TROG_COUNTRYSIDE_TOP_BOUND;
+                max_dist = spawn_ycor.integer() - TROG_COUNTRYSIDE_TOP_BOUND - 10;
             }
             else if (home.get_direction() == direction::DOWN)
             {

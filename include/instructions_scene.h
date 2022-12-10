@@ -21,11 +21,12 @@ namespace trog{
         bool _level_select, _show_secret_hints;
         session_info &_sesh;
 
-        int text_ycor;
+        int _text_ycor;
         
         void setup_instructions();
         void setup_secret_hints();
         void clear_text();
+        void write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing);
 
     public:
         explicit instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator);
