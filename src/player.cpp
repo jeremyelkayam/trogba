@@ -15,6 +15,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _sesh(sesh),
         _next_pos(xcor,ycor)
         {
+    _top_bound = TROG_COUNTRYSIDE_PLAYER_TOP_BOUND;
     _sprite.set_z_order(FRONT_ZORDER);
 
     _trogmeter = 0;
@@ -62,7 +63,7 @@ void player::update(){
         _breath.update();
 
         //update trogdor to show iframes
-        if(invincible()){
+        if(_iframes){
             //if we're on an odd iframe, hide the sprite.
             //this creates a flicker effect
             bool odd = _iframes % 2;
@@ -81,6 +82,13 @@ void player::update(){
             _iframes = 0;
         }
         update_next_pos();
+
+        #ifdef DEBUG
+            //Insta-burninate by pressing b
+            if(bn::keypad::b_pressed()){
+                start_burninating();   
+            }
+        #endif
     }
 
 }
@@ -208,10 +216,7 @@ void player::handle_peasant_collision(peasant &peasant){
         
         ++_trogmeter;
         if(_trogmeter == _trogmeter_max){
-            _burninate_time = _burninate_length;
-            _breath.enable();
-
-            bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
+            start_burninating();
         }
     }
 
@@ -220,14 +225,21 @@ void player::handle_peasant_collision(peasant &peasant){
     }
 }
 
+void player::start_burninating(){
+    _burninate_time = _burninate_length;
+    _breath.enable();
+
+    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
+}
+
 void player::handle_knight_collision(knight &knight){
-    if(collides_with(knight) && !dead() && !invincible()) { 
+    if(collides_with(knight) && !invincible()) { 
         die(bn::sprite_items::trogdor_sworded);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
-    if(collides_with(archer) && !dead() && !invincible()) { 
+    if(collides_with(archer) &&  !invincible()) { 
         die(bn::sprite_items::trogdor_arrowed);
         archer.destroy_arrow();
     }
@@ -246,5 +258,13 @@ void player::set_visible(bool visible){
         _breath.set_visible(visible);
     }
 }
+
+bool player::invincible(){
+    //if you're dead you're invincible. 
+    // If you're burninating you're invincible.
+    // If you have post-respawn invulnerability, you are also invincible.
+    return _iframes || dead() || burninating();
+}
+
 
 }

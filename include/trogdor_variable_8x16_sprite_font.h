@@ -18,7 +18,7 @@ constexpr bn::utf8_character variable_8x16_sprite_font_utf8_characters[] = {
 
 constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
     6,  // 32
-    2,  // 33 !
+    7,  // 33 !
     7,  // 34 "
     8,  // 35 #
     8,  // 36 $
@@ -43,7 +43,7 @@ constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
     8,  // 55 7
     8,  // 56 8
     8,  // 57 9
-    1,  // 58 :
+    2,  // 58 :
     4,  // 59 ;
     6,  // 60 <
     7,  // 61 =

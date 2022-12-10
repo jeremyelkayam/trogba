@@ -18,10 +18,10 @@ void knight::update(){
     entity::update();
     _walkcycle.update();
     ++_timer;
-    bn::fixed speed = 0.25;
+    bn::fixed speed = 0.35;
 
 
-    if(_timer == 300) {
+    if(_timer == 220) {
         _timer = 0;
     }
 
@@ -31,11 +31,11 @@ void knight::update(){
     //todo i hate these 'while true' / 'break' loops
     // change this one
     while(true){
-        if(_timer < 150){
+        if(_timer < 110){
             xdist = speed;
             ydist = -speed;
         }else{
-            xdist = -speed;
+            xdist = -(speed - 0.05);
         }
 
         if(_sprite.horizontal_flip()){

@@ -14,7 +14,7 @@
 #include <bn_bg_palettes.h>
 #include <bn_sprite_text_generator.h>
 #include "trogdor_variable_8x16_sprite_font.h"
-#include "trogdor_variable_16x32_sprite_font.h"
+#include "trogdor_variable_32x64_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -40,7 +40,7 @@ int main()
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
-    bn::sprite_text_generator big_text_generator(trog::variable_16x32_sprite_font);
+    bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
     text_generator.set_center_alignment();
 
     trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
@@ -63,7 +63,7 @@ int main()
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
                     hud.hide();
-                    scene.reset(new trog::instructions_scene(text_generator));
+                    scene.reset(new trog::instructions_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
@@ -114,6 +114,14 @@ int main()
             bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
             kicked=false;
         }
+
+        // soft reset code
+        if(bn::keypad::start_held() && bn::keypad::select_held() &&
+                bn::keypad::a_held() && bn::keypad::b_held()){
+            bn::core::reset();
+        }
+
+
         bn::core::update();
     }
 }

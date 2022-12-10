@@ -2,6 +2,8 @@
 
 #define SECONDS * 60
 
+#define DEBUG
+
 #define TROG_TITLE_TEXT_X -85
 #define TROG_TITLE_TEXT_Y -62
 #define TROG_TITLE_BG_X -3
@@ -14,12 +16,14 @@
 
 #define TROG_STARTING_LIVES 3
 #define TROG_STARTING_LEVEL 1
-#define TROG_POINTS_FOR_1UP 200
+#define TROG_POINTS_FOR_1UP 300
 
 #define TROG_COUNTRYSIDE_LEFT_BOUND -120
 #define TROG_COUNTRYSIDE_RIGHT_BOUND 120
-#define TROG_COUNTRYSIDE_TOP_BOUND -70
+#define TROG_COUNTRYSIDE_TOP_BOUND -66
 #define TROG_COUNTRYSIDE_BOTTOM_BOUND 81
+
+#define TROG_COUNTRYSIDE_PLAYER_TOP_BOUND -72
 
 #define TROG_KNIGHT_LEFT_BOUND -110
 #define TROG_KNIGHT_RIGHT_BOUND 110
@@ -29,7 +33,7 @@
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 1
+#define TROG_TROGMETER_MAX 10
 
 #define TROG_PLAYER_SPAWN_X 0
 #define TROG_PLAYER_SPAWN_Y 0
@@ -41,6 +45,7 @@
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (10 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)
+#define TROG_BURNINATE_ANIM_TIME_BTWN_FRAMES 6 
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal

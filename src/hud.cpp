@@ -113,9 +113,9 @@ void hud::update() {
         //TODO: don't just right align this. The text should be right aligned and the numbers
         // should be left aligned
         bn::ostringstream mans_lv_string_stream(mans_lv_str);
-        mans_lv_string_stream << "MANS ";
+        mans_lv_string_stream << "MANS:";
         mans_lv_string_stream << _sesh.get_mans();
-        mans_lv_string_stream << " L";
+        mans_lv_string_stream << " Lv:";
         mans_lv_string_stream << _sesh.get_level();
 
         _text_generator.set_right_alignment();

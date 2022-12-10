@@ -32,6 +32,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _big_text_generator(big_text_generator),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
+    BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
     _countryside.put_below();
 
@@ -106,6 +107,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
+    // _troghammer = troghammer(0, 0, false);
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -123,19 +125,7 @@ bn::optional<scene_type> play_scene::update(){
         _hud.update_trogmeter(_trogdor->get_trogmeter());
 
         
-        _trogdor->update();
-        for(cottage &c : _cottages){
-            c.update();
-            if(_trogdor->handle_cottage_collision(c)){
-                //the above if statement returns true if we hit a treasure hut
-                result = scene_type::BONUS;
-
-                //this marks the cottage as visited so that we can no longer return
-                c.visit();
-                set_visible(false);
-            }
-        }
-        
+        _trogdor->update();        
         
         bool was_burninating = _trogdor->burninating();
 
@@ -182,7 +172,18 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "SWORDED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            bn::string<13> str = "SWORDED!";
+            //3% chance to get it wrong
+            if(rand() % 33 == 0){
+                str = "SORDID!";
+            }
+            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+        }
+
+        if(_troghammer){
+            was_dead = _trogdor->dead();  
+            _troghammer->update();
+            // _trogdor->handle_knight_collision(_troghammer);
         }
 
 
@@ -193,9 +194,7 @@ bn::optional<scene_type> play_scene::update(){
         _pfact.update();
         _afact.update();
 
-        if(level_complete()){
-            result = scene_type::LEVELBEAT;
-        }
+
 
         if(_trogdor->ready_to_respawn()){
             _overlay_text.reset();
@@ -212,6 +211,25 @@ bn::optional<scene_type> play_scene::update(){
         _overlay_text.reset();
     }
     
+    if(level_complete()){
+        result = scene_type::LEVELBEAT;
+    }
+
+    //had to move this out to fix a bug where cottage fire was visible while paused.
+    // since you can't move while paused, we should be fine....
+    for(cottage &c : _cottages){
+        c.update();
+        if(_trogdor->handle_cottage_collision(c)){
+            //the above if statement returns true if we hit a treasure hut
+            result = scene_type::BONUS;
+
+            //this marks the cottage as visited so that we can no longer return
+            c.visit();
+            set_visible(false);
+        }
+    }
+
+    
     return result;
 }
 
@@ -220,6 +238,10 @@ bool play_scene::level_complete(){
     for(cottage &c : _cottages) {
         result = result & c.burninated();
     }
+    #ifdef DEBUG 
+        //Instantly win level by pressing A
+        if(bn::keypad::a_pressed()) return true;
+    #endif
     return result;
 }
 
@@ -241,5 +263,6 @@ void play_scene::set_visible(bool visible){
     _countryside.set_visible(visible);
 
 }
+
 
 }

@@ -130,14 +130,14 @@ constexpr int8_t variable_16x32_sprite_font_character_widths[] = {
     14,  // ¿
 };
 
-constexpr bn::span<const bn::utf8_character> variable_16x32_sprite_font_utf8_characters_span(
+constexpr bn::span<const bn::utf8_character> variable_32x64_sprite_font_utf8_characters_span(
         variable_32x64_sprite_font_utf8_characters);
 
 constexpr auto variable_32x64_sprite_font_utf8_characters_map =
-        bn::utf8_characters_map<variable_16x32_sprite_font_utf8_characters_span>();
+        bn::utf8_characters_map<variable_32x64_sprite_font_utf8_characters_span>();
 
 constexpr bn::sprite_font variable_32x64_sprite_font(
-        bn::sprite_items::trogdor_variable_16x32_font, variable_16x32_sprite_font_utf8_characters_map.reference(),
+        bn::sprite_items::trogdor_variable_32x64_font, variable_32x64_sprite_font_utf8_characters_map.reference(),
         variable_16x32_sprite_font_character_widths);
 
 }

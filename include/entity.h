@@ -23,6 +23,7 @@ namespace trog{
         bool out_of_bounds();
 
         void set_visible(bool visible) {_sprite.set_visible(visible);}
+
         
         
 
@@ -47,6 +48,7 @@ namespace trog{
         bn::fixed_point _pos;
         bn::fixed_rect _hitbox;
         bn::sprite_ptr _sprite;
+        short _top_bound; // top bound is Different for different classes
     };
 
 }

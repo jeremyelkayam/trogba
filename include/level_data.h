@@ -33,7 +33,7 @@ constexpr auto DIR_LEFT = 3;
 constexpr auto DIR_RIGHT = 4;
 
 const int levels[33][20] = {
-	/* 1 */ { 3, 0,
+	/* 1 */ { 1, 0,
 	DIR_LEFT, 1585, -666,
 	DIR_RIGHT, -1813, 291,
 	0, 0, 0,
