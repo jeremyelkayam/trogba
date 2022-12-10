@@ -74,7 +74,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, big_text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud));
                     }
                     break;
                 }
@@ -89,7 +89,7 @@ int main()
                 }
                 case trog::scene_type::LOSE: { 
                     hud.show();
-                    scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {

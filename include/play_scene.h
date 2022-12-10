@@ -33,7 +33,6 @@ namespace trog{
 
         unsigned short _burninate_pause_time;
 
-        bn::sprite_text_generator &_big_text_generator;
         bn::regular_bg_ptr _countryside;
 
         bn::unique_ptr<big_text> _overlay_text;
@@ -56,7 +55,7 @@ namespace trog{
         void set_visible(bool visible);
 
     public:
-        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &big_text_generator);
+        play_scene(session_info& sesh, hud& hud);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

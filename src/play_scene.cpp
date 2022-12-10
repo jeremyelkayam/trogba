@@ -22,14 +22,13 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &big_text_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud) : 
         _sesh(sesh),
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
         _burninate_pause_time(0),
-        _big_text_generator(big_text_generator),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
