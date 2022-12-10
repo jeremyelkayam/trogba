@@ -14,6 +14,7 @@ namespace trog {
 instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
         _text_generator(text_generator),
         _level_select(false),
+        _show_secret_hints(false),
         _sesh(sesh) {
     _flashing_text_counter = 0;
 
@@ -35,6 +36,24 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
     //     "Designed by Mike and Matt"
     // };
 
+    setup_instructions();
+
+
+    // _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+
+    // text_generator.generate(0, 30, , start_text_sprites);    
+
+    // text_generator.generate(0, 40, , start_text_sprites);    
+
+}
+
+void instructions_scene::clear_text(){
+    _instruction_text_sprites.clear();
+    _start_text_sprites.clear();
+}
+
+void instructions_scene::setup_instructions(){
+    //todo refactor the text setup into a function
     bn::string<64> instructions[] = {
         "Use the squishy + to move",
         "Stomp 10 guys to burninate",
@@ -47,6 +66,9 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
     };
     
     int ycor = -30;
+
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+
     for(bn::string<64> line : instructions) { 
         _text_generator.generate(0, ycor, line, _instruction_text_sprites);
         ycor+=14;
@@ -55,12 +77,31 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
 
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
     _text_generator.generate(0, -30+(14*4)+7, "Press A to start 'em up ", _start_text_sprites);    
+}
 
-    // _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+void instructions_scene::setup_secret_hints(){
 
-    // text_generator.generate(0, 30, , start_text_sprites);    
+    int ycor = -30;
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    _text_generator.generate(0, ycor, "SECRET HINTS!!", _start_text_sprites);    
+    ycor+=16;
 
-    // text_generator.generate(0, 40, , start_text_sprites);    
+    bn::string<64> instructions[] = {
+        "-Don't let peasants return home",
+        "-U're invincible while burning",
+        "-Flaming peasants burn houses",
+        "-Extra man every 300pts"
+    };
+    
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    for(bn::string<64> line : instructions) { 
+        _text_generator.generate(0, ycor, line, _instruction_text_sprites);
+        ycor+=16;
+    }
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    _text_generator.generate(0, ycor, "-What's a treasure hut?!?!", _instruction_text_sprites);
+    ycor+=16;
+    _text_generator.generate(0, ycor, "-Secret Code?!?!", _instruction_text_sprites);
 
 }
 
@@ -96,18 +137,20 @@ bn::optional<scene_type> instructions_scene::update(){
         _text_generator.generate(0, -30+(14*4)+7, lv_str, _start_text_sprites);    
 
     }else{
-        _flashing_text_counter++;
-        if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
-            for(auto it : _start_text_sprites) { 
-                it.set_visible(false);
+        if(!_show_secret_hints){
+            _flashing_text_counter++;
+            if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
+                for(auto it : _start_text_sprites) { 
+                    it.set_visible(false);
+                }
             }
+            if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
+                for(auto it : _start_text_sprites) { 
+                    it.set_visible(true);
+                }
+                _flashing_text_counter = 0;
+            }        
         }
-        if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
-            for(auto it : _start_text_sprites) { 
-                it.set_visible(true);
-            }
-            _flashing_text_counter = 0;
-        }        
     }
 
     // text stuff
@@ -116,11 +159,22 @@ bn::optional<scene_type> instructions_scene::update(){
     if(bn::keypad::a_pressed()){
         #ifdef DEBUG
             if(_level_select) result = scene_type::PLAY;
+            clear_text();
             _level_select=true;
         #endif 
         #ifndef DEBUG
             result = scene_type::PLAY;
         #endif
+    }
+    if(bn::keypad::l_pressed()){
+        //toggle secret hints
+        clear_text();
+        _show_secret_hints = !_show_secret_hints;
+        if(_show_secret_hints){
+            setup_secret_hints();
+        }else{
+            setup_instructions();
+        }
     }
 
     return result;

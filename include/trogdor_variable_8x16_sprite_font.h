@@ -43,7 +43,7 @@ constexpr int8_t variable_8x16_sprite_font_character_widths[] = {
     8,  // 55 7
     8,  // 56 8
     8,  // 57 9
-    1,  // 58 :
+    2,  // 58 :
     4,  // 59 ;
     6,  // 60 <
     7,  // 61 =

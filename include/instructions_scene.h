@@ -18,9 +18,14 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 64> _start_text_sprites;
         
         unsigned short _flashing_text_counter;
-        bool _level_select;
+        bool _level_select, _show_secret_hints;
         session_info &_sesh;
+
+        int text_ycor;
         
+        void setup_instructions();
+        void setup_secret_hints();
+        void clear_text();
 
     public:
         explicit instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator);
