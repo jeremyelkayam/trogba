@@ -30,6 +30,8 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
 }
 
 bn::optional<scene_type> gameover_scene::update(){
+
+    _itsover_text.update();
     
     bn::optional<scene_type> result;
     

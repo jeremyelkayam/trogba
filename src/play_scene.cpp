@@ -114,10 +114,11 @@ bn::optional<scene_type> play_scene::update(){
 
     bn::optional<scene_type> result;
 
+    if(_overlay_text) _overlay_text->update();
+
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
-        _overlay_text->update();
     }else{
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());

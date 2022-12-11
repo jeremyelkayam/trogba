@@ -10,7 +10,7 @@
 
 namespace trog {
     class big_text { 
-        private:
+        protected:
             bool _bigger;
             bn::vector<bn::sprite_ptr, 64>_text_sprites;
 
