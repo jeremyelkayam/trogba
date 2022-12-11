@@ -1,9 +1,6 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include "bn_sprite_items_player.h"
-#include "bn_sprite_items_trogdor_arrowed.h"
-#include "bn_sprite_items_trogdor_sworded.h"
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"
@@ -18,6 +15,8 @@ namespace trog {
         private:
             const bn::fixed _speed;
 
+            bn::sprite_ptr _majesty;
+
             bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
@@ -28,6 +27,7 @@ namespace trog {
             const int _burninate_length = TROG_BURNINATE_TIME; //temporarily this can be 10 seconds 
             unsigned short _time_dead;
             unsigned short _iframes;
+            unsigned short _majesty_flash_timer;
 
             firebreath _breath;
             session_info &_sesh;
@@ -72,6 +72,8 @@ namespace trog {
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
             void set_visible(bool visible);
+
+            void update_win_anim();
 
 
     };

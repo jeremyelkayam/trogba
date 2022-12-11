@@ -29,6 +29,7 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
         _burninate_pause_time(0),
+        _win_pause_time(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
@@ -119,6 +120,9 @@ bn::optional<scene_type> play_scene::update(){
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
+    }else if(level_complete()){
+        _win_pause_time++;
+        _trogdor->update_win_anim();
     }else{
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());
@@ -206,14 +210,21 @@ bn::optional<scene_type> play_scene::update(){
             }
         }
     }
+
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
         _burninate_pause_time = 0;
         _overlay_text.reset();
     }
     
-    if(level_complete()){
+    if(level_complete() && _win_pause_time > TROG_WIN_PAUSETIME){
         result = scene_type::LEVELBEAT;
     }
+
+    #ifdef DEBUG 
+        //Instantly win level by pressing A
+        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
+    #endif
+
 
     //had to move this out to fix a bug where cottage fire was visible while paused.
     // since you can't move while paused, we should be fine....
@@ -238,10 +249,8 @@ bool play_scene::level_complete(){
     for(cottage &c : _cottages) {
         result = result & c.burninated();
     }
-    #ifdef DEBUG 
-        //Instantly win level by pressing A
-        if(bn::keypad::a_pressed()) return true;
-    #endif
+
+    
     return result;
 }
 

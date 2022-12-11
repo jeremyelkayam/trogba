@@ -32,6 +32,7 @@ namespace trog{
 
 
         unsigned short _burninate_pause_time;
+        unsigned short _win_pause_time;
 
         bn::regular_bg_ptr _countryside;
 

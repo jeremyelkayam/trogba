@@ -46,6 +46,8 @@
 #define TROG_BURNINATE_TIME (10 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)
 #define TROG_BURNINATE_ANIM_TIME_BTWN_FRAMES 6 
+#define TROG_WIN_PAUSETIME 150
+#define TROG_MAJESTY_FLASH_INTERVAL 15
 
 // the length of invulnerability post-respawn.
 // TODO: tweak these to be closer to the real deal
