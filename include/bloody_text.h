@@ -4,7 +4,6 @@
 #pragma once
 
 #include "big_text.h"
-#include <bn_forward_list.h>
 #include "bn_sprite_animate_actions.h"
 
 namespace trog {
@@ -19,7 +18,7 @@ namespace trog {
     class bloody_text : public big_text { 
         private:
 
-            bn::forward_list<blood_droplet, 8> _droplets;
+            bn::vector<blood_droplet, 8> _droplets;
             
         public:
             bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
