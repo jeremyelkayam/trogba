@@ -39,7 +39,7 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
     //     "GBA version by Jeremy Elkayam",
     //     "Designed by Mike and Matt"
     // };
-
+    text_generator.set_center_alignment();
     setup_instructions();
 
 

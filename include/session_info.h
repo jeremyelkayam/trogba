@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace trog
 {
     class session_info {
@@ -16,11 +17,14 @@ namespace trog
             unsigned short get_mans() {return _mans;}
             unsigned int get_score() {return _score;}
             unsigned short get_level() {return _level;}
+
+            bool current_level_has_cutscene();
             
         private:
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
+            // bn::unordered_set<int, 16> _cutscene_levels;
     };
 }
 
