@@ -65,7 +65,7 @@ void movie_scene::update_ending_cutscene(){
             _sb_anim.update();
         }        
 
-        if(_timer == 240){
+        if(_timer == 260){
             bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "keep playing!", _text_sprites);
