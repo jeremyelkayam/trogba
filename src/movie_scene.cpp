@@ -3,33 +3,91 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_strongbad.h"
 #include "bn_sprite_items_player.h"
+#include "bn_sprite_items_cottageleft.h"
 
 namespace trog{
 
 movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
-    _character_sprite(bn::sprite_items::strongbad.create_sprite(130, 0)),
-    _sb_anim(bn::create_sprite_animate_action_forever(
-                _character_sprite, 5, bn::sprite_items::strongbad.tiles_item(),
-                0, 1 )),
-    _sb_move(_character_sprite, 180, 0, 0),
+    
     _timer(0),
     _text_generator(text_generator),
     _sesh(sesh)
 {
+    if(_sesh.get_level() != 101) {
+        bn::sound_items::intermish.play();
+    }
+
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    _text_generator.set_center_alignment();
+
+
+    switch(_sesh.get_level()) { 
+        case 5:
+            write_text("stompin' good");
+            break;
+        case 9:
+            write_text("fry 'em up dan");
+            
+            break;
+        case 13:
+            write_text("parade of trogdors");
+            for(int z = 0; z < 9; z++){
+
+                _sprites.emplace_back(bn::sprite_items::player.create_sprite(-140 - 30 * z, 0)),
+                _anim_actions.emplace_back(bn::create_sprite_animate_action_forever(
+                        _sprites.at(z), 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+                _move_actions.emplace_back(bn::sprite_move_to_action(_sprites.at(z), 300, 400 - 30*z, 0));                
+            }
+
+            break;
+        case 17:
+            write_text("dancin' time");
+            break;
+        case 21:
+            write_text("flex it, troggie");
+            _sprites.emplace_back(bn::sprite_items::player.create_sprite(0, 0));
+            _anim_actions.emplace_back(bn::create_sprite_animate_action_forever(
+                        _sprites.at(0), 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3));
+            break;
+        case 43:
+            write_text("2 cottages");
+            _sprites.emplace_back(bn::sprite_items::cottageleft.create_sprite(30, 0));
+            _sprites.emplace_back(bn::sprite_items::cottageleft.create_sprite(-30, 0));
+            _sprites.at(1).set_horizontal_flip(true);
+            break;
+        default:
+            BN_ERROR("Movie scene instantiated on invalid level: ", _sesh.get_level());
+    }
+}
+
+void movie_scene::write_text(const char* str){
+    _text_generator.generate(0, -60, str, _text_sprites);
 
 }
 
 bn::optional<scene_type> movie_scene::update(){
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _text_generator.set_center_alignment();
+    _timer++;
+
 
     if(_sesh.get_level() == 101) { 
-        update_ending_cutscene();
+        // update_ending_cutscene();
+    }
 
+    for(auto &anim : _anim_actions) {
+        if(!anim.done()){
+            anim.update();
+        }
+    }
+    for(auto &move : _move_actions) {
+        if(!move.done()){
+            move.update();
+        }
     }
 
     bn::optional<scene_type> result;
-    
+    if(cutscene_over()) {
+        return scene_type::PLAY;
+    }
 
     // move_background(_dead_trogdor);
 
@@ -37,47 +95,55 @@ bn::optional<scene_type> movie_scene::update(){
 }
 
 bool movie_scene::cutscene_over(){
-    return false;
+    return _timer >= 300;
 }
 
-void movie_scene::update_ending_cutscene(){
-    if(!_sb_move.done()){
-        _sb_anim.update();
-        _sb_move.update();
-    }else{
-        if(_timer == 0){
-            _sb_anim = bn::create_sprite_animate_action_forever(
-                    _character_sprite, 10, bn::sprite_items::strongbad.tiles_item(),
-                    2, 3 );            
-            _sb_anim.update();
-        }
-        if(_timer == 30){
-            bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
-            _text_generator.generate(0, -60, "congratulations.", _text_sprites);
-        }
-        if(_timer == 130){
-            _text_generator.generate(0, -48, "you got", _text_sprites);
-        }
-        if(_timer == 190){
-            _text_generator.generate(0, -36, "good score", _text_sprites);
-        }
-        if(_timer > 30 && _timer < 210){
-            _sb_anim.update();
-        }        
 
-        if(_timer == 260){
-            bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
-            _text_sprites.clear();
-            _text_generator.generate(0, -60, "keep playing!", _text_sprites);
-            _character_sprite.set_x(30);
-            _character_sprite.set_tiles(bn::sprite_items::strongbad.tiles_item(), 3);
-            _character_sprite.set_rotation_angle(315); //bn::sprite_items::player.create_sprite(0, 0);
-            _character_sprite = bn::sprite_items::player.create_sprite(-30, 0);
-            _character_sprite.set_rotation_angle(45); //bn::sprite_items::player.create_sprite(0, 0);
+// will likely come back to this later
 
-        }
-        _timer++;
-    }
-}
+// _character_sprite(bn::sprite_items::strongbad.create_sprite(130, 0)),
+//     _sb_anim(bn::create_sprite_animate_action_forever(
+//                 _character_sprite, 5, bn::sprite_items::strongbad.tiles_item(),
+//                 0, 1 )),
+//     _sb_move(_character_sprite, 180, 0, 0),
+// void movie_scene::update_ending_cutscene(){
+//     if(!_sb_move.done()){
+//         _sb_anim.update();
+//         _sb_move.update();
+//     }else{
+//         if(_timer == 0){
+//             _sb_anim = bn::create_sprite_animate_action_forever(
+//                     _character_sprite, 10, bn::sprite_items::strongbad.tiles_item(),
+//                     2, 3 );            
+//             _sb_anim.update();
+//         }
+//         if(_timer == 30){
+//             bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
+//             _text_generator.generate(0, -60, "congratulations.", _text_sprites);
+//         }
+//         if(_timer == 130){
+//             _text_generator.generate(0, -48, "you got", _text_sprites);
+//         }
+//         if(_timer == 190){
+//             _text_generator.generate(0, -36, "good score", _text_sprites);
+//         }
+//         if(_timer > 30 && _timer < 210){
+//             _sb_anim.update();
+//         }        
+
+//         if(_timer == 260){
+//             bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
+//             _text_sprites.clear();
+//             _text_generator.generate(0, -60, "keep playing!", _text_sprites);
+//             _character_sprite.set_x(30);
+//             _character_sprite.set_tiles(bn::sprite_items::strongbad.tiles_item(), 3);
+//             _character_sprite.set_rotation_angle(315); //bn::sprite_items::player.create_sprite(0, 0);
+//             _character_sprite = bn::sprite_items::player.create_sprite(-30, 0);
+//             _character_sprite.set_rotation_angle(45); //bn::sprite_items::player.create_sprite(0, 0);
+
+//         }
+//         _timer++;
+//     }
+// }
 
 }

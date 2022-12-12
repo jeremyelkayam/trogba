@@ -32,8 +32,15 @@ void session_info::reset(){
     _level = TROG_STARTING_LEVEL;
 }
 
+// THERE HAS TO BE A BETTER WAY!!!! 
 bool session_info::current_level_has_cutscene(){
-    return _level - 1 == 100;
+    return  (_level == 5) || 
+            (_level == 9) ||
+            (_level == 13) ||
+            (_level == 17) ||
+            (_level == 21) ||
+            (_level == 43) ||
+            (_level == 101);
 }
 
 }
