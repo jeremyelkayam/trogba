@@ -40,7 +40,7 @@
 #define TROG_PLAYER_WIDTH 20
 #define TROG_PLAYER_HEIGHT 40
 
-#define TROG_PLAYER_SPEED 1.5
+#define TROG_PLAYER_SPEED 1.25
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (10 SECONDS)
