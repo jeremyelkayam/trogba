@@ -10,6 +10,7 @@
 namespace trog {
     enum class scene_type
     {
+        LOGO,
         TITLE,
         INSTRUCTIONS,
         PLAY,
