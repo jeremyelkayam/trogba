@@ -76,6 +76,12 @@ void instructions_scene::setup_instructions(){
 
     _text_generator.set_palette_item(RED_PALETTE);
     _text_generator.generate(0, 33, "Press A to start 'em up ", _start_text_sprites);
+
+    // text_generator.set_left_alignment();
+    // _text_generator.set_palette_item(WHITE_PALETTE);
+    // _text_generator.generate(-120, 75, "Version 0.9", _instruction_text_sprites);
+    // _text_generator.set_center_alignment();
+
 }
 
 void instructions_scene::setup_secret_hints(){
