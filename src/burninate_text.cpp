@@ -8,8 +8,8 @@
 namespace trog{ 
     
 
-burninate_text::burninate_text(bn::sprite_text_generator &big_text_generator) : 
-    big_text(big_text_generator, 0, 0, "BURNINATE!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()),
+burninate_text::burninate_text() : 
+    big_text(true, 0, 0, "BURNINATE!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()),
     _fire(bn::affine_bg_items::burninatefire0.create_bg(0,-16)),
     _scaler(_fire, TROG_BURNINATE_PAUSETIME / 2, 0.2){
 

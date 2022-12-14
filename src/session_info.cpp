@@ -5,6 +5,11 @@
 namespace trog {
 
 session_info::session_info() {
+
+    // _cutscene_levels.insert(100);
+    // for(int z : {4, 8, 12, 16, 20, 24, 30, 34, 38, 42, 46, 50, 100}){
+    //     _cutscene_levels.insert(z);
+    // }
     reset();
 }
 
@@ -25,6 +30,17 @@ void session_info::reset(){
     _mans = TROG_STARTING_LIVES;
     _score = 0;
     _level = TROG_STARTING_LEVEL;
+}
+
+// THERE HAS TO BE A BETTER WAY!!!! 
+bool session_info::current_level_has_cutscene(){
+    return  (_level == 5) || 
+            (_level == 9) ||
+            (_level == 13) ||
+            (_level == 17) ||
+            (_level == 21) ||
+            (_level == 43) ||
+            (_level == 101);
 }
 
 }

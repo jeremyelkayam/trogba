@@ -22,14 +22,14 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &big_text_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud) : 
         _sesh(sesh),
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
         _burninate_pause_time(0),
-        _big_text_generator(big_text_generator),
+        _win_pause_time(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
@@ -115,10 +115,14 @@ bn::optional<scene_type> play_scene::update(){
 
     bn::optional<scene_type> result;
 
+    if(_overlay_text) _overlay_text->update();
+
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
-        _overlay_text->update();
+    }else if(level_complete()){
+        _win_pause_time++;
+        _trogdor->update_win_anim();
     }else{
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());
@@ -153,7 +157,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _overlay_text.reset(new burninate_text(_big_text_generator));
+            _overlay_text.reset(new burninate_text());
         }
 
         bool was_dead = _trogdor->dead();        
@@ -162,7 +166,7 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         was_dead = _trogdor->dead();  
@@ -177,7 +181,7 @@ bn::optional<scene_type> play_scene::update(){
             if(rand() % 33 == 0){
                 str = "SORDID!";
             }
-            _overlay_text.reset(new bloody_text(_big_text_generator, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         if(_troghammer){
@@ -206,14 +210,21 @@ bn::optional<scene_type> play_scene::update(){
             }
         }
     }
+
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
         _burninate_pause_time = 0;
         _overlay_text.reset();
     }
     
-    if(level_complete()){
+    if(level_complete() && _win_pause_time > TROG_WIN_PAUSETIME){
         result = scene_type::LEVELBEAT;
     }
+
+    #ifdef DEBUG 
+        //Instantly win level by pressing A
+        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
+    #endif
+
 
     //had to move this out to fix a bug where cottage fire was visible while paused.
     // since you can't move while paused, we should be fine....
@@ -238,10 +249,8 @@ bool play_scene::level_complete(){
     for(cottage &c : _cottages) {
         result = result & c.burninated();
     }
-    #ifdef DEBUG 
-        //Instantly win level by pressing A
-        if(bn::keypad::a_pressed()) return true;
-    #endif
+
+    
     return result;
 }
 

@@ -22,6 +22,7 @@
 #include "gameover_scene.h"
 #include "level_win_scene.h"
 #include "bonus_scene.h"
+#include "movie_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -74,7 +75,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, big_text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud));
                     }
                     break;
                 }
@@ -89,7 +90,7 @@ int main()
                 }
                 case trog::scene_type::LOSE: { 
                     hud.show();
-                    scene.reset(new trog::gameover_scene(sesh, text_generator, big_text_generator));
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {
@@ -97,6 +98,11 @@ int main()
                     scene.reset(new trog::level_win_scene(sesh, text_generator));
                     break;
                 }
+                case trog::scene_type::MOVIE: {
+                    hud.show();
+                    scene.reset(new trog::movie_scene(sesh, text_generator));
+                    break;
+                }                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;
