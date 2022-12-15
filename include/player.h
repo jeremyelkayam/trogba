@@ -80,6 +80,8 @@ namespace trog {
             void pass_out();
             void thumb_it_up();
             void flex();
+
+            
             virtual void update_anim() final;
 
 

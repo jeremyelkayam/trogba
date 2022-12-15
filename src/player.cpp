@@ -277,6 +277,7 @@ void player::flex(){
                 7, 8, 9, 10, 10, 9, 8);
 }
 void player::update_anim(){
+    BN_LOG("update me trogdor");
     entity::update_anim();
     if(_move_action && !_move_action->done()){
         _walkcycle.update();

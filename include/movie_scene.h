@@ -17,14 +17,8 @@ namespace trog{
     class movie_scene : public scene{ 
     protected:
 
-        // going to need to refactor this into a class for every cutscene
-        // i hate this 
+        bn::vector<bn::unique_ptr<entity>, 20> _cutscene_objects;
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
-        bn::unordered_map<const char *, bn::sprite_ptr, 16> _sprites;
-        bn::unordered_map<const char *, bn::sprite_move_to_action, 16> _move_actions;
-
-        // fuck this, todo make it better somehow idk 
-        bn::unordered_map<const char *, bn::sprite_animate_action<4>, 8> _anim_actions;
 
         unsigned short _timer, _cutscene_length;
 
@@ -41,20 +35,10 @@ namespace trog{
         // void update_lv5();
 
         void write_text(const char* str);
-        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
 
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();
-        static movie_scene* create_movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
 
     };
-
-    class movie_scene_lv21 : public movie_scene {
-        private:
-            player _trogdor;
-        public: 
-            explicit movie_scene_lv21(session_info &sesh, bn::sprite_text_generator &text_generator);
-            [[nodiscard]] virtual bn::optional<scene_type> update();
-    };
-
 }

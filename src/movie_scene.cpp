@@ -24,6 +24,47 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.set_center_alignment();
 
+    if(_sesh.get_level() == 5){
+        write_text("stompin' good");
+
+    }else if(_sesh.get_level() == 9){
+        write_text("fry 'em up dan");
+
+    }else if(_sesh.get_level() == 13){
+        write_text("parade of trogdors");
+        //create a parade of 9 trogdors
+        for(int z = 0; z < 9; z++){
+            _cutscene_objects.emplace_back(new player(-140 - 30 * z, 0, sesh, false));
+            _cutscene_objects.at(z)->move_to(_cutscene_length, 400 - 30*z, 0);                
+        }
+    }else if(_sesh.get_level() == 17){
+        write_text("dancin' time");
+
+    }else if(_sesh.get_level() == 21){
+        write_text("flex it, troggie");
+
+        player* trogdor = new player(0,0,_sesh,false);
+        trogdor->flex();
+        _cutscene_objects.emplace_back(trogdor);
+    }else if(_sesh.get_level() == 25){
+
+    }else if(_sesh.get_level() == 31){
+
+    }else if(_sesh.get_level() == 35){
+
+    }else if(_sesh.get_level() == 39){
+
+    }else if(_sesh.get_level() == 43){
+
+    }else if(_sesh.get_level() == 47){
+
+    }else if(_sesh.get_level() == 51){
+
+    }else if(_sesh.get_level() == 101){
+
+    }else BN_ERROR("Provided level does not have an associated cutscene: ",
+        _sesh.get_level());
+
 
     switch(_sesh.get_level()) { 
         case 5:
@@ -60,30 +101,15 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             //     bn::sprite_move_to_action(_sprites.at("redknight"), _cutscene_length / 2, _finish_pos + bn::fixed_point(80, 10)));
 
             break;
-        case 9:
-            // write_text("fry 'em up dan");
-            
-            break;
         case 13:
-            // write_text("parade of trogdors");
-            for(int z = 0; z < 9; z++){
 
-                // _sprites.put("trogdorz",bn::sprite_items::player.create_sprite(-140 - 30 * z, 0)),
-                // _anim_actions.insert(0, bn::create_sprite_animate_action_forever(
-                        // _sprites.at(z), 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
-                // _move_actions.emplace_back(bn::sprite_move_to_action(_sprites.at(z), 300, 400 - 30*z, 0));                
-            }
 
             break;
         case 17:
             // write_text("dancin' time");
             break;
         case 21:
-            // write_text("flex it, troggie");
-            // _sprites.emplace_back(bn::sprite_items::player.create_sprite(0, 0));
-            // _anim_actions.
-            // _anim_actions.emplace_back(bn::create_sprite_animate_action_forever(
-                        // _sprites.at(0), 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3));
+
             break;
         case 43:
             // write_text("2 cottages");
@@ -105,40 +131,19 @@ bn::optional<scene_type> movie_scene::update(){
     _timer++;
     bn::optional<scene_type> result;
 
+    for(bn::unique_ptr<entity> &e : _cutscene_objects){
+        e->update_anim();
+    }
+
     if(cutscene_over()) {
         return scene_type::PLAY;
     }
-
-    // move_background(_dead_trogdor);
 
     return result;
 }
 
 bool movie_scene::cutscene_over(){
     return _timer >= _cutscene_length;
-}
-
-movie_scene* movie_scene::create_movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator){
-    switch(sesh.get_level()){
-        case 21:
-            return new movie_scene_lv21(sesh, text_generator);
-            break;
-        default:
-            BN_ERROR("Requested scene does not have a cutscene or cutscene is not yet implemented");
-    }
-}
-
-
-movie_scene_lv21::movie_scene_lv21(session_info &sesh, bn::sprite_text_generator &text_generator) : 
-    movie_scene(sesh, text_generator),
-    _trogdor(0,0,sesh,false){
-    write_text("flex it, troggie");
-    _trogdor.flex();
-}
-
-bn::optional<scene_type> movie_scene_lv21::update(){
-    _trogdor.update_anim();
-    return movie_scene::update();
 }
 
 
