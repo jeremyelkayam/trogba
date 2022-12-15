@@ -134,7 +134,6 @@ int main()
             bn::core::reset();
         }
 
-
         bn::core::update();
     }
 }

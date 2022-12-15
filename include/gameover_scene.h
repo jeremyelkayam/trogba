@@ -12,6 +12,8 @@ namespace trog{
     private:
         bn::regular_bg_ptr _dead_trogdor;
         bn::vector<bn::sprite_ptr, 10> _challengeagain_text_sprites;
+        bn::vector<bn::sprite_ptr, 3> _secret_sprites;
+        bn::vector<bn::sprite_animate_action<6>, 3> _secret_anims;
         
         session_info &_sesh;
         bloody_text _itsover_text;
