@@ -33,6 +33,8 @@ namespace trog{
 
 
         void move_to(short time, bn::fixed x, bn::fixed y);
+        void move_to_and_back(short time, bn::fixed x, bn::fixed y);
+
         
 
     protected:
@@ -51,9 +53,10 @@ namespace trog{
 
         bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction); 
 
-        bn::fixed_point unit_vector(bn::fixed angle){return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
+        bn::fixed_point unit_vector(bn::fixed angle)
+            {return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
 
-        bn::fixed_point _pos;
+        bn::fixed_point _pos, _starting_pos;
         bn::fixed_rect _hitbox;
 
 
@@ -61,6 +64,7 @@ namespace trog{
         bn::optional<bn::sprite_move_to_action> _move_action;
 
         short _top_bound; // top bound is Different for different classes
+        bool _return_to_starting_point;//challenge again
     };
 
 }

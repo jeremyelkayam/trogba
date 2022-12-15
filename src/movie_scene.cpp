@@ -25,7 +25,11 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     _text_generator.set_center_alignment();
 
     if(_sesh.get_level() == 5){
-        write_text("stompin' good");
+        write_text("stompin' good!");
+        player* trogdor = new player(140,0,_sesh,false);
+        trogdor->set_horizontal_flip(true);
+        trogdor->move_to_and_back(_cutscene_length, -50, 0);
+        _cutscene_objects.emplace_back(trogdor);
 
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan");
@@ -120,6 +124,11 @@ bn::optional<scene_type> movie_scene::update(){
 
     for(bn::unique_ptr<entity> &e : _cutscene_objects){
         e->update_anim();
+    }
+
+    if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
+        //trogdor
+        ((player *) _cutscene_objects.at(0).get())->enable_breath();
     }
 
     if(cutscene_over()) {

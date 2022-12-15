@@ -64,14 +64,7 @@ void player::update(){
             _trogmeter = 0;
             _breath.disable();
         }
-        //update fire breath;
-        short xoffset = TROG_FIREBREATH_XOFFSET;
-        if(_sprite.horizontal_flip()){
-            xoffset=-xoffset;
-        }
-        _breath.set_x(_pos.x() + xoffset);
-        _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
-        _breath.update();
+        update_firebreath();
 
         //update trogdor to show iframes
         if(_iframes){
@@ -284,6 +277,18 @@ void player::update_anim(){
     if(_flex){
         _flex->update();
     }
+    update_firebreath();
+
+}
+
+void player::update_firebreath(){
+    short xoffset = TROG_FIREBREATH_XOFFSET;
+    if(_sprite.horizontal_flip()){
+        xoffset=-xoffset;
+    }
+    _breath.set_x(_sprite.position().x() + xoffset);
+    _breath.set_y(_sprite.position().y() + TROG_FIREBREATH_YOFFSET);        
+    _breath.update();
 }
 
 void player::set_visible(bool visible){

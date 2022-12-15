@@ -8,14 +8,21 @@ namespace trog {
 
 entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite) : 
         _pos(xcor, ycor),
+        _starting_pos(_pos),
         _hitbox(xcor, ycor, width, height),
         _sprite(sprite),
-        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND){
+        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND),
+        _return_to_starting_point(false){
     BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
 void entity::move_to(short time, bn::fixed x, bn::fixed y){
     _move_action = bn::sprite_move_to_action(_sprite, time, x, y);
+}
+void entity::move_to_and_back(short time, bn::fixed x, bn::fixed y){
+    _starting_pos = _pos;
+    _move_action = bn::sprite_move_to_action(_sprite, time/2, x, y);
+    _return_to_starting_point = true;
 }
 
 void entity::update(){
@@ -25,6 +32,11 @@ void entity::update(){
 void entity::update_anim(){
     if(_move_action && !_move_action->done()){
         _move_action->update();
+    }
+    if(_move_action && _move_action->done() && _return_to_starting_point){
+        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
+        _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
+            _starting_pos.x(), _starting_pos.y());;
     }
 }
 
