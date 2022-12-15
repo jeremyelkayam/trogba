@@ -47,27 +47,34 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         trogdor->flex();
         _cutscene_objects.emplace_back(trogdor);
     }else if(_sesh.get_level() == 25){
+        write_text("peasant dominoes");
 
     }else if(_sesh.get_level() == 31){
+        write_text("trogdor incognito");
 
     }else if(_sesh.get_level() == 35){
+        write_text("go trogdor # 2!");
 
     }else if(_sesh.get_level() == 39){
+        write_text("forbidden peasant love");
 
     }else if(_sesh.get_level() == 43){
+        write_text("2 cottages");
+
+        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false));
+        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false));
 
     }else if(_sesh.get_level() == 47){
+        write_text("a funny joke");
 
     }else if(_sesh.get_level() == 51){
+        write_text("smote that kerrek!");
 
     }else if(_sesh.get_level() == 101){
+        write_text("credits idk");
 
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
-
-
-    switch(_sesh.get_level()) { 
-        case 5:
 
             // //this is the absolute worst
 
@@ -100,26 +107,6 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             // _move_actions.insert("redknight movement", 
             //     bn::sprite_move_to_action(_sprites.at("redknight"), _cutscene_length / 2, _finish_pos + bn::fixed_point(80, 10)));
 
-            break;
-        case 13:
-
-
-            break;
-        case 17:
-            // write_text("dancin' time");
-            break;
-        case 21:
-
-            break;
-        case 43:
-            // write_text("2 cottages");
-            // _sprites.emplace_back(bn::sprite_items::cottageleft.create_sprite(30, 0));
-            // _sprites.emplace_back(bn::sprite_items::cottageleft.create_sprite(-30, 0));
-            // _sprites.at(1).set_horizontal_flip(true);
-            break;
-        default:
-            BN_ERROR("Movie scene instantiated on invalid level: ", _sesh.get_level());
-    }
 }
 
 void movie_scene::write_text(const char* str){
