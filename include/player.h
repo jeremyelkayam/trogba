@@ -40,7 +40,7 @@ namespace trog {
             void check_boundary_collision();
 
             bool invincible();
-            void die(bn::sprite_item item);
+            void die(short frame_no);
 
             //todo: this doesn't need to be in this class
             bool any_dpad_input();

@@ -246,21 +246,21 @@ void player::start_burninating(){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !invincible()) { 
-        die(bn::sprite_items::trogdor_sworded);
+        die(6);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) &&  !invincible()) { 
-        die(bn::sprite_items::trogdor_arrowed);
+        die(4);
         archer.destroy_arrow();
     }
 }
 
-void player::die(bn::sprite_item item){
+void player::die(short frame_no){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
-    _sprite.set_item(item);
+    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), frame_no);
     _breath.disable();
 }
 

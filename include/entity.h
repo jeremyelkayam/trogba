@@ -2,6 +2,8 @@
 #include <bn_fixed_rect.h>
 #include <bn_sprite_ptr.h>
 #include <bn_math.h>
+#include <bn_sprite_actions.h>
+#include <bn_sprite_animate_actions.h>
 #define FRONT_ZORDER 0
 #define MID_ZORDER 1
 #define BACK_ZORDER 2
@@ -19,10 +21,15 @@ namespace trog{
         bn::fixed get_y() { return _pos.y();}
         void set_x(const bn::fixed &x) { _pos.set_x(x);}
         void set_y(const bn::fixed &y) { _pos.set_y(y);}
-        void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
         bool out_of_bounds();
 
         void set_visible(bool visible) {_sprite.set_visible(visible);}
+
+
+        //sprite stuff
+        void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
+        virtual void update_anim();
+        void set_frame(short frame);
 
         
         
@@ -47,7 +54,11 @@ namespace trog{
 
         bn::fixed_point _pos;
         bn::fixed_rect _hitbox;
+
+
         bn::sprite_ptr _sprite;
+        bn::optional<bn::sprite_move_to_action> _move_action;
+
         short _top_bound; // top bound is Different for different classes
     };
 

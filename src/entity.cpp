@@ -18,6 +18,11 @@ void entity::update(){
     _hitbox.set_position(_pos);
     _sprite.set_position(_pos);
 }
+void entity::update_anim(){
+    if(_move_action && !_move_action->done()){
+        _move_action->update();
+    }
+}
 
 bool entity::collides_with(entity &e){
     return _hitbox.intersects(e.get_hitbox());
