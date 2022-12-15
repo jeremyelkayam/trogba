@@ -36,6 +36,7 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
     //make the background appear underneath all other backgroundlayers
     _countryside.put_below();
 
+
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
     int level_index;
     if (_sesh.get_level() == 1) {

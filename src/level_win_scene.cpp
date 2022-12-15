@@ -36,15 +36,15 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _text_generator.generate(73, 10, "nice work!", _nicework_text_sprites);
+    _text_generator.generate(73, 5, "nice work!", _nicework_text_sprites);
 
-    bn::string<13> str = "LEVEL BEATEN!";
+    bn::string<7> line2 = "BEATEN!";
     //3% chance that the game misspells it lol
     if(rand() % 33 == 0){
-        str = "LEVEL BEATED!";
+        line2 = "BEATED!";
     }
-
-    _text_generator.generate(70, 45, str, _levelbeated_text_sprites);
+    _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
+    _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
 }
 
 bn::optional<scene_type> level_win_scene::update(){
