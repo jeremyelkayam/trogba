@@ -4,12 +4,14 @@
 
 #include "bn_regular_bg_items_titlebg.h"
 #include "bn_sprite_items_titlegraphic.h"
+#include "bn_sprite_items_versionlabel.h"
 #include "title_scene.h"
 
 namespace trog {
 
 title_scene::title_scene() : 
         _titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)),
+        _version_label(bn::sprite_items::versionlabel.create_sprite(-104, 77)),
         _frame_counter(0) {
 
     bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
