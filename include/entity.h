@@ -36,7 +36,7 @@ namespace trog{
         
 
     protected:
-        entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
+        explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         
 
         //todo: add const reference keyword where applicable

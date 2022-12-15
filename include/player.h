@@ -20,6 +20,7 @@ namespace trog {
             bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
+            bn::optional<bn::sprite_animate_action<7>> _flex;
             
             unsigned short _trogmeter;
             unsigned int _burninate_time;
@@ -78,6 +79,7 @@ namespace trog {
 
             void pass_out();
             void thumb_it_up();
+            void flex();
             virtual void update_anim() final;
 
 

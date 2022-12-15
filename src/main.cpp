@@ -106,7 +106,7 @@ int main()
                 }
                 case trog::scene_type::MOVIE: {
                     hud.show();
-                    scene.reset(new trog::movie_scene(sesh, text_generator));
+                    scene.reset(trog::movie_scene::create_movie_scene(sesh, text_generator));
                     break;
                 }                
                 default: { 

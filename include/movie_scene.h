@@ -6,6 +6,7 @@
 #include <bn_sound_items.h>
 #include <bn_unordered_map.h>
 #include "scene.h"
+#include "player.h"
 #include "session_info.h"
 
 
@@ -36,14 +37,24 @@ namespace trog{
 
         bool cutscene_over();
 
-        void update_ending_cutscene();
-        void update_lv5();
+        // void update_ending_cutscene();
+        // void update_lv5();
 
         void write_text(const char* str);
+        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
 
     public:
-        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update();
+        static movie_scene* create_movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+
+    };
+
+    class movie_scene_lv21 : public movie_scene {
+        private:
+            player _trogdor;
+        public: 
+            explicit movie_scene_lv21(session_info &sesh, bn::sprite_text_generator &text_generator);
+            [[nodiscard]] virtual bn::optional<scene_type> update();
     };
 
 }

@@ -15,6 +15,10 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+        _trogmeter(0),
+        _burninate_time(0),
+        _time_dead(0),
+        _majesty_flash_timer(0),
         _breath(sesh),
         _sesh(sesh),
         _next_pos(xcor,ycor)
@@ -27,10 +31,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 
     //todo maybe condense all the timers into one?
     // since they won't all be used at the same time
-    _trogmeter = 0;
-    _burninate_time = 0;
-    _time_dead = 0;
-    _majesty_flash_timer = 0;
+
     if(iframes) {
         _iframes = 1;
     }else{
@@ -269,10 +270,19 @@ void player::pass_out(){
 void player::thumb_it_up(){
     _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 11);
 }
+
+void player::flex(){
+    _flex = bn::create_sprite_animate_action_forever(
+                _sprite, 5, bn::sprite_items::player.tiles_item(), 
+                7, 8, 9, 10, 10, 9, 8);
+}
 void player::update_anim(){
     entity::update_anim();
     if(_move_action && !_move_action->done()){
         _walkcycle.update();
+    }
+    if(_flex){
+        _flex->update();
     }
 }
 
