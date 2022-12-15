@@ -11,6 +11,7 @@ namespace trog
             void die(){--_mans;}
             void advance_level(){++_level;}
             void reset();
+            void secret_lives_boost() {_mans = 30;}
 
             void set_level(unsigned short level){_level=level;}
 
