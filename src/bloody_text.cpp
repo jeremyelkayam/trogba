@@ -47,7 +47,6 @@ blood_droplet::blood_droplet(bn::sprite_item item, int xcor, int ycor, int anim_
 }
 
 void blood_droplet::update(){
-    BN_LOG("AYY");
     _anim.update();
 }
 

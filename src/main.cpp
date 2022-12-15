@@ -23,6 +23,7 @@
 #include "level_win_scene.h"
 #include "bonus_scene.h"
 #include "movie_scene.h"
+#include "logo_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -36,7 +37,7 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::TITLE;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
@@ -57,6 +58,11 @@ int main()
         if(next_scene){
             bn::sound::stop_all();
             switch(*next_scene){
+                case trog::scene_type::LOGO: { 
+                    hud.hide();
+                    scene.reset(new trog::logo_scene(sesh));
+                    break;
+                }
                 case trog::scene_type::TITLE: { 
                     hud.hide();
                     scene.reset(new trog::title_scene());
@@ -127,7 +133,9 @@ int main()
             bn::core::reset();
         }
 
-
+        // Burn a random number every frame.
+        // This makes it less likely to get the same random numbers every time you play
+        rand();
         bn::core::update();
     }
 }

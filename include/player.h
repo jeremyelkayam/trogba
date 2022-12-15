@@ -40,7 +40,7 @@ namespace trog {
             void check_boundary_collision();
 
             bool invincible();
-            void die(bn::sprite_item item);
+            void die(short frame_no);
 
             //todo: this doesn't need to be in this class
             bool any_dpad_input();
@@ -51,6 +51,7 @@ namespace trog {
             void update_pos() {_pos = _next_pos;}
 
             void start_burninating();
+
 
             bn::fixed_point _next_pos;
 
@@ -74,6 +75,10 @@ namespace trog {
             void set_visible(bool visible);
 
             void update_win_anim();
+
+            void pass_out();
+            void thumb_it_up();
+            virtual void update_anim() final;
 
 
     };
