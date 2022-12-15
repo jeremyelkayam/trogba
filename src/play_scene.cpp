@@ -230,7 +230,9 @@ bn::optional<scene_type> play_scene::update(){
     // since you can't move while paused, we should be fine....
     for(cottage &c : _cottages){
         c.update();
-        if(_trogdor->handle_cottage_collision(c)){
+
+        // only run the collision check while unpaused
+        if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
 
