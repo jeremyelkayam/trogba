@@ -47,7 +47,6 @@ int main()
 
     trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
     hud.hide();
-    bn::random rand;
 
 
     while(true)
@@ -134,6 +133,9 @@ int main()
             bn::core::reset();
         }
 
+        // Burn a random number every frame.
+        // This makes it less likely to get the same random numbers every time you play
+        rand();
         bn::core::update();
     }
 }
