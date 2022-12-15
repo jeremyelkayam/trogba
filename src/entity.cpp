@@ -14,6 +14,10 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
     BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
+void entity::move_to(short time, bn::fixed x, bn::fixed y){
+    _move_action = bn::sprite_move_to_action(_sprite, time, x, y);
+}
+
 void entity::update(){
     _hitbox.set_position(_pos);
     _sprite.set_position(_pos);

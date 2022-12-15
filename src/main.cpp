@@ -60,7 +60,7 @@ int main()
             switch(*next_scene){
                 case trog::scene_type::LOGO: { 
                     hud.hide();
-                    scene.reset(new trog::logo_scene());
+                    scene.reset(new trog::logo_scene(sesh));
                     break;
                 }
                 case trog::scene_type::TITLE: { 

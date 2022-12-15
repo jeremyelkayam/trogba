@@ -264,6 +264,20 @@ void player::die(short frame_no){
     _breath.disable();
 }
 
+void player::pass_out(){
+    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 12);
+}
+
+void player::thumb_it_up(){
+    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 11);
+}
+void player::update_anim(){
+    entity::update_anim();
+    if(_move_action && !_move_action->done()){
+        _walkcycle.update();
+    }
+}
+
 void player::set_visible(bool visible){
     entity::set_visible(visible);
     if(_breath.enabled()){

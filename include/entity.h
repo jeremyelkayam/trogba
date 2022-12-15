@@ -31,7 +31,8 @@ namespace trog{
         virtual void update_anim();
         void set_frame(short frame);
 
-        
+
+        void move_to(short time, bn::fixed x, bn::fixed y);
         
 
     protected:
