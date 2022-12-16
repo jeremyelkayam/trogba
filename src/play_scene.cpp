@@ -227,7 +227,7 @@ bn::optional<scene_type> play_scene::update(){
 
     #ifdef DEBUG 
         //Instantly win level by pressing A
-        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
+        if(bn::keypad::start_pressed()) result = scene_type::LEVELBEAT;
     #endif
 
 

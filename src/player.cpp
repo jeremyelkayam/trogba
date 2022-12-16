@@ -87,12 +87,12 @@ void player::update(){
         }
         update_next_pos();
 
-        #ifdef DEBUG
-            //Insta-burninate by pressing b
-            if(bn::keypad::b_pressed()){
-                start_burninating();   
-            }
-        #endif
+        // #ifdef DEBUG
+        //     //Insta-burninate by pressing b
+        //     if(bn::keypad::b_pressed()){
+        //         start_burninating();   
+        //     }
+        // #endif
     }
 
 }
