@@ -74,7 +74,7 @@ namespace trog {
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
             void set_visible(bool visible);
-            void enable_breath(){_breath.enable();}
+            void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
             void disable_breath(){_breath.disable();}
             void set_horizontal_flip(bool horizontal_flip);
 

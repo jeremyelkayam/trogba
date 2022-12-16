@@ -35,7 +35,7 @@ void entity::update_anim(){
         _move_action->update();
     }
     if(_move_action && _move_action->done() && _return_to_starting_point){
-        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
+        set_horizontal_flip(!_sprite.horizontal_flip());
         _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
             _starting_pos.x(), _starting_pos.y());;
     }
