@@ -99,7 +99,6 @@ void peasant::update(){
         // BN_LOG("waiting", _time_waiting, " of ", _waittime);
         _time_waiting++;
     }
-
 }
 
 void peasant::stomp(){
@@ -108,9 +107,7 @@ void peasant::stomp(){
         _speed = bn::fixed(0);
         _time_dead=1;
         _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);
-        // return true;
-    }    
-    // return false;
+    }
 }
 
 bool peasant::remove_from_map(){
