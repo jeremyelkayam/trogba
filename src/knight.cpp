@@ -14,6 +14,11 @@ knight::knight(int xcor, int ycor, bool facingRight) :
     _sprite.set_horizontal_flip(facingRight);
 }
 
+void knight::update_anim(){
+    entity::update_anim();
+    _walkcycle.update();
+}
+
 void knight::update(){
     entity::update();
     _walkcycle.update();

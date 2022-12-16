@@ -44,7 +44,15 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 9){
-        write_text("fry 'em up dan");
+        write_text("fry 'em up dan.");
+        player* trogdor = new player(20,0,_sesh,false);
+        trogdor->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(trogdor);
+
+        peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
+        p->update();
+        p->move_to(_cutscene_length / 4, -10, 0);
+        _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 13){
         write_text("parade of trogdors");

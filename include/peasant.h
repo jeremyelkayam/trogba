@@ -42,6 +42,7 @@ namespace trog {
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();
             bool onfire(){return _onfire;}
+            virtual void update_anim() final;
 
     };
 }

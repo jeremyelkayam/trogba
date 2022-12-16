@@ -116,4 +116,12 @@ bool peasant::remove_from_map(){
     return (_time_dead >= _despawn_delay) || (_currentdist < 0);
 }
 
+void peasant::update_anim(){
+    set_visible(true);
+    if(_move_action && !_move_action->done()){
+        _walkcycle.update();
+        _move_action->update();
+    }
+}
+
 }
