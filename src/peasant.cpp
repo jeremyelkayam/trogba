@@ -56,10 +56,14 @@ void peasant::burninate(){
         _currentdist+=_speed;
 
         // change animation to flaming
-        _walkcycle = bn::create_sprite_animate_action_forever(
-                        _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+        set_sprite_ablaze();
         bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
     }
+}
+
+void peasant::set_sprite_ablaze(){
+    _walkcycle = bn::create_sprite_animate_action_forever(
+                    _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
 }
 
 void peasant::update(){

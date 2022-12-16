@@ -182,15 +182,16 @@ bn::optional<scene_type> instructions_scene::update(){
     // text stuff
     bn::optional<scene_type> result;
     
-    if(bn::keypad::a_pressed()){
-        #ifdef DEBUG
-            if(_level_select) result = scene_type::PLAY;
+    #ifdef DEBUG
+        if(bn::keypad::start_pressed()){
             clear_text();
             _level_select=true;
-        #endif 
-        #ifndef DEBUG
+        }
+    #endif 
+
+    if(bn::keypad::a_pressed()){
             result = scene_type::PLAY;
-        #endif
+
     }
     if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints

@@ -43,6 +43,7 @@ namespace trog {
             bool remove_from_map();
             bool onfire(){return _onfire;}
             virtual void update_anim() final;
+            void set_sprite_ablaze();
 
     };
 }
