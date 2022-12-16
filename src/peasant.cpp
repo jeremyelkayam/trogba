@@ -70,7 +70,6 @@ void peasant::update(){
     entity::update();
     if(_time_dead == 1){
        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
-
     }
 
     //see the .h file for more info here

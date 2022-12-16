@@ -45,21 +45,23 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan.");
+        // not done
         player* trogdor = new player(20,0,_sesh,false);
         trogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(trogdor);
 
         peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
         p->update();
-        p->move_to(_cutscene_length / 4, -10, 0);
+        p->move_to(_cutscene_length / 5, -10, 0);
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 13){
         write_text("parade of trogdors");
         //create a parade of 9 trogdors
         for(int z = 0; z < 9; z++){
-            _cutscene_objects.emplace_back(new player(-140 - 30 * z, 0, sesh, false));
-            _cutscene_objects.at(z)->move_to(_cutscene_length, 400 - 30*z, 0);                
+            _cutscene_objects.emplace_back(new player(140 + 40 * z, 0, sesh, false));
+            _cutscene_objects.at(z)->set_horizontal_flip(true);                
+            _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }
     }else if(_sesh.get_level() == 17){
         write_text("dancin' time");
@@ -99,38 +101,6 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
-
-            // //this is the absolute worst
-
-            // write_text("stompin' good");
-
-            // _start_pos = bn::fixed_point(140, 0);
-            // _finish_pos = bn::fixed_point(-80, 0);
-
-            // _sprites.insert("trogdor", bn::sprite_items::player.create_sprite(_start_pos));
-            // _sprites.at("trogdor").set_horizontal_flip(true);
-            // _anim_actions.insert("trogdor anim", 
-            //     bn::create_sprite_animate_action_forever(
-            //     _sprites.at("trogdor"), 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3));
-            // _move_actions.insert("trogdor movement", 
-            //     bn::sprite_move_to_action(_sprites.at("trogdor"), _cutscene_length / 2, _finish_pos));
-
-            // _sprites.insert("blueknight", bn::sprite_items::knight.create_sprite(_start_pos + bn::fixed_point(50, -20)));
-            // _sprites.at("blueknight").set_horizontal_flip(false);
-            // _anim_actions.insert("blueknight anim", 
-            //     bn::create_sprite_animate_action_forever(
-            //         _sprites.at("blueknight"), 10, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3));
-            // _move_actions.insert("blueknight movement", 
-            //     bn::sprite_move_to_action(_sprites.at("blueknight"), _cutscene_length / 2, _finish_pos + bn::fixed_point(50, -20)));
-
-            // _sprites.insert("redknight", bn::sprite_items::knight.create_sprite(_start_pos + bn::fixed_point(80, 10)));
-            // _sprites.at("redknight").set_horizontal_flip(false);
-            // _anim_actions.insert("redknight anim", 
-            //     bn::create_sprite_animate_action_forever(
-            //         _sprites.at("redknight"), 10, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3));
-            // _move_actions.insert("redknight movement", 
-            //     bn::sprite_move_to_action(_sprites.at("redknight"), _cutscene_length / 2, _finish_pos + bn::fixed_point(80, 10)));
-
 }
 
 void movie_scene::write_text(const char* str){
@@ -152,6 +122,19 @@ bn::optional<scene_type> movie_scene::update(){
         ((peasant *) _cutscene_objects.at(3).get())->stomp();
         
     }
+    if(_sesh.get_level() == 9){
+        //trogdor
+        if(_timer == _cutscene_length / 5 + 5){
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
+        }
+        if(_timer == _cutscene_length / 5 + 10){
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+            peasant *p = (peasant *) _cutscene_objects.at(1).get();
+            p->set_sprite_ablaze();
+            p->move_to(_cutscene_length / 5, -10, 100);
+        }
+    }
+
 
     if(cutscene_over()) {
         return scene_type::PLAY;
