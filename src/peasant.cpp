@@ -64,6 +64,10 @@ void peasant::burninate(){
 
 void peasant::update(){
     entity::update();
+    if(_time_dead == 1){
+       bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
+
+    }
 
     //see the .h file for more info here
     //but basically this exists to fix a visual bug
@@ -102,11 +106,8 @@ void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
-        _walkcycle = bn::create_sprite_animate_action_once(
-                        _sprite, 0, bn::sprite_items::peasant.tiles_item(), 2, 3);
-        _walkcycle.update();
         _time_dead=1;
-        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
+        _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);
         // return true;
     }    
     // return false;

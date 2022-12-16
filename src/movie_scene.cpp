@@ -30,6 +30,18 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         trogdor->set_horizontal_flip(true);
         trogdor->move_to_and_back(_cutscene_length, -50, 0);
         _cutscene_objects.emplace_back(trogdor);
+                
+        knight* redknight = new knight(190,-5,false);
+        redknight->move_to_and_back(_cutscene_length, 0, -5);
+        _cutscene_objects.emplace_back(redknight);
+
+        knight* blueknight = new knight(220, 5,false);
+        blueknight->move_to_and_back(_cutscene_length, 30, 5);
+        _cutscene_objects.emplace_back(blueknight);
+
+        peasant* p = new peasant(-60, 0, 0, 0, direction::DOWN);
+        p->update();
+        _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan");
@@ -129,6 +141,8 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
         //trogdor
         ((player *) _cutscene_objects.at(0).get())->enable_breath();
+        ((peasant *) _cutscene_objects.at(3).get())->stomp();
+        
     }
 
     if(cutscene_over()) {

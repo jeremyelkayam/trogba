@@ -7,6 +7,7 @@
 #include <bn_unordered_map.h>
 #include "scene.h"
 #include "player.h"
+#include "peasant.h"
 #include "session_info.h"
 
 
