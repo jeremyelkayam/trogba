@@ -125,6 +125,7 @@ void peasant::update_anim(){
         _walkcycle.update();
         _move_action->update();
     }
+    if(_update_anim_when_not_moving) _walkcycle.update();
 }
 
 }

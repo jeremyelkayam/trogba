@@ -29,6 +29,7 @@ void entity::update(){
     _hitbox.set_position(_pos);
     _sprite.set_position(_pos);
 }
+
 void entity::update_anim(){
     if(_move_action && !_move_action->done()){
         _move_action->update();
@@ -38,6 +39,13 @@ void entity::update_anim(){
         _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
             _starting_pos.x(), _starting_pos.y());;
     }
+    if(_flip_action){
+        _flip_action->update();
+    }
+}
+
+void entity::flip_every(unsigned short frames){
+    _flip_action = bn::sprite_horizontal_flip_toggle_action(_sprite, frames);
 }
 
 bool entity::collides_with(entity &e){

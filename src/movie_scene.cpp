@@ -65,6 +65,24 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         }
     }else if(_sesh.get_level() == 17){
         write_text("dancin' time");
+        for(int z=0; z < 10; z++){
+            int xcor = 100 - (z/2)*13;
+            int ycor = -12 + (z/2)*2;
+            peasant *p = new peasant(z % 2 == 0 ? xcor : -xcor, ycor, 0, 0, direction::DOWN);
+            p->update();
+            p->set_sprite_ablaze();
+            p->update_anim_action_when_not_moving(true);
+            _cutscene_objects.emplace_back(p);
+        }
+        for(int z=0; z < 2; z++){
+            int xcor = 30;
+            int ycor = -2;
+            knight *k = new knight(z == 0 ? xcor : -xcor, ycor, z == 0);
+            _cutscene_objects.emplace_back(k);
+        }
+        player *p = new player(0, 0, sesh, false);
+        p->flip_every(15);
+        _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
         write_text("flex it, troggie");

@@ -29,11 +29,13 @@ namespace trog{
         //sprite stuff
         void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
         virtual void update_anim();
-        void set_frame(short frame);
+        void flip_every(unsigned short frames);
 
 
         void move_to(short time, bn::fixed x, bn::fixed y);
         void move_to_and_back(short time, bn::fixed x, bn::fixed y);
+        void update_anim_action_when_not_moving(bool update) 
+            {_update_anim_when_not_moving = update;}
 
         
 
@@ -62,9 +64,11 @@ namespace trog{
 
         bn::sprite_ptr _sprite;
         bn::optional<bn::sprite_move_to_action> _move_action;
+        bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again
+        bool _update_anim_when_not_moving;        
     };
 
 }
