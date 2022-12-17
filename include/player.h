@@ -55,8 +55,7 @@ namespace trog {
             void update_firebreath();
 
             bn::fixed_point _next_pos;
-
-
+            
         public:
             player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes);
             virtual void update() final;
@@ -84,9 +83,6 @@ namespace trog {
             void thumb_it_up();
             void flex();
 
-
             virtual void update_anim() final;
-
-
     };
 }

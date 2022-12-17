@@ -78,6 +78,8 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             int xcor = 30;
             int ycor = -2;
             knight *k = new knight(z == 0 ? xcor : -xcor, ycor, z == 0);
+            k->animate_faster();
+            k->animate_faster();
             _cutscene_objects.emplace_back(k);
         }
         player *p = new player(0, 0, sesh, false);
@@ -137,8 +139,7 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
         //trogdor
         ((player *) _cutscene_objects.at(0).get())->enable_breath();
-        ((peasant *) _cutscene_objects.at(3).get())->stomp();
-        
+        ((peasant *) _cutscene_objects.at(3).get())->stomp();        
     }
     if(_sesh.get_level() == 9){
         //trogdor
