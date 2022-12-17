@@ -36,6 +36,7 @@ namespace trog{
         void move_to_and_back(short time, bn::fixed x, bn::fixed y);
         void update_anim_action_when_not_moving(bool update) 
             {_update_anim_when_not_moving = update;}
+        void jump(short time, bn::fixed height, bool repeating);
 
         
 
@@ -69,6 +70,9 @@ namespace trog{
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again
         bool _update_anim_when_not_moving;        
+        bool _keep_jumping;
+        short _jump_timer, _jump_time;
+        bn::fixed _jump_height;
     };
 
 }
