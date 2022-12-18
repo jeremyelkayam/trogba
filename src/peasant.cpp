@@ -62,6 +62,7 @@ void peasant::burninate(){
 void peasant::set_sprite_ablaze(){
     _walkcycle = bn::create_sprite_animate_action_forever(
                     _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+    _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 3);
 }
 
 void peasant::update(){

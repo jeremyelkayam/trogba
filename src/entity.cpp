@@ -13,6 +13,7 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _sprite(sprite),
         _top_bound(TROG_COUNTRYSIDE_TOP_BOUND),
         _return_to_starting_point(false),
+        _update_anim_when_not_moving(false),
         _keep_jumping(false),
         _jump_timer(0),
         _jump_time(0),
@@ -50,7 +51,7 @@ void entity::update_anim(){
         _jump_timer++;
         if(_jump_timer == _jump_time){
             _sprite.set_y(_sprite.y() + _jump_height);
-        }else if(_jump_timer == _jump_time * 2){
+        }else if(_jump_timer == _jump_time * 1.5){
             _sprite.set_y(_sprite.y() - _jump_height);
             if(_keep_jumping) _jump_timer = 1;
         }

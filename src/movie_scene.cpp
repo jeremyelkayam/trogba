@@ -8,6 +8,8 @@
 #include "bn_sprite_items_firebreath.h"
 #include "bn_sprite_items_cottageleft.h"
 
+
+//this class is terrible! But it's the best I've got 
 namespace trog{
 
 movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
@@ -90,6 +92,15 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     }else if(_sesh.get_level() == 25){
         write_text("peasant dominoes");
 
+        player* trogdor = new player(80,0,_sesh,false);
+        trogdor->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(trogdor);
+
+        for(int z = 0; z < 7; ++z){
+            peasant* p = new peasant(45 - 20*z, 0, 0, 0, direction::DOWN);
+            _cutscene_objects.emplace_back(p);
+        }
+
     }else if(_sesh.get_level() == 31){
         write_text("trogdor incognito");
 
@@ -135,15 +146,12 @@ bn::optional<scene_type> movie_scene::update(){
     }
 
     if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
-        //trogdor
+        //stompin good
         ((player *) _cutscene_objects.at(0).get())->enable_breath();
         ((peasant *) _cutscene_objects.at(3).get())->stomp();        
     }
     if(_sesh.get_level() == 9){
-
-
-
-        //trogdor
+        //fryemup dan
         for(int z = 0; z < 4 ; ++z){
             if(_timer == 30*z){
                 peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
@@ -163,7 +171,25 @@ bn::optional<scene_type> movie_scene::update(){
 
         }
     }
+    if(_sesh.get_level() == 25){
+        if(_timer == 40){
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
+        }
+        if(_timer == 50){
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+        }
+        for(int z = 0; z < 8; ++z){
+            if(_timer == 50 + 5*z){
+                if(z != 0) ((peasant *) _cutscene_objects.at(z).get())->stomp();
+                if(z != 7) ((peasant *) _cutscene_objects.at(z+1).get())->set_sprite_ablaze();                
+            }
+        }
+        if(_timer == 120){
+            ((player *) _cutscene_objects.at(0).get())->jump(10, -5, true);
+        }
+    }
     if(_sesh.get_level() == 51){
+        // kerrek cutscene
         if(_timer == 20){
             ((player *) _cutscene_objects.at(0).get())->enable_breath();
         }else if(_timer == 30){
