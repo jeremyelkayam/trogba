@@ -34,6 +34,7 @@ namespace trog{
 
         void move_to(short time, bn::fixed x, bn::fixed y);
         void move_to_and_back(short time, bn::fixed x, bn::fixed y);
+        void move_by(bn::fixed x, bn::fixed y);
         void update_anim_action_when_not_moving(bool update) 
             {_update_anim_when_not_moving = update;}
         void jump(short time, bn::fixed height, bool repeating);
@@ -66,6 +67,7 @@ namespace trog{
         bn::sprite_ptr _sprite;
         bn::optional<bn::sprite_move_to_action> _move_action;
         bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
+        bn::optional<bn::sprite_move_by_action> _move_by_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again

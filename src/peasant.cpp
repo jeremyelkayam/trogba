@@ -111,9 +111,9 @@ bool peasant::remove_from_map(){
 }
 
 void peasant::update_anim(){
-    if(_move_action && !_move_action->done()){
+    entity::update_anim();
+    if((_move_action && !_move_action->done()) || _move_by_action){
         _walkcycle.update();
-        _move_action->update();
     }
     if(_update_anim_when_not_moving) _walkcycle.update();
 }

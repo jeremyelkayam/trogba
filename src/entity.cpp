@@ -55,6 +55,9 @@ void entity::update_anim(){
             if(_keep_jumping) _jump_timer = 1;
         }
     }
+    if(_move_by_action){
+        _move_by_action->update();
+    }
 }
 
 void entity::flip_every(unsigned short frames){
@@ -120,6 +123,10 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
     new_hitbox.set_y(new_y);
 
     return box.intersects(new_hitbox);
+}
+
+void entity::move_by(bn::fixed x, bn::fixed y){
+    _move_by_action = bn::sprite_move_by_action(_sprite, x, y);
 }
 
 

@@ -45,15 +45,10 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan.");
-        // not done
+        
         player* trogdor = new player(20,0,_sesh,false);
         trogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(trogdor);
-
-        peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
-        p->update();
-        p->move_to(_cutscene_length / 5, -10, 0);
-        _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 13){
         write_text("parade of trogdors");
@@ -133,7 +128,6 @@ void movie_scene::write_text(const char* str){
 }
 
 bn::optional<scene_type> movie_scene::update(){
-    _timer++;
     bn::optional<scene_type> result;
 
     for(bn::unique_ptr<entity> &e : _cutscene_objects){
@@ -146,15 +140,27 @@ bn::optional<scene_type> movie_scene::update(){
         ((peasant *) _cutscene_objects.at(3).get())->stomp();        
     }
     if(_sesh.get_level() == 9){
+
+
+
         //trogdor
-        if(_timer == _cutscene_length / 5 + 5){
-            ((player *) _cutscene_objects.at(0).get())->enable_breath();
-        }
-        if(_timer == _cutscene_length / 5 + 10){
-            ((player *) _cutscene_objects.at(0).get())->disable_breath();
-            peasant *p = (peasant *) _cutscene_objects.at(1).get();
-            p->set_sprite_ablaze();
-            p->move_to(_cutscene_length / 5, -10, 100);
+        for(int z = 0; z < 4 ; ++z){
+            if(_timer == 30*z){
+                peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
+                p->move_to(_cutscene_length / 4, -10, 0);
+                _cutscene_objects.emplace_back(p);
+            }
+            if(_timer == _cutscene_length / 4 + 5 + 30*z){
+                ((player *) _cutscene_objects.at(0).get())->enable_breath();
+            }
+            if(_timer == _cutscene_length / 4 + 10 + 30*z){
+                BN_LOG("array length: ", _cutscene_objects.size());
+                ((player *) _cutscene_objects.at(0).get())->disable_breath();
+                peasant *p = (peasant *) _cutscene_objects.at(1 + z).get();
+                p->set_sprite_ablaze();
+                p->move_to(_cutscene_length / 4, -10, 100);
+            }
+
         }
     }
     if(_sesh.get_level() == 51){
@@ -174,6 +180,7 @@ bn::optional<scene_type> movie_scene::update(){
         return scene_type::PLAY;
     }
 
+    _timer++;
     return result;
 }
 
