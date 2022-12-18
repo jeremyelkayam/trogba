@@ -115,6 +115,10 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 51){
         write_text("smote that kerrek!");
+        _cutscene_objects.emplace_back(new player(-25,10,_sesh,false));
+        _cutscene_objects.emplace_back(new kerrek(25, 0));   
+
+        _cutscene_length *= 2; 
 
     }else if(_sesh.get_level() == 101){
         write_text("credits idk");
@@ -151,6 +155,17 @@ bn::optional<scene_type> movie_scene::update(){
             peasant *p = (peasant *) _cutscene_objects.at(1).get();
             p->set_sprite_ablaze();
             p->move_to(_cutscene_length / 5, -10, 100);
+        }
+    }
+    if(_sesh.get_level() == 51){
+        if(_timer == 20){
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
+        }else if(_timer == 30){
+            ((kerrek *) _cutscene_objects.at(1).get())->burninate();
+        }else if(_timer == 50){
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+        }else if(_timer == _cutscene_length / 2){
+            // MMMM! Roast Kerrek 
         }
     }
 

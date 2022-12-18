@@ -8,6 +8,7 @@
 #include "scene.h"
 #include "player.h"
 #include "peasant.h"
+#include "kerrek.h"
 #include "session_info.h"
 
 
