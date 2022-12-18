@@ -66,7 +66,6 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             int xcor = 100 - (z/2)*13;
             int ycor = -12 + (z/2)*2;
             peasant *p = new peasant(z % 2 == 0 ? xcor : -xcor, ycor, 0, 0, direction::DOWN);
-            p->update();
             p->set_sprite_ablaze();
             p->update_anim_action_when_not_moving(true);
             _cutscene_objects.emplace_back(p);
@@ -104,6 +103,13 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     }else if(_sesh.get_level() == 31){
         write_text("trogdor incognito");
 
+        for(int z = 0; z < 2 ; ++z){
+            int sign = z == 0 ? 1 : -1;
+            peasant *p = new peasant(130*sign, 0, 0, 0, direction::DOWN);
+            p->move_to(_cutscene_length / 3, 20*sign, 0);
+            p->update_anim_action_when_not_moving(true);
+            _cutscene_objects.emplace_back(p);
+        }
     }else if(_sesh.get_level() == 35){
         write_text("go trogdor # 2!");
 
@@ -172,20 +178,41 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
     if(_sesh.get_level() == 25){
-        if(_timer == 40){
+        // peasant dominoes
+        if(_timer == 60){
             ((player *) _cutscene_objects.at(0).get())->enable_breath();
         }
-        if(_timer == 50){
+        if(_timer == 70){
             ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }
         for(int z = 0; z < 8; ++z){
-            if(_timer == 50 + 5*z){
+            if(_timer == 70 + 5*z){
                 if(z != 0) ((peasant *) _cutscene_objects.at(z).get())->stomp();
                 if(z != 7) ((peasant *) _cutscene_objects.at(z+1).get())->set_sprite_ablaze();                
             }
         }
-        if(_timer == 120){
-            ((player *) _cutscene_objects.at(0).get())->jump(10, -5, true);
+        if(_timer == 140){
+            ((player *) _cutscene_objects.at(0).get())->jump(10, 5, true);
+        }
+    }
+    if(_sesh.get_level() == 31){
+        // trogdor incognito
+        if(_timer == _cutscene_length / 3 + 30){
+            //peasant breathes fire 
+            firebreath *f = new firebreath(_sesh);
+            f->set_x(-5);
+            f->set_y(-10);
+            f->enable();
+            f->update();
+            _cutscene_objects.emplace_back(f);
+        }
+        if(_timer == _cutscene_length / 3 + 40){
+            ((firebreath *) _cutscene_objects.at(2).get())->disable();
+            _cutscene_objects.at(0)->move_to(_cutscene_length / 4, 130, 0);
+        }
+        if(_timer == _cutscene_length / 2 + 60){
+            _cutscene_objects.at(1)->jump(10, 3, true);
+
         }
     }
     if(_sesh.get_level() == 51){

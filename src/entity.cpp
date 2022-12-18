@@ -50,9 +50,10 @@ void entity::update_anim(){
     if(_jump_timer){
         _jump_timer++;
         if(_jump_timer == _jump_time){
-            _sprite.set_y(_sprite.y() + _jump_height);
-        }else if(_jump_timer == _jump_time * 1.5){
+            //up is negative so jump height should be subtracted
             _sprite.set_y(_sprite.y() - _jump_height);
+        }else if(_jump_timer == _jump_time * 1.5){
+            _sprite.set_y(_sprite.y() + _jump_height);
             if(_keep_jumping) _jump_timer = 1;
         }
     }
