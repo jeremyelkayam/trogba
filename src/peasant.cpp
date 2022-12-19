@@ -6,7 +6,7 @@
 namespace trog {
 
 peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction) : 
-        entity(xcor, ycor, bn::fixed(8), bn::fixed(18), bn::sprite_items::peasant.create_sprite(0, 0)),
+        entity(xcor, ycor, bn::fixed(8), bn::fixed(18), bn::sprite_items::peasant.create_sprite(xcor, ycor)),
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
         _speed(speed),
@@ -16,10 +16,8 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _time_dead(0),
         _onfire(false),
         _returning(false),
-        _just_spawned(true),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)){
-    _sprite.set_visible(false);
     _sprite.set_z_order(MID_ZORDER);
 
     switch(direction) {
@@ -56,20 +54,21 @@ void peasant::burninate(){
         _currentdist+=_speed;
 
         // change animation to flaming
-        _walkcycle = bn::create_sprite_animate_action_forever(
-                        _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+        set_sprite_ablaze();
         bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
     }
 }
 
+void peasant::set_sprite_ablaze(){
+    _walkcycle = bn::create_sprite_animate_action_forever(
+                    _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
+    _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 3);
+}
+
 void peasant::update(){
     entity::update();
-
-    //see the .h file for more info here
-    //but basically this exists to fix a visual bug
-    if(_just_spawned){
-        _just_spawned = false;
-        _sprite.set_visible(true);
+    if(_time_dead == 1){
+       bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
     }
     
 
@@ -95,27 +94,29 @@ void peasant::update(){
         // BN_LOG("waiting", _time_waiting, " of ", _waittime);
         _time_waiting++;
     }
-
 }
 
 void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
-        _walkcycle = bn::create_sprite_animate_action_once(
-                        _sprite, 0, bn::sprite_items::peasant.tiles_item(), 2, 3);
-        _walkcycle.update();
         _time_dead=1;
-        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
-        // return true;
-    }    
-    // return false;
+        _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);
+    }
 }
 
 bool peasant::remove_from_map(){
     //dead peasants should be removed and despawned 
     //peasants despawn 1s after being stomped, or after reentering their house
     return (_time_dead >= _despawn_delay) || (_currentdist < 0);
+}
+
+void peasant::update_anim(){
+    entity::update_anim();
+    if((_move_action && !_move_action->done()) || _move_by_action){
+        _walkcycle.update();
+    }
+    if(_update_anim_when_not_moving) _walkcycle.update();
 }
 
 }

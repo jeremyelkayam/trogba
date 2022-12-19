@@ -39,7 +39,13 @@ bool session_info::current_level_has_cutscene(){
             (_level == 13) ||
             (_level == 17) ||
             (_level == 21) ||
+            (_level == 25) ||
+            (_level == 31) ||
+            (_level == 35) ||
+            (_level == 39) ||
             (_level == 43) ||
+            (_level == 47) ||
+            (_level == 51) ||
             (_level == 101);
 }
 

@@ -20,6 +20,7 @@ namespace trog {
             bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
+            bn::optional<bn::sprite_animate_action<7>> _flex;
             
             unsigned short _trogmeter;
             unsigned int _burninate_time;
@@ -51,11 +52,10 @@ namespace trog {
             void update_pos() {_pos = _next_pos;}
 
             void start_burninating();
-
+            void update_firebreath();
 
             bn::fixed_point _next_pos;
-
-
+            
         public:
             player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes);
             virtual void update() final;
@@ -73,13 +73,16 @@ namespace trog {
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
             void set_visible(bool visible);
+            void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
+            void disable_breath(){_breath.disable();}
+            void set_horizontal_flip(bool horizontal_flip);
 
             void update_win_anim();
 
             void pass_out();
             void thumb_it_up();
+            void flex();
+
             virtual void update_anim() final;
-
-
     };
 }

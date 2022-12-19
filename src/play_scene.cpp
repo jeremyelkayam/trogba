@@ -36,6 +36,10 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
     //make the background appear underneath all other backgroundlayers
     _countryside.put_below();
 
+    if(_sesh.get_level() == 1 && _sesh.get_mans() == 30){
+        bn::sound_items::secret_unlocked.play(TROG_DEFAULT_VOLUME);
+    }
+
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
     int level_index;
@@ -223,7 +227,7 @@ bn::optional<scene_type> play_scene::update(){
 
     #ifdef DEBUG 
         //Instantly win level by pressing A
-        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
+        if(bn::keypad::start_pressed()) result = scene_type::LEVELBEAT;
     #endif
 
 

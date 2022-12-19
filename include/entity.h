@@ -29,14 +29,20 @@ namespace trog{
         //sprite stuff
         void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
         virtual void update_anim();
-        void set_frame(short frame);
+        void flip_every(unsigned short frames);
 
 
         void move_to(short time, bn::fixed x, bn::fixed y);
+        void move_to_and_back(short time, bn::fixed x, bn::fixed y);
+        void move_by(bn::fixed x, bn::fixed y);
+        void update_anim_action_when_not_moving(bool update) 
+            {_update_anim_when_not_moving = update;}
+        void jump(short time, bn::fixed height, bool repeating);
+
         
 
     protected:
-        entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
+        explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         
 
         //todo: add const reference keyword where applicable
@@ -51,16 +57,24 @@ namespace trog{
 
         bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction); 
 
-        bn::fixed_point unit_vector(bn::fixed angle){return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
+        bn::fixed_point unit_vector(bn::fixed angle)
+            {return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
 
-        bn::fixed_point _pos;
+        bn::fixed_point _pos, _starting_pos;
         bn::fixed_rect _hitbox;
 
 
         bn::sprite_ptr _sprite;
         bn::optional<bn::sprite_move_to_action> _move_action;
+        bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
+        bn::optional<bn::sprite_move_by_action> _move_by_action;
 
         short _top_bound; // top bound is Different for different classes
+        bool _return_to_starting_point;//challenge again
+        bool _update_anim_when_not_moving;        
+        bool _keep_jumping;
+        short _jump_timer, _jump_time;
+        bn::fixed _jump_height;
     };
 
 }

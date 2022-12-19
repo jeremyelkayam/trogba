@@ -15,6 +15,10 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+        _trogmeter(0),
+        _burninate_time(0),
+        _time_dead(0),
+        _majesty_flash_timer(0),
         _breath(sesh),
         _sesh(sesh),
         _next_pos(xcor,ycor)
@@ -27,10 +31,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 
     //todo maybe condense all the timers into one?
     // since they won't all be used at the same time
-    _trogmeter = 0;
-    _burninate_time = 0;
-    _time_dead = 0;
-    _majesty_flash_timer = 0;
+
     if(iframes) {
         _iframes = 1;
     }else{
@@ -63,14 +64,7 @@ void player::update(){
             _trogmeter = 0;
             _breath.disable();
         }
-        //update fire breath;
-        short xoffset = TROG_FIREBREATH_XOFFSET;
-        if(_sprite.horizontal_flip()){
-            xoffset=-xoffset;
-        }
-        _breath.set_x(_pos.x() + xoffset);
-        _breath.set_y(_pos.y() + TROG_FIREBREATH_YOFFSET);
-        _breath.update();
+        update_firebreath();
 
         //update trogdor to show iframes
         if(_iframes){
@@ -93,12 +87,12 @@ void player::update(){
         }
         update_next_pos();
 
-        #ifdef DEBUG
-            //Insta-burninate by pressing b
-            if(bn::keypad::b_pressed()){
-                start_burninating();   
-            }
-        #endif
+        // #ifdef DEBUG
+        //     //Insta-burninate by pressing b
+        //     if(bn::keypad::b_pressed()){
+        //         start_burninating();   
+        //     }
+        // #endif
     }
 
 }
@@ -122,13 +116,11 @@ void player::update_next_pos(){
         _next_pos.set_y(_pos.y() + _speed);
     }
     if(bn::keypad::left_held()){
-        _sprite.set_horizontal_flip(true);
-        _breath.set_horizontal_flip(true);
+        set_horizontal_flip(true);
         _next_pos.set_x(_pos.x() - _speed);
     }
     if(bn::keypad::right_held()){
-        _sprite.set_horizontal_flip(false);
-        _breath.set_horizontal_flip(false);
+        set_horizontal_flip(false);
         _next_pos.set_x(_pos.x() + _speed);
     }
 
@@ -269,11 +261,32 @@ void player::pass_out(){
 void player::thumb_it_up(){
     _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 11);
 }
+
+void player::flex(){
+    _flex = bn::create_sprite_animate_action_forever(
+                _sprite, 5, bn::sprite_items::player.tiles_item(), 
+                7, 8, 9, 10, 10, 9, 8);
+}
 void player::update_anim(){
     entity::update_anim();
     if(_move_action && !_move_action->done()){
         _walkcycle.update();
     }
+    if(_flex){
+        _flex->update();
+    }
+    update_firebreath();
+
+}
+
+void player::update_firebreath(){
+    short xoffset = TROG_FIREBREATH_XOFFSET;
+    if(_sprite.horizontal_flip()){
+        xoffset=-xoffset;
+    }
+    _breath.set_x(_sprite.position().x() + xoffset);
+    _breath.set_y(_sprite.position().y() + TROG_FIREBREATH_YOFFSET);        
+    _breath.update();
 }
 
 void player::set_visible(bool visible){
@@ -281,6 +294,11 @@ void player::set_visible(bool visible){
     if(_breath.enabled()){
         _breath.set_visible(visible);
     }
+}
+
+void player::set_horizontal_flip(bool flip){
+    entity::set_horizontal_flip(flip);
+    _breath.set_horizontal_flip(flip);
 }
 
 bool player::invincible(){

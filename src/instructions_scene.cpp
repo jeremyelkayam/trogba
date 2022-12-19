@@ -15,6 +15,7 @@
 namespace trog {
 
 instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
+        _secret_code_index(0),
         _text_generator(text_generator),
         _level_select(false),
         _show_secret_hints(false),
@@ -25,6 +26,19 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
     for(int z = 0; z < 4 ; ++z){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_INSTRUCTION_TITLE_Y, z));
     }
+
+    //set up konami code 
+    _secret_code.emplace_back(bn::keypad::key_type::UP);
+    _secret_code.emplace_back(bn::keypad::key_type::UP);
+    _secret_code.emplace_back(bn::keypad::key_type::DOWN);
+    _secret_code.emplace_back(bn::keypad::key_type::DOWN);
+    _secret_code.emplace_back(bn::keypad::key_type::LEFT);
+    _secret_code.emplace_back(bn::keypad::key_type::RIGHT);
+    _secret_code.emplace_back(bn::keypad::key_type::LEFT);
+    _secret_code.emplace_back(bn::keypad::key_type::RIGHT);
+    _secret_code.emplace_back(bn::keypad::key_type::B);
+    _secret_code.emplace_back(bn::keypad::key_type::A);
+
 
     bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
@@ -76,12 +90,6 @@ void instructions_scene::setup_instructions(){
 
     _text_generator.set_palette_item(RED_PALETTE);
     _text_generator.generate(0, 33, "Press A to start 'em up ", _start_text_sprites);
-
-    // text_generator.set_left_alignment();
-    // _text_generator.set_palette_item(WHITE_PALETTE);
-    // _text_generator.generate(-120, 75, "Version 0.9", _instruction_text_sprites);
-    // _text_generator.set_center_alignment();
-
 }
 
 void instructions_scene::setup_secret_hints(){
@@ -157,18 +165,33 @@ bn::optional<scene_type> instructions_scene::update(){
         }
     }
 
+    if(bn::keypad::any_pressed() && _secret_code_index < _secret_code.size()){
+        if(bn::keypad::pressed(_secret_code.at(_secret_code_index))){
+            ++_secret_code_index;
+            BN_LOG("progress");
+            if(_secret_code_index == _secret_code.size()){
+                BN_LOG("you got the code");
+                _sesh.secret_lives_boost();
+            }
+        }else{
+            BN_LOG("you failed the code");
+            _secret_code_index=0;
+        }
+    }
+
     // text stuff
     bn::optional<scene_type> result;
     
-    if(bn::keypad::a_pressed()){
-        #ifdef DEBUG
-            if(_level_select) result = scene_type::PLAY;
+    #ifdef DEBUG
+        if(bn::keypad::start_pressed()){
             clear_text();
             _level_select=true;
-        #endif 
-        #ifndef DEBUG
+        }
+    #endif 
+
+    if(bn::keypad::a_pressed()){
             result = scene_type::PLAY;
-        #endif
+
     }
     if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints

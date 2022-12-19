@@ -11,6 +11,8 @@ namespace trog{
     private:
         bn::regular_bg_ptr _titlebg;
         bn::vector<bn::sprite_ptr, 4> _title_sprites;
+        bn::sprite_ptr _version_label;
+        
         int _frame_counter;
     public:
         title_scene();

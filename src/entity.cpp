@@ -8,25 +8,71 @@ namespace trog {
 
 entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite) : 
         _pos(xcor, ycor),
+        _starting_pos(_pos),
         _hitbox(xcor, ycor, width, height),
         _sprite(sprite),
-        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND){
+        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND),
+        _return_to_starting_point(false),
+        _update_anim_when_not_moving(false),
+        _keep_jumping(false),
+        _jump_timer(0),
+        _jump_time(0),
+        _jump_height(0) {
     BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
 void entity::move_to(short time, bn::fixed x, bn::fixed y){
     _move_action = bn::sprite_move_to_action(_sprite, time, x, y);
 }
+void entity::move_to_and_back(short time, bn::fixed x, bn::fixed y){
+    _starting_pos = _pos;
+    _move_action = bn::sprite_move_to_action(_sprite, time/2, x, y);
+    _return_to_starting_point = true;
+}
 
 void entity::update(){
     _hitbox.set_position(_pos);
     _sprite.set_position(_pos);
 }
+
 void entity::update_anim(){
     if(_move_action && !_move_action->done()){
         _move_action->update();
     }
+    if(_move_action && _move_action->done() && _return_to_starting_point){
+        set_horizontal_flip(!_sprite.horizontal_flip());
+        _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
+            _starting_pos.x(), _starting_pos.y());;
+    }
+    if(_flip_action){
+        _flip_action->update();
+    }
+    if(_jump_timer){
+        _jump_timer++;
+        if(_jump_timer == _jump_time){
+            //up is negative so jump height should be subtracted
+            _sprite.set_y(_sprite.y() - _jump_height);
+        }else if(_jump_timer == _jump_time * 1.5){
+            _sprite.set_y(_sprite.y() + _jump_height);
+            if(_keep_jumping) _jump_timer = 1;
+        }
+    }
+    if(_move_by_action){
+        _move_by_action->update();
+    }
 }
+
+void entity::flip_every(unsigned short frames){
+    _flip_action = bn::sprite_horizontal_flip_toggle_action(_sprite, frames);
+}
+
+void entity::jump(short time, bn::fixed height, bool repeating){
+    _jump_timer = 1;
+    _jump_time = time;
+    _jump_height = height;
+    _keep_jumping = repeating;
+}
+
 
 bool entity::collides_with(entity &e){
     return _hitbox.intersects(e.get_hitbox());
@@ -79,6 +125,10 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
     new_hitbox.set_y(new_y);
 
     return box.intersects(new_hitbox);
+}
+
+void entity::move_by(bn::fixed x, bn::fixed y){
+    _move_by_action = bn::sprite_move_by_action(_sprite, x, y);
 }
 
 
