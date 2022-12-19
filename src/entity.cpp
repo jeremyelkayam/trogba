@@ -58,6 +58,7 @@ void entity::update_anim(){
         }
     }
     if(_move_by_action){
+        BN_LOG("updating move by action");
         _move_by_action->update();
     }
 }
@@ -128,6 +129,7 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
 }
 
 void entity::move_by(bn::fixed x, bn::fixed y){
+    BN_LOG("help me");
     _move_by_action = bn::sprite_move_by_action(_sprite, x, y);
 }
 

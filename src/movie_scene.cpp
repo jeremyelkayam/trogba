@@ -112,7 +112,16 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         }
     }else if(_sesh.get_level() == 35){
         write_text("go trogdor # 2!");
-
+        for(int z = 0; z < 2; ++z){
+            player *trog = new player(-140, 30*z, sesh, false);
+            trog->move_by(1 + 0.5*z, 0);
+            _cutscene_objects.emplace_back(trog);
+        }
+        for(int z = 0; z < 7 ; ++z){
+            peasant *p = new peasant(-60 + 20*z, -25 + (13*z) % 5, 0, 0, direction::DOWN);
+            p->jump(10 + z*2, 5, true);
+            _cutscene_objects.emplace_back(p);
+        }
     }else if(_sesh.get_level() == 39){
         write_text("forbidden peasant love");
 
@@ -215,6 +224,16 @@ bn::optional<scene_type> movie_scene::update(){
 
         }
     }
+
+    if(_sesh.get_level() == 35){
+        // meh looks ok 
+        if(_timer % 40 == 0){
+            int _faster_player = (_timer / 40) % 2;
+            _cutscene_objects.at(_faster_player)->move_by(1.5,0);
+            _cutscene_objects.at(!_faster_player)->move_by(1,0);
+        }
+    }
+
     if(_sesh.get_level() == 51){
         // kerrek cutscene
         if(_timer == 20){
@@ -240,38 +259,6 @@ bn::optional<scene_type> movie_scene::update(){
 bool movie_scene::cutscene_over(){
     return _timer >= _cutscene_length;
 }
-
-
-// void movie_scene::update_lv5() {
-//     if(_move_actions.at("trogdor movement").done()){
-//         //make him go the other way 
-//         _sprites.at("trogdor").set_horizontal_flip(false);
-//         _move_actions.insert_or_assign("trogdor movement", 
-//             bn::sprite_move_to_action(_sprites.at("trogdor"), _cutscene_length / 2, _start_pos));
-
-//         _sprites.at("blueknight").set_horizontal_flip(true);
-//         _move_actions.insert_or_assign("blueknight movement", 
-//             bn::sprite_move_to_action(_sprites.at("blueknight"), _cutscene_length / 2,
-//                 _start_pos + bn::fixed_point(50, -20)));   
-
-//         _sprites.at("redknight").set_horizontal_flip(true);
-//         _move_actions.insert_or_assign("redknight movement", 
-//             bn::sprite_move_to_action(_sprites.at("redknight"), _cutscene_length / 2,
-//                 _start_pos + bn::fixed_point(80, 10))); 
-
-//         _sprites.insert("firebreath", bn::sprite_items::firebreath.create_sprite(0,0));
-//         _anim_actions.insert("firebreath", 
-//                 bn::create_sprite_animate_action_forever(
-//                     _sprites.at("firebreath"), 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3));
-//     }
-
-//     if(_sprites.contains("firebreath")) { 
-//         BN_LOG("yo wtf");
-//         _sprites.at("firebreath").set_x(_sprites.at("trogdor").x() + TROG_FIREBREATH_XOFFSET);
-//         _sprites.at("firebreath").set_x(_sprites.at("trogdor").y() + TROG_FIREBREATH_YOFFSET);        
-//     }
-// }
-
 
 
 // will likely come back to this later
