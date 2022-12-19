@@ -124,7 +124,13 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         }
     }else if(_sesh.get_level() == 39){
         write_text("forbidden peasant love");
-
+        //todo: add that heart
+        for(int z = 0; z < 2 ; ++z){
+            peasant *p = new peasant(40 + 20*z, 0, 0, 0, direction::DOWN);  
+            p->move_to(_cutscene_length / 2, -60 + 20*z, 0);      
+            _cutscene_objects.emplace_back(p);
+        }
+        
     }else if(_sesh.get_level() == 43){
         write_text("2 cottages");
 
@@ -133,6 +139,8 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");
+        _cutscene_objects.emplace_back(new knight(-80, 0, false));
+        // _cutscene_objects.emplace_back(new archer());
 
     }else if(_sesh.get_level() == 51){
         write_text("smote that kerrek!");
@@ -231,6 +239,16 @@ bn::optional<scene_type> movie_scene::update(){
             int _faster_player = (_timer / 40) % 2;
             _cutscene_objects.at(_faster_player)->move_by(1.5,0);
             _cutscene_objects.at(!_faster_player)->move_by(1,0);
+        }
+    }
+    if(_sesh.get_level() == 39){
+        if(_timer == _cutscene_length / 4){
+            knight *k = new knight(140, 0, false);
+            //todo make him pause
+            k->move_to_and_back(_cutscene_length / 2, -80, 0);
+            _cutscene_objects.emplace_back(k);
+        }else if(_timer == _cutscene_length / 2){
+            _cutscene_objects.at(0)->move_to(_cutscene_length / 4, 160, 0);
         }
     }
 
