@@ -4,6 +4,7 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
+#include <bn_sram.h>
 #include "level_win_scene.h"
 
 #include "bn_regular_bg_items_trogsmile.h"
@@ -45,6 +46,8 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
+
+    bn::sram::write(sesh);
 }
 
 bn::optional<scene_type> level_win_scene::update(){

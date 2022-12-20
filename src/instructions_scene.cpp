@@ -4,6 +4,7 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
+#include <bn_sram.h>
 #include "instructions_scene.h"
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
@@ -169,10 +170,6 @@ bn::optional<scene_type> instructions_scene::update(){
         if(bn::keypad::pressed(_secret_code.at(_secret_code_index))){
             ++_secret_code_index;
             BN_LOG("progress");
-            if(_secret_code_index == _secret_code.size()){
-                BN_LOG("you got the code");
-                _sesh.secret_lives_boost();
-            }
         }else{
             BN_LOG("you failed the code");
             _secret_code_index=0;
@@ -190,8 +187,22 @@ bn::optional<scene_type> instructions_scene::update(){
     #endif 
 
     if(bn::keypad::a_pressed()){
-            result = scene_type::PLAY;
+        //Save/load code. 
+        //TODO: Maybe change this into its own screen with info on your
+        //previous session n stuff 
+        bn::sram::read(_sesh);
 
+        BN_LOG("sesh valid?", _sesh.is_valid_object());
+        if(!_sesh.is_valid_object()){
+            _sesh.reset();
+            if(_secret_code_index == _secret_code.size()){
+                BN_LOG("you got the code");
+                _sesh.secret_lives_boost();
+            }
+        }
+        //You can load your session only once.
+        bn::sram::clear(sizeof(_sesh));
+        result = scene_type::PLAY;
     }
     if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints
