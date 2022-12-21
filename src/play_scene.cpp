@@ -13,6 +13,7 @@
 #include "bn_regular_bg_items_dawn.h"
 #include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "play_scene.h"
 #include "constants.h"
@@ -22,7 +23,7 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
         _hud(hud),
@@ -30,7 +31,9 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _afact(_archers, sesh.get_level()),
         _burninate_pause_time(0),
         _win_pause_time(0),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
+        _player_paused(false),
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
+        _text_generator(text_generator)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -108,11 +111,21 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
 			);
 		}
 	}
-
+    
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());        
+    _text_generator.generate(0, 55, "paused", _paused_text);
+    _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
+    set_paused_text_visible(false);
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
     // _troghammer = troghammer(0, 0, false);
+}
+
+void play_scene::set_paused_text_visible(bool visible){
+    for(bn::sprite_ptr &sprite : _paused_text){
+            sprite.set_visible(visible);
+    }
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -128,7 +141,11 @@ bn::optional<scene_type> play_scene::update(){
     }else if(level_complete()){
         _win_pause_time++;
         _trogdor->update_win_anim();
+    }else if(_player_paused){
+        set_paused_text_visible(true);
     }else{
+        set_paused_text_visible(false);
+
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());
         _hud.update_trogmeter(_trogdor->get_trogmeter());
@@ -227,8 +244,11 @@ bn::optional<scene_type> play_scene::update(){
 
     #ifdef DEBUG 
         //Instantly win level by pressing A
-        if(bn::keypad::start_pressed()) result = scene_type::LEVELBEAT;
+        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
     #endif
+
+    //START pauses the game
+    if(bn::keypad::start_pressed()) _player_paused = !_player_paused;
 
 
     //had to move this out to fix a bug where cottage fire was visible while paused.

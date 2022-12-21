@@ -9,6 +9,7 @@
 
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
 
@@ -47,7 +48,12 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
 
+
     bn::sram::write(sesh);
+    //todo: maybe improve the look of this ... 
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+    _text_generator.generate(-80, 75, "autosaved.", _levelbeated_text_sprites);
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 }
 
 bn::optional<scene_type> level_win_scene::update(){
