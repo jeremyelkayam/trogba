@@ -28,8 +28,7 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time;
-        unsigned short _win_pause_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time;
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;
