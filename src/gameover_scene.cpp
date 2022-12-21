@@ -4,6 +4,7 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
+#include <bn_sram.h>
 #include "gameover_scene.h"
 
 #include "bn_regular_bg_items_trogdead.h"
@@ -26,7 +27,7 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
     if(_sesh.get_score() >= 3000){
         for(int z = 0; z < 3; ++z){
             //Jonathan Howe name easter egg
-            //todo: maybe add my name to it since i madethis ??? 
+            //todo: maybe add my name to it since i made this ??? 
             _secret_sprites.emplace_back(bn::sprite_items::jonathan_howe.create_sprite(
                 TROG_GAMEOVER_SECRET_TEXT_X + 32*z, TROG_GAMEOVER_SECRET_TEXT_Y, z*6));
             _secret_anims.emplace_back(bn::create_sprite_animate_action_forever(
@@ -35,6 +36,10 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
             );
         }
     }
+
+
+    //Once you get a game over, you cannot restore your progress.
+    bn::sram::clear(sizeof(_sesh));
 }
 
 bn::optional<scene_type> gameover_scene::update(){

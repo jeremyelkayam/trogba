@@ -259,16 +259,20 @@ bn::optional<scene_type> play_scene::update(){
         if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
     #endif
 
+
     //START pauses the game
     if(bn::keypad::start_pressed()){
         _player_paused = !_player_paused;
         if(_player_paused){
+            //Apply a dimming effect and display text when the game is paused.
             bn::sprite_palettes::set_fade(bn::color(16, 16, 16), 0.6);
             bn::bg_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+            set_paused_text_visible(true);
 
         }else{
             bn::sprite_palettes::set_fade_intensity(0); 
             bn::bg_palettes::set_fade_intensity(0);
+            set_paused_text_visible(false);
         }
     } 
 
