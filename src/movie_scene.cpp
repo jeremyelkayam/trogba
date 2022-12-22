@@ -267,7 +267,7 @@ bn::optional<scene_type> movie_scene::update(){
 
 
     if(cutscene_over()) {
-        return scene_type::PLAY;
+        result = scene_type::PLAY;
     }
 
     _timer++;

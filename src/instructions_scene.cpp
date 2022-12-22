@@ -179,30 +179,9 @@ bn::optional<scene_type> instructions_scene::update(){
     // text stuff
     bn::optional<scene_type> result;
     
-    #ifdef DEBUG
-        if(bn::keypad::start_pressed()){
-            clear_text();
-            _level_select=true;
-        }
-    #endif 
 
     if(bn::keypad::a_pressed()){
-        //Save/load code. 
-        //TODO: Maybe change this into its own screen with info on your
-        //previous session n stuff 
-        bn::sram::read(_sesh);
-
-        BN_LOG("sesh valid?", _sesh.is_valid_object());
-        if(!_sesh.is_valid_object()){
-            _sesh.reset();
-            if(_secret_code_index == _secret_code.size()){
-                BN_LOG("you got the code");
-                _sesh.secret_lives_boost();
-            }
-        }
-        //You can load your session only once.
-        bn::sram::clear(sizeof(_sesh));
-        result = scene_type::PLAY;
+        result = scene_type::MENU;
     }
     if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints

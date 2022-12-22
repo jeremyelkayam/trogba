@@ -24,6 +24,7 @@
 #include "bonus_scene.h"
 #include "movie_scene.h"
 #include "logo_scene.h"
+#include "menu_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -71,6 +72,11 @@ int main()
                 case trog::scene_type::INSTRUCTIONS: { 
                     hud.hide();
                     scene.reset(new trog::instructions_scene(sesh, text_generator));
+                    break;
+                }
+                case trog::scene_type::MENU: { 
+                    hud.hide();
+                    scene.reset(new trog::menu_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
