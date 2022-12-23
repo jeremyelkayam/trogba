@@ -180,11 +180,17 @@ bn::optional<scene_type> instructions_scene::update(){
     bn::optional<scene_type> result;
     
 
+    if(bn::keypad::start_pressed()){
+        #ifdef DEBUG 
+            _level_select = !_level_select;
+        #endif
+    }
+
     if(bn::keypad::a_pressed()){
         if(_secret_code_index == _secret_code.size()){
             _sesh.secret_lives_boost();
         }
-        result = scene_type::MENU;
+        result = scene_type::PLAY;
     }
     if(bn::keypad::l_pressed() && !_level_select){
         //toggle secret hints
