@@ -49,7 +49,12 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
 
 
-    bn::sram::write(sesh);
+    session_info sesh_to_write(sesh);
+    // the level doesn't technically advance until later in the animation
+    //  so we should save a copy right now
+    sesh_to_write.advance_level();
+
+    bn::sram::write(sesh_to_write);
     //todo: maybe improve the look of this ... 
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
     _text_generator.generate(-80, 75, "autosaved.", _levelbeated_text_sprites);

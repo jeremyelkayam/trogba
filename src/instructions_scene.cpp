@@ -181,6 +181,9 @@ bn::optional<scene_type> instructions_scene::update(){
     
 
     if(bn::keypad::a_pressed()){
+        if(_secret_code_index == _secret_code.size()){
+            _sesh.secret_lives_boost();
+        }
         result = scene_type::MENU;
     }
     if(bn::keypad::l_pressed() && !_level_select){

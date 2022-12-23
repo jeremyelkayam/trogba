@@ -27,7 +27,7 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         bn::ostringstream summary_stream(session_summary);
         summary_stream << "score: " << _loaded_sesh.get_score() << "  ";       
         summary_stream << "mans: " << _loaded_sesh.get_mans() << "  ";       
-        summary_stream << "level: " << _loaded_sesh.get_mans();       
+        summary_stream << "level: " << _loaded_sesh.get_level();       
 
         _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         _text_generator.generate(-90, -15, session_summary, _menu_text_sprites);
