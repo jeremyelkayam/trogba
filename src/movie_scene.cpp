@@ -74,6 +74,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             int xcor = 30;
             int ycor = -2;
             knight *k = new knight(z == 0 ? xcor : -xcor, ycor, z == 0);
+            k->update_anim_action_when_not_moving(true);
             k->animate_faster();
             k->animate_faster();
             _cutscene_objects.emplace_back(k);
@@ -139,19 +140,22 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");
-        _cutscene_objects.emplace_back(new knight(-80, 0, false));
-        // _cutscene_objects.emplace_back(new archer());
-
+        knight *k = new knight(-80, 0, false);
+        k->update_anim_action_when_not_moving(false);
+        _cutscene_objects.emplace_back(k);
+        archer *arch = new archer(-5, true);
+        arch->set_x(130);
+        arch->move_to(20, 110, -5);
+        arch->set_bow_drawn(true);
+        _cutscene_objects.emplace_back(arch);
     }else if(_sesh.get_level() == 51){
         write_text("smote that kerrek!");
         _cutscene_objects.emplace_back(new player(-25,10,_sesh,false));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
         _cutscene_length *= 2; 
-
     }else if(_sesh.get_level() == 101){
-        write_text("credits idk");
-
+        
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
 }
@@ -249,6 +253,38 @@ bn::optional<scene_type> movie_scene::update(){
             _cutscene_objects.emplace_back(k);
         }else if(_timer == _cutscene_length / 2){
             _cutscene_objects.at(0)->move_to(_cutscene_length / 4, 160, 0);
+        }
+    }
+
+    if(_sesh.get_level() == 47){
+        _cutscene_objects.at(1)->update_anim();
+
+        // he needs to fire his bow more quickly
+
+        if((_timer - 20) % 40 == 0){
+            if(_cutscene_objects.size() > 2 && _timer / 40 < 5){
+                ((arrow *) _cutscene_objects.back().get())->plink();
+                _cutscene_objects.at(0).get()->squish(10);
+            }
+
+            if(_timer / 40 < 4){
+                ((archer *) _cutscene_objects.at(1).get())->set_bow_drawn(true);
+                arrow *a = new arrow(bn::fixed_point(120, -5), true);
+                a->update();
+                _cutscene_objects.emplace_back(a);
+            }
+            
+        }else if((_timer - 20) % 40 == 20){
+            if(_timer / 40 < 5){
+                ((archer *) _cutscene_objects.at(1).get())->set_bow_drawn(false);
+                ((arrow *) _cutscene_objects.back().get())->move_to(20, -80, -5);
+            }
+        }
+        
+        if(_timer == _cutscene_length - 60){
+            _cutscene_objects.at(1).get()->move_to(20, 130, -5);
+        }else if(_timer == _cutscene_length - 40){
+            _cutscene_objects.at(0).get()->set_horizontal_flip(true);
         }
     }
 

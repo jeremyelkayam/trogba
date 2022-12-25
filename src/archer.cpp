@@ -20,9 +20,9 @@ void archer::update(){
     ++_time_since_spawn;
     if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
-        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+        set_bow_drawn(true);
     }else if (TROG_ARCHER_SHOOT_WAITTIME == _time_since_spawn && !_arrow){
-        _sprite.set_item(bn::sprite_items::archer);
+        set_bow_drawn(false);
         shoot();
     }else if(TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
         _sprite.set_visible(false);
@@ -36,6 +36,14 @@ void archer::update(){
 void archer::shoot(){
     bn::sound_items::shoot.play(TROG_DEFAULT_VOLUME);
     _arrow = arrow(_pos, _facing_left);
+}
+
+void archer::set_bow_drawn(bool drawn){
+    if(drawn){
+        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+    }else{
+        _sprite.set_item(bn::sprite_items::archer);
+    }
 }
 
 bool archer::remove_from_map(){

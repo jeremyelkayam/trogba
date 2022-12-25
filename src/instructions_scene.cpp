@@ -192,7 +192,7 @@ bn::optional<scene_type> instructions_scene::update(){
         }
         result = scene_type::PLAY;
     }
-    if(bn::keypad::l_pressed() && !_level_select){
+    if(bn::keypad::r_pressed() && !_level_select){
         //toggle secret hints
         clear_text();
         _show_secret_hints = !_show_secret_hints;

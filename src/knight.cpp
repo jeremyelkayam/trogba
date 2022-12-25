@@ -16,7 +16,9 @@ knight::knight(int xcor, int ycor, bool facingRight) :
 
 void knight::update_anim(){
     entity::update_anim();
-    _walkcycle.update();
+    if(_move_action || _move_by_action || _update_anim_when_not_moving){
+        _walkcycle.update();
+    }
 }
 
 void knight::update(){

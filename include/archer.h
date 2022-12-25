@@ -46,6 +46,7 @@ namespace trog {
              * 
             */
             void destroy_arrow();
+            void set_bow_drawn(bool drawn);
             void set_visible(bool visible);
     };
 }
