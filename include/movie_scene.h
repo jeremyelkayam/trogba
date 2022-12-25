@@ -9,6 +9,7 @@
 #include "player.h"
 #include "peasant.h"
 #include "kerrek.h"
+#include "strongbad.h"
 #include "session_info.h"
 
 

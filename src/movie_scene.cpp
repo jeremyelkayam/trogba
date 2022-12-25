@@ -155,7 +155,12 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
         _cutscene_length *= 2; 
     }else if(_sesh.get_level() == 101){
-        
+        // CREDITS
+
+        strongbad *s = new strongbad(135, 0);
+        s->move_to(120, 0, 0);
+        _cutscene_objects.emplace_back(s);
+        _cutscene_length = 6000;
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
 }
@@ -301,6 +306,38 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
 
+    if(_sesh.get_level() == 101){
+        _text_generator.set_center_alignment();
+        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
+        if(_timer == 120){
+            sbad->talk();
+            sbad->stop_animating();
+        }else if(_timer == 150){
+            sbad->start_animating();
+            bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
+            _text_generator.generate(0, -60, "congratulations.", _text_sprites);
+        }else if(_timer == 220){
+            sbad->stop_animating();
+        }else if(_timer == 250){
+            sbad->start_animating();
+            _text_generator.generate(0, -48, "you got", _text_sprites);
+        }else if(_timer == 290){
+            sbad->stop_animating();
+        }else if(_timer == 310){
+            sbad->start_animating();
+            _text_generator.generate(0, -36, "good score", _text_sprites);
+        }else if(_timer == 360){
+            sbad->stop_animating();
+        }else if(_timer == 400){
+            sbad->set_visible(false);
+            _text_sprites.clear();
+            bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
+            _text_generator.generate(0, -60, "cast", _text_sprites);
+        }
+
+    }
+
 
     if(cutscene_over()) {
         result = scene_type::PLAY;
@@ -314,34 +351,12 @@ bool movie_scene::cutscene_over(){
     return _timer >= _cutscene_length;
 }
 
-
-// will likely come back to this later
-
-// _character_sprite(bn::sprite_items::strongbad.create_sprite(130, 0)),
-//     _sb_anim(bn::create_sprite_animate_action_forever(
-//                 _character_sprite, 5, bn::sprite_items::strongbad.tiles_item(),
-//                 0, 1 )),
-//     _sb_move(_character_sprite, 180, 0, 0),
-// void movie_scene::update_ending_cutscene(){
-//     if(!_sb_move.done()){
-//         _sb_anim.update();
-//         _sb_move.update();
 //     }else{
 //         if(_timer == 0){
 //             _sb_anim = bn::create_sprite_animate_action_forever(
 //                     _character_sprite, 10, bn::sprite_items::strongbad.tiles_item(),
 //                     2, 3 );            
 //             _sb_anim.update();
-//         }
-//         if(_timer == 30){
-//             bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
-//             _text_generator.generate(0, -60, "congratulations.", _text_sprites);
-//         }
-//         if(_timer == 130){
-//             _text_generator.generate(0, -48, "you got", _text_sprites);
-//         }
-//         if(_timer == 190){
-//             _text_generator.generate(0, -36, "good score", _text_sprites);
 //         }
 //         if(_timer > 30 && _timer < 210){
 //             _sb_anim.update();
