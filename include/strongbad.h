@@ -25,5 +25,7 @@ namespace trog {
             void talk();
             void start_animating() {_advance_anim = true;}
             void stop_animating() {_advance_anim = false;}
+            void set_frame(short frame_number){_sprite.set_tiles(bn::sprite_items::strongbad.tiles_item(), frame_number);}
+
     };
 }

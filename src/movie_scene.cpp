@@ -160,7 +160,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
-        _cutscene_length = 6000;
+        _cutscene_length = 1200;
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
 }
@@ -334,13 +334,79 @@ bn::optional<scene_type> movie_scene::update(){
             _text_sprites.clear();
             bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
             _text_generator.generate(0, -60, "cast", _text_sprites);
+        }else if(_timer == 480){
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "trogdor", _text_sprites);
+            _cutscene_objects.emplace_back(new player(0, 0, _sesh, false));
+        }else if(_timer == 550){
+            _cutscene_objects.at(1)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "perez", _text_sprites);
+            _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, direction::DOWN));
+        }else if(_timer == 620){
+            _cutscene_objects.at(2)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "hackworth", _text_sprites);
+            peasant *hackworth = new peasant(0, 0, 0, 0, direction::DOWN);
+            hackworth->set_frame(1);
+            _cutscene_objects.emplace_back(hackworth);
+        }else if(_timer == 690){
+            _cutscene_objects.at(3)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "'the steve'", _text_sprites);
+            peasant *the_steve = new peasant(0, 0, 0, 0, direction::DOWN);
+            the_steve->set_sprite_ablaze();
+            _cutscene_objects.emplace_back(the_steve);
+        }else if(_timer == 760){
+            _cutscene_objects.at(4)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "the blue knight", _text_sprites);
+            _cutscene_objects.emplace_back(new knight(0, 0, true));
+        }else if(_timer == 830){
+            _cutscene_objects.at(5)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "the red knight", _text_sprites);
+            _cutscene_objects.emplace_back(new knight(0, 0, false));
+        }else if(_timer == 900){
+            _cutscene_objects.at(6)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "the conjoined", _text_sprites);
+            _text_generator.generate(0, -48, "archers", _text_sprites);
+            for(int i = 0; i < 2 ; ++i){
+                archer *arch = new archer(0, i);
+                arch->set_x(10 - 20*i);
+                _cutscene_objects.emplace_back(arch);
+            }
+        }else if(_timer == 970){
+            _cutscene_objects.at(7)->set_visible(false);
+            _cutscene_objects.at(8)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "and WorldlyWise", _text_sprites);
+            _text_generator.generate(0, -48, "as The Kerrek", _text_sprites);
+            _cutscene_objects.emplace_back(new kerrek(0, 0));
+        }else if(_timer == 1065){
+            _cutscene_objects.at(9)->set_visible(false);
+            _text_sprites.clear();
+            _text_generator.generate(0, -60, "keep playing!", _text_sprites);
+            sbad->set_visible(true);
+            sbad->set_x(30);
+            sbad->set_rotation_angle(330);
+            sbad->set_frame(3);
+            player *trogdor = ((player *) _cutscene_objects.at(1).get());
+            trogdor->set_visible(true);
+            trogdor->set_x(-35);
+            trogdor->set_y(-5);
+            trogdor->set_rotation_angle(30);
         }
 
     }
 
 
-    if(cutscene_over()) {
+    if(cutscene_over() && _sesh.get_level() != 101) {
         result = scene_type::PLAY;
+    }else if(cutscene_over() && _sesh.get_level() == 101){
+        _sesh.reset();
+        result = scene_type::INSTRUCTIONS;
     }
 
     _timer++;
