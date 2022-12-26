@@ -1,6 +1,7 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
 #include "movie_scene.h"
+#include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_strongbad.h"
 #include "bn_sprite_items_player.h"
@@ -153,14 +154,16 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         _cutscene_objects.emplace_back(new player(-25,10,_sesh,false));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
-        _cutscene_length *= 2; 
+        _cutscene_length *= 1.75; 
     }else if(_sesh.get_level() == 101){
         // CREDITS
 
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
-        _cutscene_length = 1200;
+        sb_commentary::im_in_this_game();
+
+        _cutscene_length = 1350;
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
 }
@@ -301,8 +304,8 @@ bn::optional<scene_type> movie_scene::update(){
             ((kerrek *) _cutscene_objects.at(1).get())->burninate();
         }else if(_timer == 50){
             ((player *) _cutscene_objects.at(0).get())->disable_breath();
-        }else if(_timer == _cutscene_length / 2){
-            // MMMM! Roast Kerrek 
+        }else if(_timer == _cutscene_length / 2 + 30){
+            sb_commentary::roast_kerrek();
         }
     }
 
@@ -310,64 +313,67 @@ bn::optional<scene_type> movie_scene::update(){
         _text_generator.set_center_alignment();
         _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
         strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
+        short credits_start_time = 560, credits_interval = 70;
         if(_timer == 120){
             sbad->talk();
             sbad->stop_animating();
-        }else if(_timer == 150){
+        }else if(_timer == 180){
             sbad->start_animating();
             bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
             _text_generator.generate(0, -60, "congratulations.", _text_sprites);
-        }else if(_timer == 220){
-            sbad->stop_animating();
         }else if(_timer == 250){
+            sbad->stop_animating();
+        }else if(_timer == 280){
             sbad->start_animating();
             _text_generator.generate(0, -48, "you got", _text_sprites);
-        }else if(_timer == 290){
+        }else if(_timer == 320){
             sbad->stop_animating();
-        }else if(_timer == 310){
+        }else if(_timer == 340){
             sbad->start_animating();
             _text_generator.generate(0, -36, "good score", _text_sprites);
-        }else if(_timer == 360){
+        }else if(_timer == 380){
+            sb_commentary::i_sound_realistic();
+        }else if(_timer == 390){
             sbad->stop_animating();
-        }else if(_timer == 400){
+        }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
             _text_sprites.clear();
             bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
             _text_generator.generate(0, -60, "cast", _text_sprites);
-        }else if(_timer == 480){
+        }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();
             _text_generator.generate(0, -60, "trogdor", _text_sprites);
             _cutscene_objects.emplace_back(new player(0, 0, _sesh, false));
-        }else if(_timer == 550){
+        }else if(_timer == credits_start_time + credits_interval*2){
             _cutscene_objects.at(1)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "perez", _text_sprites);
             _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, direction::DOWN));
-        }else if(_timer == 620){
+        }else if(_timer == credits_start_time + credits_interval*3){
             _cutscene_objects.at(2)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "hackworth", _text_sprites);
             peasant *hackworth = new peasant(0, 0, 0, 0, direction::DOWN);
             hackworth->set_frame(1);
             _cutscene_objects.emplace_back(hackworth);
-        }else if(_timer == 690){
+        }else if(_timer == credits_start_time + credits_interval*4){
             _cutscene_objects.at(3)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "'the steve'", _text_sprites);
             peasant *the_steve = new peasant(0, 0, 0, 0, direction::DOWN);
             the_steve->set_sprite_ablaze();
             _cutscene_objects.emplace_back(the_steve);
-        }else if(_timer == 760){
+        }else if(_timer == credits_start_time + credits_interval*5){
             _cutscene_objects.at(4)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "the blue knight", _text_sprites);
             _cutscene_objects.emplace_back(new knight(0, 0, true));
-        }else if(_timer == 830){
+        }else if(_timer == credits_start_time + credits_interval*6){
             _cutscene_objects.at(5)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "the red knight", _text_sprites);
             _cutscene_objects.emplace_back(new knight(0, 0, false));
-        }else if(_timer == 900){
+        }else if(_timer == credits_start_time + credits_interval*7){
             _cutscene_objects.at(6)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "the conjoined", _text_sprites);
@@ -377,26 +383,26 @@ bn::optional<scene_type> movie_scene::update(){
                 arch->set_x(10 - 20*i);
                 _cutscene_objects.emplace_back(arch);
             }
-        }else if(_timer == 970){
+        }else if(_timer == credits_start_time + credits_interval*8){
             _cutscene_objects.at(7)->set_visible(false);
             _cutscene_objects.at(8)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "and WorldlyWise", _text_sprites);
             _text_generator.generate(0, -48, "as The Kerrek", _text_sprites);
             _cutscene_objects.emplace_back(new kerrek(0, 0));
-        }else if(_timer == 1065){
+        }else if(_timer == credits_start_time + credits_interval*9 + 25){
             _cutscene_objects.at(9)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "keep playing!", _text_sprites);
             sbad->set_visible(true);
             sbad->set_x(30);
-            sbad->set_rotation_angle(330);
+            sbad->set_rotation_angle(315);
             sbad->set_frame(3);
             player *trogdor = ((player *) _cutscene_objects.at(1).get());
             trogdor->set_visible(true);
             trogdor->set_x(-35);
             trogdor->set_y(-5);
-            trogdor->set_rotation_angle(30);
+            trogdor->set_rotation_angle(45);
         }
 
     }
@@ -416,31 +422,5 @@ bn::optional<scene_type> movie_scene::update(){
 bool movie_scene::cutscene_over(){
     return _timer >= _cutscene_length;
 }
-
-//     }else{
-//         if(_timer == 0){
-//             _sb_anim = bn::create_sprite_animate_action_forever(
-//                     _character_sprite, 10, bn::sprite_items::strongbad.tiles_item(),
-//                     2, 3 );            
-//             _sb_anim.update();
-//         }
-//         if(_timer > 30 && _timer < 210){
-//             _sb_anim.update();
-//         }        
-
-//         if(_timer == 260){
-//             bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
-//             _text_sprites.clear();
-//             _text_generator.generate(0, -60, "keep playing!", _text_sprites);
-//             _character_sprite.set_x(30);
-//             _character_sprite.set_tiles(bn::sprite_items::strongbad.tiles_item(), 3);
-//             _character_sprite.set_rotation_angle(315); //bn::sprite_items::player.create_sprite(0, 0);
-//             _character_sprite = bn::sprite_items::player.create_sprite(-30, 0);
-//             _character_sprite.set_rotation_angle(45); //bn::sprite_items::player.create_sprite(0, 0);
-
-//         }
-//         _timer++;
-//     }
-// }
 
 }
