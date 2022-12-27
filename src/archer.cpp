@@ -4,13 +4,16 @@
 namespace trog { 
 
 archer::archer(bn::fixed ycor, bool facing_left) : 
-        entity(-300, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(0, ycor)),
-        _facing_left(facing_left) {
+        entity(0, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(-300, ycor)),
+        _facing_left(facing_left),
+        _time_since_spawn(0) {
     _sprite.set_horizontal_flip(facing_left);
     if(facing_left){
         _pos.set_x(110);
+        _sprite.set_x(110);
     }else{
         _pos.set_x(-110);
+        _sprite.set_x(-110);
     }
 }
 
@@ -52,7 +55,7 @@ bool archer::remove_from_map(){
     }else if(!_arrow && TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
         //at this point we've shot our arrow and it also got deleted
         // possibly from hitting something
-        // so we need to despawn
+        // so we need to despawn      
         return true;
     }else return false;
 }
