@@ -18,7 +18,6 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _jump_timer(0),
         _jump_time(0),
         _jump_height(0) {
-    BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
 void entity::move_to(short time, bn::fixed x, bn::fixed y){

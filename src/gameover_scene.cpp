@@ -6,6 +6,7 @@
 #include <bn_string.h>
 #include <bn_sram.h>
 #include "gameover_scene.h"
+#include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogdead.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
@@ -22,9 +23,7 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()) {
 
-    bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-
-    if(_sesh.get_score() >= 3000){
+    if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
         for(int z = 0; z < 3; ++z){
             //Jonathan Howe name easter egg
             //todo: maybe add my name to it since i made this ??? 
@@ -35,6 +34,13 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
                     0 +6*z, 1 +6*z, 2 +6*z, 3 +6*z, 4+6*z, 5+6*z)
             );
         }
+    }
+
+    bool sound_played = sb_commentary::gameover(_sesh.get_score());
+    if(sound_played){
+        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * 0.2);
+    }else{
+        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
     }
 
 

@@ -15,7 +15,6 @@ namespace trog
 
     void peasant_factory::spawn()
     {
-        BN_LOG("spawn o'clock. number o' peasants pre-spawn: ", _peasants.size());
         if (_peasants.full())
         {
             BN_LOG("NO MORE SPACE FOR NEW PEASANTS. TRY AGAIN LATER");

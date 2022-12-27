@@ -3,6 +3,7 @@
 
 #pragma once
 #include <bn_sound_items.h>
+#include <bn_random.h>
 
 #include "constants.h"
 
@@ -13,11 +14,10 @@ namespace trog {
             
         public:
             sb_commentary();
-            static void gameover();
+            static bool gameover(unsigned int score);
             static void im_in_this_game()  {bn::sound_items::sb_iminthisgame.play(_volume);}
             static void i_sound_realistic()  {bn::sound_items::sb_isoundrealistic.play(_volume);}
             static void roast_kerrek() {bn::sound_items::sb_roastkerrek.play(_volume);}
-
 
     };
 }

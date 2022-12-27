@@ -396,17 +396,15 @@ bn::optional<scene_type> movie_scene::update(){
             _text_generator.generate(0, -60, "keep playing!", _text_sprites);
             sbad->set_visible(true);
             sbad->set_x(30);
-            sbad->set_rotation_angle(315);
+            sbad->set_rotation_angle(330);
             sbad->set_frame(3);
             player *trogdor = ((player *) _cutscene_objects.at(1).get());
             trogdor->set_visible(true);
             trogdor->set_x(-35);
             trogdor->set_y(-5);
-            trogdor->set_rotation_angle(45);
+            trogdor->set_rotation_angle(30);
         }
-
     }
-
 
     if(cutscene_over() && _sesh.get_level() != 101) {
         result = scene_type::PLAY;
