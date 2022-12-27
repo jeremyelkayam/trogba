@@ -37,15 +37,14 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
     }
     if(_sesh.last_killed_by_archer()){
         sb_commentary::gameover_arch();
+        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * 0.2);
     }else{
-        sb_commentary::gameover(_sesh.get_score());
+        if(sb_commentary::gameover(_sesh.get_score())){
+            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * 0.2);
+        }else{
+            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
+        } 
     }
-    // bool sound_played = 
-    // if(sound_played){
-    //     bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * 0.2);
-    // }else{
-    bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-    // }
 
 
     //Once you get a game over, you cannot restore your progress.

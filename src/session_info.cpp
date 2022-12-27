@@ -28,7 +28,7 @@ void session_info::score(unsigned int num_points){
 
 void session_info::reset(){
     _mans = TROG_STARTING_LIVES;
-    _score = 3000;
+    _score = 0;
     _level = TROG_STARTING_LEVEL;
     _flagbyte = 'T'; // for TROGDOR.
     _killed_by_archer = false;
