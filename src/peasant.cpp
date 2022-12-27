@@ -1,8 +1,11 @@
 #include <bn_math.h>
 #include <bn_log.h>
 #include <bn_sound_items.h>
+
 #include "peasant.h"
 #include "entity.h"
+#include "sb_commentary.h"
+
 namespace trog {
 
 peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction) : 
@@ -56,6 +59,7 @@ void peasant::burninate(){
         // change animation to flaming
         set_sprite_ablaze();
         bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
+        sb_commentary::ignite_peasant();
     }
 }
 
@@ -99,6 +103,7 @@ void peasant::update(){
 void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
+        sb_commentary::stomp_peasant();
         _speed = bn::fixed(0);
         _time_dead=1;
         _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);

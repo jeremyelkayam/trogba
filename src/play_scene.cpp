@@ -22,6 +22,7 @@
 #include "bloody_text.h"
 #include "burninate_text.h"
 #include "level_data.h"
+#include "sb_commentary.h"
 
 namespace trog {
 
@@ -139,6 +140,10 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_overlay_text) _overlay_text->update();
 
+    if(_win_pause_time == 1){
+        sb_commentary::level_win_pause();
+    }
+
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
@@ -191,6 +196,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
+            sb_commentary::burninate();
             _overlay_text.reset(new burninate_text());
         }
 
@@ -200,6 +206,7 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
+            sb_commentary::arrowed();
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
@@ -210,6 +217,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
+            sb_commentary::sworded();
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
             if(rand() % 33 == 0){
@@ -286,7 +294,6 @@ bn::optional<scene_type> play_scene::update(){
         if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
-
             //this marks the cottage as visited so that we can no longer return
             c.visit();
             set_visible(false);

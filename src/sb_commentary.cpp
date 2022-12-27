@@ -36,7 +36,7 @@ void sb_commentary::sworded(){
 }
 
 void sb_commentary::burninate(){
-    unsigned short rand_num = rand() % 4;
+    unsigned short rand_num = rand() % 2;
     if(rand_num == 0){
         bn::sound_items::sb_tablesturn.play(_volume);
     }else if(rand_num == 1){
@@ -45,13 +45,13 @@ void sb_commentary::burninate(){
 }
 
 void sb_commentary::level_win_pause(){
-    unsigned short rand_num = rand() % 4;
+    unsigned short rand_num = rand() % 5;
     if(rand_num == 0){
         bn::sound_items::sb_ohyeah.play(_volume);
     }
 }
 void sb_commentary::level_win_scene(){
-    unsigned short rand_num = rand() % 4;
+    unsigned short rand_num = rand() % 10;
     if(rand_num == 0){
         bn::sound_items::sb_comesinthenight.play(_volume);
     }else if(rand_num == 1){
@@ -60,7 +60,8 @@ void sb_commentary::level_win_scene(){
 }
 
 void sb_commentary::stomp_peasant(){
-    unsigned short rand_num = rand() % 20;
+    unsigned short rand_num = rand() % 40;
+    BN_LOG("rand num (peasant stomp): ", rand_num);
     if(rand_num == 0){
         bn::sound_items::sb_asquisha.play(_volume);
     }else if(rand_num == 1){
@@ -71,7 +72,7 @@ void sb_commentary::stomp_peasant(){
 }
 
 void sb_commentary::ignite_peasant(){
-    unsigned short rand_num = rand() % 4;
+    unsigned short rand_num = rand() % 10;
     if(rand_num == 0){
         bn::sound_items::sb_hesonfire.play(_volume);
     }else if(rand_num == 1){
@@ -80,7 +81,7 @@ void sb_commentary::ignite_peasant(){
 }
 
 void sb_commentary::ignite_cottage(){
-    unsigned short rand_num = rand() % 4;
+    unsigned short rand_num = rand() % 10;
     if(rand_num == 0){
         bn::sound_items::sb_dooj.play(_volume);
     }
