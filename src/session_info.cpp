@@ -28,13 +28,15 @@ void session_info::score(unsigned int num_points){
 
 void session_info::reset(){
     _mans = TROG_STARTING_LIVES;
-    _score = 0;
+    _score = 3000;
     _level = TROG_STARTING_LEVEL;
     _flagbyte = 'T'; // for TROGDOR.
+    _killed_by_archer = false;
 }
 bool session_info::is_valid_object(){
     return _flagbyte == 'T';
 }
+
 
 // THERE HAS TO BE A BETTER WAY!!!! 
 bool session_info::current_level_has_cutscene(){

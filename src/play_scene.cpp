@@ -207,6 +207,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->dead() && !was_dead) {
             sb_commentary::arrowed();
+            _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
@@ -223,6 +224,7 @@ bn::optional<scene_type> play_scene::update(){
             if(rand() % 33 == 0){
                 str = "SORDID!";
             }
+            _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 

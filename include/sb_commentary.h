@@ -27,7 +27,7 @@ namespace trog {
             static void sworded(); // called by play_scene
             static void burninate(); // called by play_scene
             static void level_win_pause(); // called by play_scene
-            static void level_win_scene();
+            static void level_win_scene(); // called by level_win_scene
             static void stomp_peasant(); // called by peasant
             static void ignite_peasant(); // called by peasant
             static void ignite_cottage(); // called by cottage

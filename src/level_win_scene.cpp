@@ -5,7 +5,9 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 #include <bn_sram.h>
+
 #include "level_win_scene.h"
+#include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
@@ -47,9 +49,11 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
-
+    sb_commentary::level_win_scene();
 
 }
+
+// Autosave feature for a potential future update
 void level_win_scene::save(){
     session_info sesh_to_write(_sesh);
     // the level doesn't technically advance until later in the animation
