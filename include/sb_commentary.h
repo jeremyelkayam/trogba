@@ -15,7 +15,7 @@ namespace trog {
         public:
             sb_commentary();
             static bool gameover(unsigned int score); // called by gameover_scene
-            static void gameover_arch() 
+            static void gameover_arch()  // called by movie_scene
                 {bn::sound_items::sb_archer_gameover.play(_volume);}
             static void im_in_this_game()  // called by movie_scene
                 {bn::sound_items::sb_iminthisgame.play(_volume);}

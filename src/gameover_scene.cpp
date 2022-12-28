@@ -46,7 +46,6 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
         } 
     }
 
-
     //Once you get a game over, you cannot restore your progress.
     bn::sram::clear(sizeof(_sesh));
 }
