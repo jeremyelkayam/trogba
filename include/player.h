@@ -25,7 +25,7 @@ namespace trog {
             unsigned short _trogmeter;
             unsigned int _burninate_time;
             const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
-            const int _burninate_length = TROG_BURNINATE_TIME; //temporarily this can be 10 seconds 
+            int _burninate_length; //temporarily this can be 10 seconds 
             unsigned short _time_dead;
             unsigned short _iframes;
             unsigned short _majesty_flash_timer;
@@ -72,6 +72,7 @@ namespace trog {
 
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}
+            unsigned short get_burninating_length(){return _burninate_length;}
             void set_visible(bool visible);
             void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
             void disable_breath(){_breath.disable();}

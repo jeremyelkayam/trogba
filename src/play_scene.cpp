@@ -164,7 +164,7 @@ bn::optional<scene_type> play_scene::update(){
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
-        _hud.update_burninatemeter(_trogdor->get_burninating_time());
+        _hud.update_burninatemeter(_trogdor->get_burninating_time(), _trogdor->get_burninating_length());
         _hud.update_trogmeter(_trogdor->get_trogmeter());
 
         
