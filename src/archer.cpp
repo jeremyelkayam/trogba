@@ -4,30 +4,28 @@
 namespace trog { 
 
 archer::archer(bn::fixed ycor, bool facing_left) : 
-        entity(0, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(0, ycor)),
-        _facing_left(facing_left) {
-    _sprite.set_visible(false);
+        entity(0, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(-300, ycor)),
+        _facing_left(facing_left),
+        _time_since_spawn(0) {
     _sprite.set_horizontal_flip(facing_left);
     if(facing_left){
         _pos.set_x(110);
+        _sprite.set_x(110);
     }else{
         _pos.set_x(-110);
+        _sprite.set_x(-110);
     }
-    _time_since_spawn = 0;
 }
 
 void archer::update(){
     entity::update();
-    if(_time_since_spawn == 0) { 
-        //if he just spawned in we must make him visible
-        _sprite.set_visible(true);
-    }
+
     ++_time_since_spawn;
     if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
         && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
-        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+        set_bow_drawn(true);
     }else if (TROG_ARCHER_SHOOT_WAITTIME == _time_since_spawn && !_arrow){
-        _sprite.set_item(bn::sprite_items::archer);
+        set_bow_drawn(false);
         shoot();
     }else if(TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
         _sprite.set_visible(false);
@@ -43,13 +41,21 @@ void archer::shoot(){
     _arrow = arrow(_pos, _facing_left);
 }
 
+void archer::set_bow_drawn(bool drawn){
+    if(drawn){
+        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+    }else{
+        _sprite.set_item(bn::sprite_items::archer);
+    }
+}
+
 bool archer::remove_from_map(){
     if(_arrow) {
         return _arrow->out_of_bounds();
     }else if(!_arrow && TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
         //at this point we've shot our arrow and it also got deleted
         // possibly from hitting something
-        // so we need to despawn
+        // so we need to despawn      
         return true;
     }else return false;
 }

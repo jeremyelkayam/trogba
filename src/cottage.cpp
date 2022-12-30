@@ -1,5 +1,7 @@
 #include <bn_sound_items.h>
+
 #include "cottage.h"
+#include "sb_commentary.h"
 
 #include "bn_sprite_items_cottagedown.h"
 #include "bn_sprite_items_cottageup.h"
@@ -62,6 +64,7 @@ bool cottage::burninate(){
     if(_time_burning==0){
         _flames.set_visible(true);
         _time_burning=1;
+        sb_commentary::ignite_cottage();
         bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
         return true;
     }

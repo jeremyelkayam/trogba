@@ -7,22 +7,26 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_log.h>
+#include <bn_sprite_palettes.h>
+#include <bn_bg_palettes.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
 #include "bn_regular_bg_items_dawn.h"
 #include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "play_scene.h"
 #include "constants.h"
 #include "bloody_text.h"
 #include "burninate_text.h"
 #include "level_data.h"
+#include "sb_commentary.h"
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
         _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
         _hud(hud),
@@ -30,7 +34,10 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
         _afact(_archers, sesh.get_level()),
         _burninate_pause_time(0),
         _win_pause_time(0),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
+        _flashing_text_time(0),
+        _player_paused(false),
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
+        _text_generator(text_generator)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -108,11 +115,22 @@ play_scene::play_scene(session_info& sesh, hud& hud) :
 			);
 		}
 	}
-
+    
+    _text_generator.set_center_alignment();
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());        
+    _text_generator.generate(0, 55, "paused", _paused_text);
+    _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
+    set_paused_text_visible(false);
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(43,-40,true);
     // _troghammer = troghammer(0, 0, false);
+}
+
+void play_scene::set_paused_text_visible(bool visible){
+    for(bn::sprite_ptr &sprite : _paused_text){
+            sprite.set_visible(visible);
+    }
 }
 
 bn::optional<scene_type> play_scene::update(){
@@ -122,13 +140,29 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_overlay_text) _overlay_text->update();
 
+    if(_win_pause_time == 1){
+        sb_commentary::level_win_pause();
+    }
+
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
     }else if(level_complete()){
         _win_pause_time++;
         _trogdor->update_win_anim();
+    }else if(_player_paused){
+        if(_flashing_text_time == 15){
+            set_paused_text_visible(false);
+        }else if(_flashing_text_time == 30){
+            _flashing_text_time = 0;
+        }else if(_flashing_text_time == 1){
+            set_paused_text_visible(true);
+        }
+        ++_flashing_text_time;
+
     }else{
+        set_paused_text_visible(false);
+
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time());
         _hud.update_trogmeter(_trogdor->get_trogmeter());
@@ -162,6 +196,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
+            sb_commentary::burninate();
             _overlay_text.reset(new burninate_text());
         }
 
@@ -171,6 +206,7 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
+            sb_commentary::arrowed();
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
@@ -181,6 +217,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
+            sb_commentary::sworded();
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
             if(rand() % 33 == 0){
@@ -227,8 +264,25 @@ bn::optional<scene_type> play_scene::update(){
 
     #ifdef DEBUG 
         //Instantly win level by pressing A
-        if(bn::keypad::start_pressed()) result = scene_type::LEVELBEAT;
+        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
     #endif
+
+
+    //START pauses the game
+    if(bn::keypad::start_pressed()){
+        _player_paused = !_player_paused;
+        if(_player_paused){
+            //Apply a dimming effect and display text when the game is paused.
+            bn::sprite_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+            bn::bg_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+            set_paused_text_visible(true);
+
+        }else{
+            bn::sprite_palettes::set_fade_intensity(0); 
+            bn::bg_palettes::set_fade_intensity(0);
+            set_paused_text_visible(false);
+        }
+    } 
 
 
     //had to move this out to fix a bug where cottage fire was visible while paused.
@@ -240,7 +294,6 @@ bn::optional<scene_type> play_scene::update(){
         if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
-
             //this marks the cottage as visited so that we can no longer return
             c.visit();
             set_visible(false);

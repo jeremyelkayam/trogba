@@ -18,7 +18,6 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _jump_timer(0),
         _jump_time(0),
         _jump_height(0) {
-    BN_LOG("entity created at", xcor, ", ", ycor);
 }
 
 void entity::move_to(short time, bn::fixed x, bn::fixed y){
@@ -58,7 +57,11 @@ void entity::update_anim(){
         }
     }
     if(_move_by_action){
+        BN_LOG("updating move by action");
         _move_by_action->update();
+    }
+    if(_scale_action && !_scale_action->done()){
+        _scale_action->update();
     }
 }
 
@@ -128,7 +131,13 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
 }
 
 void entity::move_by(bn::fixed x, bn::fixed y){
+    BN_LOG("help me");
     _move_by_action = bn::sprite_move_by_action(_sprite, x, y);
+}
+
+void entity::squish(short time){
+    _sprite.set_scale(0.8);
+    _scale_action = bn::sprite_scale_to_action(_sprite, time, 1);
 }
 
 

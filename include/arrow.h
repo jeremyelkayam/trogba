@@ -9,10 +9,14 @@ namespace trog {
         private:
             bool _facing_left;
             bn::fixed _speed;
-            bool _just_spawned;
+            bool _rotating;
+            unsigned short _plink_timer;
 
         public:
             arrow(bn::fixed_point pos, bool facing_left);
             virtual void update() final;
+            void update_anim();
+            void rotate() {_rotating = true;}
+            void plink();
     };
 }

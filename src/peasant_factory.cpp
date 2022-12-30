@@ -4,7 +4,6 @@
 
 namespace trog
 {
-
     peasant_factory::peasant_factory(bn::vector<cottage, TROG_MAX_COTTAGES> &cottages, bn::forward_list<peasant, 20> &peasants) : 
         enemy_factory(TROG_PEASANT_MIN_SPAWN_INTERVAL, TROG_PEASANT_MAX_SPAWN_INTERVAL),
         _cottages(cottages),
@@ -15,7 +14,6 @@ namespace trog
 
     void peasant_factory::spawn()
     {
-        BN_LOG("spawn o'clock. number o' peasants pre-spawn: ", _peasants.size());
         if (_peasants.full())
         {
             BN_LOG("NO MORE SPACE FOR NEW PEASANTS. TRY AGAIN LATER");

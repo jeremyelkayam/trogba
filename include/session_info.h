@@ -20,12 +20,13 @@ namespace trog
             unsigned short get_level() {return _level;}
 
             bool current_level_has_cutscene();
+            bool is_valid_object();
             
         private:
+            unsigned char _flagbyte;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
-            // bn::unordered_set<int, 16> _cutscene_levels;
     };
 }
 

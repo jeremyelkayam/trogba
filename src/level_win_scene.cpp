@@ -4,10 +4,12 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
+#include <bn_sram.h>
 #include "level_win_scene.h"
 
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
 
@@ -45,6 +47,21 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
+
+
+}
+void level_win_scene::save(){
+    session_info sesh_to_write(_sesh);
+    // the level doesn't technically advance until later in the animation
+    //  so we should save a copy right now
+    if(_timer < 40) sesh_to_write.advance_level();
+
+    bn::sram::write(sesh_to_write);
+    //todo: maybe improve the look of this ... 
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+    _text_generator.generate(-80, 75, "autosaved.", _levelbeated_text_sprites);
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+
 }
 
 bn::optional<scene_type> level_win_scene::update(){

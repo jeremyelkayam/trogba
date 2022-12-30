@@ -22,6 +22,8 @@ namespace trog{
 
         unsigned short _timer;
 
+        void save();
+
     public:
         explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

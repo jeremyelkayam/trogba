@@ -24,6 +24,7 @@
 #include "bonus_scene.h"
 #include "movie_scene.h"
 #include "logo_scene.h"
+#include "menu_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -73,6 +74,11 @@ int main()
                     scene.reset(new trog::instructions_scene(sesh, text_generator));
                     break;
                 }
+                case trog::scene_type::MENU: { 
+                    hud.hide();
+                    scene.reset(new trog::menu_scene(sesh, text_generator));
+                    break;
+                }
                 case trog::scene_type::PLAY: { 
                     hud.show();
                     if(previous_play_scene){
@@ -81,7 +87,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud));
+                        scene.reset(new trog::play_scene(sesh, hud, text_generator));
                     }
                     break;
                 }

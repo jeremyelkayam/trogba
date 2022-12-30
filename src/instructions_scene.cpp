@@ -4,6 +4,7 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
+#include <bn_sram.h>
 #include "instructions_scene.h"
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
@@ -169,10 +170,6 @@ bn::optional<scene_type> instructions_scene::update(){
         if(bn::keypad::pressed(_secret_code.at(_secret_code_index))){
             ++_secret_code_index;
             BN_LOG("progress");
-            if(_secret_code_index == _secret_code.size()){
-                BN_LOG("you got the code");
-                _sesh.secret_lives_boost();
-            }
         }else{
             BN_LOG("you failed the code");
             _secret_code_index=0;
@@ -182,18 +179,20 @@ bn::optional<scene_type> instructions_scene::update(){
     // text stuff
     bn::optional<scene_type> result;
     
-    #ifdef DEBUG
-        if(bn::keypad::start_pressed()){
-            clear_text();
-            _level_select=true;
-        }
-    #endif 
+
+    if(bn::keypad::start_pressed()){
+        #ifdef DEBUG 
+            _level_select = !_level_select;
+        #endif
+    }
 
     if(bn::keypad::a_pressed()){
-            result = scene_type::PLAY;
-
+        if(_secret_code_index == _secret_code.size()){
+            _sesh.secret_lives_boost();
+        }
+        result = scene_type::PLAY;
     }
-    if(bn::keypad::l_pressed() && !_level_select){
+    if(bn::keypad::r_pressed() && !_level_select){
         //toggle secret hints
         clear_text();
         _show_secret_hints = !_show_secret_hints;

@@ -19,9 +19,10 @@ namespace trog{
         bool collides_with(entity &e);
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}
-        void set_x(const bn::fixed &x) { _pos.set_x(x);}
-        void set_y(const bn::fixed &y) { _pos.set_y(y);}
+        void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}
+        void set_y(const bn::fixed &y) { _pos.set_y(y); _sprite.set_y(y);}
         bool out_of_bounds();
+        void set_rotation_angle(short angle){_sprite.set_rotation_angle(angle);}
 
         void set_visible(bool visible) {_sprite.set_visible(visible);}
 
@@ -38,6 +39,7 @@ namespace trog{
         void update_anim_action_when_not_moving(bool update) 
             {_update_anim_when_not_moving = update;}
         void jump(short time, bn::fixed height, bool repeating);
+        void squish(short time);
 
         
 
@@ -68,6 +70,7 @@ namespace trog{
         bn::optional<bn::sprite_move_to_action> _move_action;
         bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
         bn::optional<bn::sprite_move_by_action> _move_by_action;
+        bn::optional<bn::sprite_scale_to_action> _scale_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again
