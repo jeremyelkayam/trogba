@@ -30,6 +30,10 @@
 #define TROG_KNIGHT_TOP_BOUND -58
 #define TROG_KNIGHT_BOTTOM_BOUND 69
 
+#define RED_PALETTE bn::sprite_items::trogdor_variable_8x16_font_red.palette_item()
+#define WHITE_PALETTE bn::sprite_items::trogdor_variable_8x16_font.palette_item()
+#define BROWN_PALETTE bn::sprite_items::trogdor_variable_8x16_font_brown.palette_item()
+#define GRAY_PALETTE bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved

@@ -9,10 +9,6 @@
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
 
-#define RED_PALETTE bn::sprite_items::trogdor_variable_8x16_font_red.palette_item()
-#define WHITE_PALETTE bn::sprite_items::trogdor_variable_8x16_font.palette_item()
-
-
 namespace trog {
 
 instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
