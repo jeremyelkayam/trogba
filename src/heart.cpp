@@ -23,7 +23,7 @@ void heart::update_anim(){
     }
 }
 void heart::dissipate(){
-    _anim = bn::create_sprite_animate_action_forever(
+    _anim = bn::create_sprite_animate_action_once(
                 _sprite, 5, bn::sprite_items::heart.tiles_item(),
                 0, 1, 2, 3 );
 }

@@ -212,7 +212,8 @@ bn::optional<scene_type> instructions_scene::update(){
 
         //Check to see if we have a saved session
         bn::sram::read(loaded_sesh);
-        if(loaded_sesh.is_valid_object()){
+        // Don't bother with loading if we are going to do the level select cheat
+        if(!_level_select && loaded_sesh.is_valid_object()){
             if(!_continue_menu_visible){
                 setup_continue_menu();
             }else{
