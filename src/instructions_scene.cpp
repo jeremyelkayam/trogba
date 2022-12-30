@@ -16,6 +16,8 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _text_generator(text_generator),
         _level_select(false),
         _show_secret_hints(false),
+        _continue_menu_visible(false),
+        _continue_selected(true),
         _sesh(sesh),
         _text_ycor(-30) {
     _flashing_text_counter = 0;
@@ -142,9 +144,8 @@ bn::optional<scene_type> instructions_scene::update(){
         bn::string<10> lv_str;
         bn::ostringstream lv_string_stream(lv_str);
         lv_string_stream << "Lv " <<  _sesh.get_level();        
-        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+        _text_generator.set_palette_item(RED_PALETTE);
         _text_generator.generate(0, -30+(14*4)+7, lv_str, _start_text_sprites);    
-
     }else{
         if(!_show_secret_hints){
             _flashing_text_counter++;
@@ -159,6 +160,27 @@ bn::optional<scene_type> instructions_scene::update(){
                 }
                 _flashing_text_counter = 0;
             }        
+        }
+        if(_continue_menu_visible){
+
+            if(bn::keypad::left_pressed() || bn::keypad::right_pressed()) _continue_selected = !_continue_selected;
+
+            _start_text_sprites.clear();
+
+            if(_continue_selected){
+                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.generate(-60, -30+(14*4)+7, "NEW GAME", _start_text_sprites);    
+
+                _text_generator.set_palette_item(WHITE_PALETTE);
+                _text_generator.generate(60, -30+(14*4)+7, "[CONTINUE]", _start_text_sprites);                    
+            }else{
+                _text_generator.set_palette_item(WHITE_PALETTE);
+                _text_generator.generate(-60, -30+(14*4)+7, "[NEW GAME]", _start_text_sprites);    
+
+                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.generate(60, -30+(14*4)+7, "CONTINUE", _start_text_sprites);                    
+            }
+
         }
     }
 
@@ -186,9 +208,26 @@ bn::optional<scene_type> instructions_scene::update(){
         if(_secret_code_index == _secret_code.size()){
             _sesh.secret_lives_boost();
         }
-        result = scene_type::PLAY;
+        session_info loaded_sesh;
+
+        //Check to see if we have a saved session
+        bn::sram::read(loaded_sesh);
+        if(loaded_sesh.is_valid_object()){
+            if(!_continue_menu_visible){
+                setup_continue_menu();
+            }else{
+                if(_continue_selected){
+                    _sesh = loaded_sesh;
+                    bn::sram::clear(sizeof(loaded_sesh));
+                }
+                result = scene_type::PLAY;
+            }
+        }else{
+            result = scene_type::PLAY;
+        }
+
     }
-    if(bn::keypad::r_pressed() && !_level_select){
+    if(bn::keypad::r_pressed() && !_level_select && !_continue_menu_visible){
         //toggle secret hints
         clear_text();
         _show_secret_hints = !_show_secret_hints;
@@ -200,6 +239,15 @@ bn::optional<scene_type> instructions_scene::update(){
     }
 
     return result;
+}
+
+void instructions_scene::setup_continue_menu(){
+    BN_ASSERT(_continue_menu_visible == false, "Can only set up continue menu once");
+    _continue_menu_visible = true;
+    for(auto it : _start_text_sprites) { 
+        it.set_visible(true);
+    }
+    _show_secret_hints = false;
 }
 
 }
