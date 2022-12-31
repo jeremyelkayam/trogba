@@ -215,7 +215,12 @@ bn::optional<scene_type> instructions_scene::update(){
         // Don't bother with loading if we are going to do the level select cheat
         if(!_level_select && loaded_sesh.is_valid_object()){
             if(!_continue_menu_visible){
+                if(_show_secret_hints){
+                    clear_text();
+                    setup_instructions();
+                }
                 setup_continue_menu();
+
             }else{
                 if(_continue_selected){
                     _sesh = loaded_sesh;
