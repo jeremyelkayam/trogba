@@ -1,4 +1,5 @@
 #pragma once
+#include <bn_array.h>
 
 
 namespace trog
@@ -24,9 +25,11 @@ namespace trog
 
             bool current_level_has_cutscene();
             bool is_valid_object();
+
+            bn::array<char, 8> default_format_tag();
             
         private:
-            unsigned char _flagbyte;
+            bn::array<char, 8> _format_tag;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;

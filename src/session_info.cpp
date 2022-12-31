@@ -25,11 +25,21 @@ void session_info::reset(){
     _mans = TROG_STARTING_LIVES;
     _score = 0;
     _level = TROG_STARTING_LEVEL;
-    _flagbyte = 'T'; // for TROGDOR.
+
+    _format_tag = default_format_tag();
     _killed_by_archer = false;
 }
 bool session_info::is_valid_object(){
-    return _flagbyte == 'T';
+
+    return _format_tag == default_format_tag();
+}
+
+bn::array<char, 8> session_info::default_format_tag(){
+    bn::array<char, 8> default_format_tag;
+    bn::istring_base default_format_tag_istring(default_format_tag._data);
+    bn::ostringstream default_format_tag_stream(default_format_tag_istring);
+    default_format_tag_stream.append(TROG_FORMAT_TAG);
+    return default_format_tag;    
 }
 
 
