@@ -12,10 +12,16 @@
 
 namespace trog{
 
-    struct high_score_entry {
-        bn::string<9>name;
-        unsigned short level;
-        unsigned int score;
+    class high_score_entry {
+        private:
+            bn::array<char, 10>_name;
+            unsigned short _level;
+            unsigned int _score;
+        public:
+            high_score_entry(bn::string<9> name, unsigned short level, unsigned short score);
+            unsigned short get_level(){return _level;}
+            unsigned int get_score(){return _score;}
+            bn::string<9> get_name();
     };
 
     class hiscores_scene : public scene{ 
