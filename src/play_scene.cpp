@@ -206,7 +206,9 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
-            sb_commentary::arrowed();
+            if(_sesh.get_mans() != 0){
+                sb_commentary::arrowed();
+            }
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
@@ -218,11 +220,14 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
-            sb_commentary::sworded();
+            if(_sesh.get_mans() != 0){
+                sb_commentary::sworded();
+            }
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
             if(rand() % 33 == 0){
                 str = "SORDID!";
+                //maybe add that line of s.bad saying "A sordid affair"
             }
             _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
