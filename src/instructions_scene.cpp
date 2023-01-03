@@ -5,6 +5,7 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 #include <bn_sram.h>
+#include <bn_version.h>
 #include "instructions_scene.h"
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
@@ -16,6 +17,7 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _text_generator(text_generator),
         _level_select(false),
         _show_secret_hints(false),
+        _show_credits(false),
         _continue_menu_visible(false),
         _continue_selected(true),
         _sesh(sesh),
@@ -108,6 +110,31 @@ void instructions_scene::setup_secret_hints(){
     
     write_instruction("-What's a treasure hut?!?!", RED_PALETTE, 16);
     write_instruction("-Secret Code?!?!", RED_PALETTE, 16);
+}
+
+void instructions_scene::setup_credits(){
+
+    write_instruction("CREDITS!!", RED_PALETTE, 16);
+
+    bn::string<64> credits[] = {
+        "Designed by Mike and Matt",
+        "Flash ver by Jonathan Howe",
+        "HTML5 ver by Aeon Softworks",
+        "Special thanks to",
+        "Mips96 + TrogdorReburninated",
+        "for inspiration/code reference"
+    };
+
+    for(bn::string<64> line : credits) { 
+        write_instruction(line.c_str(), WHITE_PALETTE, 14);
+    }    
+
+    bn::string<32> butano_str;
+    bn::ostringstream butano_string_stream(butano_str);
+    butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor();
+
+    write_instruction(butano_str.c_str(), RED_PALETTE, 14);
+    write_instruction("by Gustavo Valiente", WHITE_PALETTE, 14);
 }
 
 void instructions_scene::write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing){

@@ -13,11 +13,44 @@ namespace trog {
 hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
         _sesh(sesh),
         _text_generator(text_generator),
-        _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)) {
+        _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
+        _high_scores_table(
+            {high_score_entry("THE CHEAT", 100, 6000),
+            high_score_entry("POM POM", 90, 5000),
+            high_score_entry("VIDLCTRX3", 80, 4000),
+            high_score_entry("LTGTNJAXN", 75, 3000),
+            high_score_entry("VIDLCTRX1", 60, 1987),
+            high_score_entry("SHARPDENE", 50, 1000),
+            high_score_entry("DJMANKWCZ", 40, 800),
+            high_score_entry("COACH Z", 4, 10)}){
+    
+    //Initialize our format tag
+    bn::istring_base expected_format_tag_istring(_format_tag._data);
+    bn::ostringstream expected_format_tag_stream(expected_format_tag_istring);
+    expected_format_tag_stream.append("TROG_HISCORES");
 
+    //Load the table if applicable
+    load_high_scores_table();
+    
 
-    init_high_scores_table();
+    //Propagate the player's score within the scores list (if applicable)
+    if(_sesh.get_score() > _high_scores_table[7].get_score()){
+        BN_LOG("you got a high score: ", _sesh.get_score());
+        _high_scores_table[7] = high_score_entry("", _sesh.get_level(), _sesh.get_score());
+        for(int z = 6; z >= 0; --z){
+            high_score_entry& current = _high_scores_table[z];
+            high_score_entry& previous = _high_scores_table[z+1];
+            if(previous.get_score() > current.get_score()){
+                bn::swap(previous, current);
+            }
+        }
+    }
 
+    draw_high_scores_table();
+
+}
+
+void hiscores_scene::draw_high_scores_table(){
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(RED_PALETTE);
     _text_generator.generate(0, -72, "YE OLDE SCROLL OF HI-SCORES", _text_sprites);
@@ -50,8 +83,6 @@ hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& te
         _text_generator.generate(16, -43 + z*15, level, _text_sprites);   
         _text_generator.generate(68, -43 + z*15, score, _text_sprites);   
     }
-    
-
 }
 
 bn::optional<scene_type> hiscores_scene::update(){
@@ -64,17 +95,15 @@ bn::optional<scene_type> hiscores_scene::update(){
     return result;
 }
 
-void hiscores_scene::init_high_scores_table(){
-    _high_scores_table.emplace_back("THE CHEAT", 100, 6000);
-    // _high_scores_table.emplace_back("POM POM", 90, 5000);
-    // _high_scores_table.emplace_back("VIDLCTRX3", 80, 4000);
-    // _high_scores_table.emplace_back("LTGTNJAXN", 75, 3000);
-    // _high_scores_table.emplace_back("VIDLCTRX1", 60, 1987);
-    // _high_scores_table.emplace_back("SHARPDENE", 50, 1000);
-    // _high_scores_table.emplace_back("DJMANKWCZ", 40, 800);
-    // _high_scores_table.emplace_back("COACH Z", 4, 10);
-    
-    // bn::sram::write_offset(_high_scores_table, sizeof(session_info));
+void hiscores_scene::load_high_scores_table(){
+
+    bn::array<char, 16> loaded_format_tag;
+    bn::sram::read_offset(loaded_format_tag, sizeof(_sesh));
+
+    if(_format_tag == loaded_format_tag){
+        BN_LOG("memory is formatted. loading now");
+        bn::sram::read_offset(_high_scores_table, sizeof(_sesh) + sizeof(_format_tag));
+    }
 }
 
 high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, unsigned short score) : 
@@ -86,11 +115,22 @@ high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, uns
     name_stream.append(name);    
 }
 
+high_score_entry::high_score_entry() : 
+    _level(0),
+    _score(0) {
+
+    bn::istring_base name_istring(_name._data);
+    bn::ostringstream name_stream(name_istring);
+    name_stream.append("DUMMY");    
+}
+
 bn::string<9> high_score_entry::get_name(){
     bn::string<9>result;
-    for(char z : _name){
-        result.push_back(z);
+    //go until you start hitting null chars
+    for(int z=0; _name[z] != 0; ++z){
+        result.append(_name[z]);
     }
+
     return result;
 }
 

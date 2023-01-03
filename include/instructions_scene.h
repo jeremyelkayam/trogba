@@ -20,13 +20,14 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 64> _start_text_sprites;
         
         unsigned short _flashing_text_counter;
-        bool _level_select, _show_secret_hints, _continue_menu_visible, _continue_selected;
+        bool _level_select, _show_secret_hints, _show_credits, _continue_menu_visible, _continue_selected;
         session_info &_sesh;
 
         int _text_ycor;
         
         void setup_instructions();
         void setup_secret_hints();
+        void setup_credits();
         void clear_text();
         void setup_continue_menu();
         void write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing);

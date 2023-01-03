@@ -39,8 +39,9 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::HISCORES;
     trog::session_info sesh;
+    sesh.score(500);
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
