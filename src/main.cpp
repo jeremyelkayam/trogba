@@ -26,6 +26,7 @@
 #include "logo_scene.h"
 #include "menu_scene.h"
 #include "hiscores_scene.h"
+#include "credits_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -39,14 +40,15 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::HISCORES;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     trog::session_info sesh;
-    sesh.score(500);
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
     text_generator.set_center_alignment();
+
+    bool logo_scene = true;
 
     trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
     hud.hide();
@@ -60,6 +62,7 @@ int main()
         }
         if(next_scene){
             bn::sound::stop_all();
+            logo_scene = (*next_scene == trog::scene_type::LOGO);
             switch(*next_scene){
                 case trog::scene_type::LOGO: { 
                     hud.hide();
@@ -122,6 +125,11 @@ int main()
                     scene.reset(new trog::hiscores_scene(sesh, text_generator));
                     break;
                 }                
+                case trog::scene_type::CREDITS: {
+                    hud.hide();
+                    scene.reset(new trog::credits_scene(text_generator));
+                    break;
+                }                                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;
@@ -142,7 +150,7 @@ int main()
 
         // soft reset code
         if(bn::keypad::start_held() && bn::keypad::select_held() &&
-                bn::keypad::a_held() && bn::keypad::b_held()){
+                bn::keypad::a_held() && bn::keypad::b_held() && !logo_scene){
             bn::core::reset();
         }
 
