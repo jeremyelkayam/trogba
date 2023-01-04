@@ -276,7 +276,8 @@ bn::optional<scene_type> play_scene::update(){
 
 
     //START pauses the game
-    if(bn::keypad::start_pressed()){
+    if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
+       && _win_pause_time == 0 && !_trogdor->dead()){
         _player_paused = !_player_paused;
         if(_player_paused){
             //Apply a dimming effect and display text when the game is paused.
