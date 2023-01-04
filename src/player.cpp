@@ -228,7 +228,9 @@ bool player::handle_cottage_collision(cottage &cottage){
 }
 
 void player::handle_peasant_collision(peasant &peasant){
-    if(!dead() && collides_with(peasant) && !peasant.dead()){
+    if(burninating()){
+        _breath.handle_peasant_collision(peasant);
+    }else if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
@@ -239,9 +241,6 @@ void player::handle_peasant_collision(peasant &peasant){
         }
     }
 
-    if(burninating()){
-        _breath.handle_peasant_collision(peasant);
-    }
 }
 
 void player::start_burninating(){
