@@ -51,7 +51,9 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
     sb_commentary::level_win_scene();
 
-    save();
+    if(sesh.get_level() != 101){
+        save();
+    }
 
 }
 
