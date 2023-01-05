@@ -13,7 +13,7 @@
 
 namespace trog {
 
-cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure) : 
+cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
         entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottageleft.create_sprite(xcor, ycor)),
         _direction(direction),
         _has_treasure(has_treasure),
@@ -37,6 +37,8 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
 
     _flames.set_visible(false);
     _sprite.set_z_order(BACK_ZORDER);
+
+    if(burninated) _time_burning = TROG_COTTAGEFIRE_TIME + 1;
 
 }
 

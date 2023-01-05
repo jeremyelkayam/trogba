@@ -36,6 +36,7 @@ namespace trog{
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
+        bn::vector<bn::sprite_ptr, 8> _autosave_text;
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
@@ -54,6 +55,10 @@ namespace trog{
         void set_visible(bool visible);
 
         void set_paused_text_visible(bool visible);
+
+        void set_autosave_text_visible(bool visible);
+
+        void death_autosave();
 
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);

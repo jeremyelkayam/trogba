@@ -251,7 +251,6 @@ bn::optional<scene_type> instructions_scene::update(){
             }else{
                 if(_continue_selected){
                     _sesh = loaded_sesh;
-                    bn::sram::clear(sizeof(loaded_sesh));
                 }
                 result = scene_type::PLAY;
             }

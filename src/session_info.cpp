@@ -28,6 +28,7 @@ void session_info::reset(){
 
     _format_tag = default_format_tag();
     _killed_by_archer = false;
+    clear_burnination_array();
 }
 bool session_info::is_valid_object(){
 
@@ -40,6 +41,16 @@ bn::array<char, 8> session_info::default_format_tag(){
     bn::ostringstream default_format_tag_stream(default_format_tag_istring);
     default_format_tag_stream.append(TROG_FORMAT_TAG);
     return default_format_tag;    
+}
+
+void session_info::set_cottage_burnination(unsigned short dex, bool status){
+    _cottage_burnination_status[dex] = status;
+}
+
+void session_info::clear_burnination_array(){
+    for(int z = 0; z < 6; ++z){
+        _cottage_burnination_status[z] = false;
+    }
 }
 
 

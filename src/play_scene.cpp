@@ -9,6 +9,8 @@
 #include <bn_log.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
+#include <bn_sram.h>
+#include <bn_blending.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
@@ -111,13 +113,25 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 				(240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120,
 				(160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80,
 				enumdir,
-                treasurehut
+                treasurehut,
+                sesh.load_cottage_burnination(i)
 			);
 		}
 	}
-    
+    //once it's loaded we are done with it
+    _sesh.clear_burnination_array();
+
+    _text_generator.set_left_alignment();
+    _text_generator.set_palette_item(WHITE_PALETTE);        
+    _text_generator.generate(-120, 75, "autosaved.", _autosave_text);
+    bn::blending::set_transparency_alpha(0.5);
+    for(bn::sprite_ptr &sprite : _autosave_text) { 
+        sprite.set_blending_enabled(true);
+    }
+    set_autosave_text_visible(false);
+
+
     _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());        
     _text_generator.generate(0, 55, "paused", _paused_text);
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
@@ -161,6 +175,9 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
+        if(!_trogdor->dead()){
+            set_autosave_text_visible(false);            
+        }
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
@@ -211,6 +228,7 @@ bn::optional<scene_type> play_scene::update(){
             }
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            death_autosave();
         }
 
         was_dead = _trogdor->dead();  
@@ -231,11 +249,13 @@ bn::optional<scene_type> play_scene::update(){
             }
             _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            death_autosave();
         }
 
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
+            death_autosave();
             // _trogdor->handle_knight_collision(_troghammer);
         }
 
@@ -276,6 +296,8 @@ bn::optional<scene_type> play_scene::update(){
 
 
     //START pauses the game
+    //but you shouldn't be able to pause during other animations 
+    //that block input (e.g. death/burninate!/winning a level)
     if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
        && _win_pause_time == 0 && !_trogdor->dead()){
         _player_paused = !_player_paused;
@@ -310,6 +332,30 @@ bn::optional<scene_type> play_scene::update(){
 
     
     return result;
+}
+
+//called on death
+//assumptions: You are dead, but the lives counter has not yet been decremented
+void play_scene::death_autosave(){
+    if(_sesh.get_mans() == 0){
+        bn::sram::clear(sizeof(_sesh));
+    }else{
+        session_info saved_sesh = _sesh;
+
+        for(int z = 0; z < _cottages.size(); ++z){
+            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+        }
+        saved_sesh.die();
+
+        bn::sram::write(saved_sesh);        
+        set_autosave_text_visible(true);
+    }
+}
+
+void play_scene::set_autosave_text_visible(bool visible){
+    for(bn::sprite_ptr &sprite : _autosave_text) { 
+        sprite.set_visible(visible);
+    }
 }
 
 bool play_scene::level_complete(){

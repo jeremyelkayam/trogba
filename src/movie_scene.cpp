@@ -139,8 +139,8 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     }else if(_sesh.get_level() == 43){
         write_text("2 cottages");
 
-        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false));
-        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false));
+        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false, false));
+        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false, false));
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");

@@ -15,7 +15,7 @@ namespace trog {
             bn::sprite_animate_action<4> _burningflames;
             int _time_burning;
         public:
-            cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure);
+            cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated);
             virtual void update() final;
             bool burninate();
             bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
