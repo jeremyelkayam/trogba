@@ -195,16 +195,16 @@ bn::optional<scene_type> instructions_scene::update(){
             _start_text_sprites.clear();
 
             if(_continue_selected){
-                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.set_palette_item(GRAY_PALETTE);
                 _text_generator.generate(-60, -30+(14*4)+7, "NEW GAME", _start_text_sprites);    
 
-                _text_generator.set_palette_item(WHITE_PALETTE);
+                _text_generator.set_palette_item(RED_PALETTE);
                 _text_generator.generate(60, -30+(14*4)+7, "[CONTINUE]", _start_text_sprites);                    
             }else{
-                _text_generator.set_palette_item(WHITE_PALETTE);
+                _text_generator.set_palette_item(RED_PALETTE);
                 _text_generator.generate(-60, -30+(14*4)+7, "[NEW GAME]", _start_text_sprites);    
 
-                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.set_palette_item(GRAY_PALETTE);
                 _text_generator.generate(60, -30+(14*4)+7, "CONTINUE", _start_text_sprites);                    
             }
 
