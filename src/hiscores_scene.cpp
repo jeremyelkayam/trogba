@@ -11,6 +11,8 @@
 namespace trog {
 
 hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
+        _selectable_letters({'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+                             'O','P','Q','R','S','T','U','V','W','X','Y','Z',' ','!','?'}),
         _sesh(sesh),
         _text_generator(text_generator),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
@@ -22,7 +24,8 @@ hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& te
             high_score_entry("VIDLCTRX1", 60, 1987),
             high_score_entry("SHARPDENE", 50, 1000),
             high_score_entry("DJMANKWCZ", 40, 800),
-            high_score_entry("COACH Z", 4, 10)}){
+            high_score_entry("COACH Z", 4, 10)}),
+        _score_entry_index_in_table(-1) {
     
     //Initialize our format tag
     bn::istring_base expected_format_tag_istring(_format_tag._data);
@@ -37,23 +40,34 @@ hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& te
     if(_sesh.get_score() > _high_scores_table[7].get_score()){
         BN_LOG("you got a high score: ", _sesh.get_score());
         _high_scores_table[7] = high_score_entry("", _sesh.get_level(), _sesh.get_score());
+        _score_entry_index_in_table=7;
         for(int z = 6; z >= 0; --z){
             high_score_entry& current = _high_scores_table[z];
             high_score_entry& previous = _high_scores_table[z+1];
             if(previous.get_score() > current.get_score()){
                 bn::swap(previous, current);
+                _score_entry_index_in_table=z;
             }
         }
     }
+    BN_LOG("score entry at index ", _score_entry_index_in_table);
 
     draw_high_scores_table();
 
 }
 
 void hiscores_scene::draw_high_scores_table(){
+
+    bn::string<64> title_text;
+    if(_score_entry_index_in_table > -1){
+        title_text = "ENTER YOUR NAME!";
+    }else{
+        title_text = "YE OLDE SCROLL OF HI-SCORES";
+    }
+
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, -72, "YE OLDE SCROLL OF HI-SCORES", _text_sprites);
+    _text_generator.generate(0, -72, title_text, _text_sprites);
 
     _text_generator.set_palette_item(BROWN_PALETTE);
     _text_generator.generate(-52, -55, "name", _text_sprites);
@@ -87,6 +101,8 @@ void hiscores_scene::draw_high_scores_table(){
 
 bn::optional<scene_type> hiscores_scene::update(){
     bn::optional<scene_type> result;
+
+    if(_score_entry_index_in_table != -1)
 
     if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::INSTRUCTIONS;

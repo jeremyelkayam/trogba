@@ -28,6 +28,8 @@ namespace trog{
     class hiscores_scene : public scene{ 
     private:
 
+        bn::array<char, 29> _selectable_letters;
+
         session_info &_sesh;
         bn::sprite_text_generator& _text_generator;
 
@@ -39,6 +41,8 @@ namespace trog{
 
         void load_high_scores_table();
         void draw_high_scores_table();
+        
+        short _score_entry_index_in_table;
 
     public:
         explicit hiscores_scene(session_info &sesh, bn::sprite_text_generator& text_generator);
