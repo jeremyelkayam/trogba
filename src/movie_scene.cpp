@@ -419,7 +419,7 @@ bn::optional<scene_type> movie_scene::update(){
         result = scene_type::PLAY;
     }else if(cutscene_over() && _sesh.get_level() == 101){
         _sesh.reset();
-        result = scene_type::INSTRUCTIONS;
+        result = scene_type::CREDITS;
     }
 
     _timer++;

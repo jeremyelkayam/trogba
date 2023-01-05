@@ -10,15 +10,21 @@
 namespace trog {
 
 credits_scene::credits_scene(bn::sprite_text_generator& text_generator) : 
-    _time(0) {
+    _time(0),
+    _text_generator(text_generator) {
 
+
+}
+
+void credits_scene::setup_credits(){
     int ycor = 100;
 
     for(int z = 0; z < 4 ; ++z){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, ycor, z));
     }
 
-    text_generator.set_center_alignment();
+    _text_generator.set_center_alignment();
+    _text_generator.set_palette_item(WHITE_PALETTE);
 
     bn::string<64> credits[] = {
         "The GBA Game",
@@ -33,17 +39,17 @@ credits_scene::credits_scene(bn::sprite_text_generator& text_generator) :
     ycor += 25;
 
     for(bn::string<64> str : credits){ 
-        text_generator.generate(0, ycor,str, _text_sprites);
+        _text_generator.generate(0, ycor,str, _text_sprites);
 
         ycor += 16;
     }
 
     ycor += 30;
-    text_generator.set_palette_item(RED_PALETTE);
-    text_generator.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", _text_sprites);   
+    _text_generator.set_palette_item(RED_PALETTE);
+    _text_generator.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", _text_sprites);   
     ycor += 30;
 
-    text_generator.set_palette_item(WHITE_PALETTE);    
+    _text_generator.set_palette_item(WHITE_PALETTE);    
     bn::string<64> original_game_credits[] = {
         "",
         "Designed by", 
@@ -61,14 +67,17 @@ credits_scene::credits_scene(bn::sprite_text_generator& text_generator) :
     };
 
     for(bn::string<64> str : original_game_credits){ 
-        text_generator.generate(0, ycor,str, _text_sprites);
+        _text_generator.generate(0, ycor,str, _text_sprites);
         ycor += 16;
     }
-
 }
 
 
+
 bn::optional<scene_type> credits_scene::update(){
+    //have to do this because we construct the new scene before discarding the old one
+    if(_time == 0) setup_credits();
+
     bn::optional<scene_type> result;
 
     bn::fixed speed = 0.5;

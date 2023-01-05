@@ -17,6 +17,9 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 4> _title_sprites;
 
         unsigned int _time;
+        void setup_credits();
+
+        bn::sprite_text_generator &_text_generator;
 
     public:
         explicit credits_scene(bn::sprite_text_generator& text_generator);

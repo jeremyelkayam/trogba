@@ -229,6 +229,9 @@ bn::optional<scene_type> instructions_scene::update(){
         #ifdef DEBUG 
             _level_select = !_level_select;
         #endif
+        #ifndef DEBUG
+            result = scene_type::CREDITS;
+        #endif
     }
 
     if(bn::keypad::a_pressed()){
