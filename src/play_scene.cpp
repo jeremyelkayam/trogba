@@ -30,7 +30,9 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
+        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+        //temp fix for f'ed up spawnage
+        (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
@@ -77,17 +79,21 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     // 6 = max cottages
     for (int i = 0; i < _cottages.max_size(); i++) {
-        BN_LOG("cottage #", i);
 
-        //Index 1 in level data refers to the number of the treasure hut from 1-6
-        // 0 if no treasure hut 
-        bool treasurehut = (i == (levels[level_index][1] - 1));
-        BN_LOG("treasure hut? ", treasurehut);
 
 		int j = (i * 3) + 2;
-        BN_LOG("direction: ", levels[level_index][j]);
 
 		if (levels[level_index][j] > 0) {
+            //Index 1 in level data refers to the number of the treasure hut from 1-6
+            // 0 if no treasure hut             
+            bool treasurehut = (i == (levels[level_index][1] - 1));
+            BN_LOG("treasure hut? ", treasurehut);            
+            BN_LOG("cottage #", i + 1);
+            BN_LOG("direction: ", levels[level_index][j]);
+            bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
+            BN_LOG("xcor ", xcor);
+            bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
+	    	BN_LOG("ycor ", ycor);
 
             direction enumdir;
             switch(levels[level_index][j]){
@@ -110,8 +116,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
 
 			_cottages.emplace_back(
-				(240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120,
-				(160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80,
+				xcor,
+                ycor,
 				enumdir,
                 treasurehut,
                 sesh.load_cottage_burnination(i)
@@ -176,7 +182,7 @@ bn::optional<scene_type> play_scene::update(){
 
     }else{
         if(!_trogdor->dead()){
-            set_autosave_text_visible(false);            
+            set_autosave_text_visible(false);
         }
         set_paused_text_visible(false);
 
@@ -274,7 +280,9 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
-                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, true));
+                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, 
+                //temp fix for f'ed up spawnage
+               (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
             }
         }

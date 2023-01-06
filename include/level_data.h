@@ -206,7 +206,7 @@ const int levels[33][20] = {
 	DIR_DOWN, -1084, -1055,
 	DIR_LEFT, -314, -505,
 	DIR_DOWN, 1760, -1070,
-	DIR_UP, -1084, 685,
+	DIR_UP, -1084, 885,
 	0, 0, 0 },
 	/* 26 */ { 2, 0,
 	DIR_UP, -2025, -642,
@@ -215,7 +215,7 @@ const int levels[33][20] = {
 	DIR_UP, 6, -642,
 	DIR_DOWN, 1960, 10,
 	0, 0, 0 },
-	/* 27 */ { 2, 0,
+	/* 27 */ { 2, 0, // and also 59 and also 91
 	DIR_RIGHT, 1076, 1186,
 	DIR_DOWN, 224, -502,
 	DIR_DOWN, -1304, -555,
