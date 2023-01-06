@@ -331,7 +331,7 @@ void player::update_win_anim(){
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
     _sprite.set_scale(2);
-    _sprite.set_item(bn::sprite_items::player);
+    // _sprite.set_item(bn::sprite_items::player);
     _sprite.put_above();
     _majesty.put_above();
     
