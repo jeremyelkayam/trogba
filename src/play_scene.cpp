@@ -150,6 +150,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 void play_scene::set_paused_text_visible(bool visible){
     for(bn::sprite_ptr &sprite : _paused_text){
             sprite.set_visible(visible);
+            sprite.put_above();
     }
 }
 
@@ -379,6 +380,7 @@ void play_scene::autosave(bool just_died){
 void play_scene::set_autosave_text_visible(bool visible){
     for(bn::sprite_ptr &sprite : _autosave_text) { 
         sprite.set_visible(visible);
+        sprite.put_above();
     }
 }
 
