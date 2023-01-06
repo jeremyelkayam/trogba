@@ -28,7 +28,7 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time, _autosave_visibility_time;
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;
@@ -58,7 +58,7 @@ namespace trog{
 
         void set_autosave_text_visible(bool visible);
 
-        void death_autosave();
+        void autosave(bool just_died);
 
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);

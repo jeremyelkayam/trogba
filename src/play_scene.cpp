@@ -163,6 +163,13 @@ bn::optional<scene_type> play_scene::update(){
     if(_win_pause_time == 1){
         sb_commentary::level_win_pause();
     }
+    if(_autosave_visibility_time != 0){
+        ++_autosave_visibility_time;
+    }
+    if(_autosave_visibility_time > (3 SECONDS)){
+        _autosave_visibility_time = 0;
+        set_autosave_text_visible(false);
+    }
 
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
@@ -181,7 +188,7 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
-        if(!_trogdor->dead()){
+        if(!_trogdor->dead() && _autosave_visibility_time == 0){
             set_autosave_text_visible(false);
         }
         set_paused_text_visible(false);
@@ -190,10 +197,11 @@ bn::optional<scene_type> play_scene::update(){
         _hud.update_burninatemeter(_trogdor->get_burninating_time(), _trogdor->get_burninating_length());
         _hud.update_trogmeter(_trogdor->get_trogmeter());
 
-        
+        bool was_burninating = _trogdor->burninating();
+
         _trogdor->update();        
         
-        bool was_burninating = _trogdor->burninating();
+
 
         for(peasant &p : _peasants) {
             p.update();
@@ -221,6 +229,10 @@ bn::optional<scene_type> play_scene::update(){
             _burninate_pause_time = 1;
             sb_commentary::burninate();
             _overlay_text.reset(new burninate_text());
+        }else if(!_trogdor->burninating() && was_burninating){
+            //our trogmeter is at 0 now, so this is a good time to autosave
+            autosave(false);
+            BN_LOG("burninate done");
         }
 
         bool was_dead = _trogdor->dead();        
@@ -234,7 +246,7 @@ bn::optional<scene_type> play_scene::update(){
             }
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
-            death_autosave();
+            autosave(true);
         }
 
         was_dead = _trogdor->dead();  
@@ -255,13 +267,13 @@ bn::optional<scene_type> play_scene::update(){
             }
             _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
-            death_autosave();
+            autosave(true);
         }
 
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
-            death_autosave();
+            autosave(true);
             // _trogdor->handle_knight_collision(_troghammer);
         }
 
@@ -342,9 +354,8 @@ bn::optional<scene_type> play_scene::update(){
     return result;
 }
 
-//called on death
-//assumptions: You are dead, but the lives counter has not yet been decremented
-void play_scene::death_autosave(){
+//assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
+void play_scene::autosave(bool just_died){
     if(_sesh.get_mans() == 0){
         bn::sram::clear(sizeof(_sesh));
     }else{
@@ -353,10 +364,15 @@ void play_scene::death_autosave(){
         for(int z = 0; z < _cottages.size(); ++z){
             saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
         }
-        saved_sesh.die();
+        if(just_died){
+            saved_sesh.die();
+        }
 
         bn::sram::write(saved_sesh);        
         set_autosave_text_visible(true);
+        if(!just_died){
+            _autosave_visibility_time = 1;
+        }
     }
 }
 
