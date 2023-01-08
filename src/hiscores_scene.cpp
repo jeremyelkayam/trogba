@@ -10,11 +10,11 @@
 
 namespace trog {
 
-hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
+hiscores_scene::hiscores_scene(session_info &sesh) : 
         _selectable_letters({'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                              'O','P','Q','R','S','T','U','V','W','X','Y','Z',' ','!','?'}),
         _sesh(sesh),
-        _text_generator(text_generator),
+        _text_generator(fixed_8x16_sprite_font),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(
             {high_score_entry("THE CHEAT", 100, 10000),
@@ -80,7 +80,7 @@ void hiscores_scene::draw_high_scores_table(){
 
     if(_table_index != -1 && _timer < 15){
         //add an underscore to show where you are in name entry
-        _text_generator.generate(-74 + _string_index * 8, -42 + _table_index*15, "_", _text_sprites);    
+        _text_generator.generate(-70 + _string_index * 8, -42 + _table_index*15, "_", _text_sprites);    
     }
 
     for(int z = 0; z < _high_scores_table.size(); ++z){
