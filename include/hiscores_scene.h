@@ -5,6 +5,7 @@
 #include "scene.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_brown.h"
+//todo: change to fixed-width 
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "session_info.h"
@@ -35,16 +36,16 @@ namespace trog{
         bn::sprite_text_generator& _text_generator;
 
         bn::vector<bn::sprite_ptr, 128> _text_sprites;
-        bn::vector<bn::sprite_ptr, 8> _name_entry_sprites;
         bn::regular_bg_ptr _scroll;
         
         bn::array<high_score_entry, 8> _high_scores_table;
         bn::array<char, 16> _format_tag;
 
         void load_high_scores_table();
+        void save_high_scores_table();
+
         void draw_high_scores_table();
         void update_name_entry();
-        void draw_name_entry();
         void end_name_entry();
         void set_selectable_chars_index_to_current_char_in_str();
         

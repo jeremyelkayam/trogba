@@ -47,7 +47,7 @@ hiscores_scene::hiscores_scene(session_info &sesh, bn::sprite_text_generator& te
         for(int z = 6; z >= 0; --z){
             high_score_entry& current = _high_scores_table[z];
             high_score_entry& previous = _high_scores_table[z+1];
-            if(previous.get_score() > current.get_score()){
+            if(previous.get_score() >= current.get_score()){
                 bn::swap(previous, current);
                 _table_index=z;
             }
@@ -77,6 +77,11 @@ void hiscores_scene::draw_high_scores_table(){
     _text_generator.generate(-52, -55, "name", _text_sprites);
     _text_generator.generate(16, -55, "level", _text_sprites);
     _text_generator.generate(68, -55, "score", _text_sprites);
+
+    if(_table_index != -1 && _timer < 15){
+        //add an underscore to show where you are in name entry
+        _text_generator.generate(-74 + _string_index * 8, -42 + _table_index*15, "_", _text_sprites);    
+    }
 
     for(int z = 0; z < _high_scores_table.size(); ++z){
         _text_generator.set_right_alignment();
@@ -108,10 +113,10 @@ bn::optional<scene_type> hiscores_scene::update(){
 
     if(_table_index != -1){
         update_name_entry();
-        draw_name_entry();
         if(bn::keypad::start_pressed()){
-            _table_index = -1;
+            end_name_entry();
         }
+        draw_high_scores_table();
     }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::INSTRUCTIONS;
     }
@@ -121,23 +126,35 @@ bn::optional<scene_type> hiscores_scene::update(){
 
 void hiscores_scene::update_name_entry(){
     ++_timer;
-    if(_timer > 60) _timer = 0;
+    if(_timer > 30) _timer = 0;
 
     high_score_entry &current_entry = _high_scores_table[_table_index];
     
     BN_ASSERT(0 <= _table_index && _table_index < 8,"Valid index required...");
 
-    if(bn::keypad::a_pressed() || bn::keypad::right_pressed()){
+    if(bn::keypad::a_pressed()){
         ++_string_index;
         
-        if(_string_index == 10){
+        if(_string_index == 9){
             end_name_entry();
+            return;
+        }else{
+            set_selectable_chars_index_to_current_char_in_str();
         }
-        set_selectable_chars_index_to_current_char_in_str();
+    }else if(bn::keypad::right_pressed()){
+        if(_string_index < 8){
+            ++_string_index;
+            set_selectable_chars_index_to_current_char_in_str();
+        }
     }else if(bn::keypad::b_pressed()){
         if(_string_index != 0){
             --_string_index;
             _selectable_letters_index = 26;
+        }
+    }else if(bn::keypad::left_pressed()){
+        if(_string_index != 0){
+            --_string_index;
+            set_selectable_chars_index_to_current_char_in_str();
         }
     }
     if(bn::keypad::down_pressed()){
@@ -147,29 +164,15 @@ void hiscores_scene::update_name_entry(){
         --_selectable_letters_index;
     }
     _selectable_letters_index = (_selectable_letters_index + _selectable_letters.max_size()) % _selectable_letters.max_size();
-    BN_LOG("selectable letters index: ", _selectable_letters.max_size());
+
     current_entry.set_name_char(_selectable_letters[_selectable_letters_index], _string_index);
     BN_LOG(current_entry.get_name());
 }
 void hiscores_scene::end_name_entry(){
-    _name_entry_sprites.clear();
-
     _table_index = -1;
+    save_high_scores_table();
 }
 
-void hiscores_scene::draw_name_entry(){
-    BN_ASSERT(0 <= _table_index && _table_index < 8,"Valid index required...");
-
-    _name_entry_sprites.clear();
-
-    _text_generator.set_left_alignment();
-    bn::string<9> name_to_draw = _high_scores_table.at(_table_index).get_name();
-    if(_timer > 45){
-        name_to_draw[_string_index] = '_';
-    }
-
-    _text_generator.generate(-74, -43 + _table_index*15, name_to_draw, _name_entry_sprites);    
-}
 
 void hiscores_scene::set_selectable_chars_index_to_current_char_in_str(){
     char &current_char = _high_scores_table[_table_index].get_name().at(_string_index);
@@ -193,6 +196,10 @@ void hiscores_scene::load_high_scores_table(){
         BN_LOG("memory is formatted. loading now");
         bn::sram::read_offset(_high_scores_table, sizeof(_sesh) + sizeof(_format_tag));
     }
+}
+void hiscores_scene::save_high_scores_table(){
+    bn::sram::write_offset(_format_tag, sizeof(_sesh));
+    bn::sram::write_offset(_high_scores_table, sizeof(_sesh) + sizeof(_format_tag));
 }
 
 high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, unsigned short score) : 
