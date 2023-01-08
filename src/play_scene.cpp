@@ -369,7 +369,7 @@ void play_scene::autosave(bool just_died){
             saved_sesh.die();
         }
 
-        bn::sram::write(saved_sesh);        
+        bn::sram::write(saved_sesh);
         set_autosave_text_visible(true);
         if(!just_died){
             _autosave_visibility_time = 1;
