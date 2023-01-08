@@ -40,7 +40,7 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::HISCORES;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     trog::session_info sesh;
     sesh.score(1000);
     

@@ -11,8 +11,8 @@ namespace trog {
             direction _direction;
             bool _has_treasure;
 
-            bn::sprite_ptr _flames;
-            bn::sprite_animate_action<4> _burningflames;
+            bn::optional<bn::sprite_ptr> _flames;
+            bn::optional<bn::sprite_animate_action<4>> _burningflames;
             int _time_burning;
         public:
             cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated);
