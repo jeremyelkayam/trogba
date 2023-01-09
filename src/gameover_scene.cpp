@@ -90,7 +90,7 @@ bn::optional<scene_type> gameover_scene::update(){
 
     if(_menu){
         //todo fix this to be more nice-looking and less stupid 
-        
+
         if(bn::keypad::up_pressed()){
             if(_menu_option == 0){
                 _menu_option = 2;
@@ -109,7 +109,6 @@ bn::optional<scene_type> gameover_scene::update(){
         
     }
 
-    
     if(bn::keypad::a_pressed()){
         if(!_menu){
             _menu = bn::regular_bg_items::game_over_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y);

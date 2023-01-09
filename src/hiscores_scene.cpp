@@ -56,6 +56,7 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
     BN_LOG("score entry at index ", _table_index);
 
     draw_high_scores_table();
+    _sesh.reset();
 
 }
 
