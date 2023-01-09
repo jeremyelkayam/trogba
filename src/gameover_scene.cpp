@@ -89,27 +89,24 @@ bn::optional<scene_type> gameover_scene::update(){
 
 
     if(_menu){
-
-        set_sprites_visible(_challengeagain_text_sprites, _menu_option == 0);
-        set_sprites_visible(_hiscores_text_sprites, _menu_option == 1);
-        set_sprites_visible(_back_text_sprites, _menu_option == 2);
-
+        //todo fix this to be more nice-looking and less stupid 
+        
         if(bn::keypad::up_pressed()){
             if(_menu_option == 0){
                 _menu_option = 2;
             }else{
                 --_menu_option;
             }
-        }
-
-        if(bn::keypad::down_pressed()){
+            set_current_menu_option_visible();
+        }else if(bn::keypad::down_pressed()){
             if(_menu_option == 2){
                 _menu_option = 0;
             }else{
                 ++_menu_option;
             }
+            set_current_menu_option_visible();
         }
-
+        
     }
 
     
@@ -123,7 +120,7 @@ bn::optional<scene_type> gameover_scene::update(){
                 sprite.set_blending_enabled(true);
             }
             _itsover_text.set_blending_enabled(true);
-
+            set_current_menu_option_visible();
         }else{
             switch(_menu_option){
                 case 0:
@@ -149,6 +146,12 @@ bn::optional<scene_type> gameover_scene::update(){
     }
 
     return result;
+}
+
+void gameover_scene::set_current_menu_option_visible(){
+    set_sprites_visible(_challengeagain_text_sprites, _menu_option == 0);
+    set_sprites_visible(_hiscores_text_sprites, _menu_option == 1);
+    set_sprites_visible(_back_text_sprites, _menu_option == 2);
 }
 
 }
