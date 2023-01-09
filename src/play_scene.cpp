@@ -9,6 +9,8 @@
 #include <bn_log.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
+#include <bn_sram.h>
+#include <bn_blending.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
@@ -28,7 +30,9 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, sesh, false)),
+        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+        //temp fix for f'ed up spawnage
+        (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
         _pfact(_cottages,_peasants),
         _afact(_archers, sesh.get_level()),
@@ -75,17 +79,21 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     // 6 = max cottages
     for (int i = 0; i < _cottages.max_size(); i++) {
-        BN_LOG("cottage #", i);
 
-        //Index 1 in level data refers to the number of the treasure hut from 1-6
-        // 0 if no treasure hut 
-        bool treasurehut = (i == (levels[level_index][1] - 1));
-        BN_LOG("treasure hut? ", treasurehut);
 
 		int j = (i * 3) + 2;
-        BN_LOG("direction: ", levels[level_index][j]);
 
 		if (levels[level_index][j] > 0) {
+            //Index 1 in level data refers to the number of the treasure hut from 1-6
+            // 0 if no treasure hut             
+            bool treasurehut = (i == (levels[level_index][1] - 1));
+            BN_LOG("treasure hut? ", treasurehut);            
+            BN_LOG("cottage #", i + 1);
+            BN_LOG("direction: ", levels[level_index][j]);
+            bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
+            BN_LOG("xcor ", xcor);
+            bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
+	    	BN_LOG("ycor ", ycor);
 
             direction enumdir;
             switch(levels[level_index][j]){
@@ -108,16 +116,28 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
 
 			_cottages.emplace_back(
-				(240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120,
-				(160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80,
+				xcor,
+                ycor,
 				enumdir,
-                treasurehut
+                treasurehut,
+                sesh.load_cottage_burnination(i)
 			);
 		}
 	}
-    
+    //once it's loaded we are done with it
+    _sesh.clear_burnination_array();
+
+    _text_generator.set_left_alignment();
+    _text_generator.set_palette_item(WHITE_PALETTE);        
+    _text_generator.generate(-120, 75, "autosaved.", _autosave_text);
+    bn::blending::set_transparency_alpha(0.5);
+    for(bn::sprite_ptr &sprite : _autosave_text) { 
+        sprite.set_blending_enabled(true);
+    }
+    set_autosave_text_visible(false);
+
+
     _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());        
     _text_generator.generate(0, 55, "paused", _paused_text);
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
@@ -130,6 +150,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 void play_scene::set_paused_text_visible(bool visible){
     for(bn::sprite_ptr &sprite : _paused_text){
             sprite.set_visible(visible);
+            sprite.put_above();
     }
 }
 
@@ -142,6 +163,13 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
         sb_commentary::level_win_pause();
+    }
+    if(_autosave_visibility_time != 0){
+        ++_autosave_visibility_time;
+    }
+    if(_autosave_visibility_time > (3 SECONDS)){
+        _autosave_visibility_time = 0;
+        set_autosave_text_visible(false);
     }
 
     if(_burninate_pause_time > 0) {
@@ -161,16 +189,20 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
+        if(!_trogdor->dead() && _autosave_visibility_time == 0){
+            set_autosave_text_visible(false);
+        }
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
-        _hud.update_burninatemeter(_trogdor->get_burninating_time());
+        _hud.update_burninatemeter(_trogdor->get_burninating_time(), _trogdor->get_burninating_length());
         _hud.update_trogmeter(_trogdor->get_trogmeter());
 
-        
+        bool was_burninating = _trogdor->burninating();
+
         _trogdor->update();        
         
-        bool was_burninating = _trogdor->burninating();
+
 
         for(peasant &p : _peasants) {
             p.update();
@@ -198,6 +230,10 @@ bn::optional<scene_type> play_scene::update(){
             _burninate_pause_time = 1;
             sb_commentary::burninate();
             _overlay_text.reset(new burninate_text());
+        }else if(!_trogdor->burninating() && was_burninating){
+            //our trogmeter is at 0 now, so this is a good time to autosave
+            autosave(false);
+            BN_LOG("burninate done");
         }
 
         bool was_dead = _trogdor->dead();        
@@ -206,8 +242,12 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
-            sb_commentary::arrowed();
+            if(_sesh.get_mans() != 0){
+                sb_commentary::arrowed();
+            }
+            _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            autosave(true);
         }
 
         was_dead = _trogdor->dead();  
@@ -217,18 +257,24 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
-            sb_commentary::sworded();
+            if(_sesh.get_mans() != 0){
+                sb_commentary::sworded();
+            }
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
             if(rand() % 33 == 0){
                 str = "SORDID!";
+                //maybe add that line of s.bad saying "A sordid affair"
             }
+            _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            autosave(true);
         }
 
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
+            autosave(true);
             // _trogdor->handle_knight_collision(_troghammer);
         }
 
@@ -247,7 +293,9 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
-                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y, _sesh, true));
+                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, 
+                //temp fix for f'ed up spawnage
+               (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
             }
         }
@@ -269,7 +317,10 @@ bn::optional<scene_type> play_scene::update(){
 
 
     //START pauses the game
-    if(bn::keypad::start_pressed()){
+    //but you shouldn't be able to pause during other animations 
+    //that block input (e.g. death/burninate!/winning a level)
+    if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
+       && _win_pause_time == 0 && !_trogdor->dead()){
         _player_paused = !_player_paused;
         if(_player_paused){
             //Apply a dimming effect and display text when the game is paused.
@@ -302,6 +353,35 @@ bn::optional<scene_type> play_scene::update(){
 
     
     return result;
+}
+
+//assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
+void play_scene::autosave(bool just_died){
+    if(_sesh.get_mans() == 0){
+        bn::sram::clear(sizeof(_sesh));
+    }else{
+        session_info saved_sesh = _sesh;
+
+        for(int z = 0; z < _cottages.size(); ++z){
+            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+        }
+        if(just_died){
+            saved_sesh.die();
+        }
+
+        bn::sram::write(saved_sesh);
+        set_autosave_text_visible(true);
+        if(!just_died){
+            _autosave_visibility_time = 1;
+        }
+    }
+}
+
+void play_scene::set_autosave_text_visible(bool visible){
+    for(bn::sprite_ptr &sprite : _autosave_text) { 
+        sprite.set_visible(visible);
+        sprite.put_above();
+    }
 }
 
 bool play_scene::level_complete(){

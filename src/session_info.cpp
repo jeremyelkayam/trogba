@@ -5,17 +5,12 @@
 namespace trog {
 
 session_info::session_info() {
-
-    // _cutscene_levels.insert(100);
-    // for(int z : {4, 8, 12, 16, 20, 24, 30, 34, 38, 42, 46, 50, 100}){
-    //     _cutscene_levels.insert(z);
-    // }
     reset();
 }
 
 void session_info::score(unsigned int num_points){
-    //once we cross 200 points, you get a 1up
-    //we can see what multiple of 200 you're on with division
+    //once we cross 300 points, you get a 1up
+    //we can see what multiple of 300 you're on with division
     int old_multiple = _score/TROG_POINTS_FOR_1UP;
 
     _score += num_points;
@@ -30,11 +25,34 @@ void session_info::reset(){
     _mans = TROG_STARTING_LIVES;
     _score = 0;
     _level = TROG_STARTING_LEVEL;
-    _flagbyte = 'T'; // for TROGDOR.
+
+    _format_tag = default_format_tag();
+    _killed_by_archer = false;
+    clear_burnination_array();
 }
 bool session_info::is_valid_object(){
-    return _flagbyte == 'T';
+
+    return _format_tag == default_format_tag();
 }
+
+bn::array<char, 8> session_info::default_format_tag(){
+    bn::array<char, 8> default_format_tag;
+    bn::istring_base default_format_tag_istring(default_format_tag._data);
+    bn::ostringstream default_format_tag_stream(default_format_tag_istring);
+    default_format_tag_stream.append(TROG_FORMAT_TAG);
+    return default_format_tag;    
+}
+
+void session_info::set_cottage_burnination(unsigned short dex, bool status){
+    _cottage_burnination_status[dex] = status;
+}
+
+void session_info::clear_burnination_array(){
+    for(int z = 0; z < 6; ++z){
+        _cottage_burnination_status[z] = false;
+    }
+}
+
 
 // THERE HAS TO BE A BETTER WAY!!!! 
 bool session_info::current_level_has_cutscene(){

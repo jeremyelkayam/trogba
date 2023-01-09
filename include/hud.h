@@ -35,7 +35,7 @@ namespace trog {
             hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
-            void update_burninatemeter(unsigned int burninate_time);
+            void update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time);
 
             void hide();
             void show();

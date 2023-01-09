@@ -28,7 +28,7 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time, _autosave_visibility_time;
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;
@@ -36,6 +36,7 @@ namespace trog{
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
+        bn::vector<bn::sprite_ptr, 8> _autosave_text;
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
@@ -54,6 +55,10 @@ namespace trog{
         void set_visible(bool visible);
 
         void set_paused_text_visible(bool visible);
+
+        void set_autosave_text_visible(bool visible);
+
+        void autosave(bool just_died);
 
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);

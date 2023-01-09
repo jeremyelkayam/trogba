@@ -72,7 +72,8 @@ void peasant::set_sprite_ablaze(){
 void peasant::update(){
     entity::update();
     if(_time_dead == 1){
-       bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
+        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
+        sb_commentary::stomp_peasant();
     }
     
 
@@ -103,7 +104,6 @@ void peasant::update(){
 void peasant::stomp(){
     //cannot stomp a peasant that is already stomped.
     if(_time_dead == 0){
-        sb_commentary::stomp_peasant();
         _speed = bn::fixed(0);
         _time_dead=1;
         _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);

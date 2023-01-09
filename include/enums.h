@@ -18,7 +18,9 @@ namespace trog {
         LEVELBEAT,
         LOSE,
         MOVIE,
-        MENU
+        MENU,
+        HISCORES,
+        CREDITS
     };
     enum class direction
     {

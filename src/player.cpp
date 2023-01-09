@@ -29,9 +29,26 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
     _top_bound = TROG_COUNTRYSIDE_PLAYER_TOP_BOUND;
     _sprite.set_z_order(FRONT_ZORDER);
 
+    // LOGIC CRIBBED FROM Trogdor-Reburninated by Mips96
+    _burninate_length = TROG_BURNINATE_TIME;
+	if (_sesh.get_level() > 25) {
+		_burninate_length /= 1.3;
+	} else if (_sesh.get_level() > 20) {
+		_burninate_length /= 1.2;
+	} else if (_sesh.get_level() > 15) {
+		_burninate_length /= 1.1;
+	} else if (_sesh.get_level() > 10) {
+		_burninate_length /= 1;
+	} else if (_sesh.get_level() > 5) {
+		_burninate_length /= 0.9;
+	} else {
+		_burninate_length /= 0.7;
+	}
+    BN_LOG("burninate length for this level: ", _burninate_length);
+
+
     //todo maybe condense all the timers into one?
     // since they won't all be used at the same time
-
     if(iframes) {
         _iframes = 1;
     }else{
@@ -211,7 +228,9 @@ bool player::handle_cottage_collision(cottage &cottage){
 }
 
 void player::handle_peasant_collision(peasant &peasant){
-    if(!dead() && collides_with(peasant) && !peasant.dead()){
+    if(burninating()){
+        _breath.handle_peasant_collision(peasant);
+    }else if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
@@ -222,9 +241,6 @@ void player::handle_peasant_collision(peasant &peasant){
         }
     }
 
-    if(burninating()){
-        _breath.handle_peasant_collision(peasant);
-    }
 }
 
 void player::start_burninating(){
@@ -315,7 +331,7 @@ void player::update_win_anim(){
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
     _sprite.set_scale(2);
-    _sprite.set_item(bn::sprite_items::player);
+    // _sprite.set_item(bn::sprite_items::player);
     _sprite.put_above();
     _majesty.put_above();
     

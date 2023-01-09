@@ -61,8 +61,8 @@ void hud::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visi
 }
 
 
-void hud::update_burninatemeter(unsigned int burninate_time){
-    if(burninate_time == 0) { 
+void hud::update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time){
+    if(current_burninate_time == 0) { 
         _burninatemeter.set_visible(false);
         _burninatemeter_invert.set_visible(false);
         set_sprite_arr_visible(_trogmeter_sprites, true);
@@ -70,8 +70,8 @@ void hud::update_burninatemeter(unsigned int burninate_time){
         BN_LOG("burninate meter visible");
         _burninatemeter.set_visible(true);
         _burninatemeter_invert.set_visible(true);
-        bn::fixed time_percentage = burninate_time;
-        time_percentage /= TROG_BURNINATE_TIME;
+        bn::fixed time_percentage = current_burninate_time;
+        time_percentage /= total_burninate_time;
         _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
         set_sprite_arr_visible(_trogmeter_sprites, false);
     }

@@ -126,18 +126,21 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         }
     }else if(_sesh.get_level() == 39){
         write_text("forbidden peasant love");
-        //todo: add that heart
         for(int z = 0; z < 2 ; ++z){
             peasant *p = new peasant(40 + 20*z, 0, 0, 0, direction::DOWN);  
             p->move_to(_cutscene_length / 2, -60 + 20*z, 0);      
             _cutscene_objects.emplace_back(p);
         }
-        
+        heart *h = new heart(50, -10);
+        h->move_to(_cutscene_length / 2, -50, -10);          
+        _cutscene_objects.emplace_back(h); 
+
+
     }else if(_sesh.get_level() == 43){
         write_text("2 cottages");
 
-        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false));
-        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false));
+        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false, false));
+        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false, false));
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");
@@ -246,7 +249,7 @@ bn::optional<scene_type> movie_scene::update(){
     }
 
     if(_sesh.get_level() == 35){
-        // meh looks ok 
+        // trogdors race. looks ok, could improve
         if(_timer % 40 == 0){
             int _faster_player = (_timer / 40) % 2;
             _cutscene_objects.at(_faster_player)->move_by(1.5,0);
@@ -254,13 +257,19 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
     if(_sesh.get_level() == 39){
+        //forbidden love
         if(_timer == _cutscene_length / 4){
             knight *k = new knight(140, 0, false);
             //todo make him pause
-            k->move_to_and_back(_cutscene_length / 2, -80, 0);
+            k->move_to(_cutscene_length / 4, -80, 0);
             _cutscene_objects.emplace_back(k);
         }else if(_timer == _cutscene_length / 2){
+            _cutscene_objects.at(3)->set_horizontal_flip(true);
+        }else if(_timer == _cutscene_length / 2 + 20){
             _cutscene_objects.at(0)->move_to(_cutscene_length / 4, 160, 0);
+            _cutscene_objects.at(3)->move_to(_cutscene_length / 4, 140, 0);
+        }else if(_timer == 3 * _cutscene_length / 4){
+            ((heart *) _cutscene_objects.at(2).get())->dissipate();
         }
     }
 
@@ -410,7 +419,7 @@ bn::optional<scene_type> movie_scene::update(){
         result = scene_type::PLAY;
     }else if(cutscene_over() && _sesh.get_level() == 101){
         _sesh.reset();
-        result = scene_type::INSTRUCTIONS;
+        result = scene_type::CREDITS;
     }
 
     _timer++;

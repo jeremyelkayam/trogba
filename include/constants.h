@@ -2,7 +2,7 @@
 
 #define SECONDS * 60
 
-#define DEBUG
+// #define DEBUG
 
 #define TROG_TITLE_TEXT_X -85
 #define TROG_TITLE_TEXT_Y -62
@@ -16,6 +16,7 @@
 
 #define TROG_STARTING_LIVES 3
 #define TROG_STARTING_LEVEL 1
+#define TROG_FORMAT_TAG "TROGv10"
 #define TROG_POINTS_FOR_1UP 300
 
 #define TROG_COUNTRYSIDE_LEFT_BOUND -120
@@ -30,6 +31,10 @@
 #define TROG_KNIGHT_TOP_BOUND -58
 #define TROG_KNIGHT_BOTTOM_BOUND 69
 
+#define RED_PALETTE bn::sprite_items::trogdor_variable_8x16_font_red.palette_item()
+#define WHITE_PALETTE bn::sprite_items::trogdor_variable_8x16_font.palette_item()
+#define BROWN_PALETTE bn::sprite_items::trogdor_variable_8x16_font_brown.palette_item()
+#define GRAY_PALETTE bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
@@ -37,13 +42,13 @@
 
 #define TROG_PLAYER_SPAWN_X 40
 #define TROG_PLAYER_SPAWN_Y 0
-#define TROG_PLAYER_WIDTH 20
+#define TROG_PLAYER_WIDTH 24
 #define TROG_PLAYER_HEIGHT 40
 
-#define TROG_PLAYER_SPEED 1
+#define TROG_PLAYER_SPEED 0.87
 
 // The length of burnination in frames.
-#define TROG_BURNINATE_TIME (10 SECONDS)
+#define TROG_BURNINATE_TIME (6 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)
 #define TROG_BURNINATE_ANIM_TIME_BTWN_FRAMES 6 
 #define TROG_WIN_PAUSETIME 150
@@ -81,12 +86,12 @@
 
 // TODO: also change this 
 #define TROG_PEASANT_MIN_WALK_DISTANCE 2
-#define TROG_PEASANT_SPEED 0.5
+#define TROG_PEASANT_SPEED TROG_PLAYER_SPEED*0.5
 #define TROG_PEASANT_STOMP_SCORE 2
 
 #define TROG_KNIGHT_WIDTH 11
 #define TROG_KNIGHT_HEIGHT 15
-#define TROG_KNIGHT_SPEED 0.5
+#define TROG_KNIGHT_SPEED TROG_PLAYER_SPEED*0.6
 
 #define TROG_ARCHER_DRAWBOW_WAITTIME 60
 #define TROG_ARCHER_SHOOT_WAITTIME 90
@@ -99,7 +104,7 @@
 #define TROG_ARCHER_MIN_SPAWN_INTERVAL (15 SECONDS)
 #define TROG_ARCHER_MAX_SPAWN_INTERVAL (30 SECONDS)
 
-#define TROG_ARROW_SPEED TROG_PLAYER_SPEED*1.25
+#define TROG_ARROW_SPEED TROG_PLAYER_SPEED*1.75
 #define TROG_ARROW_WIDTH 10
 #define TROG_ARROW_HEIGHT 3
 
@@ -112,7 +117,7 @@
 #define TROG_MONEYBAG_HEIGHT 15
 #define TROG_MONEYBAG_POINTS 50
 
-#define TROG_DEFAULT_VOLUME 1
+#define TROG_DEFAULT_VOLUME 0.75
 
 #define TROG_GAMEOVER_BG_X 8
 #define TROG_GAMEOVER_BG_Y 43
@@ -122,5 +127,5 @@
 
 #define TROG_GAMEOVER_SECRET_TEXT_X -50
 #define TROG_GAMEOVER_SECRET_TEXT_Y 76
-#define TROG_GAMEOVER_SECRET_SCORE 3000
-#define TROG_GAMEOVER_BEAT_THAT_SCORE 2000
+#define TROG_GAMEOVER_SECRET_SCORE 2000
+#define TROG_GAMEOVER_BEAT_THAT_SCORE 1000

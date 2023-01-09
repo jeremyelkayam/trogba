@@ -10,6 +10,7 @@
 #include "peasant.h"
 #include "kerrek.h"
 #include "strongbad.h"
+#include "heart.h"
 #include "session_info.h"
 
 
