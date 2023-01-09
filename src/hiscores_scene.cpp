@@ -166,7 +166,6 @@ void hiscores_scene::update_name_entry(){
     _selectable_letters_index = (_selectable_letters_index + _selectable_letters.max_size()) % _selectable_letters.max_size();
 
     current_entry.set_name_char(_selectable_letters[_selectable_letters_index], _string_index);
-    BN_LOG(current_entry.get_name());
 }
 void hiscores_scene::end_name_entry(){
     _table_index = -1;
@@ -193,7 +192,6 @@ void hiscores_scene::load_high_scores_table(){
     bn::sram::read_offset(loaded_format_tag, sizeof(_sesh));
 
     if(_format_tag == loaded_format_tag){
-        BN_LOG("memory is formatted. loading now");
         bn::sram::read_offset(_high_scores_table, sizeof(_sesh) + sizeof(_format_tag));
     }
 }
@@ -208,7 +206,7 @@ high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, uns
 
     bn::istring_base name_istring(_name._data);
     bn::ostringstream name_stream(name_istring);
-    name_stream.append(name);    
+    name_stream.append(name);
 }
 
 high_score_entry::high_score_entry() : 
@@ -217,7 +215,7 @@ high_score_entry::high_score_entry() :
 
     bn::istring_base name_istring(_name._data);
     bn::ostringstream name_stream(name_istring);
-    name_stream.append("DUMMY");    
+    name_stream.append("DUMMY");
 }
 
 bn::string<9> high_score_entry::get_name(){

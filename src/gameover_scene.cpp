@@ -19,9 +19,11 @@ namespace trog {
 
 gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
+        // _menu(bn::regular_bg_items::),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()) {
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
+        _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
         for(int z = 0; z < 3; ++z){
@@ -43,7 +45,7 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
             bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * 0.2);
         }else{
             bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-        } 
+        }
     }
 
     //Once you get a game over, you cannot restore your progress.
@@ -61,8 +63,25 @@ bn::optional<scene_type> gameover_scene::update(){
     bn::optional<scene_type> result;
     
     if(bn::keypad::a_pressed()){
-        _sesh.reset();
-        result = scene_type::PLAY;
+        // if(!_menu.visible()){
+        //     _menu.set_visible(true);
+        // }else{
+        //     switch(_menu_option){
+        //         case 0:
+        //             _sesh.reset();
+        //             result = scene_type::PLAY;
+        //             break;
+        //         case 1:
+        //             result = scene_type::HISCORES;
+        //             break;
+        //         case 2:
+        //             _sesh.reset();
+        //             result = scene_type::INSTRUCTIONS;
+        //             break;
+        //         default:
+        //         break;                
+        //     }
+        // }
     }
 
     return result;
