@@ -12,4 +12,4 @@ So I'm not actually done with this jame. But if you want to play the unfinished 
 ## Credits
 - Original videro game by Videlectrix (Mike Chapman, Matt Chapman, Jonathan Howe)
 - Board game by Boardelectrix (Mike Chapman, Matt Chapman, James Ernest)
-- Thanks to Mips96 and their [Trogdor Reburninated](https://github.com/Mips96/Trogdor-Reburninated) project for code reference & helping me understand how this game actually works
+- Thanks to Mips96 and their [Trogdor Reburninated](https://github.com/Mips96/Trogdor-Reburninated) project for code reference (my logic to load levels is entirely copied from them) & helping me understand how this game actually works
