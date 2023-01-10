@@ -19,7 +19,7 @@ namespace trog {
 
             bn::fixed_point _direction;
  
-            bn::sprite_animate_action<4> _walkcycle;
+            bn::sprite_animate_action<8> _walkcycle;
             bn::optional<bn::sprite_animate_action<7>> _flex;
             
             unsigned short _trogmeter;

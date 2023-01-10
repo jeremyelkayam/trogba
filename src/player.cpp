@@ -14,7 +14,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _speed(TROG_PLAYER_SPEED),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+                    _sprite, 2, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -252,13 +252,13 @@ void player::start_burninating(){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !invincible()) { 
-        die(6);
+        die(10);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) &&  !invincible()) { 
-        die(4);
+        die(8);
         archer.destroy_arrow();
     }
 }
@@ -271,17 +271,17 @@ void player::die(short frame_no){
 }
 
 void player::pass_out(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 12);
+    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 16);
 }
 
 void player::thumb_it_up(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 11);
+    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 15);
 }
 
 void player::flex(){
     _flex = bn::create_sprite_animate_action_forever(
                 _sprite, 5, bn::sprite_items::player.tiles_item(), 
-                7, 8, 9, 10, 10, 9, 8);
+                11, 12, 13, 14, 14, 13, 12);
 }
 void player::update_anim(){
     entity::update_anim();
