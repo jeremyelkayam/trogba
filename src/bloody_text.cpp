@@ -39,6 +39,15 @@ void bloody_text::update(){
     }
 }
 
+void bloody_text::set_blending_enabled(bool enabled){
+    for(blood_droplet &drop : _droplets){
+        drop.set_blending_enabled(enabled);
+    }
+    for(bn::sprite_ptr &sprite : _text_sprites){
+        sprite.set_blending_enabled(enabled);
+    }
+}
+
 blood_droplet::blood_droplet(bn::sprite_item item, int xcor, int ycor, int anim_index) : 
     _droplet(item.create_sprite(xcor, ycor)),
     _anim(bn::create_sprite_animate_action_forever(

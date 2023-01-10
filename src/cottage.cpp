@@ -69,6 +69,7 @@ bool cottage::burninate(){
                     _flames.value(), 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3);
 
         _time_burning=1;
+        _flames->set_z_order(MID_ZORDER);
         sb_commentary::ignite_cottage();
         bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
         return true;

@@ -14,6 +14,7 @@ namespace trog {
         public:
             void update();
             blood_droplet(bn::sprite_item item, int xcor, int ycor, int anim_index);
+            void set_blending_enabled(bool enabled){_droplet.set_blending_enabled(enabled);}
     };
     class bloody_text : public big_text { 
         private:
@@ -24,6 +25,7 @@ namespace trog {
             bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
 			virtual void update() final;
             virtual void set_visible(bool visible) final;
+            void set_blending_enabled(bool enabled);
     };
 
 }
