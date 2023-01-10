@@ -27,6 +27,7 @@
 #include "menu_scene.h"
 #include "hiscores_scene.h"
 #include "credits_scene.h"
+#include "devs_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -64,6 +65,11 @@ int main()
             bn::sound::stop_all();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
             switch(*next_scene){
+                case trog::scene_type::DEVS: { 
+                    hud.hide();
+                    scene.reset(new trog::devs_scene());
+                    break;
+                }
                 case trog::scene_type::LOGO: { 
                     hud.hide();
                     scene.reset(new trog::logo_scene(sesh));
