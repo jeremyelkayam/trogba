@@ -28,8 +28,23 @@ void session_info::reset(){
 
     _format_tag = default_format_tag();
     _killed_by_archer = false;
+    _visited_treasure_hut = false;
     clear_burnination_array();
 }
+
+void session_info::set_level(unsigned short level){
+    _visited_treasure_hut = false;
+    _level = level;
+}
+
+void session_info::visit_treasure_hut(){
+    _visited_treasure_hut = true;
+}
+
+bool session_info::can_visit_treasure_hut(){
+    return !_visited_treasure_hut;
+}
+
 bool session_info::is_valid_object(){
 
     return _format_tag == default_format_tag();

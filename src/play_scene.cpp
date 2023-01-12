@@ -86,7 +86,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 		if (levels[level_index][j] > 0) {
             //Index 1 in level data refers to the number of the treasure hut from 1-6
             // 0 if no treasure hut             
-            bool treasurehut = (i == (levels[level_index][1] - 1));
+            bool treasurehut = (i == (levels[level_index][1] - 1)) && _sesh.can_visit_treasure_hut();
             BN_LOG("treasure hut? ", treasurehut);            
             BN_LOG("cottage #", i + 1);
             BN_LOG("direction: ", levels[level_index][j]);
@@ -347,6 +347,9 @@ bn::optional<scene_type> play_scene::update(){
             result = scene_type::BONUS;
             //this marks the cottage as visited so that we can no longer return
             c.visit();
+            //this marks it as visited if we autosave
+            _sesh.visit_treasure_hut();
+
             set_visible(false);
         }
     }
