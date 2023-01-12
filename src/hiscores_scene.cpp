@@ -117,7 +117,6 @@ bn::optional<scene_type> hiscores_scene::update(){
         if(bn::keypad::start_pressed()){
             end_name_entry();
         }
-        draw_high_scores_table();
     }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::INSTRUCTIONS;
     }
@@ -132,6 +131,12 @@ void hiscores_scene::update_name_entry(){
     high_score_entry &current_entry = _high_scores_table[_table_index];
     
     BN_ASSERT(0 <= _table_index && _table_index < 8,"Valid index required...");
+
+    //Redraw the table when strictly necessary (e.g. changing letters
+    // or when the cursor blinks)
+    if(bn::keypad::any_pressed || _timer == 0 || _timer == 15){
+        draw_high_scores_table();        
+    }
 
     if(bn::keypad::a_pressed()){
         ++_string_index;

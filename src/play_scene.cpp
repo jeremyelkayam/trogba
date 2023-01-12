@@ -353,8 +353,6 @@ bn::optional<scene_type> play_scene::update(){
             set_visible(false);
         }
     }
-
-    
     return result;
 }
 
