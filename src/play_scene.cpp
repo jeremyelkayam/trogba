@@ -262,9 +262,12 @@ bn::optional<scene_type> play_scene::update(){
             }
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
-            if(rand() % 33 == 0){
+            short rand_num = rand();
+            if(rand_num % 100 == 0){
                 str = "SORDID!";
                 //maybe add that line of s.bad saying "A sordid affair"
+            }else if(rand_num % 100 == 1){
+                str = "SORTED!";
             }
             _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
