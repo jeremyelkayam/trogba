@@ -262,7 +262,7 @@ bn::optional<scene_type> play_scene::update(){
             }
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
-            short rand_num = rand();
+            short rand_num = rand() % 100;
             if(rand_num % 100 == 0){
                 str = "SORDID!";
                 //maybe add that line of s.bad saying "A sordid affair"

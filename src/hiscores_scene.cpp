@@ -12,9 +12,10 @@ namespace trog {
 
 hiscores_scene::hiscores_scene(session_info &sesh) : 
         _selectable_letters({'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
-                             'O','P','Q','R','S','T','U','V','W','X','Y','Z',' ','!','?'}),
+                             'O','P','Q','R','S','T','U','V','W','X','Y','Z','!','?', ' '}),
         _sesh(sesh),
         _text_generator(fixed_8x16_sprite_font),
+        _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(0,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(
             {high_score_entry("THE CHEAT", 100, 10000),
@@ -27,7 +28,7 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
             high_score_entry("COACH Z", 1, 10)}),
         _table_index(-1),
         _string_index(0),
-        _selectable_letters_index(26),
+        _selectable_letters_index(28),
         _timer(0) {
     
     //Initialize our format tag
@@ -52,8 +53,14 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
                 _table_index=z;
             }
         }
+        //move our cursor into position
+        _cursor_sprite.set_y(-42 + _table_index*15);
     }
+
+
     BN_LOG("score entry at index ", _table_index);
+    _cursor_sprite.set_palette(BROWN_PALETTE);
+    _cursor_sprite.set_visible(false);
 
     draw_high_scores_table();
     _sesh.reset();
@@ -72,17 +79,13 @@ void hiscores_scene::draw_high_scores_table(){
 
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, -72, title_text, _text_sprites);
+    _text_generator.generate(0, -72, title_text, _header_sprites);
 
     _text_generator.set_palette_item(BROWN_PALETTE);
     _text_generator.generate(-52, -55, "name", _text_sprites);
     _text_generator.generate(16, -55, "level", _text_sprites);
     _text_generator.generate(68, -55, "score", _text_sprites);
 
-    if(_table_index != -1 && _timer < 15){
-        //add an underscore to show where you are in name entry
-        _text_generator.generate(-70 + _string_index * 8, -42 + _table_index*15, "_", _text_sprites);    
-    }
 
     for(int z = 0; z < _high_scores_table.size(); ++z){
         _text_generator.set_right_alignment();
@@ -113,20 +116,39 @@ bn::optional<scene_type> hiscores_scene::update(){
     bn::optional<scene_type> result;
 
     if(_table_index != -1){
+        draw_name_entry();
         update_name_entry();
         if(bn::keypad::start_pressed()){
             end_name_entry();
         }
     }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::INSTRUCTIONS;
+        _text_sprites.clear();
     }
     
     return result;
 }
 
+void hiscores_scene::draw_name_entry(){
+    BN_ASSERT(_table_index != -1);
+    _name_entry_sprites.clear();
+    _text_generator.set_left_alignment();
+
+    if(_timer == 15){
+        _cursor_sprite.set_visible(true);
+    }else if(_timer == 0){
+        _cursor_sprite.set_visible(false);
+    }
+    _cursor_sprite.set_x(-70 + _string_index * 8);
+
+    _text_generator.generate(-74, -43 + _table_index*15, _high_scores_table.at(_table_index).get_name(), _name_entry_sprites);   
+}
+
 void hiscores_scene::update_name_entry(){
     ++_timer;
-    if(_timer > 30) _timer = 0;
+    if(_timer > 30){
+        _timer = 0;
+    }
 
     high_score_entry &current_entry = _high_scores_table[_table_index];
     
@@ -134,9 +156,7 @@ void hiscores_scene::update_name_entry(){
 
     //Redraw the table when strictly necessary (e.g. changing letters
     // or when the cursor blinks)
-    if(bn::keypad::any_pressed() || _timer == 0 || _timer == 15){
-        draw_high_scores_table();        
-    }
+
 
     if(bn::keypad::a_pressed()){
         ++_string_index;
@@ -155,7 +175,7 @@ void hiscores_scene::update_name_entry(){
     }else if(bn::keypad::b_pressed()){
         if(_string_index != 0){
             --_string_index;
-            _selectable_letters_index = 26;
+            _selectable_letters_index = 28;
         }
     }else if(bn::keypad::left_pressed()){
         if(_string_index != 0){
@@ -173,9 +193,18 @@ void hiscores_scene::update_name_entry(){
 
     current_entry.set_name_char(_selectable_letters[_selectable_letters_index], _string_index);
 }
+
+
 void hiscores_scene::end_name_entry(){
     _table_index = -1;
     save_high_scores_table();
+    _cursor_sprite.set_visible(false);
+
+    _header_sprites.clear();
+    
+    _text_generator.set_center_alignment();
+    _text_generator.set_palette_item(RED_PALETTE);
+    _text_generator.generate(0, -72, "YE OLDE SCROLL OF HI-SCORES", _header_sprites);
 }
 
 
@@ -184,11 +213,11 @@ void hiscores_scene::set_selectable_chars_index_to_current_char_in_str(){
     if('A' <= current_char && current_char <= 'Z' ){
         _selectable_letters_index = current_char - 65;
     }else if(current_char == ' '){
-        _selectable_letters_index = 26;
-    }else if(current_char == '!'){
-        _selectable_letters_index = 27;
-    }else if(current_char == '?'){
         _selectable_letters_index = 28;
+    }else if(current_char == '!'){
+        _selectable_letters_index = 26;
+    }else if(current_char == '?'){
+        _selectable_letters_index = 27;
     }
 }
 

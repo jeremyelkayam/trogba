@@ -36,6 +36,8 @@ namespace trog{
         bn::sprite_text_generator _text_generator;
 
         bn::vector<bn::sprite_ptr, 128> _text_sprites;
+        bn::vector<bn::sprite_ptr, 8> _name_entry_sprites, _header_sprites;
+        bn::sprite_ptr _cursor_sprite;
         bn::regular_bg_ptr _scroll;
         
         bn::array<high_score_entry, 8> _high_scores_table;
@@ -47,6 +49,7 @@ namespace trog{
         void draw_high_scores_table();
         void update_name_entry();
         void end_name_entry();
+        void draw_name_entry();
         void set_selectable_chars_index_to_current_char_in_str();
         
         short _table_index, _string_index, _selectable_letters_index;

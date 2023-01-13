@@ -43,6 +43,7 @@ int main()
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     trog::session_info sesh;
+    sesh.score(1600);
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
@@ -82,6 +83,7 @@ int main()
                 }
                 case trog::scene_type::INSTRUCTIONS: { 
                     hud.hide();
+                    scene.reset();
                     scene.reset(new trog::instructions_scene(sesh, text_generator));
                     break;
                 }
