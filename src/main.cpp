@@ -113,6 +113,7 @@ int main()
                 }
                 case trog::scene_type::LOSE: { 
                     hud.show();
+                    scene.reset();
                     scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }
