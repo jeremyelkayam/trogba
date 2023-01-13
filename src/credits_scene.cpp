@@ -29,7 +29,7 @@ void credits_scene::setup_credits(){
 
     bn::string<64> butano_str;
     bn::ostringstream butano_string_stream(butano_str);
-    butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor();
+    butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor() << "." << bn::version::patch();
 
     bn::string<64> credits[] = {
         "The GBA Game",

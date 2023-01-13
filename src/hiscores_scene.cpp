@@ -134,7 +134,7 @@ void hiscores_scene::update_name_entry(){
 
     //Redraw the table when strictly necessary (e.g. changing letters
     // or when the cursor blinks)
-    if(bn::keypad::any_pressed || _timer == 0 || _timer == 15){
+    if(bn::keypad::any_pressed() || _timer == 0 || _timer == 15){
         draw_high_scores_table();        
     }
 
