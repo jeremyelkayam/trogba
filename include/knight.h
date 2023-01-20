@@ -20,6 +20,8 @@ namespace trog {
 			unsigned short _rotation;
             bn::fixed _speed;
 
+            short _cycletime;
+
         	bn::random _random; 
             bn::sprite_animate_action<4> _walkcycle;
 

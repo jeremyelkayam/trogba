@@ -8,6 +8,7 @@ knight::knight(int xcor, int ycor, bool facingRight) :
     _timer(0),
     _rotation(0),
     _speed(TROG_KNIGHT_SPEED),
+    _cycletime(TROG_KNIGHT_MOVE_CYCLE_TIME),
     //todo: this is incomplete; fix it plz
     _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 20, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3))
@@ -26,7 +27,6 @@ void knight::update(){
     entity::update();
     _walkcycle.update();
     ++_timer;
-    short _cycletime = 180;
 
 
     if(_timer == _cycletime) {

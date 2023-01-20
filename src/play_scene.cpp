@@ -143,8 +143,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     set_paused_text_visible(false);
 
     _knights.emplace_front(-59, 31, false);
-    _knights.emplace_front(43,-40,true);
-    // _troghammer = troghammer(0, 0, false);
+    _knights.emplace_front(33,-50,true);
+    _troghammer = troghammer(0, 0, false);
 }
 
 void play_scene::set_paused_text_visible(bool visible){
