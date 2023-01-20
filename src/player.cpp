@@ -256,6 +256,12 @@ void player::handle_knight_collision(knight &knight){
     }
 }
 
+void player::handle_troghammer_collision(troghammer &troghammer){
+    if(collides_with(troghammer) && !invincible()) { 
+        die(9);
+    }
+}
+
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) &&  !invincible()) { 
         die(8);

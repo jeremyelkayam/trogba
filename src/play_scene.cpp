@@ -277,8 +277,12 @@ bn::optional<scene_type> play_scene::update(){
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
-            autosave(true);
-            // _trogdor->handle_knight_collision(_troghammer);
+            _trogdor->handle_troghammer_collision(*_troghammer.get());
+            if(_trogdor->dead() && !was_dead){
+                //todo: add a secret animation where he's passed out drunk
+                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+                autosave(true);
+            }
         }
 
 
