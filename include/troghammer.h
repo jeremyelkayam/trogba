@@ -11,8 +11,12 @@
 namespace trog {
     class troghammer : public knight { 
         private:
+            // The amount of time until the troghammer spawns.
+            unsigned short _waiting_time;
 
         public:
-            troghammer(int xcor, int ycor, bool facingRight);
+            troghammer(int xcor, int ycor, bool facingRight, int level);
+            virtual void update() final;
+            unsigned short get_waiting_time() {return _waiting_time;}
     };
 }

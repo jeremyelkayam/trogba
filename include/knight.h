@@ -30,7 +30,7 @@ namespace trog {
             
         public:
             knight(int xcor, int ycor, bool facingRight);
-			virtual void update() final;
+			virtual void update();
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
     };
