@@ -18,6 +18,16 @@
 
 namespace trog{
 
+    class troghammer_sound{
+        private:
+            unsigned short _phrase;
+            unsigned short _timer;
+            unsigned short _length;
+        public:
+            troghammer_sound(unsigned short phrase);
+            bool done() {return _timer > _length;}
+            void update();
+    };
 
     class play_scene : public scene{ 
     private:
@@ -46,6 +56,7 @@ namespace trog{
         //there will be at most 2 knights: red knight, blue knight.
         bn::forward_list<knight, 2> _knights;
         bn::optional<troghammer> _troghammer;
+        bn::optional<troghammer_sound> _th_sound;
 
         bool level_complete();
 

@@ -38,7 +38,7 @@
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 10
+#define TROG_TROGMETER_MAX 1
 
 #define TROG_PLAYER_SPAWN_X 40
 #define TROG_PLAYER_SPAWN_Y 0

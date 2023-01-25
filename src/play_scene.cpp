@@ -236,7 +236,8 @@ bn::optional<scene_type> play_scene::update(){
             if(!_troghammer){
                 //spawn in the troghammer
                 _troghammer = troghammer(0, 0, false, _sesh.get_level());  
-                _hud.scroll_text("THE TROGHAMMER STIRS...");         
+                _hud.scroll_text("THE TROGHAMMER STIRS...");   
+                _th_sound = troghammer_sound(0);      
             }
         }
 
@@ -287,6 +288,10 @@ bn::optional<scene_type> play_scene::update(){
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
                 autosave(true);
             }
+        }
+        if(_th_sound){
+            _th_sound->update();
+            if(_th_sound->done()) _th_sound.reset();
         }
 
 
@@ -423,6 +428,33 @@ void play_scene::set_visible(bool visible){
 
     _countryside.set_visible(visible);
 
+}
+
+troghammer_sound::troghammer_sound(unsigned short phrase) : 
+    _phrase(phrase), 
+    _timer(0),
+    _length(70) {
+    bn::sound_items::troghammer.play(1);
+}
+
+void troghammer_sound::update(){
+    ++_timer;
+    if(_timer == _length){
+        switch(_phrase){
+            case 0:
+                bn::sound_items::troghammer_alert.play(1);
+            break;
+            case 1:
+                bn::sound_items::troghammer_awake.play(1);
+            break;
+            case 2:
+                bn::sound_items::troghammer_coming.play(1);
+            break;
+            case 3:
+                bn::sound_items::troghammer_arrived.play(1);
+            break;
+        }
+    }
 }
 
 
