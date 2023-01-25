@@ -144,7 +144,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(33,-50,true);
-    _troghammer = troghammer(0, 0, false, _sesh.get_level());
 }
 
 void play_scene::set_paused_text_visible(bool visible){
@@ -234,6 +233,10 @@ bn::optional<scene_type> play_scene::update(){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
             BN_LOG("burninate done");
+            if(!_troghammer){
+                //spawn in the troghammer
+                _troghammer = troghammer(0, 0, false, _sesh.get_level());            
+            }
         }
 
         bool was_dead = _trogdor->dead();        
