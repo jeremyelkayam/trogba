@@ -18,6 +18,7 @@
 
 namespace trog{
 
+
     class play_scene : public scene{ 
     private:
         

@@ -235,7 +235,8 @@ bn::optional<scene_type> play_scene::update(){
             BN_LOG("burninate done");
             if(!_troghammer){
                 //spawn in the troghammer
-                _troghammer = troghammer(0, 0, false, _sesh.get_level());            
+                _troghammer = troghammer(0, 0, false, _sesh.get_level());  
+                _hud.scroll_text("THE TROGHAMMER STIRS...");         
             }
         }
 
