@@ -232,10 +232,10 @@ bn::optional<scene_type> play_scene::update(){
         }else if(!_trogdor->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
-            BN_LOG("burninate done");
-            if(!_troghammer){
+            BN_LOG("burninate done. troghammer on? ", _sesh.troghammer_enabled());
+            if(!_troghammer && _sesh.troghammer_enabled()){
                 //spawn in the troghammer
-                _troghammer = troghammer(0, 0, false, _sesh.get_level());  
+                _troghammer = troghammer(true, _sesh.get_level());  
                 _hud.scroll_text("THE TROGHAMMER STIRS...");   
                 _th_sound = troghammer_sound(0);      
             }
@@ -282,7 +282,11 @@ bn::optional<scene_type> play_scene::update(){
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
-            _trogdor->handle_troghammer_collision(*_troghammer.get());
+
+            if(_troghammer->in_play()){
+                _trogdor->handle_troghammer_collision(*_troghammer.get());
+            }
+
             if(_trogdor->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
@@ -452,6 +456,9 @@ void troghammer_sound::update(){
             break;
             case 3:
                 bn::sound_items::troghammer_arrived.play(1);
+            break;
+            default:
+                BN_ERROR("Invalid phrase ID passed into troghammer_sound: ", _phrase);
             break;
         }
     }
