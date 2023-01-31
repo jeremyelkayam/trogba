@@ -24,5 +24,9 @@ namespace trog {
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
             bool in_play(){return _waiting_time == 0;}
+
+            bool awake_alert(){return _waiting_time == _initial_waiting_time * 2 / 3;}
+            bool arrived_alert() {return _waiting_time == 1;}
+            bool coming_alert(){return _waiting_time == _initial_waiting_time / 3;}
     };
 }

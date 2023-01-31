@@ -292,6 +292,17 @@ bn::optional<scene_type> play_scene::update(){
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
                 autosave(true);
             }
+
+            if(_troghammer->awake_alert()){
+                _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
+                _th_sound = troghammer_sound(1);                      
+            }else if(_troghammer->coming_alert()){
+                _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
+                _th_sound = troghammer_sound(2);                      
+            }else if(_troghammer->arrived_alert()){
+                _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
+                _th_sound = troghammer_sound(3);      
+            }
         }
         if(_th_sound){
             _th_sound->update();
