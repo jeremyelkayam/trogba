@@ -38,12 +38,12 @@
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved
-#define TROG_TROGMETER_MAX 1
+#define TROG_TROGMETER_MAX 10
 
 #define TROG_PLAYER_SPAWN_X 40
 #define TROG_PLAYER_SPAWN_Y 0
 #define TROG_PLAYER_WIDTH 24
-#define TROG_PLAYER_HEIGHT 40
+#define TROG_PLAYER_HEIGHT 34
 
 #define TROG_PLAYER_SPEED bn::fixed(0.87)
 
@@ -88,14 +88,16 @@
 // TODO: change this to be more like the real trogdor
 #define TROG_PEASANT_MIN_SPAWN_INTERVAL 40
 #define TROG_PEASANT_MAX_SPAWN_INTERVAL 210
+#define TROG_PEASANT_WIDTH 8
+#define TROG_PEASANT_HEIGHT 16
 
 // TODO: also change this 
 #define TROG_PEASANT_MIN_WALK_DISTANCE 2
 #define TROG_PEASANT_SPEED TROG_PLAYER_SPEED*bn::fixed(0.5)
 #define TROG_PEASANT_STOMP_SCORE 2
 
-#define TROG_KNIGHT_WIDTH 11
-#define TROG_KNIGHT_HEIGHT 16
+#define TROG_KNIGHT_WIDTH 9
+#define TROG_KNIGHT_HEIGHT 18
 #define TROG_RED_KNIGHT_SPAWN_X -59
 #define TROG_RED_KNIGHT_SPAWN_Y 31
 #define TROG_BLUE_KNIGHT_SPAWN_X 33

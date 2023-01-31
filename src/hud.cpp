@@ -70,7 +70,6 @@ void hud::update_burninatemeter(unsigned int current_burninate_time, unsigned in
             _burninatemeter_invert.set_visible(false);
             set_sprite_arr_visible(_trogmeter_sprites, true);
         }else{
-            BN_LOG("burninate meter visible");
             _burninatemeter.set_visible(true);
             _burninatemeter_invert.set_visible(true);
             bn::fixed time_percentage = current_burninate_time;
