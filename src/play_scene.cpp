@@ -257,7 +257,7 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _trogdor->dead();  
         for(knight &k : _knights){
-            k.update();
+            // k.update();
             _trogdor->handle_knight_collision(k);
         }
         

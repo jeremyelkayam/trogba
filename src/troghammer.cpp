@@ -33,10 +33,29 @@ troghammer::troghammer(bool facingRight, int level) :
 }
 
 void troghammer::update(){
+
+    if(_waiting_time == _initial_waiting_time / 2) {
+        set_x(TROG_COUNTRYSIDE_RIGHT_BOUND);
+        _sprite.set_scale(0.5);
+        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
+        _speed = -_speed;
+    }
+
+     if(_waiting_time == 1){
+        set_y(TROG_COUNTRYSIDE_TOP_BOUND + 10);
+        set_x(0);
+        _sprite.set_scale(1);
+        _speed = -_speed;
+     }
+
     if(_waiting_time > 0){
         --_waiting_time;
         BN_LOG("waiting time for troghammer", _waiting_time);
         set_x(_pos.x() + _speed * _sprite.vertical_scale());
+        if(_pos.x().floor_integer() < 120 && 
+            _pos.x().floor_integer() > -120){
+            set_y(daytime_path[_pos.x().floor_integer() + 120]);
+        }
         _walkcycle.update();
     }else{
         knight::update();

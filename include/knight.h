@@ -26,7 +26,7 @@ namespace trog {
             bn::sprite_animate_action<4> _walkcycle;
 
 			void change_direction();
-            virtual void update_anim() final;
+            void update_anim() override final;
             
         public:
             knight(int xcor, int ycor, bool facingRight);
