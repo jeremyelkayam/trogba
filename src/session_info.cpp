@@ -29,7 +29,9 @@ void session_info::reset(){
     _format_tag = default_format_tag();
     _killed_by_archer = false;
     _visited_treasure_hut = false;
+    _troghammer = true;
     clear_burnination_array();
+
 }
 
 void session_info::set_level(unsigned short level){

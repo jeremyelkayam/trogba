@@ -144,7 +144,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(33,-50,true);
-    _troghammer = troghammer(0, 0, false);
 }
 
 void play_scene::set_paused_text_visible(bool visible){
@@ -233,7 +232,13 @@ bn::optional<scene_type> play_scene::update(){
         }else if(!_trogdor->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
-            BN_LOG("burninate done");
+            BN_LOG("burninate done. troghammer on? ", _sesh.troghammer_enabled());
+            if(!_troghammer && _sesh.troghammer_enabled()){
+                //spawn in the troghammer
+                _troghammer = troghammer(true, _sesh.get_level());  
+                _hud.scroll_text("THE TROGHAMMER STIRS...");   
+                _th_sound = troghammer_sound(0);      
+            }
         }
 
         bool was_dead = _trogdor->dead();        
@@ -252,7 +257,7 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _trogdor->dead();  
         for(knight &k : _knights){
-            k.update();
+            // k.update();
             _trogdor->handle_knight_collision(k);
         }
         
@@ -277,12 +282,31 @@ bn::optional<scene_type> play_scene::update(){
         if(_troghammer){
             was_dead = _trogdor->dead();  
             _troghammer->update();
-            _trogdor->handle_troghammer_collision(*_troghammer.get());
+
+            if(_troghammer->in_play()){
+                _trogdor->handle_troghammer_collision(*_troghammer.get());
+            }
+
             if(_trogdor->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
                 autosave(true);
             }
+
+            if(_troghammer->awake_alert()){
+                _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
+                _th_sound = troghammer_sound(1);                      
+            }else if(_troghammer->coming_alert()){
+                _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
+                _th_sound = troghammer_sound(2);                      
+            }else if(_troghammer->arrived_alert()){
+                _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
+                _th_sound = troghammer_sound(3);      
+            }
+        }
+        if(_th_sound){
+            _th_sound->update();
+            if(_th_sound->done()) _th_sound.reset();
         }
 
 
@@ -419,6 +443,36 @@ void play_scene::set_visible(bool visible){
 
     _countryside.set_visible(visible);
 
+}
+
+troghammer_sound::troghammer_sound(unsigned short phrase) : 
+    _phrase(phrase), 
+    _timer(0),
+    _length(70) {
+    bn::sound_items::troghammer.play(1);
+}
+
+void troghammer_sound::update(){
+    ++_timer;
+    if(_timer == _length){
+        switch(_phrase){
+            case 0:
+                bn::sound_items::troghammer_alert.play(1);
+            break;
+            case 1:
+                bn::sound_items::troghammer_awake.play(1);
+            break;
+            case 2:
+                bn::sound_items::troghammer_coming.play(1);
+            break;
+            case 3:
+                bn::sound_items::troghammer_arrived.play(1);
+            break;
+            default:
+                BN_ERROR("Invalid phrase ID passed into troghammer_sound: ", _phrase);
+            break;
+        }
+    }
 }
 
 

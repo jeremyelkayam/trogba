@@ -35,13 +35,14 @@ namespace trog
 
             void visit_treasure_hut();
             bool can_visit_treasure_hut();
+            bool troghammer_enabled() {return _troghammer;}
             
         private:
             bn::array<char, 8> _format_tag;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
-            bool _killed_by_archer, _visited_treasure_hut;
+            bool _killed_by_archer, _visited_treasure_hut, _troghammer;
 
             //TO BE USED WHEN SAVING/LOADING A FILE MID-LEVEL.
             bn::array<bool, 6> _cottage_burnination_status;
