@@ -4,7 +4,8 @@
 
 namespace trog {
 
-session_info::session_info() {
+session_info::session_info(hud &hud) :
+    _hud(hud) {
     reset();
 }
 
@@ -19,6 +20,8 @@ void session_info::score(unsigned int num_points){
 
     //if the multiple is higher after adding the points, add however many lives you earned
     _mans += (new_multiple - old_multiple);    
+    _hud.update_score(_score);
+    _hud.update_mans_lv(_mans, _level);
 }
 
 void session_info::reset(){
@@ -26,17 +29,20 @@ void session_info::reset(){
     _score = 0;
     _level = TROG_STARTING_LEVEL;
 
-    _format_tag = default_format_tag();
+    _hud.update_score(_score);
+    _hud.update_mans_lv(_mans, _level);
+
     _killed_by_archer = false;
     _visited_treasure_hut = false;
     _troghammer = true;
-    clear_burnination_array();
 
 }
 
 void session_info::set_level(unsigned short level){
     _visited_treasure_hut = false;
     _level = level;
+
+    _hud.update_mans_lv(_mans, _level);
 }
 
 void session_info::visit_treasure_hut(){
@@ -47,28 +53,7 @@ bool session_info::can_visit_treasure_hut(){
     return !_visited_treasure_hut;
 }
 
-bool session_info::is_valid_object(){
 
-    return _format_tag == default_format_tag();
-}
-
-bn::array<char, 8> session_info::default_format_tag(){
-    bn::array<char, 8> default_format_tag;
-    bn::istring_base default_format_tag_istring(default_format_tag._data);
-    bn::ostringstream default_format_tag_stream(default_format_tag_istring);
-    default_format_tag_stream.append(TROG_FORMAT_TAG);
-    return default_format_tag;    
-}
-
-void session_info::set_cottage_burnination(unsigned short dex, bool status){
-    _cottage_burnination_status[dex] = status;
-}
-
-void session_info::clear_burnination_array(){
-    for(int z = 0; z < 6; ++z){
-        _cottage_burnination_status[z] = false;
-    }
-}
 
 
 // THERE HAS TO BE A BETTER WAY!!!! 

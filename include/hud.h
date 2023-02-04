@@ -7,11 +7,9 @@
 #include <bn_rect_window.h>
 
 #include "constants.h"
-#include "session_info.h"
 namespace trog {
     class hud { 
         private:
-            session_info& _sesh;
 
             bn::sprite_text_generator& _text_generator;  
 
@@ -38,10 +36,13 @@ namespace trog {
             //todo this shouldn't be in hud; maybe throw it in a common functions class
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
 
-            hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
+            hud(bn::sprite_text_generator& generator, unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
             void update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time);
+            void update_score(unsigned int score);
+            void update_mans_lv(unsigned short mans, unsigned short level);
+            
             void scroll_text(const char* text);
             void clear_scrolling_text(){_scrolling_text_sprites.clear();show();}
 
