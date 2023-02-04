@@ -3,7 +3,7 @@
 
 namespace trog { 
 
-knight::knight(int xcor, int ycor, bool facingRight) :
+knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight) :
     entity(xcor, ycor, bn::fixed(TROG_KNIGHT_WIDTH), bn::fixed(TROG_KNIGHT_HEIGHT), bn::sprite_items::knight.create_sprite(xcor, ycor)),
     _timer(0),
     _rotation(0),

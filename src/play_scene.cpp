@@ -18,6 +18,7 @@
 #include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_voidtower.h"
 
 #include "play_scene.h"
 #include "constants.h"
@@ -144,6 +145,11 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(33,-50,true);
+
+    if(_sesh.troghammer_enabled()){
+        _void_tower = bn::sprite_items::voidtower.create_sprite_optional(TROG_VOIDTOWER_POS);
+        _void_tower->set_z_order(BACK_ZORDER);
+    }
 }
 
 void play_scene::set_paused_text_visible(bool visible){
@@ -235,9 +241,10 @@ bn::optional<scene_type> play_scene::update(){
             BN_LOG("burninate done. troghammer on? ", _sesh.troghammer_enabled());
             if(!_troghammer && _sesh.troghammer_enabled()){
                 //spawn in the troghammer
-                _troghammer = troghammer(true, _sesh.get_level());  
+                _troghammer = troghammer(_void_tower->position(), true, _sesh.get_level());  
                 _hud.scroll_text("THE TROGHAMMER STIRS...");   
                 _th_sound = troghammer_sound(0);      
+                _void_tower->set_item(bn::sprite_items::voidtower, 1);
             }
         }
 
@@ -257,7 +264,7 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _trogdor->dead();  
         for(knight &k : _knights){
-            // k.update();
+            k.update();
             _trogdor->handle_knight_collision(k);
         }
         

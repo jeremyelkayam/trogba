@@ -20,7 +20,7 @@ namespace trog {
 
 
         public:
-            troghammer(bool facingRight, int level);
+            troghammer(const bn::fixed_point &pos, bool facingRight, int level);
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
             bool in_play(){return _waiting_time == 0;}
