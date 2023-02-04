@@ -7,7 +7,6 @@
 #include "bn_sprite_items_player.h"
 #include "bn_sprite_items_knight.h"
 #include "bn_sprite_items_firebreath.h"
-#include "bn_sprite_items_cottageleft.h"
 
 
 //this class is terrible! But it's the best I've got 

@@ -43,9 +43,9 @@ void archer::shoot(){
 
 void archer::set_bow_drawn(bool drawn){
     if(drawn){
-        _sprite.set_item(bn::sprite_items::archer_bowdrawn);
+        _sprite.set_tiles(bn::sprite_items::archer.tiles_item(), 1);
     }else{
-        _sprite.set_item(bn::sprite_items::archer);
+        _sprite.set_tiles(bn::sprite_items::archer.tiles_item(), 0);
     }
 }
 

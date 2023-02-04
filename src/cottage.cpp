@@ -3,26 +3,21 @@
 #include "cottage.h"
 #include "sb_commentary.h"
 
-#include "bn_sprite_items_cottagedown.h"
-#include "bn_sprite_items_cottageup.h"
-#include "bn_sprite_items_cottageleft.h"
+#include "bn_sprite_items_cottage.h"
 #include "bn_sprite_items_cottagefire.h"
-#include "bn_sprite_items_cottagedown_burninated.h"
-#include "bn_sprite_items_cottageup_burninated.h"
-#include "bn_sprite_items_cottageleft_burninated.h"
 
 namespace trog {
 
 cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
-        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottageleft.create_sprite(xcor, ycor)),
+        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottage.create_sprite(xcor, ycor, 4)),
         _direction(direction),
         _has_treasure(has_treasure) {
     switch(direction) {
         case direction::UP:
-            _sprite.set_item(bn::sprite_items::cottageup);
+            _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 0);
         break;
         case direction::DOWN:
-            _sprite.set_item(bn::sprite_items::cottagedown);
+            _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 2);
         break;
         case direction::RIGHT:
             _sprite.set_horizontal_flip(true);
@@ -52,13 +47,13 @@ void cottage::update(){
     
     if(burninated()){
         //default can be the sideways one because it corresponds to 2 cases
-        bn::sprite_item newsprite = bn::sprite_items::cottageleft_burninated;
+        int newindex = 5;
         if(_direction == direction::UP){
-            newsprite = bn::sprite_items::cottageup_burninated;
+            newindex = 3;
         }else if(_direction == direction::DOWN){
-            newsprite = bn::sprite_items::cottagedown_burninated;
+            newindex = 1;
         }
-        _sprite.set_item(newsprite);
+        _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), newindex);
     }
 }
 
