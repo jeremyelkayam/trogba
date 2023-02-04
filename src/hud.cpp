@@ -4,7 +4,6 @@
 
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_peasanthead.h"
-#include "bn_sprite_items_peasanthead_grayscale.h"
 #include "bn_regular_bg_items_burninometer.h"
 #include "bn_regular_bg_items_burninometer_inverted.h"
 #include "hud.h"
@@ -21,9 +20,8 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
         _enabled(true) {
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
     for(int i = 0; i < trogmeter_max; i++){
-        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead_grayscale.create_sprite(
-            trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR);
-        bn::sprite_palette_ptr peasanthead_palette = peasanthead_sprite.palette();
+        bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead.create_sprite(
+            trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR, 1);
         _trogmeter_sprites.emplace_back(peasanthead_sprite);
     }
 
@@ -48,9 +46,9 @@ void hud::update_trogmeter(unsigned short trogmeter_value){
             // BN_LOG("trogmeter_value ", trogmeter_value);
             bn::sprite_ptr peasanthead_sprite = _trogmeter_sprites.at(i);
             if(i < trogmeter_value) {
-                peasanthead_sprite.set_item(bn::sprite_items::peasanthead);
+                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
             }else{
-                peasanthead_sprite.set_item(bn::sprite_items::peasanthead_grayscale);
+                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
             }
         }
     }
