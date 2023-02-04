@@ -9,7 +9,7 @@ namespace trog
         public:
             session_info(hud& hud);
             void score(unsigned int num_points);
-            void die() {--_mans; _hud.update_mans_lv(_mans, _level);}
+            void die() {--_mans;}
             void set_killed_by_archer(bool archer){_killed_by_archer = archer;}
 
             void advance_level(){set_level(_level+1);}

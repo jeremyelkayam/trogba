@@ -15,15 +15,13 @@ void session_info::score(unsigned int num_points){
     int old_multiple = _score/TROG_POINTS_FOR_1UP;
 
     _score += num_points;
-    _hud.update_score(_score);
 
     int new_multiple = _score/TROG_POINTS_FOR_1UP;
 
     //if the multiple is higher after adding the points, add however many lives you earned
     _mans += (new_multiple - old_multiple);    
-    if(new_multiple > old_multiple){
-        _hud.update_mans_lv(_mans, _level);
-    }
+    _hud.update_score(_score);
+    _hud.update_mans_lv(_mans, _level);
 }
 
 void session_info::reset(){
