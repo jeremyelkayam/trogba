@@ -7,8 +7,8 @@ namespace trog {
 
 //TODO: Make a saved_data class/struct so that we can save troghammer status
 
-troghammer::troghammer(bool facingRight, int level) :
-    knight(-100, -60, facingRight),
+troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) :
+    knight(pos.x(), pos.y(), facingRight),
     _waiting_time(120 SECONDS)
 {
     //TODO: Make the troghammer bigger, he's not imposing enough

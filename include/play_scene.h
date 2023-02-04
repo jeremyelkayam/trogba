@@ -57,6 +57,7 @@ namespace trog{
         bn::forward_list<knight, 2> _knights;
         bn::optional<troghammer> _troghammer;
         bn::optional<troghammer_sound> _th_sound;
+        bn::optional<bn::sprite_ptr> _void_tower;
 
         bool level_complete();
 
