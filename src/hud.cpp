@@ -11,7 +11,8 @@
 
 namespace trog {
 
-hud::hud(bn::sprite_text_generator& generator, unsigned short trogmeter_max) :
+hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
+        _sesh(sesh),
         _text_generator(generator),
         _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
@@ -114,48 +115,34 @@ void hud::update() {
         }
     }
 
-    // if(_enabled){
+    if(_enabled){
+            _score_text_sprites.clear();
+            _mans_lv_text_sprites.clear();
 
-    //     update_score(_sesh.get_score());
+            _text_generator.set_palette_item(RED_PALETTE);
 
-    //     update_mans_lv(_sesh.get_mans(), _sesh.get_level());
+            bn::string<64> score_str, mans_lv_str;
+            bn::ostringstream score_string_stream(score_str);
+            score_string_stream << _sesh.get_score();
 
+            _text_generator.set_left_alignment();
+            _text_generator.generate(-120, -76, score_str, _score_text_sprites);   
+
+            //TODO: don't just right align this. The text should be right aligned and the numbers
+            // should be left aligned
+            bn::ostringstream mans_lv_string_stream(mans_lv_str);
+            mans_lv_string_stream << "MANS:";
+            mans_lv_string_stream << _sesh.get_mans();
+            mans_lv_string_stream << " Lv:";
+            mans_lv_string_stream << _sesh.get_level();
+
+            _text_generator.set_right_alignment();
+            _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
+            for(bn::sprite_ptr sprite : _mans_lv_text_sprites) {
+                // need to do this for it to be covered up by the fire on the level win scene
+                sprite.put_below();
+            }
         
-    // }
-}
-
-void hud::update_score(unsigned int score){
-    _score_text_sprites.clear();
-    _text_generator.set_palette_item(RED_PALETTE);
-    
-    bn::string<64> score_str;
-    bn::ostringstream score_string_stream(score_str);
-    score_string_stream << score;
-
-    _text_generator.set_left_alignment();
-    _text_generator.generate(-120, -76, score_str, _score_text_sprites);   
-
-}
-
-void hud::update_mans_lv(unsigned short mans, unsigned short level){
-    _mans_lv_text_sprites.clear();
-    _text_generator.set_palette_item(RED_PALETTE);
-
-    bn::string<64> mans_lv_str;
-
-    //TODO: don't just right align this. The text should be right aligned and the numbers
-    // should be left aligned
-    bn::ostringstream mans_lv_string_stream(mans_lv_str);
-    mans_lv_string_stream << "MANS:";
-    mans_lv_string_stream << mans;
-    mans_lv_string_stream << " Lv:";
-    mans_lv_string_stream << level;
-
-    _text_generator.set_right_alignment();
-    _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
-    for(bn::sprite_ptr sprite : _mans_lv_text_sprites) {
-        // need to do this for it to be covered up by the fire on the level win scene
-        sprite.put_below();
     }
 }
 

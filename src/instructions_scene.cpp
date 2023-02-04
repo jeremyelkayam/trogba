@@ -238,14 +238,12 @@ bn::optional<scene_type> instructions_scene::update(){
         if(_secret_code_index == _secret_code.size()){
             _sesh.secret_lives_boost();
         }
-
-        //DISABLE LOAD SCREEN FOR NOW
-        // saved_data loaded_data;
+        session_info loaded_sesh;
 
         //Check to see if we have a saved session
-        // bn::sram::read(loaded_sesh);
+        bn::sram::read(loaded_sesh);
         // Don't bother with loading if we are going to do the level select cheat
-        if(!_level_select){ //&& loaded_sesh.is_valid_object()){
+        if(!_level_select && loaded_sesh.is_valid_object()){
             if(!_continue_menu_visible){
                 if(_show_secret_hints){
                     clear_text();
@@ -255,7 +253,7 @@ bn::optional<scene_type> instructions_scene::update(){
 
             }else{
                 if(_continue_selected){
-                    // _sesh = loaded_sesh;
+                    _sesh = loaded_sesh;
                 }
                 result = scene_type::PLAY;
             }

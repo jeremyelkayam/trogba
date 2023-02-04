@@ -18,7 +18,7 @@ namespace trog{
         
         unsigned short _selected_option_index;
         session_info &_sesh;
-        // session_info _loaded_sesh; replace this with saved_data
+        session_info _loaded_sesh;
 
         void setup_instructions();
 

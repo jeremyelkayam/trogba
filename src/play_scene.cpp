@@ -121,12 +121,12 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
                 ycor,
 				enumdir,
                 treasurehut,
-                false // sesh.load_cottage_burnination(i)
+                sesh.load_cottage_burnination(i)
 			);
 		}
 	}
     //once it's loaded we are done with it
-    // _sesh.clear_burnination_array();
+    _sesh.clear_burnination_array();
 
     _text_generator.set_left_alignment();
     _text_generator.set_palette_item(WHITE_PALETTE);        
@@ -402,7 +402,7 @@ void play_scene::autosave(bool just_died){
         session_info saved_sesh = _sesh;
 
         for(int z = 0; z < _cottages.size(); ++z){
-            // saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
         }
         if(just_died){
             saved_sesh.die();

@@ -16,23 +16,23 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
 
             
 
-    // bn::sram::read(_loaded_sesh);
+    bn::sram::read(_loaded_sesh);
 
-    // if(_loaded_sesh.is_valid_object()){
+    if(_loaded_sesh.is_valid_object()){
         _text_generator.set_left_alignment();
         _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
         _text_generator.generate(-100, -30, "CONTINUE", _menu_text_sprites);    
 
         bn::string<64> session_summary;
         bn::ostringstream summary_stream(session_summary);
-        // summary_stream << "score: " << _loaded_sesh.get_score() << "  ";       
-        // summary_stream << "mans: " << _loaded_sesh.get_mans() << "  ";       
-        // summary_stream << "level: " << _loaded_sesh.get_level();       
+        summary_stream << "score: " << _loaded_sesh.get_score() << "  ";       
+        summary_stream << "mans: " << _loaded_sesh.get_mans() << "  ";       
+        summary_stream << "level: " << _loaded_sesh.get_level();       
 
         _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         _text_generator.generate(-90, -15, session_summary, _menu_text_sprites);
         _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    // }
+    }
 
     _text_generator.generate(-100, 10, "NEW GAME", _menu_text_sprites);
 }
@@ -42,13 +42,13 @@ bn::optional<scene_type> menu_scene::update(){
     if(bn::keypad::a_pressed()){
         if(_selected_option_index == 0){
             //load file
-            // if(_loaded_sesh.is_valid_object()){
-                // _sesh = _loaded_sesh;
+            if(_loaded_sesh.is_valid_object()){
+                _sesh = _loaded_sesh;
                 bn::sram::clear(sizeof(_sesh));
                 BN_LOG("loaded the file");
-            // }else{
+            }else{
                 // probably provide some type of WRONG sound effect to provide feedback
-            // }
+            }
         }else if(_selected_option_index == 1){
             //new game
         }

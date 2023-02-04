@@ -42,6 +42,7 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
@@ -50,8 +51,7 @@ int main()
 
     bool logo_scene = true;
 
-    trog::hud hud(text_generator, TROG_TROGMETER_MAX);
-    trog::session_info sesh(hud);
+    trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
     hud.hide();
 
 

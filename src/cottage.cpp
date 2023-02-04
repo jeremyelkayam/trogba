@@ -49,9 +49,9 @@ void cottage::update(){
         //default can be the sideways one because it corresponds to 2 cases
         int newindex = 5;
         if(_direction == direction::UP){
-            newindex = 1;
-        }else if(_direction == direction::DOWN){
             newindex = 3;
+        }else if(_direction == direction::DOWN){
+            newindex = 1;
         }
         _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), newindex);
     }
