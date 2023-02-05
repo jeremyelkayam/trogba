@@ -55,6 +55,8 @@ namespace trog{
         short _table_index, _string_index, _selectable_letters_index;
         unsigned short _timer;
 
+        bool _go_to_credits;
+
 
     public:
         explicit hiscores_scene(session_info &sesh);

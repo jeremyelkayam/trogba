@@ -29,7 +29,8 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
         _table_index(-1),
         _string_index(0),
         _selectable_letters_index(28),
-        _timer(0) {
+        _timer(0),
+        _go_to_credits(false) {
     
     //Initialize our format tag
     bn::istring_base expected_format_tag_istring(_format_tag._data);
@@ -39,6 +40,12 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
     //Load the table if applicable
     load_high_scores_table();
     
+    if(_sesh.get_level() == 101){
+        //101 isn't a real level. If you beat the game, the game ends before you start level 101.
+        // So we count you as ending on level 100.
+        // Maybe add a crown or something if you beat the game? 
+        _go_to_credits = true;
+    }
 
     //Propagate the player's score within the scores list (if applicable)
     if(_sesh.get_score() > _high_scores_table[7].get_score()){
@@ -58,6 +65,7 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
     }
 
 
+    BN_LOG("score", _sesh.get_score());
     BN_LOG("score entry at index ", _table_index);
     _cursor_sprite.set_palette(BROWN_PALETTE);
     _cursor_sprite.set_visible(false);
@@ -122,7 +130,11 @@ bn::optional<scene_type> hiscores_scene::update(){
             end_name_entry();
         }
     }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
-        result = scene_type::INSTRUCTIONS;
+        if(_go_to_credits){
+            result = scene_type::CREDITS;
+        }else{
+            result = scene_type::INSTRUCTIONS;
+        }
         _text_sprites.clear();
     }
     

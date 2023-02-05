@@ -5,6 +5,7 @@
 #include "enums.h"
 #include "session_info.h"
 #include "constants.h"
+#include "bn_sprite_items_peasant.h"
 
 namespace trog {
     class peasant : public entity { 

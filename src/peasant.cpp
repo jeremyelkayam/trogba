@@ -5,7 +5,6 @@
 #include "peasant.h"
 #include "entity.h"
 #include "sb_commentary.h"
-#include "bn_sprite_items_peasant.h"
 #include "bn_sprite_items_peasantdead.h"
 
 namespace trog {
