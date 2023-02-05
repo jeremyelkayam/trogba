@@ -61,18 +61,24 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         //weird, idk 
 		level_index = ((_sesh.get_level() - 2) % 32 + 2) - 1;
 	}
+
+    bn::fixed_point void_tower_pos;
     switch(levels[level_index][0]){
         case 1:
             _countryside.set_item(bn::regular_bg_items::day);
+            void_tower_pos = TROG_VOIDTOWER_POS_DAY;
             break;
         case 2:
             _countryside.set_item(bn::regular_bg_items::dusk);
+            void_tower_pos = bn::fixed_point(10, -61);
             break;
         case 3:
             _countryside.set_item(bn::regular_bg_items::night);
+            void_tower_pos = TROG_VOIDTOWER_POS_NIGHT;
             break;
         case 4:
             _countryside.set_item(bn::regular_bg_items::dawn);
+            void_tower_pos = bn::fixed_point(-90, -61);
             break;
         default:
             BN_ERROR("Invalid background ID in level_data.h");
@@ -147,8 +153,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _knights.emplace_front(33,-50,true);
 
     if(_sesh.troghammer_enabled()){
-        _void_tower = bn::sprite_items::voidtower.create_sprite_optional(TROG_VOIDTOWER_POS);
+        _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
         _void_tower->set_z_order(BACK_ZORDER);
+        _void_tower->put_below();
     }
 }
 

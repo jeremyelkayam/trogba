@@ -1,6 +1,7 @@
 #include <bn_log.h>
 
 #include "troghammer.h"
+#include "level_data.h"
 #include "bn_sprite_items_troghammer.h"
 
 namespace trog { 
@@ -32,6 +33,19 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
  
     if(level > 90) _waiting_time = 0;
     _initial_waiting_time = _waiting_time;
+
+
+    //TODO refactor this into a function
+    int level_index;
+    if (level == 1) {
+		level_index = 0;
+	} else {
+		level_index = ((level - 2) % 32 + 2) - 1;
+	}
+
+
+    _time_of_day = levels[level_index][0];
+
 }
 
 void troghammer::update(){
@@ -56,7 +70,26 @@ void troghammer::update(){
             set_x(_pos.x() + _speed * _sprite.vertical_scale());
             if(_pos.x().floor_integer() < 120 && 
                 _pos.x().floor_integer() > -120){
-                set_y(daytime_path[_pos.x().floor_integer() + 120]);
+
+                bn::fixed ypos;
+
+                switch(_time_of_day){
+                    case 1:
+                        ypos = day_path[_pos.x().floor_integer() + 120];
+                        break;
+                    case 2:
+                        ypos = dusk_path[_pos.x().floor_integer() + 120];
+                        break;
+                    case 3:
+                        ypos = night_path[_pos.x().floor_integer() + 120];
+                        break;
+                    case 4:
+                        ypos = dawn_path[_pos.x().floor_integer() + 120];
+                        break;
+                    default:
+                        BN_ERROR("invalid time of day in level_data.h");
+                }
+                set_y(ypos);
             }
             _walkcycle.update();
 
