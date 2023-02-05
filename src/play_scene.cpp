@@ -454,6 +454,12 @@ void play_scene::set_visible(bool visible){
     for(knight &k : _knights){
         k.set_visible(visible);
     }
+    if(_troghammer){
+        _troghammer->set_visible(visible);
+    }
+    if(_void_tower){
+        _void_tower->set_visible(visible);
+    }
 
     _countryside.set_visible(visible);
 
