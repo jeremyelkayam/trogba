@@ -4,12 +4,13 @@
 #include "sb_commentary.h"
 
 #include "bn_sprite_items_cottage.h"
+#include "bn_sprite_items_cottage_burninated.h"
 #include "bn_sprite_items_cottagefire.h"
 
 namespace trog {
 
 cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
-        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottage.create_sprite(xcor, ycor, 4)),
+        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottage.create_sprite(xcor, ycor, 2)),
         _direction(direction),
         _has_treasure(has_treasure) {
     switch(direction) {
@@ -17,7 +18,7 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
             _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 0);
         break;
         case direction::DOWN:
-            _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 2);
+            _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 1);
         break;
         case direction::RIGHT:
             _sprite.set_horizontal_flip(true);
@@ -47,13 +48,14 @@ void cottage::update(){
     
     if(burninated()){
         //default can be the sideways one because it corresponds to 2 cases
-        int newindex = 5;
+        int newindex = 2;
         if(_direction == direction::UP){
-            newindex = 3;
-        }else if(_direction == direction::DOWN){
             newindex = 1;
+        }else if(_direction == direction::DOWN){
+            newindex = 0;
         }
-        _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), newindex);
+        _sprite.set_item(bn::sprite_items::cottage_burninated, newindex);
+        _sprite.set_y(_pos.y() + 2);
     }
 }
 
