@@ -10,29 +10,46 @@ namespace trog {
 
 troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) :
     knight(pos.x(), pos.y(), facingRight),
-    _waiting_time(120 SECONDS)
+    _total_wait_time(120 SECONDS)
 {
-    //TODO: Make the troghammer bigger, he's not imposing enough
     _sprite = bn::sprite_items::troghammer.create_sprite(_pos.x(), _pos.y());
     _sprite.set_horizontal_flip(facingRight);
     _sprite.set_scale(0.25);
     _sprite.put_below();
     _sprite.set_visible(false);
 
+
     _walkcycle = bn::create_sprite_animate_action_forever(
                     _sprite, (20 / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer(), bn::sprite_items::troghammer.tiles_item(), 1, 3, 4, 3);
+
+    // speed the troghammer up a bit
     _speed *= TROG_HAMMER_SPEEDUP_FACTOR;
     _cycletime = (bn::fixed(_cycletime) / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer();
 
-    //hitboxes are 20% bigger to make it harder
+    //hitboxes are bigger to make it harder
     _hitbox.set_width(TROG_HAMMER_WIDTH);
     _hitbox.set_height(TROG_HAMMER_HEIGHT);
 
     //for every 10 levels the waiting time gets 10% lower.
-    _waiting_time -= _waiting_time * (level / 9) * 0.1;
- 
-    if(level > 90) _waiting_time = 0;
-    _initial_waiting_time = _waiting_time;
+    _total_wait_time -= _total_wait_time * (level / 9) * 0.1;
+    _states.push_back(troghammer_state::ARRIVED);
+
+
+    if(_total_wait_time > 50 SECONDS){
+        _states.push_back(troghammer_state::COMING);
+    }
+    if(_total_wait_time > 25 SECONDS){
+        _states.push_back(troghammer_state::AWAKE);
+    }
+    if(_total_wait_time > 0 SECONDS){
+        _states.push_back(troghammer_state::ALERT);
+    }
+
+    _waiting_time_per_state = _total_wait_time / _states.size();
+
+    advance_to_next_state();
+
+
 
 
     //TODO refactor this into a function
@@ -42,68 +59,99 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
 	} else {
 		level_index = ((level - 2) % 32 + 2) - 1;
 	}
-
-
     _time_of_day = levels[level_index][0];
+
 
 }
 
-void troghammer::update(){
+void troghammer::advance_to_next_state(){
+    _new_state = true;
+    _current_state = _states.back();
+    _states.pop_back();
+    _timer = 0;
+}
 
+void troghammer::init_current_state(){
+    BN_ASSERT(_new_state);
 
-
-     if(_waiting_time == 1){
+    if(_current_state == troghammer_state::ARRIVED){
+        _sprite.set_visible(true);
+        //spawn at the top of the screen
         set_y(TROG_COUNTRYSIDE_TOP_BOUND + 10);
         set_x(0);
         _sprite.set_scale(1);
-        _speed = -_speed;
-     }
+        // if(_speed < 0) _speed*=-1;
+    }else if(_current_state == troghammer_state::ALERT){
+        _sprite.set_visible(false);
+    }else if(_current_state == troghammer_state::AWAKE){
+        _sprite.set_visible(true);
+    }else if(_current_state == troghammer_state::COMING){
+        _sprite.set_visible(true);
+        set_x(TROG_COUNTRYSIDE_RIGHT_BOUND);
+        _sprite.set_scale(0.5);
+        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
+    }
+}
 
-    if(_waiting_time > 0){
-        --_waiting_time;
+void troghammer::update(){
+    if(_new_state){
+        init_current_state();
+        _new_state = false;
+    }
 
-        if(_waiting_time == _initial_waiting_time * 2 / 3) _sprite.set_visible(true);
-        
-        if(_waiting_time <= _initial_waiting_time * 2 / 3){
+
+    if(_current_state == troghammer_state::ARRIVED){
+        knight::update();
+    }else{
+        ++_timer;
+
+        if(_current_state == troghammer_state::AWAKE || 
+           _current_state == troghammer_state::COMING){
+            bn::fixed delta_x = _speed * _sprite.vertical_scale();
             
-            //update walking cycle
-            set_x(_pos.x() + _speed * _sprite.vertical_scale());
+            if(_current_state == troghammer_state::COMING){
+                delta_x = -delta_x;
+            }
+
+            set_x(_pos.x() + delta_x);
             if(_pos.x().floor_integer() < 120 && 
                 _pos.x().floor_integer() > -120){
-
-                bn::fixed ypos;
-
-                switch(_time_of_day){
-                    case 1:
-                        ypos = day_path[_pos.x().floor_integer() + 120];
-                        break;
-                    case 2:
-                        ypos = dusk_path[_pos.x().floor_integer() + 120];
-                        break;
-                    case 3:
-                        ypos = night_path[_pos.x().floor_integer() + 120];
-                        break;
-                    case 4:
-                        ypos = dawn_path[_pos.x().floor_integer() + 120];
-                        break;
-                    default:
-                        BN_ERROR("invalid time of day in level_data.h");
-                }
-                set_y(ypos);
+                set_ycor_to_horizon();
             }
             _walkcycle.update();
-
-            //at 1/3 time, walk the other way
-            if(_waiting_time == _initial_waiting_time / 3) {
-                set_x(TROG_COUNTRYSIDE_RIGHT_BOUND);
-                _sprite.set_scale(0.5);
-                _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
-                _speed = -_speed;
-            }
         }
-    }else{
-        knight::update();
+
+        BN_LOG("time until next troghammer state: ", _timer, "/", _waiting_time_per_state);
+
+        if(_timer == _waiting_time_per_state){
+            advance_to_next_state();
+        }
     }
+
+    
+    
+}
+
+void troghammer::set_ycor_to_horizon(){
+    bn::fixed ypos;
+
+    switch(_time_of_day){
+        case 1:
+            ypos = day_path[_pos.x().floor_integer() + 120];
+            break;
+        case 2:
+            ypos = dusk_path[_pos.x().floor_integer() + 120];
+            break;
+        case 3:
+            ypos = night_path[_pos.x().floor_integer() + 120];
+            break;
+        case 4:
+            ypos = dawn_path[_pos.x().floor_integer() + 120];
+            break;
+        default:
+            BN_ERROR("invalid time of day in level_data.h");
+    }
+    set_y(ypos);
 }
 
 
