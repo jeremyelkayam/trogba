@@ -459,7 +459,7 @@ void play_scene::set_visible(bool visible){
     for(knight &k : _knights){
         k.set_visible(visible);
     }
-    if(_troghammer){
+    if(_troghammer && !_troghammer->inside_void_tower()){
         _troghammer->set_visible(visible);
     }
     if(_void_tower){

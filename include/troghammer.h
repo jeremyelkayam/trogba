@@ -53,5 +53,6 @@ namespace trog {
             bool awake_alert(){return _new_state && _current_state == troghammer_state::AWAKE;}
             bool arrived_alert() {return _new_state && _current_state == troghammer_state::ARRIVED;}
             bool coming_alert(){return _new_state && _current_state == troghammer_state::COMING;}
+            bool inside_void_tower(){return _current_state == troghammer_state::ALERT;}
     };
 }
