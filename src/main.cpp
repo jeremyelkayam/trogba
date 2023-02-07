@@ -103,7 +103,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::BONUS: {
-                    hud.show();
+                    // hud.show();
                     //this is the treasure hut scene
                     // we need to store the play scene so that we may return to it later.
                     previous_play_scene = bn::move(scene);

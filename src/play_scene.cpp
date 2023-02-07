@@ -398,6 +398,11 @@ bn::optional<scene_type> play_scene::update(){
             set_visible(false);
         }
     }
+
+    if(result && result != scene_type::BONUS){
+        _hud.clear_scrolling_text();
+    }
+
     return result;
 }
 
