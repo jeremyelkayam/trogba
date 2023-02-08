@@ -15,7 +15,14 @@ enum class troghammer_state
     ALERT,
     AWAKE,
     COMING,
-    ARRIVED
+    ARRIVED,
+    UNALERTED
+};
+
+struct troghammer_status{
+    troghammer_state current_state;
+    unsigned short timer;
+    bn::fixed_point pos;
 };
 
 namespace trog {
@@ -44,8 +51,11 @@ namespace trog {
             void advance_to_next_state();
             void init_current_state();
 
+            void log_state(troghammer_state state);
+
         public:
             troghammer(const bn::fixed_point &pos, bool facingRight, int level);
+            troghammer(troghammer_status status, bool facingRight, int level);
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
             bool in_play(){return _current_state == troghammer_state::ARRIVED;}
@@ -54,5 +64,7 @@ namespace trog {
             bool arrived_alert() {return _new_state && _current_state == troghammer_state::ARRIVED;}
             bool coming_alert(){return _new_state && _current_state == troghammer_state::COMING;}
             bool inside_void_tower(){return _current_state == troghammer_state::ALERT;}
+
+            troghammer_status get_status();
     };
 }

@@ -77,10 +77,31 @@ void troghammer::init_current_state(){
     if(_current_state == troghammer_state::ARRIVED){
         _sprite.set_visible(true);
         //spawn at the top of the screen
-        set_y(TROG_COUNTRYSIDE_TOP_BOUND + 10);
-        set_x(0);
+        unsigned int spawnpos = rand() % 4;
+        BN_LOG("spawn position: ", spawnpos);
+        //problem: the troghammer can spawn on top of you
+        switch(spawnpos){
+            case 0:
+                set_y(TROG_COUNTRYSIDE_TOP_BOUND + 10);
+                set_x(0);
+                break;
+            case 1:
+                set_y(TROG_COUNTRYSIDE_BOTTOM_BOUND - 10);
+                set_x(0);
+                break;
+            case 2:
+                set_y(0);
+                set_x(TROG_COUNTRYSIDE_LEFT_BOUND + 10);
+                break;
+            case 3:
+                set_y(0);
+                set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - 10);
+                break;
+            default:
+                BN_ERROR("Invalid spawn position for troghammer");
+        }
         _sprite.set_scale(1);
-        // if(_speed < 0) _speed*=-1;
+
     }else if(_current_state == troghammer_state::ALERT){
         _sprite.set_visible(false);
     }else if(_current_state == troghammer_state::AWAKE){
@@ -152,6 +173,45 @@ void troghammer::set_ycor_to_horizon(){
             BN_ERROR("invalid time of day in level_data.h");
     }
     set_y(ypos);
+}
+
+troghammer_status troghammer::get_status(){
+    troghammer_status result = {_current_state, _timer, _pos};
+    return result;
+}
+
+troghammer::troghammer(troghammer_status status, bool facingRight, int level) : 
+    troghammer(status.pos, facingRight, level) {
+    while(_current_state != status.current_state){ 
+        _current_state = _states.back(); 
+        _states.pop_back();
+        BN_LOG("state: ");
+        log_state(_current_state);
+        BN_LOG("loaded state: ");
+        log_state(status.current_state);
+    }
+    
+    _timer = status.timer;
+}
+
+void troghammer::log_state(troghammer_state state){
+    switch(state){
+        case troghammer_state::ALERT:
+            BN_LOG("alert");
+            break;
+        case troghammer_state::ARRIVED:
+            BN_LOG("arrived");
+            break;        
+        case troghammer_state::COMING:
+            BN_LOG("coming");
+            break;
+        case troghammer_state::AWAKE:
+            BN_LOG("awake");
+            break;
+        case troghammer_state::UNALERTED:
+            BN_LOG("unalerted");
+            break;
+    }
 }
 
 
