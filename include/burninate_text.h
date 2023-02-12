@@ -10,8 +10,6 @@
 namespace trog {
     class burninate_text : public big_text { 
         private:
-            bn::affine_bg_ptr _fire;
-            bn::affine_bg_scale_loop_action _scaler;
             unsigned short _timer;
 
         public:
