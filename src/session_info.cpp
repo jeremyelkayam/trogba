@@ -31,15 +31,6 @@ void session_info::reset(){
     _visited_treasure_hut = false;
     _troghammer = true;
     clear_burnination_array();
-    reset_troghammer_status();
-}
-
-void session_info::reset_troghammer_status(){
-    set_troghammer_status({
-        troghammer_state::UNALERTED,
-        0,
-        bn::fixed_point(0,0)
-    });
 }
 
 void session_info::set_level(unsigned short level){

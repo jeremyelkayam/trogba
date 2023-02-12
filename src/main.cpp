@@ -15,18 +15,12 @@
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
 #include "player.h"
-#include "title_scene.h"
 #include "instructions_scene.h"
 #include "play_scene.h"
 #include "gameover_scene.h"
 #include "level_win_scene.h"
 #include "bonus_scene.h"
 #include "movie_scene.h"
-#include "logo_scene.h"
-#include "menu_scene.h"
-#include "hiscores_scene.h"
-#include "credits_scene.h"
-#include "devs_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -40,15 +34,13 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::INSTRUCTIONS;
     trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
     text_generator.set_center_alignment();
-
-    bool logo_scene = true;
 
     trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
     hud.hide();
@@ -62,31 +54,10 @@ int main()
         }
         if(next_scene){
             bn::sound::stop_all();
-            logo_scene = (*next_scene == trog::scene_type::LOGO);
             switch(*next_scene){
-                case trog::scene_type::DEVS: { 
-                    hud.hide();
-                    scene.reset(new trog::devs_scene());
-                    break;
-                }
-                case trog::scene_type::LOGO: { 
-                    hud.hide();
-                    scene.reset(new trog::logo_scene(sesh));
-                    break;
-                }
-                case trog::scene_type::TITLE: { 
-                    hud.hide();
-                    scene.reset(new trog::title_scene());
-                    break;
-                }
                 case trog::scene_type::INSTRUCTIONS: { 
                     hud.hide();
                     scene.reset(new trog::instructions_scene(sesh, text_generator));
-                    break;
-                }
-                case trog::scene_type::MENU: { 
-                    hud.hide();
-                    scene.reset(new trog::menu_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
@@ -125,16 +96,6 @@ int main()
                     hud.show();
                     scene.reset(new trog::movie_scene(sesh, text_generator));
                     break;
-                }
-                case trog::scene_type::HISCORES: {
-                    hud.hide();
-                    scene.reset(new trog::hiscores_scene(sesh));
-                    break;
-                }                
-                case trog::scene_type::CREDITS: {
-                    hud.hide();
-                    scene.reset(new trog::credits_scene(text_generator));
-                    break;
                 }                                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
@@ -154,7 +115,7 @@ int main()
 
         // soft reset code
         if(bn::keypad::start_held() && bn::keypad::select_held() &&
-                bn::keypad::a_held() && bn::keypad::b_held() && !logo_scene){
+                bn::keypad::a_held() && bn::keypad::b_held() ){
             bn::core::reset();
         }
 

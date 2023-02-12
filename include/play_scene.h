@@ -13,21 +13,9 @@
 #include "peasant_factory.h"
 #include "archer_factory.h"
 #include "knight.h"
-#include "troghammer.h"
 #include "big_text.h"
 
 namespace trog{
-
-    class troghammer_sound{
-        private:
-            unsigned short _phrase;
-            unsigned short _timer;
-            unsigned short _length;
-        public:
-            troghammer_sound(unsigned short phrase);
-            bool done() {return _timer > _length;}
-            void update();
-    };
 
     class play_scene : public scene{ 
     private:
@@ -39,7 +27,7 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time, _autosave_visibility_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time;
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;
@@ -47,7 +35,6 @@ namespace trog{
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
-        bn::vector<bn::sprite_ptr, 8> _autosave_text;
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;
@@ -55,9 +42,6 @@ namespace trog{
 
         //there will be at most 2 knights: red knight, blue knight.
         bn::forward_list<knight, 2> _knights;
-        bn::optional<troghammer> _troghammer;
-        bn::optional<troghammer_sound> _th_sound;
-        bn::optional<bn::sprite_ptr> _void_tower;
 
         bool level_complete();
 
@@ -69,11 +53,6 @@ namespace trog{
 
         void set_paused_text_visible(bool visible);
 
-        void set_autosave_text_visible(bool visible);
-
-        void autosave(bool just_died);
-
-        void spawn_troghammer(bool alert);
 
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);

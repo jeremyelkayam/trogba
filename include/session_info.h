@@ -1,6 +1,5 @@
 #pragma once
 #include <bn_array.h>
-#include "troghammer.h"
 
 namespace trog
 {
@@ -37,11 +36,6 @@ namespace trog
             void visit_treasure_hut();
             bool can_visit_treasure_hut();
             bool troghammer_enabled() {return _troghammer;}
-
-            void set_troghammer_status (troghammer_status thinfo) { _thinfo = thinfo;}
-            troghammer_status load_troghammer_status() {return _thinfo;}
-
-            void reset_troghammer_status();
             
         private:
             bn::array<char, 8> _format_tag;
@@ -52,7 +46,6 @@ namespace trog
 
             //TO BE USED WHEN SAVING/LOADING A FILE MID-LEVEL.
             bn::array<bool, 6> _cottage_burnination_status;
-            troghammer_status _thinfo;
     };
 }
 

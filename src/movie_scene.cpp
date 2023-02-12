@@ -413,8 +413,6 @@ bn::optional<scene_type> movie_scene::update(){
 
     if(cutscene_over() && _sesh.get_level() != 101) {
         result = scene_type::PLAY;
-    }else if(cutscene_over() && _sesh.get_level() == 101){
-        result = scene_type::HISCORES;
     }
 
     _timer++;

@@ -10,18 +10,12 @@
 namespace trog {
     enum class scene_type
     {
-        DEVS,
-        LOGO,
-        TITLE,
         INSTRUCTIONS,
         PLAY,
         BONUS,
         LEVELBEAT,
         LOSE,
-        MOVIE,
-        MENU,
-        HISCORES,
-        CREDITS
+        MOVIE
     };
     enum class direction
     {

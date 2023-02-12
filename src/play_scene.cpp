@@ -17,7 +17,6 @@
 #include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_voidtower.h"
 
 #include "play_scene.h"
 #include "constants.h"
@@ -128,15 +127,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     //once it's loaded we are done with it
     _sesh.clear_burnination_array();
 
-    _text_generator.set_left_alignment();
-    _text_generator.set_palette_item(WHITE_PALETTE);        
-    _text_generator.generate(-120, 75, "autosaved.", _autosave_text);
-    bn::blending::set_transparency_alpha(0.5);
-    for(bn::sprite_ptr &sprite : _autosave_text) { 
-        sprite.set_blending_enabled(true);
-    }
-    set_autosave_text_visible(false);
-
 
     _text_generator.set_center_alignment();
     _text_generator.generate(0, 55, "paused", _paused_text);
@@ -146,17 +136,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _knights.emplace_front(-59, 31, false);
     _knights.emplace_front(33,-50,true);
 
-    if(_sesh.troghammer_enabled()){
-        _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
-        _void_tower->set_z_order(BACK_ZORDER);
-        _void_tower->put_below();
-
-        if(_sesh.load_troghammer_status().current_state != troghammer_state::UNALERTED){
-            _troghammer = troghammer(_sesh.load_troghammer_status(), true, _sesh.get_level());
-            _void_tower->set_item(bn::sprite_items::voidtower, 1);
-            _sesh.reset_troghammer_status();
-        }
-    }
 }
 
 void play_scene::set_paused_text_visible(bool visible){
@@ -175,13 +154,7 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
     }
-    if(_autosave_visibility_time != 0){
-        ++_autosave_visibility_time;
-    }
-    if(_autosave_visibility_time > (3 SECONDS)){
-        _autosave_visibility_time = 0;
-        set_autosave_text_visible(false);
-    }
+
 
     if(_burninate_pause_time > 0) {
         _burninate_pause_time++;
@@ -200,9 +173,6 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
-        if(!_trogdor->dead() && _autosave_visibility_time == 0){
-            set_autosave_text_visible(false);
-        }
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
@@ -240,12 +210,6 @@ bn::optional<scene_type> play_scene::update(){
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
             _overlay_text.reset(new burninate_text());
-        }else if(!_trogdor->burninating() && was_burninating){
-            //our trogmeter is at 0 now, so this is a good time to autosave
-            autosave(false);
-            if(!_troghammer && _sesh.troghammer_enabled()){
-                spawn_troghammer(true);
-            }
         }
 
         bool was_dead = _trogdor->dead();        
@@ -257,10 +221,6 @@ bn::optional<scene_type> play_scene::update(){
 
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
-            
-            //Spawn in the troghammer if he doesn't exist yet.
-            if(!_troghammer) spawn_troghammer(true);
-            autosave(true);
         }
 
         was_dead = _trogdor->dead();  
@@ -281,40 +241,7 @@ bn::optional<scene_type> play_scene::update(){
             }
             _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
-
-            autosave(true);
         }
-
-        if(_troghammer){
-            was_dead = _trogdor->dead();  
-            _troghammer->update();
-
-            if(_troghammer->in_play()){
-                _trogdor->handle_troghammer_collision(*_troghammer.get());
-            }
-
-            if(_trogdor->dead() && !was_dead){
-                //todo: add a secret animation where he's passed out drunk
-                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
-                autosave(true);
-            }
-
-            if(_troghammer->awake_alert()){
-                _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
-                _th_sound = troghammer_sound(1);                      
-            }else if(_troghammer->coming_alert()){
-                _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
-                _th_sound = troghammer_sound(2);                      
-            }else if(_troghammer->arrived_alert()){
-                _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
-                _th_sound = troghammer_sound(3);      
-            }
-        }
-        if(_th_sound){
-            _th_sound->update();
-            if(_th_sound->done()) _th_sound.reset();
-        }
-
 
         //despawn any peasants that need to be despawned
         _peasants.remove_if(peasant_deletable);
@@ -334,7 +261,6 @@ bn::optional<scene_type> play_scene::update(){
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
-                if(!_troghammer) spawn_troghammer(true);
             }
         }
     }
@@ -399,44 +325,7 @@ bn::optional<scene_type> play_scene::update(){
     return result;
 }
 
-//assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
-void play_scene::autosave(bool just_died){
-    if(_sesh.get_mans() == 0){
-        bn::sram::clear(sizeof(_sesh));
-    }else{
-        session_info saved_sesh = _sesh;
 
-        if(_sesh.troghammer_enabled()){
-            if(_troghammer){
-                saved_sesh.set_troghammer_status(_troghammer->get_status());
-            }else{
-                //if you just died and there's no troghammer yet, we need to send in the hammer bro
-                saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
-            }
-        }
-
-        for(int z = 0; z < _cottages.size(); ++z){
-            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
-        }
-        if(just_died){
-            saved_sesh.die();
-        }
-
-        bn::sram::write(saved_sesh);
-        set_autosave_text_visible(true);
-        if(!just_died){
-            _autosave_visibility_time = 1;
-        }
-
-    }
-}
-
-void play_scene::set_autosave_text_visible(bool visible){
-    for(bn::sprite_ptr &sprite : _autosave_text) { 
-        sprite.set_visible(visible);
-        sprite.put_above();
-    }
-}
 
 bool play_scene::level_complete(){
     bool result = true;
@@ -462,57 +351,9 @@ void play_scene::set_visible(bool visible){
     for(knight &k : _knights){
         k.set_visible(visible);
     }
-    if(_troghammer && !_troghammer->inside_void_tower()){
-        _troghammer->set_visible(visible);
-    }
-    if(_void_tower){
-        _void_tower->set_visible(visible);
-    }
 
     _countryside.set_visible(visible);
 
-}
-
-troghammer_sound::troghammer_sound(unsigned short phrase) : 
-    _phrase(phrase), 
-    _timer(0),
-    _length(70) {
-}
-
-void troghammer_sound::update(){
-    ++_timer;
-    if(_timer == _length){
-        switch(_phrase){
-            case 0:
-            break;
-            case 1:
-            break;
-            case 2:
-            break;
-            case 3:
-            break;
-            default:
-                BN_ERROR("Invalid phrase ID passed into troghammer_sound: ", _phrase);
-            break;
-        }
-    }
-}
-
-void play_scene::spawn_troghammer(bool alert){
-    _troghammer = troghammer(_void_tower->position(), true, _sesh.get_level());  
-    _void_tower->set_item(bn::sprite_items::voidtower, 1);
-
-    if(alert){
-        if(_troghammer->in_play()){
-            //If the troghammer spawns in immediately, 
-            // use the "ARRIVES" notification instead of the "STIRS" one
-            _hud.scroll_text("THE TROGHAMMER ARRIVES!");
-            _th_sound = troghammer_sound(3);          
-        }else{
-            _hud.scroll_text("THE TROGHAMMER STIRS...");   
-            _th_sound = troghammer_sound(0);          
-        }
-    }
 }
 
 

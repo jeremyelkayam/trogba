@@ -116,7 +116,8 @@ bn::optional<scene_type> gameover_scene::update(){
                     result = scene_type::PLAY;
                     break;
                 case 1:
-                    result = scene_type::HISCORES;
+                    // not available in demo
+                    // result = scene_type::HISCORES;
                     break;
                 case 2:
                     _sesh.reset();
