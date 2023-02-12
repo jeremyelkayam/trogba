@@ -2,7 +2,6 @@
 #include <bn_log.h>
 #include <bn_sram.h>
 #include "movie_scene.h"
-#include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_strongbad.h"
 #include "bn_sprite_items_player.h"
@@ -21,7 +20,6 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     _sesh(sesh)
 {
     if(_sesh.get_level() != 101) {
-        bn::sound_items::intermish.play();
     }
 
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
@@ -167,7 +165,6 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
-        sb_commentary::im_in_this_game();
 
         _cutscene_length = 1350;
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
@@ -317,7 +314,6 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == 50){
             ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }else if(_timer == _cutscene_length / 2 + 30){
-            sb_commentary::roast_kerrek();
         }
     }
 
@@ -331,7 +327,6 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->stop_animating();
         }else if(_timer == 180){
             sbad->start_animating();
-            bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
             _text_generator.generate(0, -60, "congratulations.", _text_sprites);
         }else if(_timer == 250){
             sbad->stop_animating();
@@ -344,13 +339,11 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->start_animating();
             _text_generator.generate(0, -36, "good score", _text_sprites);
         }else if(_timer == 380){
-            sb_commentary::i_sound_realistic();
         }else if(_timer == 390){
             sbad->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
             _text_sprites.clear();
-            bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
             _text_generator.generate(0, -60, "cast", _text_sprites);
         }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();

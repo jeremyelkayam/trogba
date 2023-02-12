@@ -1,5 +1,4 @@
 #include <bn_keypad.h>
-#include <bn_sound_items.h>
 #include <bn_log.h>
 
 #include "bn_regular_bg_items_titlebg.h"
@@ -15,8 +14,6 @@ title_scene::title_scene() :
         _frame_counter(0) {
 
     _version_label.set_item(bn::sprite_items::versionlabel, 1);
-
-    bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
 
     for(int z = 0; z < 4 ; ++z){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_TITLE_TEXT_Y, z));

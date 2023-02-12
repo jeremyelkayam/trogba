@@ -1,4 +1,3 @@
-#include <bn_sound_items.h>
 #include <bn_log.h>
 #include <bn_sprite_ptr.h>
 #include <bn_keypad.h>
@@ -10,7 +9,6 @@
 #include <bn_bg_palettes.h>
 
 #include "gameover_scene.h"
-#include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogdead.h"
 #include "bn_regular_bg_items_game_over_menu.h"
@@ -41,16 +39,7 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
             );
         }
     }
-    if(_sesh.last_killed_by_archer()){
-        sb_commentary::gameover_arch();
-        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
-    }else{
-        if(sb_commentary::gameover(_sesh.get_score())){
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
-        }else{
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-        }
-    }
+
 
     text_generator.set_center_alignment();
     text_generator.set_palette_item(RED_PALETTE);

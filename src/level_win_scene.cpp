@@ -1,4 +1,3 @@
-#include <bn_sound_items.h>
 #include <bn_log.h>
 #include <bn_sprite_ptr.h>
 #include <bn_keypad.h>
@@ -7,7 +6,6 @@
 #include <bn_sram.h>
 
 #include "level_win_scene.h"
-#include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
@@ -36,7 +34,6 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _flames.put_above();
     _flames.set_scale(0.7);
 
-    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
@@ -49,7 +46,6 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
     _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
-    sb_commentary::level_win_scene();
 
     if(sesh.get_level() != 101){
         save();

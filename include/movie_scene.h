@@ -3,7 +3,6 @@
 #include <bn_sprite_ptr.h>
 #include <bn_sprite_animate_actions.h>
 #include <bn_sprite_actions.h>
-#include <bn_sound_items.h>
 #include <bn_unordered_map.h>
 #include "scene.h"
 #include "player.h"

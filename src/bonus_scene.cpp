@@ -2,7 +2,6 @@
 #include "bn_regular_bg_items_cottageinterior.h"
 #include "bn_sprite_items_debug_box.h"
 #include <bn_log.h>
-#include <bn_sound_items.h>
 
 namespace trog {
 
@@ -42,7 +41,6 @@ bn::optional<scene_type> bonus_scene::update(){
         if(_trogdor.get_hitbox().intersects(bag.get_hitbox())){
             //todo refactor this into trogdor
             _sesh.score(TROG_MONEYBAG_POINTS);
-            bn::sound_items::goldget.play(1);
             bag.collect();
         }
     }

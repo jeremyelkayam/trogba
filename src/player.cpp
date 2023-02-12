@@ -1,7 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_math.h>
 #include <bn_log.h>
-#include <bn_sound_items.h>
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
@@ -246,8 +245,6 @@ void player::handle_peasant_collision(peasant &peasant){
 void player::start_burninating(){
     _burninate_time = _burninate_length;
     _breath.enable();
-
-    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 }
 
 void player::handle_knight_collision(knight &knight){
@@ -270,7 +267,6 @@ void player::handle_arrow_collision(archer &archer){
 }
 
 void player::die(short frame_no){
-    bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
     _sprite.set_tiles(bn::sprite_items::player.tiles_item(), frame_no);
     _breath.disable();

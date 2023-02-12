@@ -1,5 +1,4 @@
 #include <bn_keypad.h>
-#include <bn_sound_items.h>
 #include <bn_log.h>
 #include <bn_sprite_palettes.h>
 
@@ -17,8 +16,6 @@ logo_scene::logo_scene(session_info &sesh) :
 
     _trogdor.move_to(150, 0,30);
     _trogdor.set_horizontal_flip(true);
-
-    bn::sound_items::videlectrix_jingle.play(TROG_DEFAULT_VOLUME);
     
     //hack to make trogdor appear white
     bn::sprite_palettes::set_brightness(1);

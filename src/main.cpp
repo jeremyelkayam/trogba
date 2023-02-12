@@ -8,7 +8,6 @@
 #include <bn_core.h>
 #include <bn_log.h>
 #include <bn_keypad.h>
-#include <bn_sound_items.h>
 #include <bn_sound.h>
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
@@ -146,12 +145,10 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(TROG_DEFAULT_VOLUME);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
             kicked=false;
         }
 

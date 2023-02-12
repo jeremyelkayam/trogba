@@ -1,10 +1,8 @@
 #include <bn_math.h>
 #include <bn_log.h>
-#include <bn_sound_items.h>
 
 #include "peasant.h"
 #include "entity.h"
-#include "sb_commentary.h"
 #include "bn_sprite_items_peasantdead.h"
 
 namespace trog {
@@ -59,8 +57,6 @@ void peasant::burninate(){
 
         // change animation to flaming
         set_sprite_ablaze();
-        bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
-        sb_commentary::ignite_peasant();
     }
 }
 
@@ -73,8 +69,6 @@ void peasant::set_sprite_ablaze(){
 void peasant::update(){
     entity::update();
     if(_time_dead == 1){
-        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
-        sb_commentary::stomp_peasant();
     }
     
 

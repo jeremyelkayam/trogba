@@ -1,4 +1,3 @@
-#include <bn_sound_items.h>
 #include <bn_log.h>
 #include <bn_sprite_ptr.h>
 #include <bn_keypad.h>
@@ -40,8 +39,6 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
     _secret_code.emplace_back(bn::keypad::key_type::B);
     _secret_code.emplace_back(bn::keypad::key_type::A);
 
-
-    bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
 
     // original styles
     // bn::string<64> instructions[] = {

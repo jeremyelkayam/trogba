@@ -5,7 +5,6 @@
  */
 
 #include <bn_keypad.h>
-#include <bn_sound_items.h>
 #include <bn_log.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
@@ -25,7 +24,6 @@
 #include "bloody_text.h"
 #include "burninate_text.h"
 #include "level_data.h"
-#include "sb_commentary.h"
 
 namespace trog {
 
@@ -47,10 +45,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
     _countryside.put_below();
-
-    if(_sesh.get_level() == 1 && _sesh.get_mans() == 30){
-        bn::sound_items::secret_unlocked.play(TROG_DEFAULT_VOLUME);
-    }
 
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
@@ -180,7 +174,6 @@ bn::optional<scene_type> play_scene::update(){
     if(_overlay_text) _overlay_text->update();
 
     if(_win_pause_time == 1){
-        sb_commentary::level_win_pause();
     }
     if(_autosave_visibility_time != 0){
         ++_autosave_visibility_time;
@@ -246,7 +239,6 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            sb_commentary::burninate();
             _overlay_text.reset(new burninate_text());
         }else if(!_trogdor->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
@@ -262,9 +254,7 @@ bn::optional<scene_type> play_scene::update(){
             _trogdor->handle_arrow_collision(a);
         }
         if(_trogdor->dead() && !was_dead) {
-            if(_sesh.get_mans() != 0){
-                sb_commentary::arrowed();
-            }
+
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
             
@@ -280,9 +270,6 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_trogdor->dead() && !was_dead) {
-            if(_sesh.get_mans() != 0){
-                sb_commentary::sworded();
-            }
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
             short rand_num = rand() % 100;
@@ -490,7 +477,6 @@ troghammer_sound::troghammer_sound(unsigned short phrase) :
     _phrase(phrase), 
     _timer(0),
     _length(70) {
-    bn::sound_items::troghammer.play(1);
 }
 
 void troghammer_sound::update(){
@@ -498,16 +484,12 @@ void troghammer_sound::update(){
     if(_timer == _length){
         switch(_phrase){
             case 0:
-                bn::sound_items::troghammer_alert.play(1);
             break;
             case 1:
-                bn::sound_items::troghammer_awake.play(1);
             break;
             case 2:
-                bn::sound_items::troghammer_coming.play(1);
             break;
             case 3:
-                bn::sound_items::troghammer_arrived.play(1);
             break;
             default:
                 BN_ERROR("Invalid phrase ID passed into troghammer_sound: ", _phrase);

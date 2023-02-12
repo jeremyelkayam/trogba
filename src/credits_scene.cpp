@@ -3,7 +3,6 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 #include <bn_version.h>
-#include <bn_sound_items.h>
 #include "credits_scene.h"
 #include "bn_sprite_items_titlegraphic.h"
 #include "constants.h"
@@ -74,7 +73,6 @@ void credits_scene::setup_credits(){
         "The Brothers Chaps",
         "and James Ernest"
     };
-    bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
 
     for(bn::string<64> str : original_game_credits){ 
         _text_generator.generate(0, ycor,str, _text_sprites);
