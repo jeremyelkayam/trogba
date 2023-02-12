@@ -20,7 +20,6 @@
 #include "gameover_scene.h"
 #include "level_win_scene.h"
 #include "bonus_scene.h"
-#include "movie_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -92,11 +91,6 @@ int main()
                     scene.reset(new trog::level_win_scene(sesh, text_generator));
                     break;
                 }
-                case trog::scene_type::MOVIE: {
-                    hud.show();
-                    scene.reset(new trog::movie_scene(sesh, text_generator));
-                    break;
-                }                                
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;

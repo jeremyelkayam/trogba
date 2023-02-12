@@ -1,6 +1,5 @@
 #include "bonus_scene.h"
 #include "bn_regular_bg_items_cottageinterior.h"
-#include "bn_sprite_items_debug_box.h"
 #include <bn_log.h>
 
 namespace trog {

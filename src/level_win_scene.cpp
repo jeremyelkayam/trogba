@@ -88,11 +88,7 @@ bn::optional<scene_type> level_win_scene::update(){
     }else{
         _nose_smoke.set_visible(false);
         if(bn::keypad::a_pressed()){
-            if(_sesh.current_level_has_cutscene()) {
-                result = scene_type::MOVIE;
-            }else{
-                result = scene_type::PLAY;
-            }
+            result = scene_type::PLAY;
         }
 
     }
