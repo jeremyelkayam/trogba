@@ -8,7 +8,6 @@
 #include <bn_random.h>
 #include "bn_sprite_items_knight.h"
 #include "entity.h"
-#include "session_info.h"
 
 #include "constants.h"
 

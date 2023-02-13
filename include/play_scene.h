@@ -73,6 +73,8 @@ namespace trog{
 
         void autosave(bool just_died);
 
+        void spawn_troghammer(bool alert);
+
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

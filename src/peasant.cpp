@@ -5,6 +5,7 @@
 #include "peasant.h"
 #include "entity.h"
 #include "sb_commentary.h"
+#include "bn_sprite_items_peasantdead.h"
 
 namespace trog {
 
@@ -65,8 +66,8 @@ void peasant::burninate(){
 
 void peasant::set_sprite_ablaze(){
     _walkcycle = bn::create_sprite_animate_action_forever(
-                    _sprite, 3, bn::sprite_items::peasant.tiles_item(), 3, 4);
-    _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 3);
+                    _sprite, 3, bn::sprite_items::peasant.tiles_item(), 2, 3);
+    _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);
 }
 
 void peasant::update(){
@@ -106,7 +107,10 @@ void peasant::stomp(){
     if(_time_dead == 0){
         _speed = bn::fixed(0);
         _time_dead=1;
-        _sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), 2);
+        _sprite.set_item(bn::sprite_items::peasantdead);
+        _sprite.set_y(_sprite.y() + 3);
+        _pos.set_y(_pos.y() + 3);
+
     }
 }
 

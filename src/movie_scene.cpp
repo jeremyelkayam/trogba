@@ -1,5 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
+#include <bn_sram.h>
 #include "movie_scene.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
@@ -159,6 +160,9 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         _cutscene_length *= 1.75; 
     }else if(_sesh.get_level() == 101){
         // CREDITS
+
+        //once you beat the game, you can no longer restore your save data
+        bn::sram::clear(sizeof(_sesh));
 
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
@@ -417,8 +421,7 @@ bn::optional<scene_type> movie_scene::update(){
     if(cutscene_over() && _sesh.get_level() != 101) {
         result = scene_type::PLAY;
     }else if(cutscene_over() && _sesh.get_level() == 101){
-        _sesh.reset();
-        result = scene_type::CREDITS;
+        result = scene_type::HISCORES;
     }
 
     _timer++;

@@ -1,11 +1,11 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include "bn_sprite_items_peasant.h"
 #include "entity.h"
 #include "enums.h"
 #include "session_info.h"
 #include "constants.h"
+#include "bn_sprite_items_peasant.h"
 
 namespace trog {
     class peasant : public entity { 

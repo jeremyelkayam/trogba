@@ -110,7 +110,11 @@
 #define TROG_HAMMER_WIDTH 16
 #define TROG_HAMMER_HEIGHT 18
 
-#define TROG_VOIDTOWER_POS bn::fixed_point(-16, -61)
+#define TROG_VOIDTOWER_POS_DAY bn::fixed_point(-16, -61)
+#define TROG_VOIDTOWER_POS_DUSK bn::fixed_point(10, -61)
+#define TROG_VOIDTOWER_POS_NIGHT bn::fixed_point(-16, -61)
+#define TROG_VOIDTOWER_POS_DAWN bn::fixed_point(-16, -61)
+
 
 #define TROG_ARCHER_DRAWBOW_WAITTIME 60
 #define TROG_ARCHER_SHOOT_WAITTIME 90
