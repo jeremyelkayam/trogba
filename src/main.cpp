@@ -28,6 +28,7 @@
 #include "hiscores_scene.h"
 #include "credits_scene.h"
 #include "devs_scene.h"
+#include "fireyrage_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -41,7 +42,7 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::FIREYRAGE;
     trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
@@ -136,7 +137,12 @@ int main()
                     hud.hide();
                     scene.reset(new trog::credits_scene(text_generator));
                     break;
-                }                                
+                }                
+                case trog::scene_type::FIREYRAGE: {
+                    hud.hide();
+                    scene.reset(new trog::fireyrage_scene());
+                    break;
+                }
                 default: { 
                     BN_ERROR("the selected screen does not exist or is not yet implemented");
                     break;

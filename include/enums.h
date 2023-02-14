@@ -18,6 +18,7 @@ namespace trog {
         BONUS,
         LEVELBEAT,
         LOSE,
+        FIREYRAGE,
         MOVIE,
         MENU,
         HISCORES,
