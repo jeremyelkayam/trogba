@@ -8,7 +8,7 @@
 #include <bn_keypad.h>
 
 
-#include "bn_affine_bg_items_burninatefire0.h"
+#include "bn_affine_bg_items_ground.h"
 #include "fireyrage_scene.h"
 
 namespace trog
@@ -85,7 +85,7 @@ void fireyrage_scene::update_hbe_values()
     int camera_sin = _camera.sin;
     int y_shift = 160;
 
-    for(int index = 0; index < bn::display::height(); ++index)
+    for(int index = 32; index < bn::display::height(); ++index)
     {
         int reciprocal = bn::reciprocal_lut[index].data() >> 4;
         int lam = camera_y * reciprocal >> 12;
@@ -106,7 +106,7 @@ void fireyrage_scene::update_hbe_values()
 }
 
 fireyrage_scene::fireyrage_scene() : 
-    _bg(bn::affine_bg_items::burninatefire0.create_bg(-376, -336)),
+    _bg(bn::affine_bg_items::ground.create_bg(-376, -336)),
     _pa_hbe(bn::affine_bg_pa_register_hbe_ptr::create(_bg, _pa_values)),
     _pc_hbe(bn::affine_bg_pc_register_hbe_ptr::create(_bg, _pc_values)),
     _dx_hbe(bn::affine_bg_dx_register_hbe_ptr::create(_bg, _dx_values)),

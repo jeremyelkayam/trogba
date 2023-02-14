@@ -18,7 +18,7 @@ namespace trog {
         bn::fixed z = 320;
         int phi = 0;
         int cos = 0;
-        int sin = 0;
+        int sin = 40;
     };
     class fireyrage_scene : public scene { 
         private:
