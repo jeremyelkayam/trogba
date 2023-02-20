@@ -140,7 +140,7 @@ int main()
                 }                
                 case trog::scene_type::FIREYRAGE: {
                     hud.hide();
-                    scene.reset(new trog::fireyrage_scene());
+                    scene.reset(new trog::fireyrage_scene(sesh));
                     break;
                 }
                 default: { 

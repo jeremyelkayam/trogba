@@ -9,6 +9,7 @@
 
 
 #include "bn_affine_bg_items_ground.h"
+#include "bn_regular_bg_items_sky.h"
 #include "fireyrage_scene.h"
 
 namespace trog
@@ -85,7 +86,7 @@ void fireyrage_scene::update_hbe_values()
     int camera_sin = _camera.sin;
     int y_shift = 160;
 
-    for(int index = 32; index < bn::display::height(); ++index)
+    for(int index = 0; index < bn::display::height(); ++index)
     {
         int reciprocal = bn::reciprocal_lut[index].data() >> 4;
         int lam = camera_y * reciprocal >> 12;
@@ -105,25 +106,33 @@ void fireyrage_scene::update_hbe_values()
     }
 }
 
-fireyrage_scene::fireyrage_scene() : 
-    _bg(bn::affine_bg_items::ground.create_bg(-376, -336)),
-    _pa_hbe(bn::affine_bg_pa_register_hbe_ptr::create(_bg, _pa_values)),
-    _pc_hbe(bn::affine_bg_pc_register_hbe_ptr::create(_bg, _pc_values)),
-    _dx_hbe(bn::affine_bg_dx_register_hbe_ptr::create(_bg, _dx_values)),
-    _dy_hbe(bn::affine_bg_dy_register_hbe_ptr::create(_bg, _dy_values))
+fireyrage_scene::fireyrage_scene(session_info &sesh) : 
+    _sesh(sesh),
+    _sky(bn::regular_bg_items::sky.create_bg(0,48)),
+    _ground(bn::affine_bg_items::ground.create_bg(-376, -336)),
+    _pa_hbe(bn::affine_bg_pa_register_hbe_ptr::create(_ground, _pa_values)),
+    _pc_hbe(bn::affine_bg_pc_register_hbe_ptr::create(_ground, _pc_values)),
+    _dx_hbe(bn::affine_bg_dx_register_hbe_ptr::create(_ground, _dx_values)),
+    _dy_hbe(bn::affine_bg_dy_register_hbe_ptr::create(_ground, _dy_values)),
+    _pos(0,0),
+    _sprite(bn::sprite_items::knight.create_sprite(_pos))
+    // _trogdor(0, 0, _sesh, false)
 {
-
+    
 }
+
 
 bn::optional<scene_type> fireyrage_scene::update(){
     bn::optional<scene_type> result;
 
     update_camera();
     update_hbe_values();
+    update_sprite();
     _pa_hbe.reload_values_ref();
     _pc_hbe.reload_values_ref();
     _dx_hbe.reload_values_ref();
     _dy_hbe.reload_values_ref();
+    // _trogdor.update();
     
     return result;
 }
