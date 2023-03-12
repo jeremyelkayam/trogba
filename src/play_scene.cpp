@@ -12,9 +12,6 @@
 #include <bn_blending.h>
 
 #include "bn_regular_bg_items_day.h"
-#include "bn_regular_bg_items_night.h"
-#include "bn_regular_bg_items_dawn.h"
-#include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
@@ -62,15 +59,15 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             void_tower_pos = TROG_VOIDTOWER_POS_DAY;
             break;
         case 2:
-            _countryside.set_item(bn::regular_bg_items::dusk);
+            _countryside.set_item(bn::regular_bg_items::day);
             void_tower_pos = bn::fixed_point(10, -61);
             break;
         case 3:
-            _countryside.set_item(bn::regular_bg_items::night);
+            _countryside.set_item(bn::regular_bg_items::day);
             void_tower_pos = TROG_VOIDTOWER_POS_NIGHT;
             break;
         case 4:
-            _countryside.set_item(bn::regular_bg_items::dawn);
+            _countryside.set_item(bn::regular_bg_items::day);
             void_tower_pos = bn::fixed_point(-90, -61);
             break;
         default:
