@@ -18,7 +18,6 @@
 #include "play_scene.h"
 #include "gameover_scene.h"
 #include "level_win_scene.h"
-#include "bonus_scene.h"
 #include "enums.h"
 
 //debug settings for emulator
@@ -67,15 +66,6 @@ int main()
                     }else{
                         scene.reset(new trog::play_scene(sesh, hud, text_generator));
                     }
-                    break;
-                }
-                case trog::scene_type::BONUS: {
-                    // hud.show();
-                    //this is the treasure hut scene
-                    // we need to store the play scene so that we may return to it later.
-                    previous_play_scene = bn::move(scene);
-
-                    scene.reset(new trog::bonus_scene(sesh));
                     break;
                 }
                 case trog::scene_type::LOSE: { 

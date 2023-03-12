@@ -12,7 +12,6 @@ namespace trog {
     {
         INSTRUCTIONS,
         PLAY,
-        BONUS,
         LEVELBEAT,
         LOSE
     };

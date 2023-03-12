@@ -14,7 +14,7 @@
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
 #include "bn_regular_bg_items_dawn.h"
-// #include "bn_regular_bg_items_dusk.h"
+#include "bn_regular_bg_items_dusk.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
@@ -62,7 +62,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             void_tower_pos = TROG_VOIDTOWER_POS_DAY;
             break;
         case 2:
-            _countryside.set_item(bn::regular_bg_items::day);
+            _countryside.set_item(bn::regular_bg_items::dusk);
             void_tower_pos = bn::fixed_point(10, -61);
             break;
         case 3:
@@ -307,8 +307,6 @@ bn::optional<scene_type> play_scene::update(){
 
         // only run the collision check while unpaused
         if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
-            //the above if statement returns true if we hit a treasure hut
-            result = scene_type::BONUS;
             //this marks the cottage as visited so that we can no longer return
             c.visit();
             //this marks it as visited if we autosave
@@ -318,7 +316,7 @@ bn::optional<scene_type> play_scene::update(){
         }
     }
 
-    if(result && result != scene_type::BONUS){
+    if(result ){
         _hud.clear_scrolling_text();
     }
 
