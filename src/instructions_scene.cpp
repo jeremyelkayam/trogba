@@ -71,14 +71,14 @@ void instructions_scene::clear_text(){
 
 void instructions_scene::setup_instructions(){
     bn::string<64> instructions[] = {
-        "Use the squishy + to move",
-        "Stomp 10 guys to burninate",
-        "Burn all cottages to win",
-        "Avoid knights and archers!",
+        "This is a demo of Trogba,",
+        "a fanmade Trogdor GBA port",
+        "by Jeremy Elkayam.",
         "",
         "",
-        "OG by Mike/Matt/Jonathan",
-        "GBA version by Jeremy Elkayam"
+        "",
+        "Get the full version at",
+        "github.com/jeremyelkayam/trogba"
     };
 
     for(bn::string<64> line : instructions) { 
