@@ -14,8 +14,7 @@ namespace trog{
         bn::sprite_text_generator& _text_generator;
         bn::vector<bn::sprite_ptr, 64> _nicework_text_sprites;
         bn::vector<bn::sprite_ptr, 64> _levelbeated_text_sprites;
-        bn::sprite_ptr _nose_smoke, _flames;
-        bn::sprite_animate_action<31> _smoke_anim;
+        bn::sprite_ptr _flames;
         bn::sprite_animate_action<4> _burningflames;
 
         session_info &_sesh;
