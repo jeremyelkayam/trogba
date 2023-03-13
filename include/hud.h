@@ -6,7 +6,6 @@
 #include <bn_sprite_ptr.h>
 #include <bn_rect_window.h>
 
-#include "constants.h"
 #include "session_info.h"
 namespace trog {
     class hud { 
@@ -16,8 +15,7 @@ namespace trog {
             bn::sprite_text_generator& _text_generator;  
 
             bn::vector<bn::sprite_ptr, 32> _score_text_sprites, 
-                                           _mans_lv_text_sprites,
-                                           _scrolling_text_sprites;
+                                           _mans_lv_text_sprites;
 
 
             bn::vector<bn::sprite_ptr, 10> _trogmeter_sprites;
@@ -27,9 +25,6 @@ namespace trog {
             bn::regular_bg_ptr _burninatemeter_invert;            
             bn::rect_window _burninatemeter_window;
             void set_all_visible(bool visible);
-            
-            //return true if we have scrolling text, false otherwise
-            bool scrolling_text(){return _scrolling_text_sprites.size();}
 
             bool _enabled;
 
@@ -42,9 +37,7 @@ namespace trog {
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
             void update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time);
-            void scroll_text(const char* text);
-            void clear_scrolling_text(){_scrolling_text_sprites.clear();show();}
-
+ 
             void hide();
             void show();
     };

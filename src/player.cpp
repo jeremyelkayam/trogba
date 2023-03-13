@@ -9,11 +9,11 @@
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(xcor, ycor)),
-        _speed(TROG_PLAYER_SPEED),
+        entity(xcor, ycor, 24, 34, bn::sprite_items::player.create_sprite(xcor, ycor)),
+        _speed(0.87),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 2, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+                    _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -25,11 +25,11 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
     _majesty.set_visible(false);
     _majesty.set_z_order(FRONT_ZORDER);
     _majesty.set_scale(2.3);
-    _top_bound = TROG_COUNTRYSIDE_PLAYER_TOP_BOUND;
+    _top_bound = -72;
     _sprite.set_z_order(FRONT_ZORDER);
 
     // LOGIC CRIBBED FROM Trogdor-Reburninated by Mips96
-    _burninate_length = TROG_BURNINATE_TIME;
+    _burninate_length = 360;
 	if (_sesh.get_level() > 25) {
 		_burninate_length /= 1.3;
 	} else if (_sesh.get_level() > 20) {
@@ -96,7 +96,7 @@ void player::update(){
         }
 
         //once the iframes are over, return the sprite to normal
-        if(_iframes > TROG_RESPAWN_INV_TIME) {
+        if(_iframes > 120) {
             BN_LOG("end invincibility");
             _sprite.set_visible(true);
             _iframes = 0;
@@ -232,7 +232,7 @@ void player::handle_peasant_collision(peasant &peasant){
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
-        _sesh.score(TROG_PEASANT_STOMP_SCORE);
+        _sesh.score(2);
         
         ++_trogmeter;
         if(_trogmeter == _trogmeter_max){
@@ -276,12 +276,12 @@ void player::update_anim(){
 }
 
 void player::update_firebreath(){
-    short xoffset = TROG_FIREBREATH_XOFFSET;
+    short xoffset = 30;
     if(_sprite.horizontal_flip()){
         xoffset=-xoffset;
     }
     _breath.set_x(_sprite.position().x() + xoffset);
-    _breath.set_y(_sprite.position().y() + TROG_FIREBREATH_YOFFSET);        
+    _breath.set_y(_sprite.position().y() + -8);        
     _breath.update();
 }
 
@@ -315,10 +315,10 @@ void player::update_win_anim(){
     _sprite.put_above();
     _majesty.put_above();
     
-    _majesty.set_visible(_majesty_flash_timer < TROG_MAJESTY_FLASH_INTERVAL);
+    _majesty.set_visible(_majesty_flash_timer < 15);
     _breath.set_visible(false);
 
-    if(_majesty_flash_timer > TROG_MAJESTY_FLASH_INTERVAL * 2){
+    if(_majesty_flash_timer > 15 * 2){
         _majesty_flash_timer = 0;
     }
 

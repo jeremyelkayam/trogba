@@ -21,13 +21,13 @@ void archer::update(){
     entity::update();
 
     ++_time_since_spawn;
-    if(TROG_ARCHER_DRAWBOW_WAITTIME < _time_since_spawn 
-        && _time_since_spawn < TROG_ARCHER_SHOOT_WAITTIME){
+    if(60 < _time_since_spawn 
+        && _time_since_spawn < 90){
         set_bow_drawn(true);
-    }else if (TROG_ARCHER_SHOOT_WAITTIME == _time_since_spawn && !_arrow){
+    }else if (90 == _time_since_spawn && !_arrow){
         set_bow_drawn(false);
         shoot();
-    }else if(TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
+    }else if(120 < _time_since_spawn){
         _sprite.set_visible(false);
     }
 
@@ -51,7 +51,7 @@ void archer::set_bow_drawn(bool drawn){
 bool archer::remove_from_map(){
     if(_arrow) {
         return _arrow->out_of_bounds();
-    }else if(!_arrow && TROG_ARCHER_DISAPPEAR_WAITTIME < _time_since_spawn){
+    }else if(!_arrow && 120 < _time_since_spawn){
         //at this point we've shot our arrow and it also got deleted
         // possibly from hitting something
         // so we need to despawn      

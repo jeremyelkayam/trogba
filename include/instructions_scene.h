@@ -12,7 +12,6 @@ namespace trog{
 
     class instructions_scene : public scene{ 
     private:
-        bn::vector<bn::sprite_ptr, 4> _title_sprites;
         bn::vector<bn::keypad::key_type, 10> _secret_code;
         unsigned short _secret_code_index;
 

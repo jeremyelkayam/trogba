@@ -4,9 +4,9 @@
 namespace trog { 
 
 arrow::arrow(bn::fixed_point pos, bool facing_left) : 
-        entity(pos.x(), pos.y(), TROG_ARROW_WIDTH, TROG_ARROW_HEIGHT, bn::sprite_items::arrow.create_sprite(_pos)),
+        entity(pos.x(), pos.y(), 10, 3, bn::sprite_items::arrow.create_sprite(_pos)),
         _facing_left(facing_left),
-        _speed(TROG_ARROW_SPEED),
+        _speed(1.5),
         _rotating(false),
         _plink_timer(0) {
     _sprite.set_horizontal_flip(facing_left);

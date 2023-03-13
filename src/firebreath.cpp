@@ -6,7 +6,7 @@
 namespace trog {
 
 firebreath::firebreath(session_info &sesh) : 
-        entity(bn::fixed(0), bn::fixed(0), bn::fixed(TROG_FIREBREATH_WIDTH), bn::fixed(TROG_FIREBREATH_HEIGHT), bn::sprite_items::firebreath.create_sprite(0, 0)),
+        entity(bn::fixed(0), bn::fixed(0), bn::fixed(20), bn::fixed(12), bn::sprite_items::firebreath.create_sprite(0, 0)),
         _burningflames(bn::create_sprite_animate_action_forever(
                     _sprite, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _sesh(sesh){
@@ -45,7 +45,7 @@ void firebreath::handle_cottage_collision(cottage &cottage){
         BN_LOG("burninate the cottage?");        
         bool burninate_success = cottage.burninate();
         if(burninate_success){
-            _sesh.score(TROG_COTTAGE_BREATHBURN_SCORE);
+            _sesh.score(5);
         }
     }
 }

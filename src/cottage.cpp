@@ -8,7 +8,7 @@
 namespace trog {
 
 cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
-        entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottage.create_sprite(xcor, ycor, 2)),
+        entity(xcor, ycor, 20, 20, bn::sprite_items::cottage.create_sprite(xcor, ycor, 2)),
         _direction(direction),
         _has_treasure(has_treasure) {
     switch(direction) {
@@ -28,7 +28,7 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
 
     _sprite.set_z_order(BACK_ZORDER);
 
-    if(burninated) _time_burning = TROG_COTTAGEFIRE_TIME + 1;
+    if(burninated) _time_burning = 120 + 1;
 
 }
 
@@ -36,7 +36,7 @@ void cottage::update(){
     if(_flames){
         _burningflames->update();
         ++_time_burning;
-        if(_time_burning > TROG_COTTAGEFIRE_TIME){
+        if(_time_burning > 120){
             //clear out our flames; they are no longer necessary.
             _flames->set_visible(false);
             _burningflames.reset();
@@ -59,7 +59,7 @@ void cottage::update(){
 
 bool cottage::burninate(){
     if(_time_burning==0){
-        _flames = bn::sprite_items::cottagefire.create_sprite_optional(_pos.x(), _pos.y() + TROG_COTTAGEFIRE_YOFFSET);
+        _flames = bn::sprite_items::cottagefire.create_sprite_optional(_pos.x(), _pos.y() + -10);
         _burningflames = bn::create_sprite_animate_action_forever(
                     _flames.value(), 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3);
 

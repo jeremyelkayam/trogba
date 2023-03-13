@@ -3,11 +3,8 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
-#include <bn_sram.h>
 #include <bn_version.h>
 #include "instructions_scene.h"
-#include "bn_sprite_items_titlegraphic.h"
-#include "constants.h"
 
 namespace trog {
 
@@ -22,10 +19,6 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _sesh(sesh),
         _text_ycor(-30) {
     _flashing_text_counter = 0;
-
-    for(int z = 0; z < 4 ; ++z){
-        _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_INSTRUCTION_TITLE_Y, z));
-    }
 
     //set up konami code 
     _secret_code.emplace_back(bn::keypad::key_type::UP);
@@ -78,21 +71,21 @@ void instructions_scene::setup_instructions(){
         "",
         "",
         "Get the full version at",
-        "github.com/jeremyelkayam/trogba"
+        "github.com/JeremyElkayam/trogba"
     };
 
     for(bn::string<64> line : instructions) { 
-        write_instruction(line.c_str(), WHITE_PALETTE, 14);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
     }
 
 
-    _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, 33, "Press A to start 'em up ", _start_text_sprites);
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    _text_generator.generate(0, 25, "Press A to start 'em up ", _start_text_sprites);
 }
 
 void instructions_scene::setup_secret_hints(){
 
-    write_instruction("SECRET HINTS!!", RED_PALETTE, 16);
+    write_instruction("SECRET HINTS!!", bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 16);
 
     bn::string<64> instructions[] = {
         "-Don't let peasants return home",
@@ -102,16 +95,16 @@ void instructions_scene::setup_secret_hints(){
     };
     
     for(bn::string<64> line : instructions) { 
-        write_instruction(line.c_str(), WHITE_PALETTE, 16);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 16);
     }
     
-    write_instruction("-What's a treasure hut?!?!", RED_PALETTE, 16);
-    write_instruction("-Secret Code?!?!", RED_PALETTE, 16);
+    write_instruction("-What's a treasure hut?!?!", bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 16);
+    write_instruction("-Secret Code?!?!", bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 16);
 }
 
 void instructions_scene::setup_credits(){
 
-    write_instruction("CREDITS!!", RED_PALETTE, 16);
+    write_instruction("CREDITS!!", bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 16);
 
     bn::string<64> credits[] = {
         "Designed by Mike and Matt",
@@ -123,15 +116,15 @@ void instructions_scene::setup_credits(){
     };
 
     for(bn::string<64> line : credits) { 
-        write_instruction(line.c_str(), WHITE_PALETTE, 14);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
     }    
 
     bn::string<32> butano_str;
     bn::ostringstream butano_string_stream(butano_str);
     butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor();
 
-    write_instruction(butano_str.c_str(), RED_PALETTE, 14);
-    write_instruction("by Gustavo Valiente", WHITE_PALETTE, 14);
+    write_instruction(butano_str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 14);
+    write_instruction("by Gustavo Valiente", bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
 }
 
 void instructions_scene::write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing){
@@ -168,17 +161,17 @@ bn::optional<scene_type> instructions_scene::update(){
         bn::string<10> lv_str;
         bn::ostringstream lv_string_stream(lv_str);
         lv_string_stream << "Lv " <<  _sesh.get_level();        
-        _text_generator.set_palette_item(RED_PALETTE);
+        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
         _text_generator.generate(0, -30+(14*4)+7, lv_str, _start_text_sprites);    
     }else{
         if(!_show_secret_hints){
             _flashing_text_counter++;
-            if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME){
+            if(_flashing_text_counter > 40){
                 for(auto it : _start_text_sprites) { 
                     it.set_visible(false);
                 }
             }
-            if(_flashing_text_counter > TROG_FLASHING_TEXT_VISIBLE_TIME + TROG_FLASHING_TEXT_INVISIBLE_TIME){
+            if(_flashing_text_counter > 40 + 10){
                 for(auto it : _start_text_sprites) { 
                     it.set_visible(true);
                 }
@@ -192,16 +185,16 @@ bn::optional<scene_type> instructions_scene::update(){
             _start_text_sprites.clear();
 
             if(_continue_selected){
-                _text_generator.set_palette_item(GRAY_PALETTE);
+                _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
                 _text_generator.generate(-60, -30+(14*4)+7, "NEW GAME", _start_text_sprites);    
 
-                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
                 _text_generator.generate(60, -30+(14*4)+7, "[CONTINUE]", _start_text_sprites);                    
             }else{
-                _text_generator.set_palette_item(RED_PALETTE);
+                _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
                 _text_generator.generate(-60, -30+(14*4)+7, "[NEW GAME]", _start_text_sprites);    
 
-                _text_generator.set_palette_item(GRAY_PALETTE);
+                _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
                 _text_generator.generate(60, -30+(14*4)+7, "CONTINUE", _start_text_sprites);                    
             }
 
@@ -232,28 +225,7 @@ bn::optional<scene_type> instructions_scene::update(){
         if(_secret_code_index == _secret_code.size()){
             _sesh.secret_lives_boost();
         }
-        session_info loaded_sesh;
-
-        //Check to see if we have a saved session
-        bn::sram::read(loaded_sesh);
-        // Don't bother with loading if we are going to do the level select cheat
-        if(!_level_select && loaded_sesh.is_valid_object()){
-            if(!_continue_menu_visible){
-                if(_show_secret_hints){
-                    clear_text();
-                    setup_instructions();
-                }
-                setup_continue_menu();
-
-            }else{
-                if(_continue_selected){
-                    _sesh = loaded_sesh;
-                }
-                result = scene_type::PLAY;
-            }
-        }else{
-            result = scene_type::PLAY;
-        }
+        result = scene_type::PLAY;
 
     }
     if(bn::keypad::r_pressed() && !_level_select && !_continue_menu_visible){

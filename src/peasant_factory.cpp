@@ -4,8 +4,8 @@
 
 namespace trog
 {
-    peasant_factory::peasant_factory(bn::vector<cottage, TROG_MAX_COTTAGES> &cottages, bn::forward_list<peasant, 20> &peasants) : 
-        enemy_factory(TROG_PEASANT_MIN_SPAWN_INTERVAL, TROG_PEASANT_MAX_SPAWN_INTERVAL),
+    peasant_factory::peasant_factory(bn::vector<cottage, 6> &cottages, bn::forward_list<peasant, 20> &peasants) : 
+        enemy_factory(40, 120),
         _cottages(cottages),
         _peasants(peasants)
     {
@@ -43,18 +43,18 @@ namespace trog
             else if (home.get_direction() == direction::UP)
             {
                 spawn_ycor -= 10;
-                max_dist = spawn_ycor.integer() - TROG_COUNTRYSIDE_TOP_BOUND - 10;
+                max_dist = spawn_ycor.integer() - -66 - 10;
             }
             else if (home.get_direction() == direction::DOWN)
             {
                 spawn_ycor += 10;
-                max_dist = TROG_COUNTRYSIDE_BOTTOM_BOUND - spawn_ycor.integer();
+                max_dist = 79 - spawn_ycor.integer();
             }else BN_ASSERT(false, "invalid direction");
 
-            bn::fixed dist = _random.get_int(TROG_PEASANT_MIN_WALK_DISTANCE, max_dist);
+            bn::fixed dist = _random.get_int(2, max_dist);
 
 
-            _peasants.emplace_front(spawn_xcor, spawn_ycor, TROG_PEASANT_SPEED, dist, home.get_direction());
+            _peasants.emplace_front(spawn_xcor, spawn_ycor, 0.435, dist, home.get_direction());
         }
     }
 

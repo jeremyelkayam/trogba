@@ -16,7 +16,6 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "play_scene.h"
-#include "constants.h"
 #include "bloody_text.h"
 #include "burninate_text.h"
 #include "level_data.h"
@@ -25,7 +24,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+        _trogdor(new player(40, 0 + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
@@ -52,27 +51,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 		level_index = ((_sesh.get_level() - 2) % 32 + 2) - 1;
 	}
 
-    bn::fixed_point void_tower_pos;
-    switch(levels[level_index][0]){
-        case 1:
-            _countryside.set_item(bn::regular_bg_items::day);
-            void_tower_pos = TROG_VOIDTOWER_POS_DAY;
-            break;
-        case 2:
-            _countryside.set_item(bn::regular_bg_items::day);
-            void_tower_pos = bn::fixed_point(10, -61);
-            break;
-        case 3:
-            _countryside.set_item(bn::regular_bg_items::day);
-            void_tower_pos = TROG_VOIDTOWER_POS_NIGHT;
-            break;
-        case 4:
-            _countryside.set_item(bn::regular_bg_items::day);
-            void_tower_pos = bn::fixed_point(-90, -61);
-            break;
-        default:
-            BN_ERROR("Invalid background ID in level_data.h");
-    }
 
     // 6 = max cottages
     for (int i = 0; i < _cottages.max_size(); i++) {
@@ -83,7 +61,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 		if (levels[level_index][j] > 0) {
             //Index 1 in level data refers to the number of the treasure hut from 1-6
             // 0 if no treasure hut             
-            bool treasurehut = (i == (levels[level_index][1] - 1)) && _sesh.can_visit_treasure_hut();
+            bool treasurehut = (i == (levels[level_index][1] - 1));
             BN_LOG("treasure hut? ", treasurehut);            
             BN_LOG("cottage #", i + 1);
             BN_LOG("direction: ", levels[level_index][j]);
@@ -117,12 +95,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
                 ycor,
 				enumdir,
                 treasurehut,
-                sesh.load_cottage_burnination(i)
+                false
 			);
 		}
 	}
-    //once it's loaded we are done with it
-    _sesh.clear_burnination_array();
 
 
     _text_generator.set_center_alignment();
@@ -195,10 +171,10 @@ bn::optional<scene_type> play_scene::update(){
                         bool cottage_burninated = c.burninate();
                         if(cottage_burninated) {
                             //bonus points if the peasant burns his house down
-                            _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
+                            _sesh.score(10);
                         }else{
                             //the peasant is still dead so you get points
-                            _sesh.score(TROG_PEASANT_STOMP_SCORE);
+                            _sesh.score(2);
                         }
                     }
                 }
@@ -216,7 +192,6 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->dead() && !was_dead) {
 
-            _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
@@ -236,7 +211,6 @@ bn::optional<scene_type> play_scene::update(){
             }else if(rand_num % 100 == 1){
                 str = "SORTED!";
             }
-            _sesh.set_killed_by_archer(false);
             _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
@@ -254,7 +228,7 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
-                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, 
+                _trogdor.reset(new player(40, 
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
@@ -262,12 +236,12 @@ bn::optional<scene_type> play_scene::update(){
         }
     }
 
-    if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
+    if(_burninate_pause_time >= 60){
         _burninate_pause_time = 0;
         _overlay_text.reset();
     }
     
-    if(level_complete() && _win_pause_time > TROG_WIN_PAUSETIME){
+    if(level_complete() && _win_pause_time > 150){
         result = scene_type::LEVELBEAT;
     }
 
@@ -301,20 +275,6 @@ bn::optional<scene_type> play_scene::update(){
     // since you can't move while paused, we should be fine....
     for(cottage &c : _cottages){
         c.update();
-
-        // only run the collision check while unpaused
-        if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
-            //this marks the cottage as visited so that we can no longer return
-            c.visit();
-            //this marks it as visited if we autosave
-            _sesh.visit_treasure_hut();
-
-            set_visible(false);
-        }
-    }
-
-    if(result ){
-        _hud.clear_scrolling_text();
     }
 
     return result;

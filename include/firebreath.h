@@ -5,7 +5,6 @@
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"
-#include "constants.h"
 #include "session_info.h"
 
 namespace trog {

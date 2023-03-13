@@ -2,7 +2,6 @@
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
 #include "entity.h"
-#include "constants.h"
 #include "enums.h"
 
 namespace trog {
@@ -18,7 +17,7 @@ namespace trog {
             cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated);
             virtual void update() final;
             bool burninate();
-            bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
+            bool burninated() {return _time_burning > (120 / 2);}
             direction get_direction() {return _direction;}
             bool has_treasure();
             void visit() {BN_ASSERT(_has_treasure); _has_treasure = false;}

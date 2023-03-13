@@ -1,6 +1,5 @@
 #include <bn_log.h>
 #include <bn_display.h>
-#include "constants.h"
 #include "entity.h"
 
 
@@ -11,7 +10,7 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _starting_pos(_pos),
         _hitbox(xcor, ycor, width, height),
         _sprite(sprite),
-        _top_bound(TROG_COUNTRYSIDE_TOP_BOUND),
+        _top_bound(-66),
         _return_to_starting_point(false),
         _update_anim_when_not_moving(false),
         _keep_jumping(false),
@@ -88,14 +87,14 @@ bool entity::out_of_bounds(){
 
 //collision shit
 bool entity::going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox){
-    bool oob_left = new_hitbox.left() < TROG_COUNTRYSIDE_LEFT_BOUND; 
-    bool oob_right = new_hitbox.right() > TROG_COUNTRYSIDE_RIGHT_BOUND;
+    bool oob_left = new_hitbox.left() < -120; 
+    bool oob_right = new_hitbox.right() > 120;
     return (oob_left || oob_right);
 }
 
 bool entity::going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox){
     bool oob_top = new_hitbox.top() < _top_bound;
-    bool oob_bottom =  new_hitbox.bottom() > TROG_COUNTRYSIDE_BOTTOM_BOUND;
+    bool oob_bottom =  new_hitbox.bottom() > 79;
     return (oob_top || oob_bottom);
 }
 

@@ -6,8 +6,6 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
 
-#include "constants.h"
-
 namespace trog {
     class big_text { 
         protected:

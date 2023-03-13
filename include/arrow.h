@@ -2,7 +2,6 @@
 #include <bn_sprite_actions.h>
 #include "bn_sprite_items_arrow.h"
 #include "entity.h"
-#include "constants.h"
 
 namespace trog {
     class arrow : public entity { 

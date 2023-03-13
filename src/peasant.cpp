@@ -8,7 +8,7 @@
 namespace trog {
 
 peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction) : 
-        entity(xcor, ycor, TROG_PEASANT_WIDTH, TROG_PEASANT_HEIGHT, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
+        entity(xcor, ycor, 8, 16, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
         _speed(speed),

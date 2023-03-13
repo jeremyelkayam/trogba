@@ -9,8 +9,6 @@
 #include "bn_sprite_items_knight.h"
 #include "entity.h"
 
-#include "constants.h"
-
 namespace trog {
     class knight : public entity { 
         protected:

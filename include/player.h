@@ -4,7 +4,6 @@
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"
-#include "constants.h"
 #include "firebreath.h"
 #include "session_info.h"
 #include "knight.h"
@@ -23,7 +22,7 @@ namespace trog {
             
             unsigned short _trogmeter;
             unsigned int _burninate_time;
-            const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
+            const unsigned short _trogmeter_max = 10;
             int _burninate_length; //temporarily this can be 10 seconds 
             unsigned short _time_dead;
             unsigned short _iframes;
@@ -67,7 +66,7 @@ namespace trog {
             void handle_wall_collision(const bn::fixed_rect &wall_hitbox);
             
             bool dead() {return _time_dead;}
-            bool ready_to_respawn() {return _time_dead == TROG_RESPAWN_TIME;}
+            bool ready_to_respawn() {return _time_dead == 120;}
 
             unsigned short get_trogmeter(){return _trogmeter;}
             unsigned short get_burninating_time(){return _burninate_time;}

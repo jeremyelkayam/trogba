@@ -8,8 +8,6 @@
 #include <bn_optional.h>
 #include <bn_regular_bg_ptr.h>
 #include "enums.h"
-#include "constants.h"
-
 namespace trog {
 
     class scene {

@@ -10,7 +10,6 @@ namespace trog
             session_info();
             void score(unsigned int num_points);
             void die() {--_mans;}
-            void set_killed_by_archer(bool archer){_killed_by_archer = archer;}
 
             void advance_level(){set_level(_level+1);}
             void reset();
@@ -21,31 +20,14 @@ namespace trog
             unsigned short get_mans() {return _mans;}
             unsigned int get_score() {return _score;}
             unsigned short get_level() {return _level;}
-            bool last_killed_by_archer() {return _killed_by_archer;}
 
-            bool current_level_has_cutscene();
-            bool is_valid_object();
-
-            bn::array<char, 8> default_format_tag();
-
-            //todo probably refactor this into a saved data class
-            void clear_burnination_array();
-            void set_cottage_burnination(unsigned short dex, bool status);
-            bool load_cottage_burnination(unsigned short dex) {return _cottage_burnination_status[dex];}
-
-            void visit_treasure_hut();
-            bool can_visit_treasure_hut();
-            bool troghammer_enabled() {return _troghammer;}
             
         private:
             bn::array<char, 8> _format_tag;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
-            bool _killed_by_archer, _visited_treasure_hut, _troghammer;
 
-            //TO BE USED WHEN SAVING/LOADING A FILE MID-LEVEL.
-            bn::array<bool, 6> _cottage_burnination_status;
     };
 }
 

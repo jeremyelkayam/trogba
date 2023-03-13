@@ -38,7 +38,7 @@ int main()
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     text_generator.set_center_alignment();
 
-    trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
+    trog::hud hud(sesh, text_generator, 10);
     hud.hide();
 
 
