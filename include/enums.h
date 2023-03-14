@@ -12,8 +12,7 @@ namespace trog {
     {
         INSTRUCTIONS,
         PLAY,
-        LEVELBEAT,
-        LOSE
+        LEVELBEAT
     };
     enum class direction
     {
