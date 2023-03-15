@@ -15,6 +15,7 @@
 #include "player.h"
 #include "instructions_scene.h"
 #include "play_scene.h"
+#include "gameover_scene.h"
 #include "level_win_scene.h"
 #include "enums.h"
 
@@ -61,6 +62,12 @@ int main()
                     }else{
                         scene.reset(new trog::play_scene(sesh, hud, text_generator));
                     }
+                    break;
+                }
+                case trog::scene_type::LOSE: { 
+                    hud.show();
+                    scene.reset();
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {

@@ -219,7 +219,7 @@ bn::optional<scene_type> play_scene::update(){
         if(_trogdor->ready_to_respawn()){
             _overlay_text.reset();
             if(_sesh.get_mans() == 0) {
-                result = scene_type::INSTRUCTIONS;
+                result = scene_type::LOSE;
             }else{
                 _trogdor.reset(new player(40, 
                 //temp fix for f'ed up spawnage
