@@ -16,7 +16,6 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "play_scene.h"
-#include "bloody_text.h"
 #include "burninate_text.h"
 #include "level_data.h"
 
@@ -192,7 +191,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->dead() && !was_dead) {
 
-            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new big_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         was_dead = _trogdor->dead();  
@@ -211,7 +210,7 @@ bn::optional<scene_type> play_scene::update(){
             }else if(rand_num % 100 == 1){
                 str = "SORTED!";
             }
-            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new big_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
         }
 
         //despawn any peasants that need to be despawned
@@ -220,7 +219,7 @@ bn::optional<scene_type> play_scene::update(){
 
         _pfact.update();
         _afact.update();
-
+m
 
 
         if(_trogdor->ready_to_respawn()){
