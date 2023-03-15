@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_sprite_ptr.h>
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
@@ -204,9 +203,7 @@ bn::optional<scene_type> instructions_scene::update(){
     if(bn::keypad::any_pressed() && _secret_code_index < _secret_code.size()){
         if(bn::keypad::pressed(_secret_code.at(_secret_code_index))){
             ++_secret_code_index;
-            BN_LOG("progress");
         }else{
-            BN_LOG("you failed the code");
             _secret_code_index=0;
         }
     }

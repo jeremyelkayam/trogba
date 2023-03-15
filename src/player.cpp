@@ -1,6 +1,5 @@
 #include <bn_keypad.h>
 #include <bn_math.h>
-#include <bn_log.h>
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
@@ -43,7 +42,6 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 	} else {
 		_burninate_length /= 0.7;
 	}
-    BN_LOG("burninate length for this level: ", _burninate_length);
 
 
     //todo maybe condense all the timers into one?
@@ -97,7 +95,6 @@ void player::update(){
 
         //once the iframes are over, return the sprite to normal
         if(_iframes > 120) {
-            BN_LOG("end invincibility");
             _sprite.set_visible(true);
             _iframes = 0;
         }
@@ -160,15 +157,11 @@ void player::free_from_collisionbox(const bn::fixed_rect &box){
 
     bn::fixed downdist,updist,leftdist,rightdist,min_dist;
     downdist = bn::abs(box.bottom() - _hitbox.top());
-    BN_LOG("down distance ", downdist);
     updist = bn::abs(box.top() - _hitbox.bottom());
-    BN_LOG("up distance ", updist);
 
 
     leftdist = bn::abs(box.left() - _hitbox.right());
-    BN_LOG("left distance ", leftdist);
     rightdist = bn::abs(box.right() - _hitbox.left());
-    BN_LOG("right distance ", rightdist);
 
     // ah yes, 3 nested mins, very good coding jeremy
     min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
@@ -230,7 +223,6 @@ void player::handle_peasant_collision(peasant &peasant){
     if(burninating()){
         _breath.handle_peasant_collision(peasant);
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
-        BN_LOG("stomped.");
         peasant.stomp();
         _sesh.score(2);
         

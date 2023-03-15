@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include "arrow.h"
 
 namespace trog { 
@@ -34,7 +33,6 @@ void arrow::update_anim(){
         move_to(20, 0, 90);        
     }
 
-    BN_LOG("update arrow anim");
     if(_rotating){
         short new_angle = _sprite.rotation_angle().integer() - 10;
         new_angle %= 360;

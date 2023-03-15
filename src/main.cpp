@@ -6,7 +6,6 @@
  */
 
 #include <bn_core.h>
-#include <bn_log.h>
 #include <bn_keypad.h>
 #include <bn_sound.h>
 #include <bn_timer.h>
@@ -19,8 +18,6 @@
 #include "level_win_scene.h"
 #include "enums.h"
 
-//debug settings for emulator
-#define BN_LOG_BACKEND_MGBA true
 
 int main()
 {
@@ -60,7 +57,6 @@ int main()
                     if(previous_play_scene){
                         //this means we are returning from an interruption
                         //so we should go back to the play scene from before 
-                        BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
                         scene.reset(new trog::play_scene(sesh, hud, text_generator));
@@ -80,7 +76,6 @@ int main()
         }
 
         if(!kicked && bn::keypad::select_pressed()){
-            BN_LOG("kick. TROGADOR");
             kicktimer.restart();
             kicked=true;
         }

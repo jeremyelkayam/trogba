@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_color_effect.h>
 #include <bn_sprite_palette_ptr.h>
 
@@ -42,7 +41,6 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
 
 void hud::update_trogmeter(unsigned short trogmeter_value){
     for(int i = 0; i < 10; i++){
-        // BN_LOG("trogmeter_value ", trogmeter_value);
         bn::sprite_ptr peasanthead_sprite = _trogmeter_sprites.at(i);
         if(i < trogmeter_value) {
             peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);

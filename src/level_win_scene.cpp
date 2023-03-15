@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_sprite_ptr.h>
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>

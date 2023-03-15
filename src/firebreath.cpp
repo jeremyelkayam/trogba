@@ -1,5 +1,4 @@
 #include <bn_math.h>
-#include <bn_log.h>
 #include "firebreath.h"
 #include "bn_assert.h"
 
@@ -42,7 +41,6 @@ void firebreath::handle_cottage_collision(cottage &cottage){
     BN_ASSERT(enabled());
     bn::fixed_rect cottagebox = cottage.get_hitbox();
     if(_hitbox.intersects(cottagebox)){
-        BN_LOG("burninate the cottage?");        
         bool burninate_success = cottage.burninate();
         if(burninate_success){
             _sesh.score(5);
@@ -54,7 +52,6 @@ void firebreath::handle_peasant_collision(peasant &peasant){
     BN_ASSERT(enabled());
     bn::fixed_rect pbox = peasant.get_hitbox();
     if(_hitbox.intersects(pbox)){
-        BN_LOG("burninate the peasant?");        
         peasant.burninate();
     }
 }

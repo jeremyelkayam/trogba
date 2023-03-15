@@ -5,7 +5,6 @@
  */
 
 #include <bn_keypad.h>
-#include <bn_log.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
 #include <bn_sram.h>
@@ -61,13 +60,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             //Index 1 in level data refers to the number of the treasure hut from 1-6
             // 0 if no treasure hut             
             bool treasurehut = (i == (levels[level_index][1] - 1));
-            BN_LOG("treasure hut? ", treasurehut);            
-            BN_LOG("cottage #", i + 1);
-            BN_LOG("direction: ", levels[level_index][j]);
             bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
-            BN_LOG("xcor ", xcor);
             bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
-	    	BN_LOG("ycor ", ycor);
 
             direction enumdir;
             switch(levels[level_index][j]){
@@ -219,8 +213,6 @@ bn::optional<scene_type> play_scene::update(){
 
         _pfact.update();
         _afact.update();
-m
-
 
         if(_trogdor->ready_to_respawn()){
             _overlay_text.reset();

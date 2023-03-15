@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_string.h>
 #include "peasant_factory.h"
 
@@ -9,14 +8,12 @@ namespace trog
         _cottages(cottages),
         _peasants(peasants)
     {
-        BN_LOG("new peasant factory");
     }
 
     void peasant_factory::spawn()
     {
         if (_peasants.full())
         {
-            BN_LOG("NO MORE SPACE FOR NEW PEASANTS. TRY AGAIN LATER");
         }
         else
         {
