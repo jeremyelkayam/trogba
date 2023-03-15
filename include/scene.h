@@ -6,7 +6,6 @@
 #pragma once
 
 #include <bn_optional.h>
-#include <bn_regular_bg_ptr.h>
 #include "enums.h"
 namespace trog {
 
@@ -19,7 +18,6 @@ namespace trog {
 
         protected:
             scene() = default;
-            void move_background(bn::regular_bg_ptr bg);
     };
 
 }

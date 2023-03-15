@@ -3,10 +3,8 @@
 #include <bn_keypad.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_string.h>
-#include <bn_sram.h>
 #include <bn_blending.h>
 #include <bn_sprite_palettes.h>
-#include <bn_bg_palettes.h>
 
 #include "gameover_scene.h"
 
