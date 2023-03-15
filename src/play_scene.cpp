@@ -7,7 +7,6 @@
 #include <bn_keypad.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
-#include <bn_sram.h>
 #include <bn_blending.h>
 
 #include "bn_regular_bg_items_day.h"

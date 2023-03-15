@@ -7,8 +7,6 @@
 #pragma once 
 
 #include <bn_forward_list.h>
-#include <bn_vector.h>
-#include <bn_random.h>
 #include "archer.h"
 #include "enemy_factory.h"
 

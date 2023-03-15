@@ -34,7 +34,6 @@ namespace trog {
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();
             bool onfire(){return _onfire;}
-            virtual void update_anim() final;
             void set_sprite_ablaze();
             void set_frame(short frame_number){_sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), frame_number);}
 

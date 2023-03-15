@@ -77,7 +77,5 @@ namespace trog {
             void set_horizontal_flip(bool horizontal_flip);
 
             void update_win_anim();
-
-            virtual void update_anim() final;
     };
 }

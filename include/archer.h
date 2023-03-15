@@ -7,7 +7,6 @@
  */
 
 #pragma once
-#include <bn_sprite_actions.h>
 #include "bn_sprite_items_archer.h"
 #include "entity.h"
 #include "arrow.h"

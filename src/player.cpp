@@ -258,15 +258,6 @@ void player::die(short frame_no){
     _breath.disable();
 }
 
-void player::update_anim(){
-    entity::update_anim();
-    if((_move_action && !_move_action->done()) || _move_by_action){
-        _walkcycle.update();
-    }
-    update_firebreath();
-
-}
-
 void player::update_firebreath(){
     short xoffset = 30;
     if(_sprite.horizontal_flip()){
