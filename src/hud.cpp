@@ -13,8 +13,8 @@ namespace trog {
 hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
         _sesh(sesh),
         _text_generator(generator),
-        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(15, -75)),
-        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(15, -75)),
+        _burninatemeter(bn::regular_bg_items::burninometer.create_bg(-19, -75)),
+        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(-19, -75)),
         _burninatemeter_window(bn::rect_window::internal()),
         _enabled(true) {
     int trogmeter_start = -68;
