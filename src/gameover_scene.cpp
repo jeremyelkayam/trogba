@@ -20,6 +20,7 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(8, 43)),
         _sesh(sesh),
         _itsover_text(false, 0, -50, "IT'S OVER!",
+            bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(),
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()) {
 
 }
