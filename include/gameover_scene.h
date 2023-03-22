@@ -3,7 +3,7 @@
 #include <bn_sprite_text_generator.h>
 #include "scene.h"
 #include "session_info.h"
-#include "bloody_text.h"
+#include "big_text.h"
 
 
 namespace trog{
@@ -13,7 +13,7 @@ namespace trog{
         bn::regular_bg_ptr _dead_trogdor;
                 
         session_info &_sesh;
-        bloody_text _itsover_text;
+        big_text _itsover_text;
 
     public:
         explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator);

@@ -4,6 +4,7 @@
 #include <bn_string.h>
 #include <bn_version.h>
 #include "instructions_scene.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 
 namespace trog {
 
@@ -16,7 +17,9 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _continue_menu_visible(false),
         _continue_selected(true),
         _sesh(sesh),
-        _text_ycor(-30) {
+        _text_ycor(-30),
+        _title(true, 0, -60, "TROGDOR ON GBA!", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item())
+ {
     _flashing_text_counter = 0;
 
     //set up konami code 
@@ -70,7 +73,7 @@ void instructions_scene::setup_instructions(){
         "",
         "",
         "Get the full version at",
-        "github.com/JeremyElkayam/trogba"
+        "jeremyelkayam.itch.io/trogba"
     };
 
     for(bn::string<64> line : instructions) { 

@@ -6,6 +6,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "session_info.h"
+#include "big_text.h"
 
 
 namespace trog{
@@ -23,7 +24,9 @@ namespace trog{
         bool _level_select, _show_secret_hints, _show_credits, _continue_menu_visible, _continue_selected;
         session_info &_sesh;
 
+
         int _text_ycor;
+        big_text _title;
         
         void setup_instructions();
         void setup_secret_hints();
