@@ -21,7 +21,7 @@ bloody_text::bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, co
     }else{
         ycor = y.integer() + 16;
     }
-    for(int z = 0 ; z < _text_sprites.size() - 1 ; ++z){
+    for(int z = 0 ; z < _text_sprites.size()  - 1 ; ++z){
         int xcor = _text_sprites.at(z).x().integer();
         bool short_droplet = rand() % 2;
         _droplets.emplace_back(short_droplet ? SHORT_DROPLET : LONG_DROPLET, xcor + rand() % 8, ycor, rand() % 5);

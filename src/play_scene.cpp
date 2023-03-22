@@ -268,6 +268,7 @@ bn::optional<scene_type> play_scene::update(){
     // since you can't move while paused, we should be fine....
     for(cottage &c : _cottages){
         c.update();
+        _trogdor->handle_cottage_collision(c);
     }
 
     return result;
