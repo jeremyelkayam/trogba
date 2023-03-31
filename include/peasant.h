@@ -13,11 +13,10 @@ namespace trog {
             bn::fixed _currentdist;
             bn::fixed _speed;
 
-            const unsigned short _waittime;
-            unsigned short _time_waiting;
 
-            const unsigned short _despawn_delay;
-            unsigned short _time_dead;
+            uint8_t _time_waiting;
+
+            uint8_t _time_dead;
 
             bn::fixed_point _direction;
             bool _onfire;

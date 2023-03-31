@@ -24,9 +24,9 @@ namespace trog
             
         private:
             bn::array<char, 8> _format_tag;
-            unsigned short _mans;
-            unsigned int _score;
-            unsigned short _level;
+            uint8_t _mans;
+            unsigned short _score;
+            uint8_t _level;
 
     };
 }

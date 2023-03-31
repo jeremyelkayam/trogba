@@ -10,7 +10,6 @@
 namespace trog {
     class burninate_text : public big_text { 
         private:
-            unsigned short _timer;
 
         public:
             burninate_text();

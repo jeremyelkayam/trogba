@@ -22,7 +22,6 @@ namespace trog{
         void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}
         void set_y(const bn::fixed &y) { _pos.set_y(y); _sprite.set_y(y);}
         bool out_of_bounds();
-        void set_rotation_angle(short angle){_sprite.set_rotation_angle(angle);}
 
         void set_visible(bool visible) {_sprite.set_visible(visible);}
         void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}

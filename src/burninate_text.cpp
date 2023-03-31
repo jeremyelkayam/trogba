@@ -14,9 +14,6 @@ burninate_text::burninate_text() :
 }
 
 void burninate_text::update(){
-
-    //animate the flame effect
-    ++_timer;
 }
 
 void burninate_text::set_visible(bool visible){

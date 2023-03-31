@@ -227,7 +227,7 @@ void player::handle_peasant_collision(peasant &peasant){
         _sesh.score(2);
         
         ++_trogmeter;
-        if(_trogmeter == _trogmeter_max){
+        if(_trogmeter == 10){
             start_burninating();
         }
     }

@@ -71,7 +71,7 @@ bool cottage::burninate(){
 }
 
 bool cottage::has_treasure(){
-    return _has_treasure && _time_burning==0;
+    return false;
 }
 
 void cottage::set_visible(bool visible){

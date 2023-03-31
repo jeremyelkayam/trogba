@@ -20,13 +20,12 @@ namespace trog {
  
             bn::sprite_animate_action<4> _walkcycle;
             
-            unsigned short _trogmeter;
-            unsigned int _burninate_time;
-            const unsigned short _trogmeter_max = 10;
-            int _burninate_length; //temporarily this can be 10 seconds 
-            unsigned short _time_dead;
-            unsigned short _iframes;
-            unsigned short _majesty_flash_timer;
+            uint8_t _trogmeter;
+            unsigned short _burninate_time;
+            unsigned short _burninate_length; //temporarily this can be 10 seconds 
+            uint8_t _time_dead;
+            uint8_t _iframes;
+            uint8_t _majesty_flash_timer;
 
             firebreath _breath;
             session_info &_sesh;

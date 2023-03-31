@@ -96,6 +96,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
 
     _text_generator.set_center_alignment();
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.generate(0, 55, "paused", _paused_text);
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
@@ -269,11 +270,13 @@ bn::optional<scene_type> play_scene::update(){
     } 
 
 
-    //had to move this out to fix a bug where cottage fire was visible while paused.
-    // since you can't move while paused, we should be fine....
-    for(cottage &c : _cottages){
-        c.update();
-        _trogdor->handle_cottage_collision(c);
+    if(!_player_paused){
+        //had to move this out to fix a bug where cottage fire was visible while paused.
+        // since you can't move while paused, we should be fine....
+        for(cottage &c : _cottages){
+            c.update();
+            _trogdor->handle_cottage_collision(c);
+        }
     }
 
     return result;

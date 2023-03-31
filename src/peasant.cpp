@@ -11,9 +11,7 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
         _speed(speed),
-        _waittime(180),// 3 seconds for now but can change
         _time_waiting(0),
-        _despawn_delay(60),
         _time_dead(0),
         _onfire(false),
         _returning(false),
@@ -71,7 +69,7 @@ void peasant::update(){
     }
     
 
-    if(_time_waiting == _waittime){
+    if(_time_waiting == 180){
         _speed=-_speed;
         _currentdist+=_speed;
         _returning = true;
@@ -80,7 +78,7 @@ void peasant::update(){
         _time_waiting = 0;
     }
 
-    if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
+    if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < 180){
 
         _pos+=_direction.multiplication(_speed);
 
@@ -109,7 +107,7 @@ void peasant::stomp(){
 bool peasant::remove_from_map(){
     //dead peasants should be removed and despawned 
     //peasants despawn 1s after being stomped, or after reentering their house
-    return (_time_dead >= _despawn_delay) || (_currentdist < 0);
+    return (_time_dead >= 60) || (_currentdist < 0);
 }
 
 }
