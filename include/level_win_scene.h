@@ -10,10 +10,9 @@ namespace trog{
 
     class level_win_scene : public scene{ 
     private:
-        bn::regular_bg_ptr _happy_trogdor;
         bn::sprite_text_generator& _text_generator;
-        bn::vector<bn::sprite_ptr, 64> _nicework_text_sprites;
-        bn::vector<bn::sprite_ptr, 64> _levelbeated_text_sprites;
+        bn::vector<bn::sprite_ptr, 8> _nicework_text_sprites;
+        bn::vector<bn::sprite_ptr, 8> _levelbeated_text_sprites;
         bn::sprite_ptr _flames;
         bn::sprite_animate_action<4> _burningflames;
 

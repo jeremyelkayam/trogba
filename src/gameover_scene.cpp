@@ -8,7 +8,6 @@
 
 #include "gameover_scene.h"
 
-#include "bn_regular_bg_items_trogdead.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
@@ -17,7 +16,6 @@
 namespace trog {
 
 gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
-        _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(8, 43)),
         _sesh(sesh),
         _itsover_text(false, 0, -50, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(),

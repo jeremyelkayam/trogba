@@ -10,8 +10,6 @@ namespace trog{
 
     class gameover_scene : public scene{ 
     private:
-        bn::regular_bg_ptr _dead_trogdor;
-                
         session_info &_sesh;
         big_text _itsover_text;
 

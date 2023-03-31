@@ -5,7 +5,6 @@
 
 #include "level_win_scene.h"
 
-#include "bn_regular_bg_items_trogsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_cottagefire.h"
@@ -14,7 +13,6 @@
 namespace trog {
 
 level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
-        _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _text_generator(text_generator),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
         _burningflames(bn::create_sprite_animate_action_once(
