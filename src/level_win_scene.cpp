@@ -58,7 +58,7 @@ bn::optional<scene_type> level_win_scene::update(){
     }
 
 
-    if(bn::keypad::a_pressed()){
+    if(_timer >= 50 && bn::keypad::a_pressed()){
         result = scene_type::PLAY;
     }
     

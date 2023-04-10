@@ -5,6 +5,7 @@
 #include <bn_version.h>
 #include "instructions_scene.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_green.h"
 
 namespace trog {
 
@@ -18,7 +19,7 @@ instructions_scene::instructions_scene(session_info &sesh, bn::sprite_text_gener
         _continue_selected(true),
         _sesh(sesh),
         _text_ycor(-30),
-        _title(true, 0, -60, "TROGDOR ON GBA!", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item())
+        _title(true, 0, -60, "TROGDOR ON GBA!", bn::sprite_items::trogdor_variable_8x16_font_green.palette_item(), bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item())
  {
     _flashing_text_counter = 0;
 
