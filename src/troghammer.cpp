@@ -211,6 +211,8 @@ void troghammer::log_state(troghammer_state state){
         case troghammer_state::UNALERTED:
             BN_LOG("unalerted");
             break;
+        default:
+            BN_LOG("unknown state");
     }
 }
 
