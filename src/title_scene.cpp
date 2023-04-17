@@ -29,7 +29,7 @@ bn::optional<scene_type> title_scene::update(){
     // BN_LOG(frame_counter);
 
     if(_frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
-        result = scene_type::INSTRUCTIONS;
+        result = scene_type::MENU;
     }
     
     return result;
