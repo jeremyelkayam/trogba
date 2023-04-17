@@ -5,7 +5,6 @@
 #include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_strongbad.h"
-#include "bn_sprite_items_player.h"
 #include "bn_sprite_items_knight.h"
 #include "bn_sprite_items_firebreath.h"
 

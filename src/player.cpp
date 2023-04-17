@@ -5,16 +5,16 @@
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
-#include "bn_sprite_items_player.h"
+#include "bn_sprite_items_trogdor.h"
 
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(xcor, ycor)),
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::trogdor.create_sprite(xcor, ycor)),
         _speed(TROG_PLAYER_SPEED),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 2, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)),
+                    _sprite, 2, bn::sprite_items::trogdor.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -272,21 +272,21 @@ void player::handle_arrow_collision(archer &archer){
 void player::die(short frame_no){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), frame_no);
+    _sprite.set_tiles(bn::sprite_items::trogdor.tiles_item(), frame_no);
     _breath.disable();
 }
 
 void player::pass_out(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 16);
+    _sprite.set_tiles(bn::sprite_items::trogdor.tiles_item(), 16);
 }
 
 void player::thumb_it_up(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 15);
+    _sprite.set_tiles(bn::sprite_items::trogdor.tiles_item(), 15);
 }
 
 void player::flex(){
     _flex = bn::create_sprite_animate_action_forever(
-                _sprite, 5, bn::sprite_items::player.tiles_item(), 
+                _sprite, 5, bn::sprite_items::trogdor.tiles_item(), 
                 11, 12, 13, 14, 14, 13, 12);
 }
 void player::update_anim(){
