@@ -5,20 +5,18 @@
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
-#include "bn_sprite_items_player.h"
 
 namespace trog {
-
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, bn::sprite_items::player.create_sprite(xcor, ycor)),
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames) : 
+        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
+        _spritem(spritem),
         _speed(TROG_PLAYER_SPEED),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
-        _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 2, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
         _majesty_flash_timer(0),
+        _walk_cycle_frames(walk_cycle_frames),
         _breath(sesh),
         _sesh(sesh),
         _next_pos(xcor,ycor)
@@ -69,9 +67,9 @@ void player::update(){
     if(!dead()){
         update_pos();
         entity::update();
-        if(any_dpad_input()){
-            _walkcycle.update();
-        }
+        // if(any_dpad_input()){
+        //     _walkcycle.update();
+        // }
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -252,54 +250,30 @@ void player::start_burninating(){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !invincible()) { 
-        die(10);
+        die(2);
     }
 }
 
 void player::handle_troghammer_collision(troghammer &troghammer){
     if(collides_with(troghammer) && !invincible()) { 
-        die(9);
+        die(1);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) &&  !invincible()) { 
-        die(8);
+        die(0);
         archer.destroy_arrow();
     }
 }
 
-void player::die(short frame_no){
+void player::die(uint8_t death_index){
     bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
     _time_dead = 1;
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), frame_no);
     _breath.disable();
+    _sprite.set_tiles(_spritem.tiles_item(), death_index + _walk_cycle_frames);
 }
 
-void player::pass_out(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 16);
-}
-
-void player::thumb_it_up(){
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), 15);
-}
-
-void player::flex(){
-    _flex = bn::create_sprite_animate_action_forever(
-                _sprite, 5, bn::sprite_items::player.tiles_item(), 
-                11, 12, 13, 14, 14, 13, 12);
-}
-void player::update_anim(){
-    entity::update_anim();
-    if((_move_action && !_move_action->done()) || _move_by_action){
-        _walkcycle.update();
-    }
-    if(_flex){
-        _flex->update();
-    }
-    update_firebreath();
-
-}
 
 void player::update_firebreath(){
     short xoffset = TROG_FIREBREATH_XOFFSET;

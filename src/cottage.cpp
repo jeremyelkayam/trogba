@@ -50,9 +50,9 @@ void cottage::update(){
         //default can be the sideways one because it corresponds to 2 cases
         int newindex = 2;
         if(_direction == direction::UP){
-            newindex = 1;
-        }else if(_direction == direction::DOWN){
             newindex = 0;
+        }else if(_direction == direction::DOWN){
+            newindex = 1;
         }
         _sprite.set_item(bn::sprite_items::cottage_burninated, newindex);
         _sprite.set_y(_pos.y() + 2);

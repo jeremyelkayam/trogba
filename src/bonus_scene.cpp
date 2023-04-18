@@ -9,9 +9,9 @@ namespace trog {
 bonus_scene::bonus_scene(session_info &sesh) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
         _exit(110,0,20,20),
-        _trogdor(80,10, sesh, false),
+        _player(new trogdor(80,10, sesh, false)),
         _sesh(sesh) {
-    _trogdor.set_horizontal_flip(true);
+    _player->set_horizontal_flip(true);
 
     //todo refactor this into an array of pairs with a for loop. would be cleaner
     _money.emplace_front(-90, 30);
@@ -30,16 +30,16 @@ bonus_scene::bonus_scene(session_info &sesh) :
 
 bn::optional<scene_type> bonus_scene::update(){
     bn::optional<scene_type> result;
-    _trogdor.update();
+    _player->update();
 
     //if you walk to the exit you must return to play scene
-    if(_trogdor.get_hitbox().intersects(_exit) && _money.empty()){
+    if(_player->get_hitbox().intersects(_exit) && _money.empty()){
         BN_LOG("return to play scene");
         result = scene_type::PLAY;
     }
 
     for(moneybag &bag : _money){
-        if(_trogdor.get_hitbox().intersects(bag.get_hitbox())){
+        if(_player->get_hitbox().intersects(bag.get_hitbox())){
             //todo refactor this into trogdor
             _sesh.score(TROG_MONEYBAG_POINTS);
             bn::sound_items::goldget.play(1);
@@ -47,7 +47,7 @@ bn::optional<scene_type> bonus_scene::update(){
         }
     }
     for(bn::fixed_rect &wall : _wall_hitboxes) {
-        _trogdor.handle_wall_collision(wall);
+        _player->handle_wall_collision(wall);
     }
 
     _money.remove_if(moneybag_deletable);

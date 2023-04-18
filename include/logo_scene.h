@@ -2,7 +2,7 @@
 #include <bn_random.h>
 #include <bn_regular_bg_ptr.h>
 #include <bn_bgs_mosaic_actions.h>
-#include "player.h"
+#include "trogdor.h"
 #include "scene.h"
 
 
@@ -15,7 +15,7 @@ namespace trog{
         int _frame_counter;
         bool _easter_egg;
 
-        player _trogdor;
+        trogdor _trogdor;
 
     public:
         logo_scene(session_info &sesh);

@@ -31,7 +31,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+        _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
@@ -55,10 +55,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
     int level_index;
-    if (_sesh.get_level() == 1) {
+    if (_sesh.get_level() <= 1) {
 		level_index = 0;
 	} else {
-        //weird, idk 
 		level_index = ((_sesh.get_level() - 2) % 32 + 2) - 1;
 	}
 
@@ -117,7 +116,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
                     enumdir = direction::RIGHT;
                 break;
                 default:
-                    BN_ERROR("invalid direction in levelData.h");
+                    BN_ERROR("invalid direction in level_data.h");
                 break;
             }
 
@@ -149,8 +148,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
 
-    _knights.emplace_front(-59, 31, false);
-    _knights.emplace_front(33,-50,true);
+    if(_sesh.get_level() != 0){
+        _knights.emplace_front(-59, 31, false);
+        _knights.emplace_front(33,-50,true);
+    }
 
     if(_sesh.troghammer_enabled()){
         _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
@@ -343,7 +344,7 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
-                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, 
+                _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, 
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();

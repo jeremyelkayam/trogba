@@ -6,7 +6,7 @@
 #include <bn_sound_items.h>
 #include <bn_unordered_map.h>
 #include "scene.h"
-#include "player.h"
+#include "trogdor.h"
 #include "peasant.h"
 #include "kerrek.h"
 #include "strongbad.h"
