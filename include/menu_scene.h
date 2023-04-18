@@ -22,6 +22,7 @@ namespace trog{
         bn::vector<menu_option, 4> _menu_options;
 
         bn::sprite_text_generator& _text_generator;
+        // bn::sprite_text_generator& _small_text_generator;
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
         bn::sprite_ptr _cursor, _flames;
         bn::sprite_animate_action<4> _flames_anim;
