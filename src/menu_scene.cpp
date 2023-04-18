@@ -65,21 +65,24 @@ bn::optional<scene_type> menu_scene::update(){
     }
 
     if(bn::keypad::a_pressed()){
+            _selection_anim_timer = 1;
         if(_selected_option_index == 0){
             //load file
             if(_loaded_sesh.is_valid_object()){
                 _sesh = _loaded_sesh;
                 bn::sram::clear(sizeof(_sesh));
                 BN_LOG("loaded the file");
+                select();
             }else{
+                _selection_anim_timer = 0;
                 // probably provide some type of WRONG sound effect to provide feedback
             }
         }else if(_selected_option_index == 1){
-            //new game
-            _cursor.set_item(bn::sprite_items::trogdorhead, 1);
-            _flames.set_visible(true);
-            _flames.set_position(_cursor.position());
-            _selection_anim_timer = 1;
+            select();
+        }else if(_selected_option_index == 2){
+            //Tutorial level is lv. 0 
+            _sesh.set_level(0);
+            select();
         }
 
 
@@ -95,6 +98,12 @@ bn::optional<scene_type> menu_scene::update(){
     }
 
     return result;
+}
+
+void menu_scene::select(){
+    _cursor.set_item(bn::sprite_items::trogdorhead, 1);
+    _flames.set_visible(true);
+    _flames.set_position(_cursor.position());
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator){

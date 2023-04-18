@@ -55,10 +55,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
     int level_index;
-    if (_sesh.get_level() == 1) {
+    if (_sesh.get_level() <= 1) {
 		level_index = 0;
 	} else {
-        //weird, idk 
 		level_index = ((_sesh.get_level() - 2) % 32 + 2) - 1;
 	}
 
@@ -117,7 +116,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
                     enumdir = direction::RIGHT;
                 break;
                 default:
-                    BN_ERROR("invalid direction in levelData.h");
+                    BN_ERROR("invalid direction in level_data.h");
                 break;
             }
 
@@ -149,8 +148,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
 
-    _knights.emplace_front(-59, 31, false);
-    _knights.emplace_front(33,-50,true);
+    if(_sesh.get_level() != 0){
+        _knights.emplace_front(-59, 31, false);
+        _knights.emplace_front(33,-50,true);
+    }
 
     if(_sesh.troghammer_enabled()){
         _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
