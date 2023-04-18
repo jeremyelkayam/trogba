@@ -31,7 +31,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
         _sesh(sesh),
-        _trogdor(new player(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+        _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
@@ -343,7 +343,7 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
-                _trogdor.reset(new player(TROG_PLAYER_SPAWN_X, 
+                _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, 
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();

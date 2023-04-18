@@ -7,7 +7,7 @@
 #include "scene.h"
 #include "constants.h"
 #include "session_info.h"
-#include "player.h"
+#include "trogdor.h"
 #include "hud.h"
 #include "cottage.h"
 #include "peasant_factory.h"

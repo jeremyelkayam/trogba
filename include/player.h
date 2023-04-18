@@ -1,6 +1,7 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_unique_ptr.h>
 #include "entity.h"
 #include "cottage.h"
 #include "peasant.h"
@@ -13,16 +14,14 @@
 
 namespace trog {
     class player : public entity { 
-        private:
+        protected:
+            bn::sprite_item _spritem;
             const bn::fixed _speed;
 
             bn::sprite_ptr _majesty;
 
             bn::fixed_point _direction;
  
-            bn::sprite_animate_action<8> _walkcycle;
-            bn::optional<bn::sprite_animate_action<7>> _flex;
-            
             unsigned short _trogmeter;
             unsigned int _burninate_time;
             const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
@@ -30,6 +29,7 @@ namespace trog {
             unsigned short _time_dead;
             unsigned short _iframes;
             unsigned short _majesty_flash_timer;
+            uint8_t _walk_cycle_frames;
 
             firebreath _breath;
             session_info &_sesh;
@@ -42,7 +42,7 @@ namespace trog {
             void check_boundary_collision();
 
             bool invincible();
-            void die(short frame_no);
+            virtual void die(uint8_t death_index);
 
             //todo: this doesn't need to be in this class
             bool any_dpad_input();
@@ -58,8 +58,8 @@ namespace trog {
             bn::fixed_point _next_pos;
             
         public:
-            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes);
-            virtual void update() final;
+            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames);
+            virtual void update();
 
             bool burninating();
             bool handle_cottage_collision(cottage &cottage);
@@ -82,10 +82,6 @@ namespace trog {
 
             void update_win_anim();
 
-            void pass_out();
-            void thumb_it_up();
-            void flex();
 
-            virtual void update_anim() final;
     };
 }

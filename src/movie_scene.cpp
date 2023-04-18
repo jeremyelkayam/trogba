@@ -28,10 +28,10 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     if(_sesh.get_level() == 5){
         write_text("stompin' good!");
-        player* trogdor = new player(140,0,_sesh,false);
-        trogdor->set_horizontal_flip(true);
-        trogdor->move_to_and_back(_cutscene_length, -50, 0);
-        _cutscene_objects.emplace_back(trogdor);
+        trogdor* mytrogdor = new trogdor(140,0,_sesh,false);
+        mytrogdor->set_horizontal_flip(true);
+        mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
+        _cutscene_objects.emplace_back(mytrogdor);
                 
         knight* redknight = new knight(190,-5,false);
         redknight->move_to_and_back(_cutscene_length, 0, -5);
@@ -48,15 +48,15 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan.");
         
-        player* trogdor = new player(20,0,_sesh,false);
-        trogdor->set_horizontal_flip(true);
-        _cutscene_objects.emplace_back(trogdor);
+        trogdor* mytrogdor = new trogdor(20,0,_sesh,false);
+        mytrogdor->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(mytrogdor);
 
     }else if(_sesh.get_level() == 13){
         write_text("parade of trogdors");
         //create a parade of 9 trogdors
         for(int z = 0; z < 9; z++){
-            _cutscene_objects.emplace_back(new player(140 + 40 * z, 0, sesh, false));
+            _cutscene_objects.emplace_back(new trogdor(140 + 40 * z, 0, sesh, false));
             _cutscene_objects.at(z)->set_horizontal_flip(true);                
             _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }
@@ -79,22 +79,22 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
             k->animate_faster();
             _cutscene_objects.emplace_back(k);
         }
-        player *p = new player(0, 0, sesh, false);
+        trogdor *p = new trogdor(0, 0, sesh, false);
         p->flip_every(15);
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
         write_text("flex it, troggie");
 
-        player* trogdor = new player(0,0,_sesh,false);
-        trogdor->flex();
-        _cutscene_objects.emplace_back(trogdor);
+        trogdor* mytrogdor = new trogdor(0,0,_sesh,false);
+        mytrogdor->flex();
+        _cutscene_objects.emplace_back(mytrogdor);
     }else if(_sesh.get_level() == 25){
         write_text("peasant dominoes");
 
-        player* trogdor = new player(80,0,_sesh,false);
-        trogdor->set_horizontal_flip(true);
-        _cutscene_objects.emplace_back(trogdor);
+        trogdor* mytrogdor = new trogdor(80,0,_sesh,false);
+        mytrogdor->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(mytrogdor);
 
         for(int z = 0; z < 7; ++z){
             peasant* p = new peasant(45 - 20*z, 0, 0, 0, direction::DOWN);
@@ -114,7 +114,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
     }else if(_sesh.get_level() == 35){
         write_text("go trogdor # 2!");
         for(int z = 0; z < 2; ++z){
-            player *trog = new player(-140, 30*z, sesh, false);
+            trogdor *trog = new trogdor(-140, 30*z, sesh, false);
             trog->move_by(1 + 0.5*z, 0);
             _cutscene_objects.emplace_back(trog);
         }
@@ -153,7 +153,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         _cutscene_objects.emplace_back(arch);
     }else if(_sesh.get_level() == 51){
         write_text("smote that kerrek!");
-        _cutscene_objects.emplace_back(new player(-25,10,_sesh,false));
+        _cutscene_objects.emplace_back(new trogdor(-25,10,_sesh,false));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
         _cutscene_length *= 1.75; 
@@ -187,7 +187,7 @@ bn::optional<scene_type> movie_scene::update(){
 
     if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
         //stompin good
-        ((player *) _cutscene_objects.at(0).get())->enable_breath();
+        ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
         ((peasant *) _cutscene_objects.at(3).get())->stomp();        
     }
     if(_sesh.get_level() == 9){
@@ -199,11 +199,11 @@ bn::optional<scene_type> movie_scene::update(){
                 _cutscene_objects.emplace_back(p);
             }
             if(_timer == _cutscene_length / 4 + 5 + 30*z){
-                ((player *) _cutscene_objects.at(0).get())->enable_breath();
+                ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
             }
             if(_timer == _cutscene_length / 4 + 10 + 30*z){
                 BN_LOG("array length: ", _cutscene_objects.size());
-                ((player *) _cutscene_objects.at(0).get())->disable_breath();
+                ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
                 peasant *p = (peasant *) _cutscene_objects.at(1 + z).get();
                 p->set_sprite_ablaze();
                 p->move_to(_cutscene_length / 4, -10, 100);
@@ -214,10 +214,10 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 25){
         // peasant dominoes
         if(_timer == 60){
-            ((player *) _cutscene_objects.at(0).get())->enable_breath();
+            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
         }
         if(_timer == 70){
-            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
         }
         for(int z = 0; z < 8; ++z){
             if(_timer == 70 + 5*z){
@@ -226,7 +226,7 @@ bn::optional<scene_type> movie_scene::update(){
             }
         }
         if(_timer == 140){
-            ((player *) _cutscene_objects.at(0).get())->jump(10, 5, true);
+            ((trogdor *) _cutscene_objects.at(0).get())->jump(10, 5, true);
         }
     }
     if(_sesh.get_level() == 31){
@@ -310,11 +310,11 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 51){
         // kerrek cutscene
         if(_timer == 20){
-            ((player *) _cutscene_objects.at(0).get())->enable_breath();
+            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
         }else if(_timer == 30){
             ((kerrek *) _cutscene_objects.at(1).get())->burninate();
         }else if(_timer == 50){
-            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
         }else if(_timer == _cutscene_length / 2 + 30){
             sb_commentary::roast_kerrek();
         }
@@ -354,7 +354,7 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();
             _text_generator.generate(0, -60, "trogdor", _text_sprites);
-            _cutscene_objects.emplace_back(new player(0, 0, _sesh, false));
+            _cutscene_objects.emplace_back(new trogdor(0, 0, _sesh, false));
         }else if(_timer == credits_start_time + credits_interval*2){
             _cutscene_objects.at(1)->set_visible(false);
             _text_sprites.clear();
@@ -409,11 +409,11 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->set_x(30);
             sbad->set_rotation_angle(330);
             sbad->set_frame(3);
-            player *trogdor = ((player *) _cutscene_objects.at(1).get());
-            trogdor->set_visible(true);
-            trogdor->set_x(-35);
-            trogdor->set_y(-5);
-            trogdor->set_rotation_angle(30);
+            trogdor *mytrogdor = ((trogdor *) _cutscene_objects.at(1).get());
+            mytrogdor->set_visible(true);
+            mytrogdor->set_x(-35);
+            mytrogdor->set_y(-5);
+            mytrogdor->set_rotation_angle(30);
         }
     }
 

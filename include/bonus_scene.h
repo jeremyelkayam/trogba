@@ -3,7 +3,7 @@
 #include <bn_forward_list.h>
 #include "scene.h"
 #include "session_info.h"
-#include "player.h"
+#include "trogdor.h"
 #include "moneybag.h"
 
 
@@ -13,7 +13,7 @@ namespace trog{
     private:
         bn::regular_bg_ptr _bg;
         bn::fixed_rect _exit;
-        player _trogdor;
+        bn::unique_ptr<player> _player;
 
         bn::forward_list<moneybag, 10> _money;
         bn::forward_list<bn::fixed_rect, 5> _wall_hitboxes;
