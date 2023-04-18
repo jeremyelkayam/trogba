@@ -43,9 +43,9 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         small_generator.generate(-90, -15, session_summary, _menu_text_sprites);
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }else{
-        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        _text_generator.generate(-90, -15, "no data saved.", _menu_text_sprites);
-        _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+        small_generator.generate(-90, -15, "no data saved.", _menu_text_sprites);
+        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
     _menu_options.emplace_back(-100, 10, "NEW GAME", _text_generator);
