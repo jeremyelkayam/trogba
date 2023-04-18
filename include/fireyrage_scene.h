@@ -25,11 +25,11 @@ namespace trog {
         private:
             void update_camera();
             void update_hbe_values();
-            void update_sprite();
+            // void update_sprite();
 
             session_info &_sesh;
 
-            bn::regular_bg_ptr _sky;
+            // bn::regular_bg_ptr _sky;
 
             camera _camera;
             bn::affine_bg_ptr _ground;
@@ -46,7 +46,7 @@ namespace trog {
             // player _trogdor;
 
             bn::fixed_point _pos;
-            bn::sprite_ptr _sprite;
+            // bn::sprite_ptr _sprite;
 
             
         public:
