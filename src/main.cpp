@@ -15,6 +15,7 @@
 #include <bn_sprite_text_generator.h>
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
+#include "trogdor_variable_8x8_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 #include "instructions_scene.h"
@@ -48,6 +49,7 @@ int main()
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
+    bn::sprite_text_generator small_text_generator(trog::variable_8x8_sprite_font);
     text_generator.set_center_alignment();
 
     bool logo_scene = true;
@@ -88,7 +90,7 @@ int main()
                 }
                 case trog::scene_type::MENU: { 
                     hud.hide();
-                    scene.reset(new trog::menu_scene(sesh, text_generator));
+                    scene.reset(new trog::menu_scene(sesh, text_generator, small_text_generator));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
@@ -99,7 +101,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud, text_generator, small_text_generator));
                     }
                     break;
                 }

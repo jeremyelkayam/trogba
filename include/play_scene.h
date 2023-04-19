@@ -15,6 +15,7 @@
 #include "knight.h"
 #include "troghammer.h"
 #include "big_text.h"
+#include "text_box.h"
 
 namespace trog{
 
@@ -59,6 +60,8 @@ namespace trog{
         bn::optional<troghammer_sound> _th_sound;
         bn::optional<bn::sprite_ptr> _void_tower;
 
+        bn::optional<text_box> _text_box;
+
         bool level_complete();
 
         //probably would be better if i figured out how to harness friends for this.
@@ -76,7 +79,7 @@ namespace trog{
         void spawn_troghammer(bool alert);
 
     public:
-        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);
+        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 }

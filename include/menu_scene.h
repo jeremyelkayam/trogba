@@ -38,7 +38,7 @@ namespace trog{
         void select();
 
     public:
-        explicit menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator);
+        explicit menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

@@ -29,7 +29,7 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
         _sesh(sesh),
         _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
@@ -165,6 +165,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
             _sesh.reset_troghammer_status();
         }
+    }
+
+    if(_sesh.get_level() == 0){
+        _text_box = text_box(small_generator, "This is a test of the text box system. Blah blah blah blah blah blah blah blah blah");
     }
 }
 

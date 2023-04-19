@@ -6,11 +6,10 @@
 #include "menu_scene.h"
 #include "bn_sprite_items_trogdorhead.h"
 #include "bn_sprite_items_firebreath.h"
-#include "trogdor_variable_8x8_sprite_font.h"
 
 namespace trog {
 
-menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator) : 
+menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator) : 
         _text_generator(text_generator),
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-110,-30)),
@@ -28,7 +27,6 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
     bn::sram::read(_loaded_sesh);
     _menu_options.emplace_back(-100, -30, "CONTINUE", _text_generator);
 
-    bn::sprite_text_generator small_generator(variable_8x8_sprite_font);
 
 
     if(_loaded_sesh.is_valid_object()){
