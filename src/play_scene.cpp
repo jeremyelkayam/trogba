@@ -250,6 +250,12 @@ bn::optional<scene_type> play_scene::update(){
                     _text_box.reset();
                     _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
                 }
+            }else if(_trogdor->burninating()){
+                //burnination / level winning tutorial
+                if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
+                    _text_box.reset();
+                    _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+                }
             }
         }
 

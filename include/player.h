@@ -25,7 +25,7 @@ namespace trog {
             unsigned short _trogmeter;
             unsigned int _burninate_time;
             const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
-            int _burninate_length; //temporarily this can be 10 seconds 
+            int _burninate_length; 
             unsigned short _time_dead;
             unsigned short _iframes;
             unsigned short _majesty_flash_timer;
