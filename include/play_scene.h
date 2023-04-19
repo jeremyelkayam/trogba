@@ -44,7 +44,7 @@ namespace trog{
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;
-        bn::sprite_text_generator &_text_generator;
+        bn::sprite_text_generator &_text_generator, &_small_generator;
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
@@ -61,6 +61,7 @@ namespace trog{
         bn::optional<bn::sprite_ptr> _void_tower;
 
         bn::optional<text_box> _text_box;
+        uint8_t _tutorial_timer;
 
         bool level_complete();
 

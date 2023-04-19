@@ -27,6 +27,8 @@
 #include "level_data.h"
 #include "sb_commentary.h"
 
+
+
 namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
@@ -42,7 +44,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _flashing_text_time(0),
         _player_paused(false),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _text_generator(text_generator)
+        _text_generator(text_generator),
+        _small_generator(small_generator)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -168,7 +171,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     }
 
     if(_sesh.get_level() == 0){
-        _text_box = text_box(small_generator, "This is a test of the text box system. Blah blah blah blah blah blah blah blah blah");
+        _text_box = text_box(_small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
     }
 }
 
@@ -214,6 +217,43 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
+
+        //TUTORIAL BLOCK
+        if(_sesh.get_level() == 0){
+            if(_cottages.size() == 0){
+                //tutorial phase 1
+                if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
+                   bn::keypad::left_pressed() || bn::keypad::right_pressed())){
+                    _tutorial_timer = 1;
+                }
+                if(_tutorial_timer) _tutorial_timer++;
+
+                if(_tutorial_timer == 240){
+                    _cottages.emplace_back(65, -45, direction::LEFT, false, false);
+                    _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
+                    _text_box.reset();
+                    _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
+                    _tutorial_timer = 0;
+                }
+
+            }else if(_knights.size() == 0){
+                //tutorial phase 2
+                if(_trogdor->get_trogmeter() >= 1){
+                    _text_box.reset();
+                    _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+                }
+
+                if(_trogdor->get_trogmeter() >= 3){
+                    _knights.emplace_front(-75, -45, false);
+                    _knights.emplace_front(75,-45,true);
+
+                    _text_box.reset();
+                    _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+                }
+            }
+        }
+
+
         if(!_trogdor->dead() && _autosave_visibility_time == 0){
             set_autosave_text_visible(false);
         }
@@ -276,7 +316,7 @@ bn::optional<scene_type> play_scene::update(){
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
             
             //Spawn in the troghammer if he doesn't exist yet.
-            if(!_troghammer) spawn_troghammer(true);
+            if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             autosave(true);
         }
 
@@ -340,8 +380,15 @@ bn::optional<scene_type> play_scene::update(){
         _peasants.remove_if(peasant_deletable);
         _archers.remove_if(archer_deletable);
 
-        _pfact.update();
-        _afact.update();
+        //only spawn peasants if there are cottages
+        if(_cottages.size() > 0)
+            _pfact.update();
+        
+        //only spawn archers if there are knights
+        if(_knights.size() > 0)
+            _afact.update();
+
+        //the above 2 cases are mainly for the tutorial
 
 
 
@@ -354,7 +401,7 @@ bn::optional<scene_type> play_scene::update(){
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
-                if(!_troghammer) spawn_troghammer(true);
+                if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             }
         }
     }
@@ -421,33 +468,36 @@ bn::optional<scene_type> play_scene::update(){
 
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
 void play_scene::autosave(bool just_died){
-    if(_sesh.get_mans() == 0){
-        bn::sram::clear(sizeof(_sesh));
-    }else{
-        session_info saved_sesh = _sesh;
+    //No autosaving during the tutorial.
+    if(_sesh.get_level() != 0){
+        if(_sesh.get_mans() == 0){
+            bn::sram::clear(sizeof(_sesh));
+        }else{
+            session_info saved_sesh = _sesh;
 
-        if(_sesh.troghammer_enabled()){
-            if(_troghammer){
-                saved_sesh.set_troghammer_status(_troghammer->get_status());
-            }else{
-                //if you just died and there's no troghammer yet, we need to send in the hammer bro
-                saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
+            if(_sesh.troghammer_enabled()){
+                if(_troghammer){
+                    saved_sesh.set_troghammer_status(_troghammer->get_status());
+                }else{
+                    //if you just died and there's no troghammer yet, we need to send in the hammer bro
+                    saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
+                }
             }
-        }
 
-        for(int z = 0; z < _cottages.size(); ++z){
-            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
-        }
-        if(just_died){
-            saved_sesh.die();
-        }
+            for(int z = 0; z < _cottages.size(); ++z){
+                saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+            }
+            if(just_died){
+                saved_sesh.die();
+            }
 
-        bn::sram::write(saved_sesh);
-        set_autosave_text_visible(true);
-        if(!just_died){
-            _autosave_visibility_time = 1;
-        }
+            bn::sram::write(saved_sesh);
+            set_autosave_text_visible(true);
+            if(!just_died){
+                _autosave_visibility_time = 1;
+            }
 
+        }
     }
 }
 
