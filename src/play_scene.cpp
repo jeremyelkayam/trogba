@@ -256,6 +256,10 @@ bn::optional<scene_type> play_scene::update(){
                     _text_box.reset();
                     _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
                 }
+                if(false){
+                    _text_box.reset();
+                    _text_box = text_box(_small_generator, "Burninate all cottages to win the level.");                    
+                }
             }
         }
 
