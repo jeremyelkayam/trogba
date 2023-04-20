@@ -42,7 +42,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes,
 	} else {
 		_burninate_length /= 0.7;
 	}
-    BN_LOG("burninate length for this level: ", _burninate_length);
+    // BN_LOG("burninate length for this level: ", _burninate_length);
 
 
     //todo maybe condense all the timers into one?

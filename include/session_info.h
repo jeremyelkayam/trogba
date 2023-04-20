@@ -10,7 +10,7 @@ namespace trog
         public:
             session_info();
             void score(unsigned int num_points);
-            void die() {--_mans;}
+            void die() {if(_level != 0) --_mans;}
             void set_killed_by_archer(bool archer){_killed_by_archer = archer;}
 
             void advance_level(){set_level(_level+1);}
@@ -36,7 +36,9 @@ namespace trog
 
             void visit_treasure_hut();
             bool can_visit_treasure_hut();
-            bool troghammer_enabled() {return _troghammer;}
+
+            //the troghammer NEVER spawns on the tutorial level (level 0).
+            bool troghammer_enabled() {return _troghammer && _level != 0;}
 
             void set_troghammer_status (troghammer_status thinfo) { _thinfo = thinfo;}
             troghammer_status load_troghammer_status() {return _thinfo;}

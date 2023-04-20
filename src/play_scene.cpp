@@ -19,6 +19,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_voidtower.h"
+#include "bn_sprite_items_tutorial_arrow.h"
 
 #include "play_scene.h"
 #include "constants.h"
@@ -26,6 +27,8 @@
 #include "burninate_text.h"
 #include "level_data.h"
 #include "sb_commentary.h"
+
+
 
 namespace trog {
 
@@ -41,8 +44,11 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _win_pause_time(0),
         _flashing_text_time(0),
         _player_paused(false),
+        _tutorial_timer(0),
+        _fade_timer(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _text_generator(text_generator)
+        _text_generator(text_generator),
+        _small_generator(small_generator)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -168,7 +174,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     }
 
     if(_sesh.get_level() == 0){
-        _text_box = text_box(small_generator, "This is a test of the text box system. Blah blah blah blah blah blah blah blah blah");
+        _text_box = text_box(_small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
     }
 }
 
@@ -188,6 +194,12 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
         sb_commentary::level_win_pause();
+
+        //tutorial win level thing 
+        if(_sesh.get_level() == 0){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Congrats! You finished the tutorial.");
+        }
     }
     if(_autosave_visibility_time != 0){
         ++_autosave_visibility_time;
@@ -212,8 +224,17 @@ bn::optional<scene_type> play_scene::update(){
             set_paused_text_visible(true);
         }
         ++_flashing_text_time;
+    }else if(_fade_timer > 0){
+        ++_fade_timer;
+        bn::blending::set_transparency_alpha(0.005 * _fade_timer);
+
+        if(_fade_timer == 200) _fade_timer = 0;
 
     }else{
+
+        if(_sesh.get_level() == 0) update_tutorial();
+
+
         if(!_trogdor->dead() && _autosave_visibility_time == 0){
             set_autosave_text_visible(false);
         }
@@ -275,8 +296,6 @@ bn::optional<scene_type> play_scene::update(){
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
             
-            //Spawn in the troghammer if he doesn't exist yet.
-            if(!_troghammer) spawn_troghammer(true);
             autosave(true);
         }
 
@@ -340,8 +359,15 @@ bn::optional<scene_type> play_scene::update(){
         _peasants.remove_if(peasant_deletable);
         _archers.remove_if(archer_deletable);
 
-        _pfact.update();
-        _afact.update();
+        //only spawn peasants if there are cottages
+        if(_cottages.size() > 0)
+            _pfact.update();
+        
+        //only spawn archers if there are knights
+        if(_knights.size() > 0)
+            _afact.update();
+
+        //the above 2 cases are mainly for the tutorial
 
 
 
@@ -354,7 +380,7 @@ bn::optional<scene_type> play_scene::update(){
                 //temp fix for f'ed up spawnage
                (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
                 _sesh.die();
-                if(!_troghammer) spawn_troghammer(true);
+                if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             }
         }
     }
@@ -378,7 +404,7 @@ bn::optional<scene_type> play_scene::update(){
     //but you shouldn't be able to pause during other animations 
     //that block input (e.g. death/burninate!/winning a level)
     if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
-       && _win_pause_time == 0 && !_trogdor->dead()){
+       && _win_pause_time == 0 && !_trogdor->dead() && _sesh.get_level() != 0){
         _player_paused = !_player_paused;
         if(_player_paused){
             //Apply a dimming effect and display text when the game is paused.
@@ -419,35 +445,43 @@ bn::optional<scene_type> play_scene::update(){
     return result;
 }
 
+void play_scene::fade_elements_in(){
+    bn::blending::set_transparency_alpha(0);
+    _fade_timer = 1;
+}
+
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
 void play_scene::autosave(bool just_died){
-    if(_sesh.get_mans() == 0){
-        bn::sram::clear(sizeof(_sesh));
-    }else{
-        session_info saved_sesh = _sesh;
+    //No autosaving during the tutorial.
+    if(_sesh.get_level() != 0){
+        if(_sesh.get_mans() == 0){
+            bn::sram::clear(sizeof(_sesh));
+        }else{
+            session_info saved_sesh = _sesh;
 
-        if(_sesh.troghammer_enabled()){
-            if(_troghammer){
-                saved_sesh.set_troghammer_status(_troghammer->get_status());
-            }else{
-                //if you just died and there's no troghammer yet, we need to send in the hammer bro
-                saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
+            if(_sesh.troghammer_enabled()){
+                if(_troghammer){
+                    saved_sesh.set_troghammer_status(_troghammer->get_status());
+                }else{
+                    //if you just died and there's no troghammer yet, we need to send in the hammer bro
+                    saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
+                }
             }
-        }
 
-        for(int z = 0; z < _cottages.size(); ++z){
-            saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
-        }
-        if(just_died){
-            saved_sesh.die();
-        }
+            for(int z = 0; z < _cottages.size(); ++z){
+                saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+            }
+            if(just_died){
+                saved_sesh.die();
+            }
 
-        bn::sram::write(saved_sesh);
-        set_autosave_text_visible(true);
-        if(!just_died){
-            _autosave_visibility_time = 1;
-        }
+            bn::sram::write(saved_sesh);
+            set_autosave_text_visible(true);
+            if(!just_died){
+                _autosave_visibility_time = 1;
+            }
 
+        }
     }
 }
 
@@ -538,6 +572,93 @@ void play_scene::spawn_troghammer(bool alert){
             _th_sound = troghammer_sound(0);          
         }
     }
+}
+
+void play_scene::update_tutorial(){
+    BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
+
+    if(_tutorial_arrow){
+        _tutorial_arrow->update();
+        if(_tutorial_arrow->get_direction() == direction::UP){
+            if(_trogdor->get_trogmeter() == 0){
+                _tutorial_arrow->set_x(-64);
+            }else{
+                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
+            }
+        }
+    }
+    
+    //but not all, since if all cottages were burninated, we win
+    bool some_cottages_burninated = false;
+    for(cottage &c : _cottages){
+        if(c.burninated()) some_cottages_burninated = true;
+    }
+
+    if(_cottages.size() == 0){
+        //tutorial phase 1
+        if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
+            bn::keypad::left_pressed() || bn::keypad::right_pressed())){
+            _tutorial_timer = 1;
+        }
+        if(_tutorial_timer) _tutorial_timer++;
+
+        if(_tutorial_timer == 240){
+            _cottages.emplace_back(65, -45, direction::LEFT, false, false);
+            _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
+            _tutorial_timer = 0;
+
+            for(cottage &c : _cottages) c.set_blending_enabled(true);            
+            fade_elements_in();
+        }
+
+    }else if(_knights.size() == 0){
+        //tutorial phase 2
+        if(_peasants.size() > 0 && _trogdor->get_trogmeter() == 0){
+            bn::fixed arrow_ycor = _peasants.front().get_y();
+            if(!_tutorial_arrow){
+                _tutorial_arrow = tutorial_arrow(_peasants.front().get_x() - 15, arrow_ycor, direction::RIGHT);
+            }else{
+                _tutorial_arrow->set_y(arrow_ycor);
+            }
+
+        }
+
+        if(_trogdor->get_trogmeter() >= 1 && 
+        //this direction clause is just to make sure this only runs once
+                _tutorial_arrow->get_direction() != direction::UP){
+            
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+            _tutorial_arrow = tutorial_arrow(-60, -62, direction::UP);
+        }
+
+        if(_trogdor->get_trogmeter() >= 5){
+            _knights.emplace_front(-95, -15, true);
+            _knights.emplace_front(95,-15,false);
+            _archers.emplace_front(-50, true);
+
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+
+            for(cottage &c : _cottages) c.set_blending_enabled(false);            
+            for(knight &k : _knights) k.set_blending_enabled(true);
+            _archers.front().set_blending_enabled(true);
+            fade_elements_in();
+        }
+    }else if(_trogdor->burninating()){
+        _tutorial_arrow.reset();
+        //burnination / level winning tutorial
+        if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+        }
+    }else if(some_cottages_burninated){
+        _text_box.reset();
+        _text_box = text_box(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
+    }
+    
 }
 
 

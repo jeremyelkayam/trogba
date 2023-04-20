@@ -41,7 +41,8 @@ namespace trog{
         void jump(short time, bn::fixed height, bool repeating);
         void squish(short time);
 
-        
+        void set_blending_enabled(bool enabled) 
+            {_sprite.set_blending_enabled(enabled);}
 
     protected:
         explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);

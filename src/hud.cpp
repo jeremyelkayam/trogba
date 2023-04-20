@@ -5,7 +5,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_peasanthead.h"
 #include "bn_regular_bg_items_burninometer.h"
-#include "bn_regular_bg_items_burninometer_inverted.h"
+#include "bn_sprite_items_burninometer_inverted.h"
 #include "hud.h"
 
 
@@ -15,7 +15,6 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
         _sesh(sesh),
         _text_generator(generator),
         _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
-        _burninatemeter_invert(bn::regular_bg_items::burninometer_inverted.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_window(bn::rect_window::internal()),
         _enabled(true) {
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
@@ -33,10 +32,16 @@ hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned shor
     _burninatemeter_window.set_boundaries(-80,TROG_HUD_BURNINATEMETER_LEFTBOUND,-72,TROG_HUD_TROGMETER_LEFTBOUND + TROG_HUD_BURNINATEMETER_WIDTH);
 
     _burninatemeter.set_visible(false);
+    _burninatemeter.set_priority(0);
 
-    _burninatemeter_invert.set_visible(false);
-    _burninatemeter_invert.put_below();
+    _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER - 32, -75, 0));
+    _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
+    _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER + 32, -75, 2));
 
+    for(bn::sprite_ptr &sprite : _burninatemeter_invert){
+        sprite.set_visible(false);
+        // sprite.set_bg_priority(1);
+    }
 }
 
 
@@ -65,11 +70,11 @@ void hud::update_burninatemeter(unsigned int current_burninate_time, unsigned in
     if(!scrolling_text()){
         if(current_burninate_time == 0) { 
             _burninatemeter.set_visible(false);
-            _burninatemeter_invert.set_visible(false);
+            set_sprite_arr_visible(_burninatemeter_invert, false);
             set_sprite_arr_visible(_trogmeter_sprites, true);
         }else{
             _burninatemeter.set_visible(true);
-            _burninatemeter_invert.set_visible(true);
+            set_sprite_arr_visible(_burninatemeter_invert, true);
             bn::fixed time_percentage = current_burninate_time;
             time_percentage /= total_burninate_time;
             _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
@@ -87,9 +92,9 @@ void hud::set_all_visible(bool visible){
         set_sprite_arr_visible(_trogmeter_sprites, visible);        
     }else{
         _burninatemeter.set_visible(visible);
-        _burninatemeter_invert.set_visible(visible);
+        set_sprite_arr_visible(_burninatemeter_invert, visible);
+
     }
-    
     _enabled = visible;
 }
 
@@ -131,10 +136,16 @@ void hud::update() {
             //TODO: don't just right align this. The text should be right aligned and the numbers
             // should be left aligned
             bn::ostringstream mans_lv_string_stream(mans_lv_str);
-            mans_lv_string_stream << "MANS:";
-            mans_lv_string_stream << _sesh.get_mans();
-            mans_lv_string_stream << " Lv:";
-            mans_lv_string_stream << _sesh.get_level();
+
+            if(_sesh.get_level() == 0){
+                mans_lv_string_stream << "TUTORIAL";
+            }else{
+                mans_lv_string_stream << "MANS:";
+                mans_lv_string_stream << _sesh.get_mans();
+                mans_lv_string_stream << " Lv:";
+                mans_lv_string_stream << _sesh.get_level();
+            }
+
 
             _text_generator.set_right_alignment();
             _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);

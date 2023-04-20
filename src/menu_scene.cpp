@@ -7,6 +7,8 @@
 #include "bn_sprite_items_trogdorhead.h"
 #include "bn_sprite_items_firebreath.h"
 
+#define SELECTION_ANIM_LENGTH 30 
+
 namespace trog {
 
 menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator) : 
@@ -16,7 +18,7 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         _flames(bn::sprite_items::firebreath.create_sprite(-110,-30)),
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
-        _flames_scale(_flames, 30, 4),
+        _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
         _selected_option_index(0),
         _selection_anim_timer(0),
         _sesh(sesh) {
@@ -59,7 +61,8 @@ bn::optional<scene_type> menu_scene::update(){
         ++_selection_anim_timer;
         _flames_anim.update();
         _flames_scale.update();
-        if(_selection_anim_timer > 30 ||  bn::keypad::a_pressed()) 
+        _flames_translate->update();
+        if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()) 
             result = scene_type::PLAY;
     }
 
@@ -69,7 +72,6 @@ bn::optional<scene_type> menu_scene::update(){
             //load file
             if(_loaded_sesh.is_valid_object()){
                 _sesh = _loaded_sesh;
-                bn::sram::clear(sizeof(_sesh));
                 BN_LOG("loaded the file");
                 select();
             }else{
@@ -102,7 +104,9 @@ bn::optional<scene_type> menu_scene::update(){
 void menu_scene::select(){
     _cursor.set_item(bn::sprite_items::trogdorhead, 1);
     _flames.set_visible(true);
-    _flames.set_position(_cursor.position());
+    _flames.put_above();
+    _flames.set_position(_cursor.position().x() + 2, _cursor.position().y() + 2);
+    _flames_translate = bn::sprite_move_to_action(_flames, SELECTION_ANIM_LENGTH, _flames.position().x() + 40, _flames.position().y());
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator){

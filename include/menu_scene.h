@@ -27,6 +27,7 @@ namespace trog{
         bn::sprite_ptr _cursor, _flames;
         bn::sprite_animate_action<4> _flames_anim;
         bn::sprite_scale_to_action _flames_scale;
+        bn::optional<bn::sprite_move_to_action> _flames_translate;
         
         uint8_t _selected_option_index, _selection_anim_timer;
 

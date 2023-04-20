@@ -16,6 +16,7 @@
 #include "troghammer.h"
 #include "big_text.h"
 #include "text_box.h"
+#include "tutorial_arrow.h"
 
 namespace trog{
 
@@ -42,9 +43,10 @@ namespace trog{
 
         unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time, _autosave_visibility_time;
         bool _player_paused;
+        uint8_t _tutorial_timer, _fade_timer;
 
         bn::regular_bg_ptr _countryside;
-        bn::sprite_text_generator &_text_generator;
+        bn::sprite_text_generator &_text_generator, &_small_generator;
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
@@ -59,6 +61,7 @@ namespace trog{
         bn::optional<troghammer> _troghammer;
         bn::optional<troghammer_sound> _th_sound;
         bn::optional<bn::sprite_ptr> _void_tower;
+        bn::optional<tutorial_arrow> _tutorial_arrow;
 
         bn::optional<text_box> _text_box;
 
@@ -77,6 +80,10 @@ namespace trog{
         void autosave(bool just_died);
 
         void spawn_troghammer(bool alert);
+
+        void fade_elements_in();
+
+        void update_tutorial();
 
     public:
         play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator);
