@@ -43,6 +43,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _win_pause_time(0),
         _flashing_text_time(0),
         _player_paused(false),
+        _tutorial_timer(0),
+        _fade_timer(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _text_generator(text_generator),
         _small_generator(small_generator)
@@ -215,53 +217,15 @@ bn::optional<scene_type> play_scene::update(){
             set_paused_text_visible(true);
         }
         ++_flashing_text_time;
+    }else if(_fade_timer > 0){
+        ++_fade_timer;
+        bn::blending::set_transparency_alpha(0.005 * _fade_timer);
+
+        if(_fade_timer == 200) _fade_timer = 0;
 
     }else{
 
-        //TUTORIAL BLOCK
-        if(_sesh.get_level() == 0){
-            if(_cottages.size() == 0){
-                //tutorial phase 1
-                if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
-                   bn::keypad::left_pressed() || bn::keypad::right_pressed())){
-                    _tutorial_timer = 1;
-                }
-                if(_tutorial_timer) _tutorial_timer++;
-
-                if(_tutorial_timer == 240){
-                    _cottages.emplace_back(65, -45, direction::LEFT, false, false);
-                    _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
-                    _text_box.reset();
-                    _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
-                    _tutorial_timer = 0;
-                }
-
-            }else if(_knights.size() == 0){
-                //tutorial phase 2
-                if(_trogdor->get_trogmeter() >= 1){
-                    _text_box.reset();
-                    _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
-                }
-
-                if(_trogdor->get_trogmeter() >= 3){
-                    _knights.emplace_front(-75, -45, false);
-                    _knights.emplace_front(75,-45,true);
-
-                    _text_box.reset();
-                    _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
-                }
-            }else if(_trogdor->burninating()){
-                //burnination / level winning tutorial
-                if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
-                    _text_box.reset();
-                    _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
-                }
-                if(false){
-                    _text_box.reset();
-                    _text_box = text_box(_small_generator, "Burninate all cottages to win the level.");                    
-                }
-            }
-        }
+        if(_sesh.get_level() == 0) update_tutorial();
 
 
         if(!_trogdor->dead() && _autosave_visibility_time == 0){
@@ -433,7 +397,7 @@ bn::optional<scene_type> play_scene::update(){
     //but you shouldn't be able to pause during other animations 
     //that block input (e.g. death/burninate!/winning a level)
     if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
-       && _win_pause_time == 0 && !_trogdor->dead()){
+       && _win_pause_time == 0 && !_trogdor->dead() && _sesh.get_level() != 0){
         _player_paused = !_player_paused;
         if(_player_paused){
             //Apply a dimming effect and display text when the game is paused.
@@ -472,6 +436,11 @@ bn::optional<scene_type> play_scene::update(){
     }
 
     return result;
+}
+
+void play_scene::fade_elements_in(){
+    bn::blending::set_transparency_alpha(0);
+    _fade_timer = 1;
 }
 
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
@@ -596,6 +565,61 @@ void play_scene::spawn_troghammer(bool alert){
             _th_sound = troghammer_sound(0);          
         }
     }
+}
+
+void play_scene::update_tutorial(){
+    BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
+    if(_cottages.size() == 0){
+        //tutorial phase 1
+        if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
+            bn::keypad::left_pressed() || bn::keypad::right_pressed())){
+            _tutorial_timer = 1;
+        }
+        if(_tutorial_timer) _tutorial_timer++;
+
+        if(_tutorial_timer == 240){
+            _cottages.emplace_back(65, -45, direction::LEFT, false, false);
+            _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
+            _tutorial_timer = 0;
+
+            for(cottage &c : _cottages) c.set_blending_enabled(true);            
+            fade_elements_in();
+        }
+
+    }else if(_knights.size() == 0){
+        //tutorial phase 2
+        if(_trogdor->get_trogmeter() >= 1){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+        }
+
+        if(_trogdor->get_trogmeter() >= 3){
+            _knights.emplace_front(-95, -15, true);
+            _knights.emplace_front(95,-15,false);
+            _archers.emplace_front(-50, true);
+
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+
+            for(cottage &c : _cottages) c.set_blending_enabled(false);            
+            for(knight &k : _knights) k.set_blending_enabled(true);
+            _archers.front().set_blending_enabled(true);
+            fade_elements_in();
+        }
+    }else if(_trogdor->burninating()){
+        //burnination / level winning tutorial
+        if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+        }
+        if(false){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Burninate all cottages to win the level.");                    
+        }
+    }
+
 }
 
 
