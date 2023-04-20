@@ -325,8 +325,6 @@ bn::optional<scene_type> play_scene::update(){
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
             
-            //Spawn in the troghammer if he doesn't exist yet.
-            if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             autosave(true);
         }
 
