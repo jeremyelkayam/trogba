@@ -19,6 +19,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_voidtower.h"
+#include "bn_sprite_items_tutorial_arrow.h"
 
 #include "play_scene.h"
 #include "constants.h"
@@ -193,6 +194,12 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
         sb_commentary::level_win_pause();
+
+        //tutorial win level thing 
+        if(_sesh.get_level() == 0){
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Congrats! You finished the tutorial.");
+        }
     }
     if(_autosave_visibility_time != 0){
         ++_autosave_visibility_time;
@@ -569,6 +576,24 @@ void play_scene::spawn_troghammer(bool alert){
 
 void play_scene::update_tutorial(){
     BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
+
+    if(_tutorial_arrow){
+        _tutorial_arrow->update();
+        if(_tutorial_arrow->get_direction() == direction::UP){
+            if(_trogdor->get_trogmeter() == 0){
+                _tutorial_arrow->set_x(-64);
+            }else{
+                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
+            }
+        }
+    }
+    
+    //but not all, since if all cottages were burninated, we win
+    bool some_cottages_burninated = false;
+    for(cottage &c : _cottages){
+        if(c.burninated()) some_cottages_burninated = true;
+    }
+
     if(_cottages.size() == 0){
         //tutorial phase 1
         if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
@@ -590,12 +615,26 @@ void play_scene::update_tutorial(){
 
     }else if(_knights.size() == 0){
         //tutorial phase 2
-        if(_trogdor->get_trogmeter() >= 1){
-            _text_box.reset();
-            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+        if(_peasants.size() > 0 && _trogdor->get_trogmeter() == 0){
+            bn::fixed arrow_ycor = _peasants.front().get_y();
+            if(!_tutorial_arrow){
+                _tutorial_arrow = tutorial_arrow(_peasants.front().get_x() - 15, arrow_ycor, direction::RIGHT);
+            }else{
+                _tutorial_arrow->set_y(arrow_ycor);
+            }
+
         }
 
-        if(_trogdor->get_trogmeter() >= 3){
+        if(_trogdor->get_trogmeter() >= 1 && 
+        //this direction clause is just to make sure this only runs once
+                _tutorial_arrow->get_direction() != direction::UP){
+            
+            _text_box.reset();
+            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+            _tutorial_arrow = tutorial_arrow(-60, -62, direction::UP);
+        }
+
+        if(_trogdor->get_trogmeter() >= 5){
             _knights.emplace_front(-95, -15, true);
             _knights.emplace_front(95,-15,false);
             _archers.emplace_front(-50, true);
@@ -609,17 +648,17 @@ void play_scene::update_tutorial(){
             fade_elements_in();
         }
     }else if(_trogdor->burninating()){
+        _tutorial_arrow.reset();
         //burnination / level winning tutorial
         if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
             _text_box.reset();
             _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
         }
-        if(false){
-            _text_box.reset();
-            _text_box = text_box(_small_generator, "Burninate all cottages to win the level.");                    
-        }
+    }else if(some_cottages_burninated){
+        _text_box.reset();
+        _text_box = text_box(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
     }
-
+    
 }
 
 

@@ -16,6 +16,7 @@
 #include "troghammer.h"
 #include "big_text.h"
 #include "text_box.h"
+#include "tutorial_arrow.h"
 
 namespace trog{
 
@@ -60,6 +61,7 @@ namespace trog{
         bn::optional<troghammer> _troghammer;
         bn::optional<troghammer_sound> _th_sound;
         bn::optional<bn::sprite_ptr> _void_tower;
+        bn::optional<tutorial_arrow> _tutorial_arrow;
 
         bn::optional<text_box> _text_box;
 
