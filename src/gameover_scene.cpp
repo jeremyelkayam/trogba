@@ -131,7 +131,7 @@ bn::optional<scene_type> gameover_scene::update(){
                     break;
                 case 2:
                     _sesh.reset();
-                    result = scene_type::INSTRUCTIONS;
+                    result = scene_type::MENU;
                     break;
                 default:
                 break;                
