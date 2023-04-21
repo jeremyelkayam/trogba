@@ -6,19 +6,24 @@
 #include "menu_scene.h"
 #include "bn_sprite_items_trogdorhead.h"
 #include "bn_sprite_items_firebreath.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
+#include "bn_regular_bg_items_main_menu.h"
 
-#define SELECTION_ANIM_LENGTH 30 
+#define SELECTION_ANIM_LENGTH 30
 
 namespace trog {
 
 menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator) : 
         _text_generator(text_generator),
         // _small_text_generator(variable_8x8_sprite_font),
-        _cursor(bn::sprite_items::trogdorhead.create_sprite(-110,-30)),
-        _flames(bn::sprite_items::firebreath.create_sprite(-110,-30)),
+        _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
+        _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
+        _bg(bn::regular_bg_items::main_menu.create_bg(0, 45)),
         _selected_option_index(0),
         _selection_anim_timer(0),
         _sesh(sesh) {
@@ -27,7 +32,8 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
     _flames.set_visible(false);
     _flames.set_scale(0.01);
     bn::sram::read(_loaded_sesh);
-    _menu_options.emplace_back(-100, -30, "CONTINUE", _text_generator);
+    _text_generator.set_center_alignment();
+    _menu_options.emplace_back(5, -52, "CONTINUE", _text_generator);
 
 
 
@@ -40,16 +46,16 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         summary_stream << "level: " << _loaded_sesh.get_level();       
 
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(-90, -15, session_summary, _menu_text_sprites);
+        small_generator.generate(-70, -37, session_summary, _menu_text_sprites);
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }else{
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(-90, -15, "no data saved.", _menu_text_sprites);
+        small_generator.generate(-70, -37, "no data saved.", _menu_text_sprites);
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
-    _menu_options.emplace_back(-100, 10, "NEW GAME", _text_generator);
-    _menu_options.emplace_back(-100, 30, "HOW TO PLAY", _text_generator);
+    _menu_options.emplace_back(5, 0, "NEW GAME", _text_generator);
+    _menu_options.emplace_back(5, 34, "HOW TO PLAY", _text_generator);
     
 }
 
@@ -88,15 +94,31 @@ bn::optional<scene_type> menu_scene::update(){
 
 
     }else if(bn::keypad::up_pressed()){
-        --_selected_option_index;
+        BN_LOG("wtf i pressed up");
+        if(_selected_option_index == 0){
+            _selected_option_index = _menu_options.size() - 1;
+        }else{
+            --_selected_option_index;
+        }
     }else if(bn::keypad::down_pressed()){
-        ++_selected_option_index;
+        if(_selected_option_index == _menu_options.size() - 1){
+            _selected_option_index = 0;
+        }else{
+            ++_selected_option_index;
+        }
+    }
+    _cursor.set_y(_menu_options.at(_selected_option_index).y());
+
+    for(uint8_t i = 0; i < _menu_options.size(); i++){
+        if(i == _selected_option_index) {
+            _menu_options.at(i).turn_red();
+        } else {
+            _menu_options.at(i).turn_white();
+        }
     }
 
-    if(bn::keypad::any_pressed()){
-        _selected_option_index = _selected_option_index % _menu_options.size();
-        _cursor.set_y(_menu_options.at(_selected_option_index).y());
-    }
+
+
 
     return result;
 }
@@ -110,13 +132,24 @@ void menu_scene::select(){
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator){
-    _text_generator.set_left_alignment();
+    _text_generator.set_center_alignment();
 
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
     _text_generator.generate(x - 1, y + 1, text, _text_sprites);    
 
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.generate(x, y, text, _text_sprites);    
+
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    _text_generator.generate(x, y, text, _red_text_sprites);   
+}
+
+void menu_option::turn_red(){
+    for(bn::sprite_ptr &sprite : _red_text_sprites) sprite.set_visible(true);
+}
+
+void menu_option::turn_white(){
+    for(bn::sprite_ptr &sprite : _red_text_sprites) sprite.set_visible(false);
 }
 
 }
