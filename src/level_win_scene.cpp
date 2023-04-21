@@ -18,7 +18,7 @@
 
 namespace trog {
 
-level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
+level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
         _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _text_generator(text_generator),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
@@ -30,7 +30,8 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
         _burningflames(bn::create_sprite_animate_action_once(
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)),
         _sesh(sesh),
-        _timer(0) {
+        _timer(0),
+        _small_generator(small_generator) {
 
     _flames.set_visible(false);
     _flames.put_above();
@@ -57,7 +58,6 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
 }
 
-// Autosave feature for a potential future update
 void level_win_scene::save(){
     session_info sesh_to_write(_sesh);
     // the level doesn't technically advance until later in the animation
@@ -75,6 +75,10 @@ void level_win_scene::save(){
 bn::optional<scene_type> level_win_scene::update(){
     ++_timer;
     bn::optional<scene_type> result;
+    if(_sesh.get_level() == 0 && !_text_box){
+        _sesh.reset_score();
+        _text_box = text_box(_small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
+    }
 
     if(30 < _timer && !_burningflames.done()){
         _flames.set_visible(true);
@@ -91,7 +95,7 @@ bn::optional<scene_type> level_win_scene::update(){
         _smoke_anim.update();
     }else{
         _nose_smoke.set_visible(false);
-        if(bn::keypad::a_pressed()){
+        if(bn::keypad::a_pressed() || _timer > 600){
             if(_sesh.current_level_has_cutscene()) {
                 result = scene_type::MOVIE;
             }else{

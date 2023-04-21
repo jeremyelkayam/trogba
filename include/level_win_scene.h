@@ -4,6 +4,7 @@
 #include <bn_sprite_animate_actions.h>
 #include "scene.h"
 #include "session_info.h"
+#include "text_box.h"
 
 
 namespace trog{
@@ -18,14 +19,18 @@ namespace trog{
         bn::sprite_animate_action<31> _smoke_anim;
         bn::sprite_animate_action<4> _burningflames;
 
+        bn::optional<text_box> _text_box;
+        
         session_info &_sesh;
 
         unsigned short _timer;
 
+        bn::sprite_text_generator &_small_generator;
+
         void save();
 
     public:
-        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

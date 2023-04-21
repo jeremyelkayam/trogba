@@ -18,7 +18,7 @@
 #include "trogdor_variable_8x8_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
-#include "instructions_scene.h"
+// #include "instructions_scene.h"
 #include "play_scene.h"
 #include "gameover_scene.h"
 #include "level_win_scene.h"
@@ -83,11 +83,12 @@ int main()
                     scene.reset(new trog::title_scene());
                     break;
                 }
-                case trog::scene_type::INSTRUCTIONS: { 
-                    hud.hide();
-                    scene.reset(new trog::instructions_scene(sesh, text_generator));
-                    break;
-                }
+                // instructions scene has been replaced by menu scene.
+                // case trog::scene_type::INSTRUCTIONS: { 
+                //     hud.hide();
+                //     scene.reset(new trog::instructions_scene(sesh, text_generator));
+                //     break;
+                // }
                 case trog::scene_type::MENU: { 
                     hud.hide();
                     scene.reset(new trog::menu_scene(sesh, text_generator, small_text_generator));
@@ -122,7 +123,7 @@ int main()
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, text_generator));
+                    scene.reset(new trog::level_win_scene(sesh, text_generator, small_text_generator));
                     break;
                 }
                 case trog::scene_type::MOVIE: {

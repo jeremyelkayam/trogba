@@ -44,6 +44,8 @@ namespace trog
             troghammer_status load_troghammer_status() {return _thinfo;}
 
             void reset_troghammer_status();
+
+            void reset_score(){_score = 0;}
             
         private:
             bn::array<char, 8> _format_tag;
