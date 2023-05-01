@@ -53,7 +53,7 @@ namespace trog{
         void set_selectable_chars_index_to_current_char_in_str();
         
         short _table_index, _string_index, _selectable_letters_index;
-        unsigned short _timer;
+        uint8_t _blink_timer, _hold_down_timer;
 
         bool _go_to_credits;
 
