@@ -16,6 +16,7 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
     _sprite.set_horizontal_flip(facingRight);
     _sprite.set_scale(0.25);
     _sprite.put_below();
+    _sprite.set_z_order(BACK_ZORDER);
     _sprite.set_visible(false);
 
 
@@ -101,6 +102,7 @@ void troghammer::init_current_state(){
                 BN_ERROR("Invalid spawn position for troghammer");
         }
         _sprite.set_scale(1);
+        _sprite.set_z_order(MID_ZORDER);
 
     }else if(_current_state == troghammer_state::ALERT){
         _sprite.set_visible(false);
