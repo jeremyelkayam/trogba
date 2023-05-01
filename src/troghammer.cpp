@@ -83,20 +83,20 @@ void troghammer::init_current_state(){
         //problem: the troghammer can spawn on top of you
         switch(spawnpos){
             case 0:
-                set_y(TROG_COUNTRYSIDE_TOP_BOUND + 10);
+                set_y(TROG_COUNTRYSIDE_TOP_BOUND - 10);
                 set_x(0);
                 break;
             case 1:
-                set_y(TROG_COUNTRYSIDE_BOTTOM_BOUND - 10);
+                set_y(TROG_COUNTRYSIDE_BOTTOM_BOUND + 15);
                 set_x(0);
                 break;
             case 2:
                 set_y(0);
-                set_x(TROG_COUNTRYSIDE_LEFT_BOUND + 10);
+                set_x(TROG_COUNTRYSIDE_LEFT_BOUND - 10);
                 break;
             case 3:
                 set_y(0);
-                set_x(TROG_COUNTRYSIDE_RIGHT_BOUND - 10);
+                set_x(TROG_COUNTRYSIDE_RIGHT_BOUND + 15);
                 break;
             default:
                 BN_ERROR("Invalid spawn position for troghammer");
@@ -124,7 +124,17 @@ void troghammer::update(){
 
 
     if(_current_state == troghammer_state::ARRIVED){
-        knight::update();
+        if(_timer > 120){
+            knight::update();
+        }else{
+            if(_pos.x() < 0) _pos.set_x(_pos.x() + bn::fixed(0.3));
+            if(_pos.x() > 0) _pos.set_x(_pos.x() - bn::fixed(0.3));
+            if(_pos.y() < 0) _pos.set_y(_pos.y() + bn::fixed(0.3));
+            if(_pos.y() > 0) _pos.set_y(_pos.y() - bn::fixed(0.3));
+            _sprite.set_position(_pos);
+            _walkcycle.update();
+            ++_timer;
+        }
     }else{
         ++_timer;
 

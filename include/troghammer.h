@@ -58,7 +58,7 @@ namespace trog {
             troghammer(troghammer_status status, bool facingRight, int level);
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
-            bool in_play(){return _current_state == troghammer_state::ARRIVED;}
+            bool in_play(){return _current_state == troghammer_state::ARRIVED && _timer >= 120;}
 
             bool awake_alert(){return _new_state && _current_state == troghammer_state::AWAKE;}
             bool arrived_alert() {return _new_state && _current_state == troghammer_state::ARRIVED;}
