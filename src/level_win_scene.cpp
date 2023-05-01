@@ -14,6 +14,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
+#include "bn_sprite_items_a_button_prompt.h"
 
 
 namespace trog {
@@ -31,11 +32,16 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)),
         _sesh(sesh),
         _timer(0),
-        _small_generator(small_generator) {
+        _small_generator(small_generator),
+        _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
+        _a_button_anim(bn::create_sprite_animate_action_forever(
+            _a_button, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1
+        )) {
 
     _flames.set_visible(false);
     _flames.put_above();
     _flames.set_scale(0.7);
+    _a_button.set_visible(false);
 
     bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 
@@ -75,6 +81,8 @@ void level_win_scene::save(){
 bn::optional<scene_type> level_win_scene::update(){
     ++_timer;
     bn::optional<scene_type> result;
+
+    _a_button_anim.update();
     if(_sesh.get_level() == 0 && !_text_box){
         _sesh.reset_score();
         _text_box = text_box(_small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
@@ -86,6 +94,7 @@ bn::optional<scene_type> level_win_scene::update(){
     }
     if(_timer == 40) { 
         _sesh.advance_level();
+        _a_button.set_visible(true);
     }
     if(_burningflames.done()){
         _flames.set_visible(false);
@@ -95,7 +104,7 @@ bn::optional<scene_type> level_win_scene::update(){
         _smoke_anim.update();
     }else{
         _nose_smoke.set_visible(false);
-        if(bn::keypad::a_pressed() || _timer > 600){
+        if(bn::keypad::a_pressed()){
             if(_sesh.current_level_has_cutscene()) {
                 result = scene_type::MOVIE;
             }else{
