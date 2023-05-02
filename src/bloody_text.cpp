@@ -13,7 +13,7 @@ namespace trog {
 
 
 
-bloody_text::bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette) : 
+bloody_text::bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette, bn::random &rand) : 
     big_text(bigger, x, y, text, palette) {
     int ycor;
     if(_bigger){
@@ -23,8 +23,8 @@ bloody_text::bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, co
     }
     for(int z = 0 ; z < _text_sprites.size() - 1 ; ++z){
         int xcor = _text_sprites.at(z).x().integer();
-        bool short_droplet = rand() % 2;
-        _droplets.emplace_back(short_droplet ? SHORT_DROPLET : LONG_DROPLET, xcor + rand() % 8, ycor, rand() % 5);
+        bool short_droplet = rand.get_int(2);
+        _droplets.emplace_back(short_droplet ? SHORT_DROPLET : LONG_DROPLET, xcor + rand.get_int(8), ycor, rand.get_int(5));
     }
 }
 

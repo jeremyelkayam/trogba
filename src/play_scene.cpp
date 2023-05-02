@@ -295,7 +295,7 @@ bn::optional<scene_type> play_scene::update(){
                 sb_commentary::arrowed();
             }
             _sesh.set_killed_by_archer(true);
-            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
             
             autosave(true);
         }
@@ -320,7 +320,7 @@ bn::optional<scene_type> play_scene::update(){
                 str = "SORTED!";
             }
             _sesh.set_killed_by_archer(false);
-            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
 
             autosave(true);
         }
@@ -335,7 +335,7 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_trogdor->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
-                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
                 autosave(true);
             }
 

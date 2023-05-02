@@ -22,11 +22,11 @@
 
 namespace trog {
 
-gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
+gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &rand) : 
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), rand),
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
