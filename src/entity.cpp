@@ -43,6 +43,13 @@ void entity::update_anim(){
         _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
             _starting_pos.x(), _starting_pos.y());;
     }
+
+    //drop clause
+    if(_move_action && _move_action->done() && _vsl_action){
+        _vsl_action->update();
+        _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * _hitbox.height());
+    }
+
     if(_flip_action){
         _flip_action->update();
     }
@@ -138,6 +145,12 @@ void entity::move_by(bn::fixed x, bn::fixed y){
 void entity::squish(short time){
     _sprite.set_scale(0.8);
     _scale_action = bn::sprite_scale_to_action(_sprite, time, 1);
+}
+
+void entity::drop(){
+    _sprite.set_y(_pos.y() - 160);
+    move_to(60, _pos.x(), _pos.y());
+    _vsl_action = bn::sprite_vertical_scale_loop_action(_sprite, 15, 0.6);
 }
 
 

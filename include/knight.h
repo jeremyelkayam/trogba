@@ -25,12 +25,12 @@ namespace trog {
             bn::sprite_animate_action<4> _walkcycle;
 
 			void change_direction();
-            void update_anim() override final;
             
         public:
             knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random);
 			virtual void update();
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
+            void update_anim() override final;
     };
 }

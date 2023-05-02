@@ -45,7 +45,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _flashing_text_time(0),
         _player_paused(false),
         _tutorial_timer(0),
-        _fade_timer(0),
+        _tutorial_cutscene_timer(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _text_generator(text_generator),
         _small_generator(small_generator),
@@ -225,11 +225,22 @@ bn::optional<scene_type> play_scene::update(){
             set_paused_text_visible(true);
         }
         ++_flashing_text_time;
-    }else if(_fade_timer > 0){
-        ++_fade_timer;
-        bn::blending::set_transparency_alpha(0.005 * _fade_timer);
-
-        if(_fade_timer == 200) _fade_timer = 0;
+    }else if(_tutorial_cutscene_timer > 0){
+        ++_tutorial_cutscene_timer;
+        if(_tutorial_cutscene_timer <= 90){
+            for(cottage &c : _cottages) c.update_anim();
+            for(archer &a : _archers) a.update_anim();
+            for(knight &k : _knights) k.update_anim();
+            if(_tutorial_cutscene_timer >= 68){
+                if(_tutorial_cutscene_timer % 4 == 0){
+                    _countryside.set_y(_countryside.y() + 5);
+                }else if(_tutorial_cutscene_timer % 2 == 0){
+                    _countryside.set_y(_countryside.y() - 5);                    
+                }
+            }
+        }
+        
+        if(_tutorial_cutscene_timer == 200) _tutorial_cutscene_timer = 0;
 
     }else{
 
@@ -446,11 +457,6 @@ bn::optional<scene_type> play_scene::update(){
     return result;
 }
 
-void play_scene::fade_elements_in(){
-    bn::blending::set_transparency_alpha(0);
-    _fade_timer = 1;
-}
-
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
 void play_scene::autosave(bool just_died){
     //No autosaving during the tutorial.
@@ -563,7 +569,7 @@ void play_scene::spawn_troghammer(bool alert){
     _void_tower->set_item(bn::sprite_items::voidtower, 1);
 
     if(alert){
-        if(_troghammer->in_play()){
+        if(_troghammer->get_status().current_state == troghammer_state::ARRIVED){
             //If the troghammer spawns in immediately, 
             // use the "ARRIVES" notification instead of the "STIRS" one
             _hud.scroll_text("THE TROGHAMMER ARRIVES!");
@@ -604,14 +610,16 @@ void play_scene::update_tutorial(){
         if(_tutorial_timer) _tutorial_timer++;
 
         if(_tutorial_timer == 240){
-            _cottages.emplace_back(65, -45, direction::LEFT, false, false);
+            _cottages.emplace_back(65, 5, direction::LEFT, false, false);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
             _text_box.reset();
             _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
             _tutorial_timer = 0;
+            _tutorial_cutscene_timer = 1;
 
-            for(cottage &c : _cottages) c.set_blending_enabled(true);            
-            fade_elements_in();
+            _cottages.at(0).drop();
+            _cottages.at(1).drop();
+            bn::sound_items::heavylanding.play(TROG_DEFAULT_VOLUME);
         }
 
     }else if(_knights.size() == 0){
@@ -622,6 +630,7 @@ void play_scene::update_tutorial(){
                 _tutorial_arrow = tutorial_arrow(_peasants.front().get_x() - 15, arrow_ycor, direction::RIGHT);
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
+                //fix this
             }
 
         }
@@ -639,14 +648,16 @@ void play_scene::update_tutorial(){
             _knights.emplace_front(-95, -15, true, _rand);
             _knights.emplace_front(95,-15,false, _rand);
             _archers.emplace_front(-50, true);
+            // _archers.front()
 
             _text_box.reset();
             _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
 
-            for(cottage &c : _cottages) c.set_blending_enabled(false);            
-            for(knight &k : _knights) k.set_blending_enabled(true);
-            _archers.front().set_blending_enabled(true);
-            fade_elements_in();
+            // for(knight &k : _knights) k.drop();
+
+            // for(cottage &c : _cottages) c.set_blending_enabled(false);            
+            // for(knight &k : _knights) k.set_blending_enabled(true);
+            // _archers.front().set_blending_enabled(true);
         }
     }else if(_trogdor->burninating()){
         _tutorial_arrow.reset();
