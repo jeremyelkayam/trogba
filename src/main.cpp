@@ -124,7 +124,7 @@ int main()
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, text_generator, small_text_generator));
+                    scene.reset(new trog::level_win_scene(sesh, text_generator, small_text_generator, rand));
                     break;
                 }
                 case trog::scene_type::MOVIE: {

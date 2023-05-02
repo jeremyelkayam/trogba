@@ -19,7 +19,7 @@
 
 namespace trog {
 
-level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
+level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand) : 
         _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _text_generator(text_generator),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
@@ -50,7 +50,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     bn::string<7> line2 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(rand() % 33 == 0){
+    if(rand.get_int(33) == 0){
         line2 = "BEATED!";
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);

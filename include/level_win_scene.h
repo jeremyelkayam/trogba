@@ -31,7 +31,7 @@ namespace trog{
         void save();
 
     public:
-        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator);
+        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
