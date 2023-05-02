@@ -55,8 +55,8 @@ namespace trog {
             void log_state(troghammer_state state);
 
         public:
-            troghammer(const bn::fixed_point &pos, bool facingRight, int level);
-            troghammer(troghammer_status status, bool facingRight, int level);
+            troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand);
+            troghammer(troghammer_status status, bool facingRight, int level, bn::random &rand);
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
             bool in_play(){return _current_state == troghammer_state::ARRIVED && _timer >= 120;}

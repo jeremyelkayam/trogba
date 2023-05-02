@@ -24,19 +24,18 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
         _text_generator(text_generator),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
+        _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
         _smoke_anim(bn::create_sprite_animate_action_once(
                     _nose_smoke, 3, bn::sprite_items::nose_smoke.tiles_item(),
                     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
                     17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)),
         _burningflames(bn::create_sprite_animate_action_once(
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)),
+        _a_button_anim(bn::create_sprite_animate_action_forever(
+            _a_button, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
         _sesh(sesh),
         _timer(0),
-        _small_generator(small_generator),
-        _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
-        _a_button_anim(bn::create_sprite_animate_action_forever(
-            _a_button, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1
-        )) {
+        _small_generator(small_generator) {
 
     _flames.set_visible(false);
     _flames.put_above();

@@ -4,7 +4,6 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include <bn_random.h>
 #include "bn_sprite_items_strongbad.h"
 #include "entity.h"
 #include "session_info.h"

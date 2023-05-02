@@ -31,7 +31,7 @@ namespace trog{
          *                  spawned by the factory.
          * @param level     The level currently being played.
          */
-        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level);
+        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level, bn::random &random);
     };
 
 }

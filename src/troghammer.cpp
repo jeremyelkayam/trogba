@@ -8,8 +8,8 @@ namespace trog {
 
 //TODO: Make a saved_data class/struct so that we can save troghammer status
 
-troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) :
-    knight(pos.x(), pos.y(), facingRight),
+troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand) :
+    knight(pos.x(), pos.y(), facingRight, rand),
     _total_wait_time(120 SECONDS)
 {
     _sprite = bn::sprite_items::troghammer.create_sprite(_pos.x(), _pos.y());
@@ -64,8 +64,8 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
 
 
 }
-troghammer::troghammer(troghammer_status status, bool facingRight, int level) : 
-    troghammer(status.pos, facingRight, level) {
+troghammer::troghammer(troghammer_status status, bool facingRight, int level, bn::random &rand) : 
+    troghammer(status.pos, facingRight, level, rand) {
     while(_current_state != status.current_state){ 
         _current_state = _states.back(); 
         _states.pop_back();
@@ -101,7 +101,6 @@ void troghammer::init_current_state(){
         //spawn at the top of the screen
         unsigned int spawnpos = rand() % 4;
         BN_LOG("spawn position: ", spawnpos);
-        //problem: the troghammer can spawn on top of you
         switch(spawnpos){
             case 0:
                 short ycor;

@@ -32,14 +32,14 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand) : 
         _sesh(sesh),
         _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
-        _pfact(_cottages,_peasants),
-        _afact(_archers, sesh.get_level()),
+        _pfact(_cottages,_peasants, rand),
+        _afact(_archers, sesh.get_level(), rand),
         _burninate_pause_time(0),
         _win_pause_time(0),
         _flashing_text_time(0),
@@ -48,7 +48,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _fade_timer(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _text_generator(text_generator),
-        _small_generator(small_generator)
+        _small_generator(small_generator),
+        _rand(rand)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -157,8 +158,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     set_paused_text_visible(false);
 
     if(_sesh.get_level() != 0){
-        _knights.emplace_front(-59, 31, false);
-        _knights.emplace_front(33,-50,true);
+        _knights.emplace_front(-59, 31, false, _rand);
+        _knights.emplace_front(33,-50,true, _rand);
     }
 
     if(_sesh.troghammer_enabled()){
@@ -167,7 +168,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
         _void_tower->put_below();
 
         if(_sesh.load_troghammer_status().current_state != troghammer_state::UNALERTED){
-            _troghammer = troghammer(_sesh.load_troghammer_status(), true, _sesh.get_level());
+            _troghammer.emplace(_sesh.load_troghammer_status(), true, _sesh.get_level(), _rand);
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
             _sesh.reset_troghammer_status();
         }
@@ -558,7 +559,7 @@ void troghammer_sound::update(){
 }
 
 void play_scene::spawn_troghammer(bool alert){
-    _troghammer = troghammer(_void_tower->position(), true, _sesh.get_level());  
+    _troghammer.emplace(_void_tower->position(), true, _sesh.get_level(), _rand);  
     _void_tower->set_item(bn::sprite_items::voidtower, 1);
 
     if(alert){
@@ -635,8 +636,8 @@ void play_scene::update_tutorial(){
         }
 
         if(_trogdor->get_trogmeter() >= 5){
-            _knights.emplace_front(-95, -15, true);
-            _knights.emplace_front(95,-15,false);
+            _knights.emplace_front(-95, -15, true, _rand);
+            _knights.emplace_front(95,-15,false, _rand);
             _archers.emplace_front(-50, true);
 
             _text_box.reset();

@@ -48,6 +48,8 @@ namespace trog{
         bn::regular_bg_ptr _countryside;
         bn::sprite_text_generator &_text_generator, &_small_generator;
 
+        bn::random &_rand;
+
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
         bn::vector<bn::sprite_ptr, 8> _autosave_text;
@@ -86,7 +88,7 @@ namespace trog{
         void update_tutorial();
 
     public:
-        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator);
+        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 }

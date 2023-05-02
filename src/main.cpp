@@ -50,6 +50,7 @@ int main()
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
     bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
     bn::sprite_text_generator small_text_generator(trog::variable_8x8_sprite_font);
+    bn::random rand;
     text_generator.set_center_alignment();
 
     bool logo_scene = true;
@@ -102,7 +103,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, text_generator, small_text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud, text_generator, small_text_generator, rand));
                     }
                     break;
                 }
@@ -128,7 +129,7 @@ int main()
                 }
                 case trog::scene_type::MOVIE: {
                     hud.show();
-                    scene.reset(new trog::movie_scene(sesh, text_generator));
+                    scene.reset(new trog::movie_scene(sesh, text_generator, rand));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
@@ -172,7 +173,8 @@ int main()
 
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
-        rand();
+        rand.update();
+
         bn::core::update();
     }
 }

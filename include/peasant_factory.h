@@ -14,7 +14,7 @@ namespace trog{
         virtual void spawn() final;
 
     public:
-        peasant_factory(bn::vector<cottage, TROG_MAX_COTTAGES>& cottages, bn::forward_list<peasant, 20>& peasants);
+        peasant_factory(bn::vector<cottage, TROG_MAX_COTTAGES>& cottages, bn::forward_list<peasant, 20>& peasants, bn::random &rand);
     };
 
 }
