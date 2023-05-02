@@ -163,7 +163,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
     if(_sesh.troghammer_enabled()){
         _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
-        _void_tower->set_z_order(BACK_ZORDER);
+        _void_tower->set_z_order(FURTHEST_BACK_ZORDER);
         _void_tower->put_below();
 
         if(_sesh.load_troghammer_status().current_state != troghammer_state::UNALERTED){

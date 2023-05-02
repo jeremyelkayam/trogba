@@ -15,8 +15,8 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
     _sprite = bn::sprite_items::troghammer.create_sprite(_pos.x(), _pos.y());
     _sprite.set_horizontal_flip(facingRight);
     _sprite.set_scale(0.25);
-    _sprite.put_below();
     _sprite.set_z_order(BACK_ZORDER);
+    _sprite.put_below();
     _sprite.set_visible(false);
 
 
@@ -64,6 +64,26 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level) 
 
 
 }
+troghammer::troghammer(troghammer_status status, bool facingRight, int level) : 
+    troghammer(status.pos, facingRight, level) {
+    while(_current_state != status.current_state){ 
+        _current_state = _states.back(); 
+        _states.pop_back();
+    }
+
+    if(_current_state == troghammer_state::COMING){
+        _sprite.set_scale(0.5);
+        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
+    }else if(_current_state == troghammer_state::ARRIVED){
+        _sprite.set_scale(1);
+        _sprite.set_z_order(FRONT_ZORDER);
+        _sprite.put_above();
+    }
+    
+    _new_state = false;
+    _timer = status.timer;
+}
+
 
 void troghammer::advance_to_next_state(){
     _new_state = true;
@@ -76,6 +96,7 @@ void troghammer::init_current_state(){
     BN_ASSERT(_new_state);
 
     if(_current_state == troghammer_state::ARRIVED){
+        _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
         _sprite.set_visible(true);
         //spawn at the top of the screen
         unsigned int spawnpos = rand() % 4;
@@ -83,7 +104,24 @@ void troghammer::init_current_state(){
         //problem: the troghammer can spawn on top of you
         switch(spawnpos){
             case 0:
-                set_y(TROG_COUNTRYSIDE_TOP_BOUND - 10);
+                short ycor;
+                switch(_time_of_day){
+                    case 1:
+                        ycor = day_path[120];
+                        break;
+                    case 2:
+                        ycor = dusk_path[120];
+                        break;
+                    case 3:
+                        ycor = night_path[120];
+                        break;
+                    case 4:
+                        ycor = dawn_path[120];
+                        break;
+                    default:
+                        BN_ERROR("invalid time of day in level_data.h");
+                    }
+                set_y(ycor);
                 set_x(0);
                 break;
             case 1:
@@ -101,8 +139,14 @@ void troghammer::init_current_state(){
             default:
                 BN_ERROR("Invalid spawn position for troghammer");
         }
-        _sprite.set_scale(1);
-        _sprite.set_z_order(MID_ZORDER);
+        if(spawnpos == 0){
+            _sprite.set_scale(0.01);
+            _over_the_hill = bn::sprite_scale_to_action(_sprite, 120, 1);
+        }else{
+            _sprite.set_scale(1);
+        }
+        _sprite.set_z_order(FRONT_ZORDER);
+        _sprite.put_above();
 
     }else if(_current_state == troghammer_state::ALERT){
         _sprite.set_visible(false);
@@ -127,10 +171,18 @@ void troghammer::update(){
         if(_timer > 120){
             knight::update();
         }else{
+            //left
             if(_pos.x() < 0) _pos.set_x(_pos.x() + bn::fixed(0.3));
+            //right
             if(_pos.x() > 0) _pos.set_x(_pos.x() - bn::fixed(0.3));
-            if(_pos.y() < 0) _pos.set_y(_pos.y() + bn::fixed(0.3));
+            //bottom
             if(_pos.y() > 0) _pos.set_y(_pos.y() - bn::fixed(0.3));
+
+            //top
+            if(_pos.y() < 0){
+                 _pos.set_y(_pos.y() + bn::fixed(0.1));
+                if(_over_the_hill && !_over_the_hill->done()) _over_the_hill->update();
+            }
             _sprite.set_position(_pos);
             _walkcycle.update();
             ++_timer;
@@ -190,20 +242,6 @@ void troghammer::set_ycor_to_horizon(){
 troghammer_status troghammer::get_status(){
     troghammer_status result = {_current_state, _timer, _pos};
     return result;
-}
-
-troghammer::troghammer(troghammer_status status, bool facingRight, int level) : 
-    troghammer(status.pos, facingRight, level) {
-    while(_current_state != status.current_state){ 
-        _current_state = _states.back(); 
-        _states.pop_back();
-        BN_LOG("state: ");
-        log_state(_current_state);
-        BN_LOG("loaded state: ");
-        log_state(status.current_state);
-    }
-    
-    _timer = status.timer;
 }
 
 void troghammer::log_state(troghammer_state state){

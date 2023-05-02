@@ -7,7 +7,7 @@
 #define FRONT_ZORDER 0
 #define MID_ZORDER 1
 #define BACK_ZORDER 2
-
+#define FURTHEST_BACK_ZORDER 3
 
 namespace trog{
 
