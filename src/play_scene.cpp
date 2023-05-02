@@ -311,12 +311,12 @@ bn::optional<scene_type> play_scene::update(){
                 sb_commentary::sworded();
             }
             bn::string<13> str = "SWORDED!";
-            //3% chance to get it wrong
-            short rand_num = rand() % 100;
-            if(rand_num % 100 == 0){
+            //2% chance to get it wrong
+            short rand_num = _rand.get_int(100);
+            if(rand_num == 0){
                 str = "SORDID!";
                 //maybe add that line of s.bad saying "A sordid affair"
-            }else if(rand_num % 100 == 1){
+            }else if(rand_num == 1){
                 str = "SORTED!";
             }
             _sesh.set_killed_by_archer(false);
