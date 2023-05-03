@@ -34,6 +34,7 @@ namespace trog{
 
 
         void move_to(short time, bn::fixed x, bn::fixed y);
+        void move_from(short time, bn::fixed x, bn::fixed y);        
         void move_to_and_back(short time, bn::fixed x, bn::fixed y);
         void move_by(bn::fixed x, bn::fixed y);
         void update_anim_action_when_not_moving(bool update) 

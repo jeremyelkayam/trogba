@@ -23,6 +23,12 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
 void entity::move_to(short time, bn::fixed x, bn::fixed y){
     _move_action = bn::sprite_move_to_action(_sprite, time, x, y);
 }
+
+void entity::move_from(short time, bn::fixed x, bn::fixed y){
+    _sprite.set_position(x, y);
+    move_to(time, _pos.x(), _pos.y());
+}
+
 void entity::move_to_and_back(short time, bn::fixed x, bn::fixed y){
     _starting_pos = _pos;
     _move_action = bn::sprite_move_to_action(_sprite, time/2, x, y);

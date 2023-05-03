@@ -227,10 +227,8 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
     }else if(_tutorial_cutscene_timer > 0){
         ++_tutorial_cutscene_timer;
-        if(_tutorial_cutscene_timer <= 90){
+        if(_tutorial_cutscene_timer <= 90 && _archers.empty()){
             for(cottage &c : _cottages) c.update_anim();
-            for(archer &a : _archers) a.update_anim();
-            for(knight &k : _knights) k.update_anim();
             if(_tutorial_cutscene_timer >= 68){
                 if(_tutorial_cutscene_timer % 4 == 0){
                     _countryside.set_y(_countryside.y() + 5);
@@ -239,8 +237,16 @@ bn::optional<scene_type> play_scene::update(){
                 }
             }
         }
+
+        if(!_archers.empty()){
+            for(archer &a : _archers) a.update_anim();
+            for(knight &k : _knights) k.update_anim();
+            if(_tutorial_cutscene_timer == 200) _tutorial_cutscene_timer = 0; 
+        }
         
-        if(_tutorial_cutscene_timer == 200) _tutorial_cutscene_timer = 0;
+        if(_archers.empty() && _tutorial_cutscene_timer == 100) _tutorial_cutscene_timer = 0;
+
+
 
     }else{
 
@@ -395,6 +401,9 @@ bn::optional<scene_type> play_scene::update(){
                 if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             }
         }
+
+        //TUTORIAL BLOCK
+        if(_sesh.get_level() == 0) update_tutorial();
     }
 
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
@@ -583,17 +592,6 @@ void play_scene::spawn_troghammer(bool alert){
 
 void play_scene::update_tutorial(){
     BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
-
-    if(_tutorial_arrow){
-        _tutorial_arrow->update();
-        if(_tutorial_arrow->get_direction() == direction::UP){
-            if(_trogdor->get_trogmeter() == 0){
-                _tutorial_arrow->set_x(-64);
-            }else{
-                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
-            }
-        }
-    }
     
     //but not all, since if all cottages were burninated, we win
     bool some_cottages_burninated = false;
@@ -626,11 +624,12 @@ void play_scene::update_tutorial(){
         //tutorial phase 2
         if(_peasants.size() > 0 && _trogdor->get_trogmeter() == 0){
             bn::fixed arrow_ycor = _peasants.front().get_y();
+            bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
-                _tutorial_arrow = tutorial_arrow(_peasants.front().get_x() - 15, arrow_ycor, direction::RIGHT);
+                _tutorial_arrow = tutorial_arrow(arrow_xcor, arrow_ycor, direction::RIGHT);
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
-                //fix this
+                _tutorial_arrow->set_x(arrow_xcor);
             }
 
         }
@@ -640,20 +639,22 @@ void play_scene::update_tutorial(){
                 _tutorial_arrow->get_direction() != direction::UP){
             
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
-            _tutorial_arrow = tutorial_arrow(-60, -62, direction::UP);
+            _text_box.emplace(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+            _tutorial_arrow.emplace(-60, -62, direction::UP);
         }
 
         if(_trogdor->get_trogmeter() >= 5){
-            _knights.emplace_front(-95, -15, true, _rand);
-            _knights.emplace_front(95,-15,false, _rand);
+            _knights.emplace_front(-85, -15, true, _rand);
+            _knights.front().move_from(200, -145, -15);
+            _knights.emplace_front(85,-15,false, _rand);
+            _knights.front().move_from(200, 145, -15);
             _archers.emplace_front(-50, true);
-            // _archers.front()
+            _archers.front().move_from(60, 135, -50);
 
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+            _text_box.emplace(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
 
-            // for(knight &k : _knights) k.drop();
+            _tutorial_cutscene_timer = 1;
 
             // for(cottage &c : _cottages) c.set_blending_enabled(false);            
             // for(knight &k : _knights) k.set_blending_enabled(true);
@@ -664,13 +665,24 @@ void play_scene::update_tutorial(){
         //burnination / level winning tutorial
         if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+            _text_box.emplace(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
         }
-    }else if(some_cottages_burninated){
-        _text_box.reset();
-        _text_box = text_box(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
+        if(_trogdor->get_burninating_time() == 1) _text_box.reset();
+    }else if(some_cottages_burninated && !_text_box){
+        _text_box.emplace(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
     }
-    
+
+    if(_tutorial_arrow){
+        _tutorial_arrow->update();
+        if(_tutorial_arrow->get_direction() == direction::UP){
+            if(_trogdor->get_trogmeter() == 0){
+                _tutorial_arrow->set_x(-64);
+            }else{
+                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
+            }
+        }
+    }
+
 }
 
 
