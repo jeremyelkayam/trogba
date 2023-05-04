@@ -7,12 +7,12 @@
 #include "bn_sprite_items_majesty.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames) : 
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, uint8_t initial_trogmeter) : 
         entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
         _speed(TROG_PLAYER_SPEED),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
-        _trogmeter(0),
+        _trogmeter(initial_trogmeter),
         _burninate_time(0),
         _time_dead(0),
         _majesty_flash_timer(0),
@@ -21,6 +21,11 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes,
         _sesh(sesh),
         _next_pos(xcor,ycor)
         {
+    if(_trogmeter > 0){
+        BN_ASSERT(sesh.get_level() == 0, "Initial trogmeter value can only be set in the tutorial");
+        BN_ASSERT(_trogmeter < _trogmeter_max, "Invalid value entered for trogmeter value: ", _trogmeter, " (greater than trogmeter max value of ", _trogmeter_max, ")");
+    }
+    
     _majesty.set_visible(false);
     _majesty.set_z_order(FRONT_ZORDER);
     _majesty.set_scale(2.3);

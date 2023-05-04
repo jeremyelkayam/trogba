@@ -394,10 +394,18 @@ bn::optional<scene_type> play_scene::update(){
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
+                uint8_t init_trogmeter = 0;
+                if(_sesh.get_level() == 0){
+                    init_trogmeter = _trogdor->get_trogmeter();
+                }
                 _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, 
                 //temp fix for f'ed up spawnage
-               (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, _sesh, true));
+                    (_sesh.get_level() == 27 ||
+                     _sesh.get_level() == 59 ||
+                     _sesh.get_level() == 91)
+                    ? 10 : 0, _sesh, true, init_trogmeter));
                 _sesh.die();
+                
                 if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             }
         }

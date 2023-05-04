@@ -3,8 +3,8 @@
 
 namespace trog { 
 
-trogdor::trogdor(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-    player(xcor, ycor, sesh, iframes, bn::sprite_items::trogdor, 8), 
+trogdor::trogdor(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, uint8_t initial_trogmeter) : 
+    player(xcor, ycor, sesh, iframes, bn::sprite_items::trogdor, 8, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 2, 
             bn::sprite_items::trogdor.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)) {
 
