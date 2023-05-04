@@ -660,7 +660,7 @@ void play_scene::update_tutorial(){
             _archers.front().move_from(60, 135, -50);
 
             _text_box.reset();
-            _text_box.emplace(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+            _text_box.emplace(_small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords.");
 
             _tutorial_cutscene_timer = 1;
 
