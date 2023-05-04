@@ -76,6 +76,8 @@ namespace trog{
         bn::optional<bn::sprite_move_by_action> _move_by_action;
         bn::optional<bn::sprite_scale_to_action> _scale_action;
         bn::optional<bn::sprite_vertical_scale_loop_action> _vsl_action;
+        bn::optional<bn::sprite_vertical_scale_to_action> _vst_action;
+        bn::optional<bn::sprite_horizontal_scale_to_action> _hst_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again
