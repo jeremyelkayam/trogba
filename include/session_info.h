@@ -46,13 +46,15 @@ namespace trog
             void reset_troghammer_status();
 
             void reset_score(){_score = 0;}
+
+            bool can_lose_trogmeter(){return _can_lose_trogmeter; }
             
         private:
             bn::array<char, 8> _format_tag;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
-            bool _killed_by_archer, _visited_treasure_hut, _troghammer;
+            bool _killed_by_archer, _visited_treasure_hut, _troghammer, _can_lose_trogmeter;
 
             //TO BE USED WHEN SAVING/LOADING A FILE MID-LEVEL.
             bn::array<bool, 6> _cottage_burnination_status;

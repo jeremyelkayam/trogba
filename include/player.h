@@ -80,6 +80,8 @@ namespace trog {
             void disable_breath(){_breath.disable();}
             void set_horizontal_flip(bool horizontal_flip);
 
+            void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}
+
             void update_win_anim();
 
 
