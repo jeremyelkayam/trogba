@@ -53,8 +53,10 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     if(rand.get_int(33) == 0){
         line2 = "BEATED!";
     }
-    _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
-    _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
+    
+
+    _text_generator.generate(70, 25, "LEVEL", _levelbeated_text_sprites);
+    _text_generator.generate(70, 40, line2, _levelbeated_text_sprites);
     sb_commentary::level_win_scene();
 
     if(sesh.get_level() != 101){

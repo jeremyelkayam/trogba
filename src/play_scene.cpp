@@ -11,6 +11,8 @@
 #include <bn_bg_palettes.h>
 #include <bn_sram.h>
 #include <bn_blending.h>
+#include <bn_music_items.h>
+#include <bn_music.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
@@ -175,7 +177,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     }
 
     if(_sesh.get_level() == 0){
+        //Initialize tutorial
         _text_box = text_box(_small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
+        bn::music_items::skoa.play(0.5);
     }
 }
 
@@ -395,7 +399,7 @@ bn::optional<scene_type> play_scene::update(){
                 result = scene_type::LOSE;
             }else{
                 uint8_t init_trogmeter = 0;
-                if(_sesh.get_level() == 0){
+                if(_sesh.get_level() == 0 && _trogdor->get_trogmeter() != 10){
                     init_trogmeter = _trogdor->get_trogmeter();
                 }
                 _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, 
@@ -469,6 +473,7 @@ bn::optional<scene_type> play_scene::update(){
 
     if(result && result != scene_type::BONUS){
         _hud.clear_scrolling_text();
+        if(bn::music::playing()) bn::music::stop();
     }
 
     return result;
