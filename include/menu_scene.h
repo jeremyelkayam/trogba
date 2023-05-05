@@ -2,8 +2,6 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_sprite_ptr.h>
 #include "scene.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "session_info.h"
 
 
@@ -12,9 +10,12 @@ namespace trog{
     class menu_option {
         private:
             bn::vector<bn::sprite_ptr, 8> _text_sprites;
+            bn::vector<bn::sprite_ptr, 4> _red_text_sprites;
         public:
             menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator);
             bn::fixed y(){return _text_sprites.at(0).y();}
+            void turn_red();
+            void turn_white();
     };
     class menu_scene : public scene{ 
     private:
@@ -27,6 +28,7 @@ namespace trog{
         bn::sprite_ptr _cursor, _flames;
         bn::sprite_animate_action<4> _flames_anim;
         bn::sprite_scale_to_action _flames_scale;
+        bn::regular_bg_ptr _bg;
         bn::optional<bn::sprite_move_to_action> _flames_translate;
         
         uint8_t _selected_option_index, _selection_anim_timer;

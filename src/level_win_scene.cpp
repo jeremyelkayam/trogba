@@ -14,27 +14,33 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
+#include "bn_sprite_items_a_button_prompt.h"
 
 
 namespace trog {
 
-level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
+level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand) : 
         _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _text_generator(text_generator),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
+        _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
         _smoke_anim(bn::create_sprite_animate_action_once(
                     _nose_smoke, 3, bn::sprite_items::nose_smoke.tiles_item(),
                     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
                     17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)),
         _burningflames(bn::create_sprite_animate_action_once(
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)),
+        _a_button_anim(bn::create_sprite_animate_action_forever(
+            _a_button, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
         _sesh(sesh),
-        _timer(0) {
+        _timer(0),
+        _small_generator(small_generator) {
 
     _flames.set_visible(false);
     _flames.put_above();
     _flames.set_scale(0.7);
+    _a_button.set_visible(false);
 
     bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 
@@ -44,7 +50,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     bn::string<7> line2 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(rand() % 33 == 0){
+    if(rand.get_int(33) == 0){
         line2 = "BEATED!";
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
@@ -57,7 +63,6 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
 }
 
-// Autosave feature for a potential future update
 void level_win_scene::save(){
     session_info sesh_to_write(_sesh);
     // the level doesn't technically advance until later in the animation
@@ -76,12 +81,19 @@ bn::optional<scene_type> level_win_scene::update(){
     ++_timer;
     bn::optional<scene_type> result;
 
+    _a_button_anim.update();
+    if(_sesh.get_level() == 0 && !_text_box){
+        _sesh.reset_score();
+        _text_box = text_box(_small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
+    }
+
     if(30 < _timer && !_burningflames.done()){
         _flames.set_visible(true);
         _burningflames.update();
     }
     if(_timer == 40) { 
         _sesh.advance_level();
+        _a_button.set_visible(true);
     }
     if(_burningflames.done()){
         _flames.set_visible(false);

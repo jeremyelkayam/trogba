@@ -26,24 +26,26 @@ tutorial_arrow::tutorial_arrow(bn::fixed xcor, bn::fixed ycor, direction dir) :
 }
 
 void tutorial_arrow::update(){
+    uint8_t oscillate_time = 50;
     ++_timer;
     bn::fixed increment(0.25);
     if(_dir == direction::DOWN || _dir == direction::LEFT){
         increment = -increment;
     }
 
-    if(_timer > 15){
-        increment = -increment;
+    uint8_t multiplier = _timer;
+    if(_timer >= oscillate_time / 2){
+        multiplier = oscillate_time - _timer;
     }
 
     if(_dir == direction::UP || _dir == direction::DOWN){
-        set_y(get_y() + increment);
+        _sprite.set_y(_pos.y() + increment * multiplier);
     }else{
-        set_x(get_x() + increment);
+        _sprite.set_x(_pos.x() + increment * multiplier);
     }
 
     
-    if(_timer >= 30){
+    if(_timer >= oscillate_time){
         _timer = 0;
     }
 }

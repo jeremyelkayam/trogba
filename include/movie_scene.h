@@ -33,6 +33,8 @@ namespace trog{
         
         session_info &_sesh;
 
+        bn::random &_random;
+
         bool cutscene_over();
 
         // void update_ending_cutscene();
@@ -42,7 +44,7 @@ namespace trog{
 
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();
-        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &random);
 
     };
 }

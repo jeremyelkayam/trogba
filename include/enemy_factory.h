@@ -14,12 +14,12 @@ namespace trog{
         unsigned short _min_spawn_interval;
         unsigned short _max_spawn_interval;
 
-        bn::random _random;
+        bn::random &_random;
         virtual void spawn() = 0;
         void reset_spawn_clock();
     public:
         virtual ~enemy_factory() = default;
-        enemy_factory(int min, int max);
+        enemy_factory(bn::random &random, int min, int max);
         void update();
 
     };

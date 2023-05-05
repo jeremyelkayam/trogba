@@ -18,18 +18,18 @@ hiscores_scene::hiscores_scene(session_info &sesh) :
         _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(0,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(
-            {high_score_entry("THE CHEAT", 100, 10000),
-            high_score_entry("POM POM", 60, 5000),
-            high_score_entry("LTGTNJAXN", 45, 3000),
-            high_score_entry("VIDLCTRX3", 28, 1994),
-            high_score_entry("VIDLCTRX1", 30, 1987),
-            high_score_entry("SHARPDENE", 20, 1000),
-            high_score_entry("DJMANKWCZ", 10, 800),
-            high_score_entry("COACH Z", 1, 10)}),
+            {high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0),
+            high_score_entry("", 0, 0)}),
         _table_index(-1),
         _string_index(0),
         _selectable_letters_index(28),
-        _timer(0),
+        _blink_timer(0),
         _go_to_credits(false) {
     
     //Initialize our format tag
@@ -106,17 +106,19 @@ void hiscores_scene::draw_high_scores_table(){
         _text_generator.set_left_alignment();
         _text_generator.generate(-74, -43 + z*15, _high_scores_table.at(z).get_name(), _text_sprites);   
 
-        _text_generator.set_center_alignment();
-        bn::string<3> level;
-        bn::ostringstream lv_string_stream(level);
-        lv_string_stream << _high_scores_table.at(z).get_level();
+        if(_high_scores_table.at(z).get_score() != 0){
+            _text_generator.set_center_alignment();
+            bn::string<3> level;
+            bn::ostringstream lv_string_stream(level);
+            lv_string_stream << _high_scores_table.at(z).get_level();
 
-        bn::string<12> score;
-        bn::ostringstream score_string_stream(score);
-        score_string_stream << _high_scores_table.at(z).get_score();
+            bn::string<12> score;
+            bn::ostringstream score_string_stream(score);
+            score_string_stream << _high_scores_table.at(z).get_score();
 
-        _text_generator.generate(16, -43 + z*15, level, _text_sprites);
-        _text_generator.generate(68, -43 + z*15, score, _text_sprites);
+            _text_generator.generate(16, -43 + z*15, level, _text_sprites);
+            _text_generator.generate(68, -43 + z*15, score, _text_sprites);
+        }
     }
 }
 
@@ -133,11 +135,10 @@ bn::optional<scene_type> hiscores_scene::update(){
         if(_go_to_credits){
             result = scene_type::CREDITS;
         }else{
-            result = scene_type::INSTRUCTIONS;
+            result = scene_type::MENU;
         }
         _text_sprites.clear();
-    }
-    
+    }    
     return result;
 }
 
@@ -146,9 +147,9 @@ void hiscores_scene::draw_name_entry(){
     _name_entry_sprites.clear();
     _text_generator.set_left_alignment();
 
-    if(_timer == 15){
+    if(_blink_timer == 15){
         _cursor_sprite.set_visible(true);
-    }else if(_timer == 0){
+    }else if(_blink_timer == 0){
         _cursor_sprite.set_visible(false);
     }
     _cursor_sprite.set_x(-70 + _string_index * 8);
@@ -157,9 +158,9 @@ void hiscores_scene::draw_name_entry(){
 }
 
 void hiscores_scene::update_name_entry(){
-    ++_timer;
-    if(_timer > 30){
-        _timer = 0;
+    ++_blink_timer;
+    if(_blink_timer > 30){
+        _blink_timer = 0;
     }
 
     high_score_entry &current_entry = _high_scores_table[_table_index];
@@ -201,6 +202,21 @@ void hiscores_scene::update_name_entry(){
     if(bn::keypad::up_pressed()){
         --_selectable_letters_index;
     }
+    if(bn::keypad::down_held() || bn::keypad::up_held()){
+        ++_hold_down_timer;
+
+        if(_hold_down_timer >= 30 && _hold_down_timer % 6 == 0){
+
+            if(bn::keypad::down_held())
+                ++_selectable_letters_index;
+            else
+                --_selectable_letters_index;            
+        }
+        //just keep holding if you hold for more than 4 seconds
+        if(_hold_down_timer >=210) _hold_down_timer = 30;
+    }
+
+    if(bn::keypad::down_released() || bn::keypad::up_released()) _hold_down_timer = 0;
     _selectable_letters_index = (_selectable_letters_index + _selectable_letters.max_size()) % _selectable_letters.max_size();
 
     current_entry.set_name_char(_selectable_letters[_selectable_letters_index], _string_index);

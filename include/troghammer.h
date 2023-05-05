@@ -33,6 +33,7 @@ namespace trog {
 
             troghammer_state _current_state;
             bn::list<troghammer_state, 4> _states;
+            bn::optional<bn::sprite_scale_to_action> _over_the_hill;
 
 
             static constexpr short day_path[240] {-56, -56, -57, -57, -57, -58, -58, -59, -59, -59, -60, -60, -60, -60, -61, -61, -61, -61, -61, -61, -61, -61, -61, -61, -61, -60, -60, -60, -60, -59, -59, -58, -58, -58, -57, -57, -57, -57, -57, -56, -56, -56, -56, -56, -55, -55, -55, -55, -55, -55, -55, -55, -55, -56, -56, -56, -56, -56, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -57, -56, -56, -55, -55, -55, -55, -55, -55, -54, -54, -54, -54, -54, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -53, -54, -54, -54, -54, -54, -54, -55, -55, -55, -55, -55, -56, -56, -56, -57, -57, -57, -58, -58, -58, -58, -58, -59, -59, -59, -60, -60, -60, -60, -61, -61, -61, -61, -61, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -62, -61, -61, -61, -61, -61, -61, -61, -60, -60, -60, -60, -60, -59, -59, -59, -59, -58, -58, -58, -57, -57, -56, -56, -56, -55, -55, -55, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -54, -55, -55, -55, -55, -55, -55, -56, -56, -56, -56, -56, -56, -57, -57, -57, -57, -57, -58, -58, -58, -58, -58, -58, -58};
@@ -54,11 +55,11 @@ namespace trog {
             void log_state(troghammer_state state);
 
         public:
-            troghammer(const bn::fixed_point &pos, bool facingRight, int level);
-            troghammer(troghammer_status status, bool facingRight, int level);
+            troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand);
+            troghammer(troghammer_status status, bool facingRight, int level, bn::random &rand);
             virtual void update() final;
             // unsigned short get_waiting_time() {return _waiting_time;}
-            bool in_play(){return _current_state == troghammer_state::ARRIVED;}
+            bool in_play(){return _current_state == troghammer_state::ARRIVED && _timer >= 120;}
 
             bool awake_alert(){return _new_state && _current_state == troghammer_state::AWAKE;}
             bool arrived_alert() {return _new_state && _current_state == troghammer_state::ARRIVED;}

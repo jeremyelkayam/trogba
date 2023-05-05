@@ -12,12 +12,13 @@
 //this class is terrible! But it's the best I've got 
 namespace trog{
 
-movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
+movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &random) : 
     
     _timer(0),
     _cutscene_length(270),
     _text_generator(text_generator),
-    _sesh(sesh)
+    _sesh(sesh),
+    _random(random)
 {
     if(_sesh.get_level() != 101) {
         bn::sound_items::intermish.play();
@@ -33,11 +34,11 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
         _cutscene_objects.emplace_back(mytrogdor);
                 
-        knight* redknight = new knight(190,-5,false);
+        knight* redknight = new knight(190,-5,false,random);
         redknight->move_to_and_back(_cutscene_length, 0, -5);
         _cutscene_objects.emplace_back(redknight);
 
-        knight* blueknight = new knight(220, 5,false);
+        knight* blueknight = new knight(220, 5,false,random);
         blueknight->move_to_and_back(_cutscene_length, 30, 5);
         _cutscene_objects.emplace_back(blueknight);
 
@@ -73,7 +74,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
         for(int z=0; z < 2; z++){
             int xcor = 30;
             int ycor = -2;
-            knight *k = new knight(z == 0 ? xcor : -xcor, ycor, z == 0);
+            knight *k = new knight(z == 0 ? xcor : -xcor, ycor, z == 0,random);
             k->update_anim_action_when_not_moving(true);
             k->animate_faster();
             k->animate_faster();
@@ -143,7 +144,7 @@ movie_scene::movie_scene(session_info &sesh, bn::sprite_text_generator &text_gen
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");
-        knight *k = new knight(-80, 0, false);
+        knight *k = new knight(-80, 0, false, random);
         k->update_anim_action_when_not_moving(false);
         _cutscene_objects.emplace_back(k);
         archer *arch = new archer(-5, true);
@@ -261,7 +262,7 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 39){
         //forbidden love
         if(_timer == _cutscene_length / 4){
-            knight *k = new knight(140, 0, false);
+            knight *k = new knight(140, 0, false, _random);
             //todo make him pause
             k->move_to(_cutscene_length / 4, -80, 0);
             _cutscene_objects.emplace_back(k);
@@ -378,12 +379,12 @@ bn::optional<scene_type> movie_scene::update(){
             _cutscene_objects.at(4)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "the blue knight", _text_sprites);
-            _cutscene_objects.emplace_back(new knight(0, 0, true));
+            _cutscene_objects.emplace_back(new knight(0, 0, true, _random));
         }else if(_timer == credits_start_time + credits_interval*6){
             _cutscene_objects.at(5)->set_visible(false);
             _text_sprites.clear();
             _text_generator.generate(0, -60, "the red knight", _text_sprites);
-            _cutscene_objects.emplace_back(new knight(0, 0, false));
+            _cutscene_objects.emplace_back(new knight(0, 0, false, _random));
         }else if(_timer == credits_start_time + credits_interval*7){
             _cutscene_objects.at(6)->set_visible(false);
             _text_sprites.clear();

@@ -32,23 +32,24 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand) : 
         _sesh(sesh),
         _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
-        _pfact(_cottages,_peasants),
-        _afact(_archers, sesh.get_level()),
+        _pfact(_cottages,_peasants, rand),
+        _afact(_archers, sesh.get_level(), rand),
         _burninate_pause_time(0),
         _win_pause_time(0),
         _flashing_text_time(0),
         _player_paused(false),
         _tutorial_timer(0),
-        _fade_timer(0),
+        _tutorial_cutscene_timer(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _text_generator(text_generator),
-        _small_generator(small_generator)
+        _small_generator(small_generator),
+        _rand(rand)
 {
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
@@ -157,17 +158,17 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     set_paused_text_visible(false);
 
     if(_sesh.get_level() != 0){
-        _knights.emplace_front(-59, 31, false);
-        _knights.emplace_front(33,-50,true);
+        _knights.emplace_front(-59, 31, false, _rand);
+        _knights.emplace_front(33,-50,true, _rand);
     }
 
     if(_sesh.troghammer_enabled()){
         _void_tower = bn::sprite_items::voidtower.create_sprite_optional(void_tower_pos);
-        _void_tower->set_z_order(BACK_ZORDER);
+        _void_tower->set_z_order(FURTHEST_BACK_ZORDER);
         _void_tower->put_below();
 
         if(_sesh.load_troghammer_status().current_state != troghammer_state::UNALERTED){
-            _troghammer = troghammer(_sesh.load_troghammer_status(), true, _sesh.get_level());
+            _troghammer.emplace(_sesh.load_troghammer_status(), true, _sesh.get_level(), _rand);
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
             _sesh.reset_troghammer_status();
         }
@@ -224,11 +225,28 @@ bn::optional<scene_type> play_scene::update(){
             set_paused_text_visible(true);
         }
         ++_flashing_text_time;
-    }else if(_fade_timer > 0){
-        ++_fade_timer;
-        bn::blending::set_transparency_alpha(0.005 * _fade_timer);
+    }else if(_tutorial_cutscene_timer > 0){
+        ++_tutorial_cutscene_timer;
+        if(_tutorial_cutscene_timer <= 90 && _archers.empty()){
+            for(cottage &c : _cottages) c.update_anim();
+            if(_tutorial_cutscene_timer >= 68){
+                if(_tutorial_cutscene_timer % 4 == 0){
+                    _countryside.set_y(_countryside.y() + 5);
+                }else if(_tutorial_cutscene_timer % 2 == 0){
+                    _countryside.set_y(_countryside.y() - 5);                    
+                }
+            }
+        }
 
-        if(_fade_timer == 200) _fade_timer = 0;
+        if(!_archers.empty()){
+            for(archer &a : _archers) a.update_anim();
+            for(knight &k : _knights) k.update_anim();
+            if(_tutorial_cutscene_timer == 200) _tutorial_cutscene_timer = 0; 
+        }
+        
+        if(_archers.empty() && _tutorial_cutscene_timer == 100) _tutorial_cutscene_timer = 0;
+
+
 
     }else{
 
@@ -294,7 +312,7 @@ bn::optional<scene_type> play_scene::update(){
                 sb_commentary::arrowed();
             }
             _sesh.set_killed_by_archer(true);
-            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
             
             autosave(true);
         }
@@ -310,16 +328,16 @@ bn::optional<scene_type> play_scene::update(){
                 sb_commentary::sworded();
             }
             bn::string<13> str = "SWORDED!";
-            //3% chance to get it wrong
-            short rand_num = rand() % 100;
-            if(rand_num % 100 == 0){
+            //2% chance to get it wrong
+            short rand_num = _rand.get_int(100);
+            if(rand_num == 0){
                 str = "SORDID!";
                 //maybe add that line of s.bad saying "A sordid affair"
-            }else if(rand_num % 100 == 1){
+            }else if(rand_num == 1){
                 str = "SORTED!";
             }
             _sesh.set_killed_by_archer(false);
-            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
 
             autosave(true);
         }
@@ -334,7 +352,7 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_trogdor->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
-                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
                 autosave(true);
             }
 
@@ -383,6 +401,9 @@ bn::optional<scene_type> play_scene::update(){
                 if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
             }
         }
+
+        //TUTORIAL BLOCK
+        if(_sesh.get_level() == 0) update_tutorial();
     }
 
     if(_burninate_pause_time >= TROG_BURNINATE_PAUSETIME){
@@ -443,11 +464,6 @@ bn::optional<scene_type> play_scene::update(){
     }
 
     return result;
-}
-
-void play_scene::fade_elements_in(){
-    bn::blending::set_transparency_alpha(0);
-    _fade_timer = 1;
 }
 
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
@@ -558,11 +574,11 @@ void troghammer_sound::update(){
 }
 
 void play_scene::spawn_troghammer(bool alert){
-    _troghammer = troghammer(_void_tower->position(), true, _sesh.get_level());  
+    _troghammer.emplace(_void_tower->position(), true, _sesh.get_level(), _rand);  
     _void_tower->set_item(bn::sprite_items::voidtower, 1);
 
     if(alert){
-        if(_troghammer->in_play()){
+        if(_troghammer->get_status().current_state == troghammer_state::ARRIVED){
             //If the troghammer spawns in immediately, 
             // use the "ARRIVES" notification instead of the "STIRS" one
             _hud.scroll_text("THE TROGHAMMER ARRIVES!");
@@ -576,17 +592,6 @@ void play_scene::spawn_troghammer(bool alert){
 
 void play_scene::update_tutorial(){
     BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
-
-    if(_tutorial_arrow){
-        _tutorial_arrow->update();
-        if(_tutorial_arrow->get_direction() == direction::UP){
-            if(_trogdor->get_trogmeter() == 0){
-                _tutorial_arrow->set_x(-64);
-            }else{
-                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
-            }
-        }
-    }
     
     //but not all, since if all cottages were burninated, we win
     bool some_cottages_burninated = false;
@@ -603,24 +608,28 @@ void play_scene::update_tutorial(){
         if(_tutorial_timer) _tutorial_timer++;
 
         if(_tutorial_timer == 240){
-            _cottages.emplace_back(65, -45, direction::LEFT, false, false);
+            _cottages.emplace_back(65, 5, direction::LEFT, false, false);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
             _text_box.reset();
             _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
             _tutorial_timer = 0;
+            _tutorial_cutscene_timer = 1;
 
-            for(cottage &c : _cottages) c.set_blending_enabled(true);            
-            fade_elements_in();
+            _cottages.at(0).drop();
+            _cottages.at(1).drop();
+            bn::sound_items::heavylanding.play(TROG_DEFAULT_VOLUME);
         }
 
     }else if(_knights.size() == 0){
         //tutorial phase 2
         if(_peasants.size() > 0 && _trogdor->get_trogmeter() == 0){
             bn::fixed arrow_ycor = _peasants.front().get_y();
+            bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
-                _tutorial_arrow = tutorial_arrow(_peasants.front().get_x() - 15, arrow_ycor, direction::RIGHT);
+                _tutorial_arrow = tutorial_arrow(arrow_xcor, arrow_ycor, direction::RIGHT);
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
+                _tutorial_arrow->set_x(arrow_xcor);
             }
 
         }
@@ -630,35 +639,50 @@ void play_scene::update_tutorial(){
                 _tutorial_arrow->get_direction() != direction::UP){
             
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
-            _tutorial_arrow = tutorial_arrow(-60, -62, direction::UP);
+            _text_box.emplace(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+            _tutorial_arrow.emplace(-60, -62, direction::UP);
         }
 
         if(_trogdor->get_trogmeter() >= 5){
-            _knights.emplace_front(-95, -15, true);
-            _knights.emplace_front(95,-15,false);
+            _knights.emplace_front(-85, -15, true, _rand);
+            _knights.front().move_from(200, -145, -15);
+            _knights.emplace_front(85,-15,false, _rand);
+            _knights.front().move_from(200, 145, -15);
             _archers.emplace_front(-50, true);
+            _archers.front().move_from(60, 135, -50);
 
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
+            _text_box.emplace(_small_generator, "Archers and knights can kill Trogdor!! Avoid their arrows and swords.");
 
-            for(cottage &c : _cottages) c.set_blending_enabled(false);            
-            for(knight &k : _knights) k.set_blending_enabled(true);
-            _archers.front().set_blending_enabled(true);
-            fade_elements_in();
+            _tutorial_cutscene_timer = 1;
+
+            // for(cottage &c : _cottages) c.set_blending_enabled(false);            
+            // for(knight &k : _knights) k.set_blending_enabled(true);
+            // _archers.front().set_blending_enabled(true);
         }
     }else if(_trogdor->burninating()){
         _tutorial_arrow.reset();
         //burnination / level winning tutorial
         if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+            _text_box.emplace(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
         }
-    }else if(some_cottages_burninated){
-        _text_box.reset();
-        _text_box = text_box(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
+        if(_trogdor->get_burninating_time() == 1) _text_box.reset();
+    }else if(some_cottages_burninated && !_text_box){
+        _text_box.emplace(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
     }
-    
+
+    if(_tutorial_arrow){
+        _tutorial_arrow->update();
+        if(_tutorial_arrow->get_direction() == direction::UP){
+            if(_trogdor->get_trogmeter() == 0){
+                _tutorial_arrow->set_x(-64);
+            }else{
+                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
+            }
+        }
+    }
+
 }
 
 

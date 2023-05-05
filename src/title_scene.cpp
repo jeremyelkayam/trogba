@@ -14,7 +14,7 @@ title_scene::title_scene() :
         _version_label(bn::sprite_items::versionlabel.create_sprite(-104, 77)),
         _frame_counter(0) {
 
-    _version_label.set_item(bn::sprite_items::versionlabel, 1);
+    _version_label.set_item(bn::sprite_items::versionlabel, 2);
 
     bn::sound_items::themesong.play(TROG_DEFAULT_VOLUME);
 

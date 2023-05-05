@@ -3,12 +3,13 @@
 
 namespace trog { 
 
-knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight) :
+knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random) :
     entity(xcor, ycor, bn::fixed(TROG_KNIGHT_WIDTH), bn::fixed(TROG_KNIGHT_HEIGHT), bn::sprite_items::knight.create_sprite(xcor, ycor)),
     _timer(0),
     _rotation(0),
     _speed(TROG_KNIGHT_SPEED),
     _cycletime(TROG_KNIGHT_MOVE_CYCLE_TIME),
+    _random(random),
     //todo: this is incomplete; fix it plz
     _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 20, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3))

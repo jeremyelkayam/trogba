@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <bn_random.h>
+
 #include "big_text.h"
 #include "bn_sprite_animate_actions.h"
 
@@ -22,7 +24,7 @@ namespace trog {
             bn::vector<blood_droplet, 8> _droplets;
             
         public:
-            bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette);
+            bloody_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette, bn::random &rand);
 			virtual void update() final;
             virtual void set_visible(bool visible) final;
             void set_blending_enabled(bool enabled);

@@ -307,6 +307,10 @@ bool player::invincible(){
 void player::update_win_anim(){
     _majesty_flash_timer++;
 
+    //reset the sprite if the player is dead.
+    if(dead()){
+        _sprite.set_tiles(_spritem.tiles_item(), 0);
+    }
     
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
@@ -321,8 +325,6 @@ void player::update_win_anim(){
     if(_majesty_flash_timer > TROG_MAJESTY_FLASH_INTERVAL * 2){
         _majesty_flash_timer = 0;
     }
-
 }
-
 
 }

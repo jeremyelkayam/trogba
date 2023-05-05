@@ -7,7 +7,7 @@
 #define FRONT_ZORDER 0
 #define MID_ZORDER 1
 #define BACK_ZORDER 2
-
+#define FURTHEST_BACK_ZORDER 3
 
 namespace trog{
 
@@ -34,6 +34,7 @@ namespace trog{
 
 
         void move_to(short time, bn::fixed x, bn::fixed y);
+        void move_from(short time, bn::fixed x, bn::fixed y);        
         void move_to_and_back(short time, bn::fixed x, bn::fixed y);
         void move_by(bn::fixed x, bn::fixed y);
         void update_anim_action_when_not_moving(bool update) 
@@ -43,6 +44,8 @@ namespace trog{
 
         void set_blending_enabled(bool enabled) 
             {_sprite.set_blending_enabled(enabled);}
+
+        void drop();
 
     protected:
         explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
@@ -72,6 +75,7 @@ namespace trog{
         bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
         bn::optional<bn::sprite_move_by_action> _move_by_action;
         bn::optional<bn::sprite_scale_to_action> _scale_action;
+        bn::optional<bn::sprite_vertical_scale_loop_action> _vsl_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again

@@ -24,7 +24,7 @@ namespace trog{
         void set_sprites_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
         void set_current_menu_option_visible();        
     public:
-        explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &rand);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
