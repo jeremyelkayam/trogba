@@ -35,7 +35,7 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
     _flames.set_scale(0.01);
     bn::sram::read(_loaded_sesh);
     _text_generator.set_center_alignment();
-    _menu_options.emplace_back(5, -52, "CONTINUE", _text_generator);
+    _menu_options.emplace_back(5, -62, "CONTINUE", _text_generator);
 
     small_generator.set_center_alignment();
 
@@ -47,16 +47,17 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         summary_stream << "level: " << _loaded_sesh.get_level();       
 
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(5, -37, session_summary, _menu_text_sprites);
+        small_generator.generate(5, -46, session_summary, _menu_text_sprites);
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }else{
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(5, -37, "no data saved.", _menu_text_sprites);
+        small_generator.generate(5, -46, "no data saved.", _menu_text_sprites);
         small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
-    _menu_options.emplace_back(5, 0, "NEW GAME", _text_generator);
-    _menu_options.emplace_back(5, 34, "HOW TO PLAY", _text_generator);
+    _menu_options.emplace_back(5, -15, "NEW GAME", _text_generator);
+    _menu_options.emplace_back(5, 17, "HOW TO PLAY", _text_generator);
+    _menu_options.emplace_back(5, 47, "OPTIONS", _text_generator);
     
 }
 
@@ -95,13 +96,13 @@ bn::optional<scene_type> menu_scene::update(){
         }
 
 
-    }else if(bn::keypad::up_pressed()){
+    }else if(bn::keypad::up_pressed() && !_selection_anim_timer){
         if(_selected_option_index == 0){
             _selected_option_index = _menu_options.size() - 1;
         }else{
             --_selected_option_index;
         }
-    }else if(bn::keypad::down_pressed()){
+    }else if(bn::keypad::down_pressed() && !_selection_anim_timer){
         if(_selected_option_index == _menu_options.size() - 1){
             _selected_option_index = 0;
         }else{
