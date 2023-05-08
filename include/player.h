@@ -22,14 +22,14 @@ namespace trog {
 
             bn::fixed_point _direction;
  
-            unsigned short _trogmeter;
-            unsigned int _burninate_time;
-            const unsigned short _trogmeter_max = TROG_TROGMETER_MAX;
-            int _burninate_length; 
-            unsigned short _time_dead;
-            unsigned short _iframes;
-            unsigned short _majesty_flash_timer;
-            uint8_t _walk_cycle_frames;
+            uint8_t _trogmeter;
+            unsigned short _burninate_time;
+            const uint8_t _trogmeter_max = TROG_TROGMETER_MAX;
+            unsigned short _burninate_length; 
+            uint8_t _time_dead;
+            uint8_t _iframes;
+            uint8_t _majesty_flash_timer;
+            const uint8_t _walk_cycle_frames;
 
             firebreath _breath;
             session_info &_sesh;
@@ -58,7 +58,7 @@ namespace trog {
             bn::fixed_point _next_pos;
             
         public:
-            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames);
+            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, uint8_t initial_trogmeter=0);
             virtual void update();
 
             bool burninating();
@@ -79,6 +79,8 @@ namespace trog {
             void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
             void disable_breath(){_breath.disable();}
             void set_horizontal_flip(bool horizontal_flip);
+
+            void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}
 
             void update_win_anim();
 

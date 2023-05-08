@@ -30,6 +30,7 @@ void session_info::reset(){
     _killed_by_archer = false;
     _visited_treasure_hut = false;
     _troghammer = true;
+    _can_lose_trogmeter = true;
     clear_burnination_array();
     reset_troghammer_status();
 }

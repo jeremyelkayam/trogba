@@ -21,7 +21,7 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
 }
 
 void entity::move_to(short time, bn::fixed x, bn::fixed y){
-    _move_action = bn::sprite_move_to_action(_sprite, time, x, y);
+    _move_action.emplace(_sprite, time, x, y);
 }
 
 void entity::move_from(short time, bn::fixed x, bn::fixed y){
@@ -31,7 +31,7 @@ void entity::move_from(short time, bn::fixed x, bn::fixed y){
 
 void entity::move_to_and_back(short time, bn::fixed x, bn::fixed y){
     _starting_pos = _pos;
-    _move_action = bn::sprite_move_to_action(_sprite, time/2, x, y);
+    _move_action.emplace(_sprite, time/2, x, y);
     _return_to_starting_point = true;
 }
 
@@ -46,7 +46,7 @@ void entity::update_anim(){
     }
     if(_move_action && _move_action->done() && _return_to_starting_point){
         set_horizontal_flip(!_sprite.horizontal_flip());
-        _move_action = bn::sprite_move_to_action(_sprite, _move_action->duration_updates(), 
+        _move_action.emplace(_sprite, _move_action->duration_updates(), 
             _starting_pos.x(), _starting_pos.y());;
     }
 
@@ -54,6 +54,15 @@ void entity::update_anim(){
     if(_move_action && _move_action->done() && _vsl_action){
         _vsl_action->update();
         _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * _hitbox.height());
+    }
+
+    //squish clause
+    if(_hst_action && !_hst_action->done())
+        _hst_action->update();
+
+    if(_vst_action && !_vst_action->done()){
+        _vst_action->update();
+        _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * (_hitbox.height() * 1.25));
     }
 
     if(_flip_action){
@@ -145,18 +154,20 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
 
 void entity::move_by(bn::fixed x, bn::fixed y){
     BN_LOG("help me");
-    _move_by_action = bn::sprite_move_by_action(_sprite, x, y);
+    _move_by_action.emplace(_sprite, x, y);
 }
 
 void entity::squish(short time){
-    _sprite.set_scale(0.8);
-    _scale_action = bn::sprite_scale_to_action(_sprite, time, 1);
+    _sprite.set_vertical_scale(0.8);
+    _sprite.set_horizontal_scale(1.2);
+    _vst_action.emplace(_sprite, time, 1);
+    _hst_action.emplace(_sprite, time, 1);
 }
 
 void entity::drop(){
     _sprite.set_y(_pos.y() - 160);
     move_to(60, _pos.x(), _pos.y());
-    _vsl_action = bn::sprite_vertical_scale_loop_action(_sprite, 15, 0.6);
+    _vsl_action.emplace(_sprite, 15, 0.6);
 }
 
 
