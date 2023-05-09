@@ -1,4 +1,5 @@
 #include <bn_sound_items.h>
+#include <bn_log.h>
 
 #include "cottage.h"
 #include "sb_commentary.h"
@@ -35,6 +36,7 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
 }
 
 void cottage::update(){
+
     if(_flames){
         _burningflames->update();
         ++_time_burning;
