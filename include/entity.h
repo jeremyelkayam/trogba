@@ -76,12 +76,16 @@ namespace trog{
         bn::unique_ptr<bn::sprite_horizontal_flip_toggle_action> _flip_action;
         bn::unique_ptr<bn::sprite_move_by_action> _move_by_action;
         bn::unique_ptr<bn::sprite_scale_to_action> _scale_action;
-        bn::unique_ptr<bn::sprite_vertical_scale_loop_action> _vsl_action;
         bn::unique_ptr<bn::sprite_vertical_scale_to_action> _vst_action;
         bn::unique_ptr<bn::sprite_horizontal_scale_to_action> _hst_action;
 
+        //for dropping only
+        bn::optional<bn::sprite_ptr> _dust_cloud;
+        bn::unique_ptr<bn::sprite_animate_action<8>> _dust_anim;
+
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again
+        bool _drop;
         bool _update_anim_when_not_moving;        
         bool _keep_jumping;
         short _jump_timer, _jump_time;

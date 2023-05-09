@@ -231,9 +231,9 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
     }else if(_tutorial_cutscene_timer > 0){
         ++_tutorial_cutscene_timer;
-        if(_tutorial_cutscene_timer <= 90 && _archers.empty()){
+        if(_archers.empty()){
             for(cottage &c : _cottages) c.update_anim();
-            if(_tutorial_cutscene_timer >= 68){
+            if(_tutorial_cutscene_timer >= 68 && _tutorial_cutscene_timer < 90){
                 if(_tutorial_cutscene_timer % 4 == 0){
                     _countryside.set_y(_countryside.y() + 5);
                 }else if(_tutorial_cutscene_timer % 2 == 0){
@@ -462,7 +462,9 @@ bn::optional<scene_type> play_scene::update(){
     //had to move this out to fix a bug where cottage fire was visible while paused.
     // since you can't move while paused, we should be fine....
     for(cottage &c : _cottages){
-        c.update();
+        if(!_tutorial_cutscene_timer){
+            c.update();
+        }
 
         // only run the collision check while unpaused
         if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){

@@ -2,6 +2,7 @@
 #include <bn_display.h>
 #include "constants.h"
 #include "entity.h"
+#include "bn_sprite_items_wmg_dustcloud.h"
 
 
 namespace trog {
@@ -13,6 +14,7 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _sprite(sprite),
         _top_bound(TROG_COUNTRYSIDE_TOP_BOUND),
         _return_to_starting_point(false),
+        _drop(false),
         _update_anim_when_not_moving(false),
         _keep_jumping(false),
         _jump_timer(0),
@@ -51,18 +53,38 @@ void entity::update_anim(){
     }
 
     //drop clause
-    if(_move_action && _move_action->done() && _vsl_action){
-        _vsl_action->update();
-        _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * _hitbox.height());
+    //this is fucking garbage and i'm ashamed of what i have
+    if(_move_action && _move_action->done() && _drop){
+        //once it's dropped, start the dust cloud animation
+        if(!_dust_cloud){
+            _dust_cloud = bn::sprite_items::wmg_dustcloud.create_sprite(_pos.x(), _hitbox.bottom() + 2);
+            _dust_anim.reset(new bn::sprite_animate_action(bn::create_sprite_animate_action_once(*_dust_cloud.get(), 2, 
+                bn::sprite_items::wmg_dustcloud.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7)));
+        }
+
+        // once we finish squishing the sprite down, unsquish it back up.
+        if(_vst_action->done()) {
+            _drop = false;
+            _vst_action.reset(new bn::sprite_vertical_scale_to_action(_sprite, 15, 1));
+        }
+    }
+
+    if(_dust_anim){
+        _dust_anim->update();
+        if(_dust_anim->done()){
+            _dust_anim.reset();
+            _dust_cloud.reset();
+        }
     }
 
     //squish clause
     if(_hst_action && !_hst_action->done())
         _hst_action->update();
-
     if(_vst_action && !_vst_action->done()){
-        _vst_action->update();
-        _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * (_hitbox.height() * 1.25));
+        if(!_drop || (_move_action && _move_action->done())){
+            _vst_action->update();
+            _sprite.set_y(_pos.y() + (1 - _sprite.vertical_scale()) * (_hitbox.height() * 1.25));
+        }
     }
 
     if(_flip_action){
@@ -167,7 +189,8 @@ void entity::squish(short time){
 void entity::drop(){
     _sprite.set_y(_pos.y() - 160);
     move_to(60, _pos.x(), _pos.y());
-    _vsl_action.reset(new bn::sprite_vertical_scale_loop_action(_sprite, 15, 0.6));
+    _vst_action.reset(new bn::sprite_vertical_scale_to_action(_sprite, 15, 0.6));
+    _drop = true;
 }
 
 
