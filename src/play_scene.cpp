@@ -645,12 +645,11 @@ void play_scene::update_tutorial(){
             bn::fixed arrow_ycor = _peasants.front().get_y();
             bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
-                _tutorial_arrow = tutorial_arrow(arrow_xcor, arrow_ycor, direction::RIGHT);
+                _tutorial_arrow.emplace(arrow_xcor, arrow_ycor, direction::RIGHT);
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
                 _tutorial_arrow->set_x(arrow_xcor);
             }
-
         }
 
         if(_trogdor->get_trogmeter() >= 1 && 

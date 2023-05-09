@@ -4,6 +4,7 @@
 #include <bn_math.h>
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_unique_ptr.h>
 #define FRONT_ZORDER 0
 #define MID_ZORDER 1
 #define BACK_ZORDER 2
@@ -71,13 +72,13 @@ namespace trog{
 
 
         bn::sprite_ptr _sprite;
-        bn::optional<bn::sprite_move_to_action> _move_action;
-        bn::optional<bn::sprite_horizontal_flip_toggle_action> _flip_action;
-        bn::optional<bn::sprite_move_by_action> _move_by_action;
-        bn::optional<bn::sprite_scale_to_action> _scale_action;
-        bn::optional<bn::sprite_vertical_scale_loop_action> _vsl_action;
-        bn::optional<bn::sprite_vertical_scale_to_action> _vst_action;
-        bn::optional<bn::sprite_horizontal_scale_to_action> _hst_action;
+        bn::unique_ptr<bn::sprite_move_to_action> _move_action;
+        bn::unique_ptr<bn::sprite_horizontal_flip_toggle_action> _flip_action;
+        bn::unique_ptr<bn::sprite_move_by_action> _move_by_action;
+        bn::unique_ptr<bn::sprite_scale_to_action> _scale_action;
+        bn::unique_ptr<bn::sprite_vertical_scale_loop_action> _vsl_action;
+        bn::unique_ptr<bn::sprite_vertical_scale_to_action> _vst_action;
+        bn::unique_ptr<bn::sprite_horizontal_scale_to_action> _hst_action;
 
         short _top_bound; // top bound is Different for different classes
         bool _return_to_starting_point;//challenge again

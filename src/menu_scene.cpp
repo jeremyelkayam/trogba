@@ -111,13 +111,14 @@ bn::optional<scene_type> menu_scene::update(){
     }
     _cursor.set_y(_menu_options.at(_selected_option_index).y());
 
-    for(uint8_t i = 0; i < _menu_options.size(); i++){
-        if(i == _selected_option_index) {
-            // _menu_options.at(i).turn_red();
-        } else {
-            // _menu_options.at(i).turn_white();
-        }
-    }
+    //highlighting selected menu option
+    // for(uint8_t i = 0; i < _menu_options.size(); i++){
+    //     if(i == _selected_option_index) {
+    //         _menu_options.at(i).turn_red();
+    //     } else {
+    //         _menu_options.at(i).turn_white();
+    //     }
+    // }
 
 
 

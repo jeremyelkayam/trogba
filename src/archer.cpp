@@ -38,7 +38,7 @@ void archer::update(){
 
 void archer::shoot(){
     bn::sound_items::shoot.play(TROG_DEFAULT_VOLUME);
-    _arrow = arrow(_pos, _facing_left);
+    _arrow.emplace(_pos, _facing_left);
 }
 
 void archer::set_bow_drawn(bool drawn){
