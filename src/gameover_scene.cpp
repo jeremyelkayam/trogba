@@ -18,6 +18,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_jonathan_howe.h"
+#include "bn_sprite_items_jeremy_elkayam.h"
 
 
 namespace trog {
@@ -30,13 +31,15 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
+
+        bn::sprite_item item = _sesh.get_score() >= TROG_GAMEOVER_SUPER_SECRET_SCORE ? 
+              bn::sprite_items::jeremy_elkayam
+            : bn::sprite_items::jonathan_howe;
         for(int z = 0; z < 3; ++z){
-            //Jonathan Howe name easter egg
-            //todo: maybe add my name to it since i made this ??? 
-            _secret_sprites.emplace_back(bn::sprite_items::jonathan_howe.create_sprite(
+            _secret_sprites.emplace_back(item.create_sprite(
                 TROG_GAMEOVER_SECRET_TEXT_X + 32*z, TROG_GAMEOVER_SECRET_TEXT_Y, z*6));
             _secret_anims.emplace_back(bn::create_sprite_animate_action_forever(
-                    _secret_sprites.at(z), 3, bn::sprite_items::jonathan_howe.tiles_item(), 
+                    _secret_sprites.at(z), 3, item.tiles_item(), 
                     0 +6*z, 1 +6*z, 2 +6*z, 3 +6*z, 4+6*z, 5+6*z)
             );
         }

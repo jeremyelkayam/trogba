@@ -233,7 +233,7 @@ bn::optional<scene_type> play_scene::update(){
         ++_tutorial_cutscene_timer;
         if(_archers.empty()){
             for(cottage &c : _cottages) c.update_anim();
-            if(_tutorial_cutscene_timer >= 68 && _tutorial_cutscene_timer < 90){
+            if(_tutorial_cutscene_timer >= 68 && _tutorial_cutscene_timer <= 90){
                 if(_tutorial_cutscene_timer % 4 == 0){
                     _countryside.set_y(_countryside.y() + 5);
                 }else if(_tutorial_cutscene_timer % 2 == 0){
