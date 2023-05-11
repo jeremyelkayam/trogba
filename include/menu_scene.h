@@ -3,6 +3,7 @@
 #include <bn_sprite_ptr.h>
 #include "scene.h"
 #include "session_info.h"
+#include "common_stuff.h"
 
 
 namespace trog{
@@ -41,7 +42,7 @@ namespace trog{
         void select();
 
     public:
-        explicit menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator);
+        explicit menu_scene(session_info &sesh, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

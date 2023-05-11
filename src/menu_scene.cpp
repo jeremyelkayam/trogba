@@ -16,8 +16,8 @@
 
 namespace trog {
 
-menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator) : 
-        _text_generator(text_generator),
+menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) : 
+        _text_generator(common_stuff.text_generator),
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
@@ -37,7 +37,7 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
     _text_generator.set_center_alignment();
     _menu_options.emplace_back(5, -62, "CONTINUE", _text_generator);
 
-    small_generator.set_center_alignment();
+    common_stuff.small_generator.set_center_alignment();
 
     if(_loaded_sesh.is_valid_object()){
         bn::string<64> session_summary;
@@ -46,13 +46,13 @@ menu_scene::menu_scene(session_info &sesh, bn::sprite_text_generator& text_gener
         summary_stream << "mans: " << _loaded_sesh.get_mans() << "  ";       
         summary_stream << "level: " << _loaded_sesh.get_level();       
 
-        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(5, -46, session_summary, _menu_text_sprites);
-        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+        common_stuff.small_generator.generate(5, -46, session_summary, _menu_text_sprites);
+        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }else{
-        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        small_generator.generate(5, -46, "no data saved.", _menu_text_sprites);
-        small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+        common_stuff.small_generator.generate(5, -46, "no data saved.", _menu_text_sprites);
+        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
     _menu_options.emplace_back(5, -15, "NEW GAME", _text_generator);

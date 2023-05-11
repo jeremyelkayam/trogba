@@ -17,6 +17,7 @@
 #include "big_text.h"
 #include "text_box.h"
 #include "tutorial_arrow.h"
+#include "common_stuff.h"
 
 namespace trog{
 
@@ -87,7 +88,7 @@ namespace trog{
         void update_tutorial();
 
     public:
-        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand);
+        play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 }
