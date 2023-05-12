@@ -4,7 +4,6 @@
 
 namespace trog
 {
-    //todo: make it scale based on level
     archer_factory::archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level, bn::random &random) : 
         enemy_factory(random, 
                     TROG_ARCHER_MIN_SPAWN_INTERVAL * (1 - (level / 10)*0.1), 

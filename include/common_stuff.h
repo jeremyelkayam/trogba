@@ -3,6 +3,8 @@
 #include <bn_random.h>
 #include <bn_sram.h>
 #include <bn_fixed_point.h>
+#include <bn_sprite_ptr.h>
+#include <bn_vector.h>
 #include "constants.h"
 
 namespace trog {
@@ -55,8 +57,15 @@ namespace trog {
             void clear_saved_session();
 
             common_stuff();
+            void set_autosave_text_visible(const bool &visible) {set_sprite_arr_visible(_autosave_text, visible);};
+
+            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
+
 
         private:
+
+
+            bn::vector<bn::sprite_ptr, 8> _autosave_text;
 
     };
 }

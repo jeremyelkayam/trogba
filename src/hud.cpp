@@ -11,9 +11,9 @@
 
 namespace trog {
 
-hud::hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max) : 
+hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmeter_max) : 
         _sesh(sesh),
-        _text_generator(generator),
+        _common_stuff(common_stuff),
         _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_window(bn::rect_window::internal()),
         _enabled(true) {
@@ -59,40 +59,34 @@ void hud::update_trogmeter(unsigned short trogmeter_value){
     }
 }
 
-void hud::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible) {
-    for(bn::sprite_ptr sprite : sprites) {
-        sprite.set_visible(visible);
-    }
-}
-
 
 void hud::update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time){
     if(!scrolling_text()){
         if(current_burninate_time == 0) { 
             _burninatemeter.set_visible(false);
-            set_sprite_arr_visible(_burninatemeter_invert, false);
-            set_sprite_arr_visible(_trogmeter_sprites, true);
+            _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, false);
+            _common_stuff.set_sprite_arr_visible(_trogmeter_sprites, true);
         }else{
             _burninatemeter.set_visible(true);
-            set_sprite_arr_visible(_burninatemeter_invert, true);
+            _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, true);
             bn::fixed time_percentage = current_burninate_time;
             time_percentage /= total_burninate_time;
             _burninatemeter_window.set_right(TROG_HUD_BURNINATEMETER_LEFTBOUND + (TROG_HUD_BURNINATEMETER_WIDTH * time_percentage));
-            set_sprite_arr_visible(_trogmeter_sprites, false);
+            _common_stuff.set_sprite_arr_visible(_trogmeter_sprites, false);
         }
     }
 }
 
 void hud::set_all_visible(bool visible){
-    set_sprite_arr_visible(_score_text_sprites, visible);
-    set_sprite_arr_visible(_mans_lv_text_sprites, visible);
-    set_sprite_arr_visible(_scrolling_text_sprites, visible);
+    _common_stuff.set_sprite_arr_visible(_score_text_sprites, visible);
+    _common_stuff.set_sprite_arr_visible(_mans_lv_text_sprites, visible);
+    _common_stuff.set_sprite_arr_visible(_scrolling_text_sprites, visible);
 
     if(!_burninatemeter.visible()){
-        set_sprite_arr_visible(_trogmeter_sprites, visible);        
+        _common_stuff.set_sprite_arr_visible(_trogmeter_sprites, visible);        
     }else{
         _burninatemeter.set_visible(visible);
-        set_sprite_arr_visible(_burninatemeter_invert, visible);
+        _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, visible);
 
     }
     _enabled = visible;
@@ -124,14 +118,14 @@ void hud::update() {
             _score_text_sprites.clear();
             _mans_lv_text_sprites.clear();
 
-            _text_generator.set_palette_item(RED_PALETTE);
+            _common_stuff.text_generator.set_palette_item(RED_PALETTE);
 
             bn::string<64> score_str, mans_lv_str;
             bn::ostringstream score_string_stream(score_str);
             score_string_stream << _sesh.get_score();
 
-            _text_generator.set_left_alignment();
-            _text_generator.generate(-120, -76, score_str, _score_text_sprites);   
+            _common_stuff.text_generator.set_left_alignment();
+            _common_stuff.text_generator.generate(-120, -76, score_str, _score_text_sprites);   
 
             //TODO: don't just right align this. The text should be right aligned and the numbers
             // should be left aligned
@@ -147,8 +141,8 @@ void hud::update() {
             }
 
 
-            _text_generator.set_right_alignment();
-            _text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
+            _common_stuff.text_generator.set_right_alignment();
+            _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
             for(bn::sprite_ptr sprite : _mans_lv_text_sprites) {
                 // need to do this for it to be covered up by the fire on the level win scene
                 sprite.put_below();
@@ -160,10 +154,10 @@ void hud::update() {
 void hud::scroll_text(const char *text){
     set_all_visible(false);
 
-    _text_generator.set_left_alignment();
-    _text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.set_left_alignment();
+    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
 
-    _text_generator.generate(120, -76, text, _scrolling_text_sprites);
+    _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
     BN_LOG("scroll text: ",text);
 
 }

@@ -39,7 +39,7 @@ namespace trog {
              * Override from entity.
              * @return  the hitbox of the arrow shot by this archer.
              */
-            virtual bn::fixed_rect get_hitbox() final;
+            virtual bn::fixed_rect get_hitbox() const final;
 
             /**
              * 

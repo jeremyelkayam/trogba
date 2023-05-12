@@ -145,16 +145,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         }
     }
 
-    //todo: refactor this into common stuff
-    common_stuff.text_generator.set_left_alignment();
-    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);        
-    common_stuff.text_generator.generate(-120, 75, "autosaved.", _autosave_text);
-    bn::blending::set_transparency_alpha(0.5);
-    for(bn::sprite_ptr &sprite : _autosave_text) { 
-        sprite.set_blending_enabled(true);
-    }
-    set_autosave_text_visible(false);
-
 
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.generate(0, 55, "paused", _paused_text);
@@ -184,12 +174,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     }
 }
 
-void play_scene::set_paused_text_visible(bool visible){
-    for(bn::sprite_ptr &sprite : _paused_text){
-            sprite.set_visible(visible);
-            sprite.put_above();
-    }
-}
 
 bn::optional<scene_type> play_scene::update(){
     set_visible(true);
@@ -212,7 +196,7 @@ bn::optional<scene_type> play_scene::update(){
     }
     if(_autosave_visibility_time > (3 SECONDS)){
         _autosave_visibility_time = 0;
-        set_autosave_text_visible(false);
+        _common_stuff.set_autosave_text_visible(false);
     }
 
     if(_burninate_pause_time > 0) {
@@ -259,7 +243,7 @@ bn::optional<scene_type> play_scene::update(){
 
 
         if(!_trogdor->dead() && _autosave_visibility_time == 0){
-            set_autosave_text_visible(false);
+            _common_stuff.set_autosave_text_visible(false);
         }
         set_paused_text_visible(false);
 
@@ -516,19 +500,12 @@ void play_scene::autosave(bool just_died){
             if(just_died){
                 saved_sesh.mans--;
             }
-            set_autosave_text_visible(true);
+            _common_stuff.set_autosave_text_visible(true);
             if(!just_died){
                 _autosave_visibility_time = 1;
             }
         }
         _common_stuff.save();
-    }
-}
-
-void play_scene::set_autosave_text_visible(bool visible){
-    for(bn::sprite_ptr &sprite : _autosave_text) { 
-        sprite.set_visible(visible);
-        sprite.put_above();
     }
 }
 

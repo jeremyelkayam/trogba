@@ -60,7 +60,7 @@ bool archer::remove_from_map(){
     }else return false;
 }
 
-bn::fixed_rect archer::get_hitbox() {
+bn::fixed_rect archer::get_hitbox() const {
     if(_arrow){
         return _arrow->get_hitbox();
     }else{

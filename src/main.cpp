@@ -52,7 +52,7 @@ int main()
 
     bool logo_scene = true;
 
-    trog::hud hud(sesh, common_stuff.text_generator, TROG_TROGMETER_MAX);
+    trog::hud hud(sesh, common_stuff, TROG_TROGMETER_MAX);
     hud.hide();
 
 

@@ -1,3 +1,4 @@
+#include <bn_blending.h>
 #include "common_stuff.h"
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
@@ -33,8 +34,23 @@ common_stuff::common_stuff() :
         savefile.decrement_trogmeter = true;
         savefile.starting_lives = 3;
     }
+
+    text_generator.set_left_alignment();
+    text_generator.set_palette_item(WHITE_PALETTE);        
+    text_generator.generate(-120, 75, "autosaved.", _autosave_text);
+    bn::blending::set_transparency_alpha(0.5);
+    for(bn::sprite_ptr &sprite : _autosave_text) { 
+        sprite.set_blending_enabled(true);
+    }
+    set_autosave_text_visible(false);
 }
 
+void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible) {
+    for(bn::sprite_ptr &sprite : sprites) {
+        sprite.set_visible(visible);
+        sprite.put_above();
+    }
+}
 
 
 }

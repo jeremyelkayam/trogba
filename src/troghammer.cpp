@@ -6,8 +6,6 @@
 
 namespace trog { 
 
-//TODO: Make a saved_data class/struct so that we can save troghammer status
-
 troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand) :
     knight(pos.x(), pos.y(), facingRight, rand),
     _total_wait_time(120 SECONDS)

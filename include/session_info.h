@@ -6,7 +6,6 @@
 namespace trog
 {
     class session_info {
-        //TODO: Implement a saved_data class with all of our save data
 
         public:
             session_info(common_stuff &common_stuff);
@@ -30,41 +29,19 @@ namespace trog
             void import_save();
             saved_session export_save();
 
-            // bool is_valid_object();
-
-            // bn::array<char, 8> default_format_tag();
-
-            //todo probably refactor this into a saved data class
-            // void clear_burnination_array();
-            // void set_cottage_burnination(unsigned short dex, bool status);
-            // bool load_cottage_burnination(unsigned short dex) {return _cottage_burnination_status[dex];}
-
-            // void visit_treasure_hut();
-            // bool can_visit_treasure_hut();
-
             //the troghammer NEVER spawns on the tutorial level (level 0).
             bool troghammer_enabled() {return _troghammer && _level != 0;}
-
-            // void set_troghammer_status (troghammer_status thinfo) { _thinfo = thinfo;}
-            // troghammer_status load_troghammer_status() {return _thinfo;}
-
-            // void reset_troghammer_status();
 
             void reset_score(){_score = 0;}
 
             bool can_lose_trogmeter(){return _can_lose_trogmeter; }
             
         private:
-            // bn::array<char, 8> _format_tag;
             unsigned short _mans;
             unsigned int _score;
             unsigned short _level;
             bool _killed_by_archer, _troghammer, _can_lose_trogmeter;
             common_stuff &_common_stuff;
-
-            // //TO BE USED WHEN SAVING/LOADING A FILE MID-LEVEL.
-            // bn::array<bool, 6> _cottage_burnination_status;
-            // troghammer_status _thinfo;
     };
 }
 

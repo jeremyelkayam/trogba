@@ -74,11 +74,7 @@ void level_win_scene::save(){
 
     //todo: maybe improve the look of this ... 
 
-    _common_stuff.text_generator.set_left_alignment();
-    _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    _common_stuff.text_generator.generate(-120, 75, "autosaved.", _levelbeated_text_sprites);
-    _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-
+    _common_stuff.set_autosave_text_visible(true);
 }
 
 bn::optional<scene_type> level_win_scene::update(){
@@ -120,6 +116,8 @@ bn::optional<scene_type> level_win_scene::update(){
         }else{
             result = scene_type::PLAY;
         }
+
+        _common_stuff.set_autosave_text_visible(false);
     }
 
     return result;

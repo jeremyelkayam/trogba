@@ -34,11 +34,6 @@ namespace trog {
             firebreath _breath;
             session_info &_sesh;
 
-            //it's probably bad for this to have a reference to the cottage
-            // vector, but I just need to get this working!!
-            // TODO: Refactor trogdor to have direction
-            // bn::vector<cottage, 10> &_cottages;
-
             void check_boundary_collision();
 
             bool invincible();

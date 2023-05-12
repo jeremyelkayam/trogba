@@ -89,8 +89,6 @@ bn::optional<scene_type> gameover_scene::update(){
 
 
     if(_menu){
-        //todo fix this to be more nice-looking and less stupid 
-
         if(bn::keypad::up_pressed()){
             if(_menu_option == 0){
                 _menu_option = 2;

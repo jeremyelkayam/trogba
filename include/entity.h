@@ -16,34 +16,34 @@ namespace trog{
     public:
         virtual ~entity() = default;
         virtual void update();
-        virtual bn::fixed_rect get_hitbox() { return _hitbox; }
-        bool collides_with(entity &e);
+        virtual bn::fixed_rect get_hitbox() const { return _hitbox; }
+        bool collides_with(const entity &e);
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}
         void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}
         void set_y(const bn::fixed &y) { _pos.set_y(y); _sprite.set_y(y);}
         bool out_of_bounds();
-        void set_rotation_angle(short angle){_sprite.set_rotation_angle(angle);}
+        void set_rotation_angle(const short &angle){_sprite.set_rotation_angle(angle);}
 
-        void set_visible(bool visible) {_sprite.set_visible(visible);}
+        void set_visible(const bool &visible) {_sprite.set_visible(visible);}
 
 
         //sprite stuff
-        void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
+        void set_horizontal_flip(const bool &flip) { _sprite.set_horizontal_flip(flip);}
         virtual void update_anim();
-        void flip_every(unsigned short frames);
+        void flip_every(const uint8_t &frames);
 
 
-        void move_to(short time, bn::fixed x, bn::fixed y);
-        void move_from(short time, bn::fixed x, bn::fixed y);        
-        void move_to_and_back(short time, bn::fixed x, bn::fixed y);
-        void move_by(bn::fixed x, bn::fixed y);
-        void update_anim_action_when_not_moving(bool update) 
+        void move_to(const short &time, const bn::fixed &x, const bn::fixed &y);
+        void move_from(const short &time, const bn::fixed &x, const bn::fixed &y);        
+        void move_to_and_back(const short &time, const bn::fixed &x, const bn::fixed &y);
+        void move_by(const bn::fixed &x, const bn::fixed &y);
+        void update_anim_action_when_not_moving(const bool &update) 
             {_update_anim_when_not_moving = update;}
-        void jump(short time, bn::fixed height, bool repeating);
-        void squish(short time);
+        void jump(const short &time, const bn::fixed &height, const bool &repeating);
+        void squish(const short &time);
 
-        void set_blending_enabled(bool enabled) 
+        void set_blending_enabled(const bool &enabled) 
             {_sprite.set_blending_enabled(enabled);}
 
         void drop();
@@ -52,7 +52,6 @@ namespace trog{
         explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         
 
-        //todo: add const reference keyword where applicable
         bool going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox);   
         bool going_to_go_offscreen_x(const bn::fixed &new_x);  
         
