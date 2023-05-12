@@ -49,6 +49,7 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
     for(bn::sprite_ptr &sprite : sprites) {
         sprite.set_visible(visible);
         sprite.put_above();
+        sprite.set_bg_priority(1);
     }
 }
 

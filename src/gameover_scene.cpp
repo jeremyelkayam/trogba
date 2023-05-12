@@ -28,6 +28,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
+        _common_stuff(common_stuff),
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
@@ -65,17 +66,11 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
 
     common_stuff.text_generator.generate(0, 50, "BACK", _back_text_sprites);
 
-    set_sprites_visible(_challengeagain_text_sprites, false);
-    set_sprites_visible(_hiscores_text_sprites, false);
-    set_sprites_visible(_back_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
 }
 
-void gameover_scene::set_sprites_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible){
-    for(bn::sprite_ptr &sprite : sprites){
-        sprite.set_visible(visible);
-        sprite.set_bg_priority(1);
-    }
-}
 
 bn::optional<scene_type> gameover_scene::update(){
 
@@ -146,9 +141,9 @@ bn::optional<scene_type> gameover_scene::update(){
 }
 
 void gameover_scene::set_current_menu_option_visible(){
-    set_sprites_visible(_challengeagain_text_sprites, _menu_option == 0);
-    set_sprites_visible(_hiscores_text_sprites, _menu_option == 1);
-    set_sprites_visible(_back_text_sprites, _menu_option == 2);
+    _common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, _menu_option == 0);
+    _common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, _menu_option == 1);
+    _common_stuff.set_sprite_arr_visible(_back_text_sprites, _menu_option == 2);
 }
 
 }
