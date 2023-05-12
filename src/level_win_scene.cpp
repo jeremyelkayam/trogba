@@ -19,9 +19,8 @@
 
 namespace trog {
 
-level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::sprite_text_generator &small_generator, bn::random &rand) : 
+level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff) : 
         _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
-        _text_generator(text_generator),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
         _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
@@ -34,8 +33,8 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
         _a_button_anim(bn::create_sprite_animate_action_forever(
             _a_button, 30, bn::sprite_items::a_button_prompt.tiles_item(), 0, 1)),
         _sesh(sesh),
-        _timer(0),
-        _small_generator(small_generator) {
+        _common_stuff(common_stuff), 
+        _timer(0) {
 
     _flames.set_visible(false);
     _flames.put_above();
@@ -44,19 +43,19 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
 
-    _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _text_generator.generate(73, 5, "nice work!", _nicework_text_sprites);
+    common_stuff.text_generator.set_center_alignment();
+    common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    common_stuff.text_generator.generate(73, 5, "nice work!", _nicework_text_sprites);
 
     bn::string<7> line2 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(rand.get_int(33) == 0){
+    if(common_stuff.rand.get_int(33) == 0){
         line2 = "BEATED!";
     }
     
 
-    _text_generator.generate(70, 25, "LEVEL", _levelbeated_text_sprites);
-    _text_generator.generate(70, 40, line2, _levelbeated_text_sprites);
+    common_stuff.text_generator.generate(70, 25, "LEVEL", _levelbeated_text_sprites);
+    common_stuff.text_generator.generate(70, 40, line2, _levelbeated_text_sprites);
     sb_commentary::level_win_scene();
 
     if(sesh.get_level() != 101){
@@ -66,16 +65,19 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 }
 
 void level_win_scene::save(){
-    session_info sesh_to_write(_sesh);
-    // the level doesn't technically advance until later in the animation
-    //  so we should save a copy right now
-    if(_timer < 40) sesh_to_write.advance_level();
+    _common_stuff.savefile.session = _sesh.export_save();
 
-    bn::sram::write(sesh_to_write);
+    // the level doesn't technically advance until later in the animation
+    //  so we should increment it here if it hasn't happened yet
+    if(_timer < 40) _common_stuff.savefile.session.level++;
+
+
     //todo: maybe improve the look of this ... 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    _text_generator.generate(-80, 75, "autosaved.", _levelbeated_text_sprites);
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+
+    _common_stuff.text_generator.set_left_alignment();
+    _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+    _common_stuff.text_generator.generate(-120, 75, "autosaved.", _levelbeated_text_sprites);
+    _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
 }
 
@@ -86,7 +88,7 @@ bn::optional<scene_type> level_win_scene::update(){
     _a_button_anim.update();
     if(_sesh.get_level() == 0 && !_text_box){
         _sesh.reset_score();
-        _text_box = text_box(_small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
+        _text_box = text_box(_common_stuff.small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
     }
 
     if(30 < _timer && !_burningflames.done()){
@@ -95,7 +97,6 @@ bn::optional<scene_type> level_win_scene::update(){
     }
     if(_timer == 40) { 
         _sesh.advance_level();
-        _a_button.set_visible(true);
     }
     if(_burningflames.done()){
         _flames.set_visible(false);
@@ -105,14 +106,20 @@ bn::optional<scene_type> level_win_scene::update(){
         _smoke_anim.update();
     }else{
         _nose_smoke.set_visible(false);
-        if(bn::keypad::a_pressed()){
-            if(_sesh.current_level_has_cutscene()) {
-                result = scene_type::MOVIE;
-            }else{
-                result = scene_type::PLAY;
-            }
-        }
+        _a_button.set_visible(true);
+    }
 
+    //you can skip this scene by pressing A.
+    if(bn::keypad::a_pressed()){
+        //if you skip the scene before the level up animation 
+        //we will just advance it for you
+        if(_timer < 40) _sesh.advance_level();
+
+        if(_sesh.current_level_has_cutscene()) {
+            result = scene_type::MOVIE;
+        }else{
+            result = scene_type::PLAY;
+        }
     }
 
     return result;

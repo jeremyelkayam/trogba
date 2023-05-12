@@ -1,4 +1,3 @@
-#include <bn_sram.h>
 #include <bn_string.h>
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -17,7 +16,7 @@
 namespace trog {
 
 menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) : 
-        _text_generator(common_stuff.text_generator),
+        _common_stuff(common_stuff),
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
@@ -33,18 +32,20 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
 
     _flames.set_visible(false);
     _flames.set_scale(0.01);
-    bn::sram::read(_loaded_sesh);
-    _text_generator.set_center_alignment();
-    _menu_options.emplace_back(5, -62, "CONTINUE", _text_generator);
+    common_stuff.text_generator.set_center_alignment();
+    _menu_options.emplace_back(5, -62, "CONTINUE", common_stuff.text_generator);
 
     common_stuff.small_generator.set_center_alignment();
 
-    if(_loaded_sesh.is_valid_object()){
+    saved_session &loaded_sesh = common_stuff.savefile.session;
+
+    if(loaded_sesh.exists){
+        BN_LOG("SESSION EXISTS! Loading in the datum");
         bn::string<64> session_summary;
         bn::ostringstream summary_stream(session_summary);
-        summary_stream << "score: " << _loaded_sesh.get_score() << "  ";       
-        summary_stream << "mans: " << _loaded_sesh.get_mans() << "  ";       
-        summary_stream << "level: " << _loaded_sesh.get_level();       
+        summary_stream << "score: " << loaded_sesh.score << "  ";       
+        summary_stream << "mans: " << loaded_sesh.mans << "  ";       
+        summary_stream << "level: " << loaded_sesh.level;       
 
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         common_stuff.small_generator.generate(5, -46, session_summary, _menu_text_sprites);
@@ -55,9 +56,9 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
-    _menu_options.emplace_back(5, -15, "NEW GAME", _text_generator);
-    _menu_options.emplace_back(5, 17, "HOW TO PLAY", _text_generator);
-    _menu_options.emplace_back(5, 47, "OPTIONS", _text_generator);
+    _menu_options.emplace_back(5, -15, "NEW GAME", common_stuff.text_generator);
+    _menu_options.emplace_back(5, 17, "HOW TO PLAY", common_stuff.text_generator);
+    _menu_options.emplace_back(5, 47, "OPTIONS", common_stuff.text_generator);
     
 }
 
@@ -78,8 +79,8 @@ bn::optional<scene_type> menu_scene::update(){
             _selection_anim_timer = 1;
         if(_selected_option_index == 0){
             //load file
-            if(_loaded_sesh.is_valid_object()){
-                _sesh = _loaded_sesh;
+            if(_common_stuff.savefile.session.exists){
+                _sesh.import_save();
                 BN_LOG("loaded the file");
                 select();
             }else{
@@ -135,17 +136,17 @@ void menu_scene::select(){
     bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
 }
 
-menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator){
-    _text_generator.set_center_alignment();
+menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& text_generator){
+    text_generator.set_center_alignment();
 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    _text_generator.generate(x - 1, y + 1, text, _text_sprites);    
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+    text_generator.generate(x - 1, y + 1, text, _text_sprites);    
 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _text_generator.generate(x, y, text, _text_sprites);    
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    text_generator.generate(x, y, text, _text_sprites);    
 
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    _text_generator.generate(x, y, text, _red_text_sprites);   
+    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+    text_generator.generate(x, y, text, _red_text_sprites);   
     turn_white();
 }
 

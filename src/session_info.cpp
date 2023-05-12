@@ -4,7 +4,8 @@
 
 namespace trog {
 
-session_info::session_info() {
+session_info::session_info(common_stuff &common_stuff) : 
+    _common_stuff(common_stuff) {
     reset();
 }
 
@@ -26,61 +27,43 @@ void session_info::reset(){
     _score = 0;
     _level = TROG_STARTING_LEVEL;
 
-    _format_tag = default_format_tag();
+    // _format_tag = default_format_tag();
     _killed_by_archer = false;
-    _visited_treasure_hut = false;
-    _troghammer = true;
-    _can_lose_trogmeter = true;
-    clear_burnination_array();
-    reset_troghammer_status();
+    _troghammer = _common_stuff.savefile.troghammer;
+    _can_lose_trogmeter = _common_stuff.savefile.decrement_trogmeter;
+    // clear_burnination_array();
+    // reset_troghammer_status();
 }
 
-void session_info::reset_troghammer_status(){
-    set_troghammer_status({
-        troghammer_state::UNALERTED,
-        0,
-        bn::fixed_point(0,0)
-    });
+void session_info::import_save(){
+    saved_session &sesh = _common_stuff.savefile.session;
+    BN_ASSERT(sesh.exists, "Session must exist to be loaded.");
+    _mans = sesh.mans;
+    _score = sesh.score;
+    _level = sesh.level;
+    _troghammer = sesh.troghammer;
+    _can_lose_trogmeter = sesh.can_lose_trogmeter;
+}
+
+saved_session session_info::export_save(){
+    saved_session result;
+    result.exists = true;
+    result.mans = _mans;
+    result.score = _score;
+    result.level = _level;
+    result.can_lose_trogmeter = _can_lose_trogmeter;
+    result.troghammer = _troghammer;
+    result.cottage_burnination_status = {false, false, false, 
+                                         false, false, false};
+    result.can_visit_treasure_hut = true;
+    result.thinfo = {troghammer_state::UNALERTED, 0, bn::fixed_point(0, 0)};
+    return result;
 }
 
 void session_info::set_level(unsigned short level){
-    _visited_treasure_hut = false;
     _level = level;
 }
 
-void session_info::visit_treasure_hut(){
-    _visited_treasure_hut = true;
-}
-
-bool session_info::can_visit_treasure_hut(){
-    return !_visited_treasure_hut;
-}
-
-bool session_info::is_valid_object(){
-
-    return _format_tag == default_format_tag();
-}
-
-bn::array<char, 8> session_info::default_format_tag(){
-    bn::array<char, 8> default_format_tag;
-    bn::istring_base default_format_tag_istring(default_format_tag._data);
-    bn::ostringstream default_format_tag_stream(default_format_tag_istring);
-    default_format_tag_stream.append(TROG_FORMAT_TAG);
-    return default_format_tag;    
-}
-
-void session_info::set_cottage_burnination(unsigned short dex, bool status){
-    _cottage_burnination_status[dex] = status;
-}
-
-void session_info::clear_burnination_array(){
-    for(int z = 0; z < 6; ++z){
-        _cottage_burnination_status[z] = false;
-    }
-}
-
-
-// THERE HAS TO BE A BETTER WAY!!!! 
 bool session_info::current_level_has_cutscene(){
     return  (_level == 5) || 
             (_level == 9) ||

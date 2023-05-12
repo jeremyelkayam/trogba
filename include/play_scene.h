@@ -36,6 +36,7 @@ namespace trog{
     private:
         
         session_info& _sesh;
+        common_stuff &_common_stuff;
         bn::unique_ptr<player> _trogdor;
         hud& _hud;
         peasant_factory _pfact;
@@ -47,9 +48,6 @@ namespace trog{
         uint8_t _tutorial_timer, _tutorial_cutscene_timer;
 
         bn::regular_bg_ptr _countryside;
-        bn::sprite_text_generator &_text_generator, &_small_generator;
-
-        bn::random &_rand;
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;

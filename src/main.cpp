@@ -41,11 +41,11 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
-    trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
     trog::common_stuff common_stuff;
+    trog::session_info sesh(common_stuff);
 
 
     common_stuff.text_generator.set_center_alignment();
@@ -116,12 +116,12 @@ int main()
                 case trog::scene_type::LOSE: { 
                     hud.show();
                     scene.reset();
-                    scene.reset(new trog::gameover_scene(sesh, common_stuff.text_generator, common_stuff.rand));
+                    scene.reset(new trog::gameover_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, common_stuff.text_generator, common_stuff.small_generator, common_stuff.rand));
+                    scene.reset(new trog::level_win_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::MOVIE: {

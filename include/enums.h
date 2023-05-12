@@ -13,7 +13,6 @@ namespace trog {
         DEVS,
         LOGO,
         TITLE,
-        INSTRUCTIONS,
         PLAY,
         BONUS,
         LEVELBEAT,

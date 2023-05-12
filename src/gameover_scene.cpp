@@ -23,11 +23,11 @@
 
 namespace trog {
 
-gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &rand) : 
+gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) : 
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), rand),
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
@@ -55,22 +55,19 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
         }
     }
 
-    text_generator.set_center_alignment();
-    text_generator.set_palette_item(RED_PALETTE);
-    text_generator.generate(1, -49, "CHALLENGE", _challengeagain_text_sprites);
-    text_generator.generate(0, -36, "AGAIN!", _challengeagain_text_sprites);
+    common_stuff.text_generator.set_center_alignment();
+    common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    common_stuff.text_generator.generate(1, -49, "CHALLENGE", _challengeagain_text_sprites);
+    common_stuff.text_generator.generate(0, -36, "AGAIN!", _challengeagain_text_sprites);
 
-    text_generator.generate(0, -4, "VIEW", _hiscores_text_sprites);
-    text_generator.generate(2, 9, "HI-SCORES", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(0, -4, "VIEW", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(2, 9, "HI-SCORES", _hiscores_text_sprites);
 
-    text_generator.generate(0, 50, "BACK", _back_text_sprites);
+    common_stuff.text_generator.generate(0, 50, "BACK", _back_text_sprites);
 
     set_sprites_visible(_challengeagain_text_sprites, false);
     set_sprites_visible(_hiscores_text_sprites, false);
     set_sprites_visible(_back_text_sprites, false);
-
-    //Once you get a game over, you cannot restore your progress.
-    bn::sram::clear(sizeof(_sesh));
 }
 
 void gameover_scene::set_sprites_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible){

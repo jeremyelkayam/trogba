@@ -9,7 +9,6 @@
 #include <bn_log.h>
 #include <bn_sprite_palettes.h>
 #include <bn_bg_palettes.h>
-#include <bn_sram.h>
 #include <bn_blending.h>
 #include <bn_music_items.h>
 #include <bn_music.h>
@@ -36,6 +35,7 @@ namespace trog {
 
 play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff) : 
         _sesh(sesh),
+        _common_stuff(common_stuff),
         _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
@@ -48,11 +48,11 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _player_paused(false),
         _tutorial_timer(0),
         _tutorial_cutscene_timer(0),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _text_generator(common_stuff.text_generator),
-        _small_generator(common_stuff.small_generator),
-        _rand(common_stuff.rand)
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
+    saved_session &saved_sesh = common_stuff.savefile.session; 
+
+
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
     //make the background appear underneath all other backgroundlayers
     _countryside.put_below();
@@ -101,8 +101,11 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
             if (levels[level_index][j] > 0) {
                 //Index 1 in level data refers to the number of the treasure hut from 1-6
-                // 0 if no treasure hut             
-                bool treasurehut = (i == (levels[level_index][1] - 1)) && _sesh.can_visit_treasure_hut();
+                // 0 if no treasure hut            
+                bool treasurehut = (i == (levels[level_index][1] - 1));
+                if(saved_sesh.exists && !saved_sesh.can_visit_treasure_hut){
+                    treasurehut = false;
+                }
                 BN_LOG("treasure hut? ", treasurehut);            
                 BN_LOG("cottage #", i + 1);
                 BN_LOG("direction: ", levels[level_index][j]);
@@ -136,17 +139,16 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                     ycor,
                     enumdir,
                     treasurehut,
-                    sesh.load_cottage_burnination(i)
+                    saved_sesh.exists && saved_sesh.cottage_burnination_status[i]
                 );
             }
         }
-        //once it's loaded we are done with it
-        _sesh.clear_burnination_array();
     }
 
-    _text_generator.set_left_alignment();
-    _text_generator.set_palette_item(WHITE_PALETTE);        
-    _text_generator.generate(-120, 75, "autosaved.", _autosave_text);
+    //todo: refactor this into common stuff
+    common_stuff.text_generator.set_left_alignment();
+    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);        
+    common_stuff.text_generator.generate(-120, 75, "autosaved.", _autosave_text);
     bn::blending::set_transparency_alpha(0.5);
     for(bn::sprite_ptr &sprite : _autosave_text) { 
         sprite.set_blending_enabled(true);
@@ -154,14 +156,14 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     set_autosave_text_visible(false);
 
 
-    _text_generator.set_center_alignment();
-    _text_generator.generate(0, 55, "paused", _paused_text);
-    _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
+    common_stuff.text_generator.set_center_alignment();
+    common_stuff.text_generator.generate(0, 55, "paused", _paused_text);
+    common_stuff.text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
 
     if(_sesh.get_level() != 0){
-        _knights.emplace_front(-59, 31, false, _rand);
-        _knights.emplace_front(33,-50,true, _rand);
+        _knights.emplace_front(-59, 31, false, common_stuff.rand);
+        _knights.emplace_front(33,-50,true, common_stuff.rand);
     }
 
     if(_sesh.troghammer_enabled()){
@@ -169,16 +171,15 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _void_tower->set_z_order(FURTHEST_BACK_ZORDER);
         _void_tower->put_below();
 
-        if(_sesh.load_troghammer_status().current_state != troghammer_state::UNALERTED){
-            _troghammer.emplace(_sesh.load_troghammer_status(), true, _sesh.get_level(), _rand);
+        if(saved_sesh.exists && saved_sesh.thinfo.current_state != troghammer_state::UNALERTED){
+            _troghammer.emplace(saved_sesh.thinfo, true, _sesh.get_level(), common_stuff.rand);
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
-            _sesh.reset_troghammer_status();
         }
     }
 
     if(_sesh.get_level() == 0){
         //Initialize tutorial
-        _text_box = text_box(_small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
+        _text_box = text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
         bn::music_items::skoa.play(0.5);
     }
 }
@@ -203,7 +204,7 @@ bn::optional<scene_type> play_scene::update(){
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Congrats! You finished the tutorial.");
+            _text_box = text_box(_common_stuff.small_generator, "Congrats! You finished the tutorial.");
         }
     }
     if(_autosave_visibility_time != 0){
@@ -322,7 +323,7 @@ bn::optional<scene_type> play_scene::update(){
                 sb_commentary::arrowed();
             }
             _sesh.set_killed_by_archer(true);
-            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
+            _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
             
             autosave(true);
         }
@@ -339,7 +340,7 @@ bn::optional<scene_type> play_scene::update(){
             }
             bn::string<13> str = "SWORDED!";
             //2% chance to get it wrong
-            short rand_num = _rand.get_int(100);
+            short rand_num = _common_stuff.rand.get_int(100);
             if(rand_num == 0){
                 str = "SORDID!";
                 //maybe add that line of s.bad saying "A sordid affair"
@@ -347,7 +348,7 @@ bn::optional<scene_type> play_scene::update(){
                 str = "SORTED!";
             }
             _sesh.set_killed_by_archer(false);
-            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
+            _overlay_text.reset(new bloody_text(true, 0, 0, str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
 
             autosave(true);
         }
@@ -362,7 +363,7 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_trogdor->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
-                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _rand));
+                _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
                 autosave(true);
             }
 
@@ -472,8 +473,6 @@ bn::optional<scene_type> play_scene::update(){
             result = scene_type::BONUS;
             //this marks the cottage as visited so that we can no longer return
             c.visit();
-            //this marks it as visited if we autosave
-            _sesh.visit_treasure_hut();
 
             set_visible(false);
         }
@@ -490,36 +489,39 @@ bn::optional<scene_type> play_scene::update(){
 //assumptions: if just_died is true, you have died but the lives counter has not yet been decremented
 void play_scene::autosave(bool just_died){
     //No autosaving during the tutorial.
+    _common_stuff.savefile.session = _sesh.export_save();
+    saved_session &saved_sesh = _common_stuff.savefile.session;
+    
     if(_sesh.get_level() != 0){
         if(_sesh.get_mans() == 0){
-            bn::sram::clear(sizeof(_sesh));
+            saved_sesh.exists = false;
+            BN_LOG("erasing the save.");
         }else{
-            //needs to become a level save
-            session_info saved_sesh = _sesh;
-
             if(_sesh.troghammer_enabled()){
                 if(_troghammer){
-                    saved_sesh.set_troghammer_status(_troghammer->get_status());
+                    saved_sesh.thinfo = _troghammer->get_status();
                 }else{
-                    //if you just died and there's no troghammer yet, we need to send in the hammer bro
-                    saved_sesh.set_troghammer_status({troghammer_state::ALERT, 0, _void_tower->position()});
+                    // if you just died/finished burnin and there's no 
+                    // troghammer yet, we need to send in the hammer, bro.
+                    saved_sesh.thinfo = {troghammer_state::ALERT, 0, _void_tower->position()};
                 }
             }
 
             for(int z = 0; z < _cottages.size(); ++z){
-                saved_sesh.set_cottage_burnination(z, _cottages.at(z).burninated());
+                saved_sesh.cottage_burnination_status[z] = _cottages.at(z).burninated();
+                if(_cottages.at(z).has_treasure()){            
+                    saved_sesh.can_visit_treasure_hut = true;    
+                }
             }
             if(just_died){
-                saved_sesh.die();
+                saved_sesh.mans--;
             }
-
-            bn::sram::write(saved_sesh);
             set_autosave_text_visible(true);
             if(!just_died){
                 _autosave_visibility_time = 1;
             }
-
         }
+        _common_stuff.save();
     }
 }
 
@@ -596,7 +598,7 @@ void troghammer_sound::update(){
 }
 
 void play_scene::spawn_troghammer(bool alert){
-    _troghammer.emplace(_void_tower->position(), true, _sesh.get_level(), _rand);  
+    _troghammer.emplace(_void_tower->position(), true, _sesh.get_level(), _common_stuff.rand);  
     _void_tower->set_item(bn::sprite_items::voidtower, 1);
 
     if(alert){
@@ -633,7 +635,7 @@ void play_scene::update_tutorial(){
             _cottages.emplace_back(65, 5, direction::LEFT, false, false);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
             _text_box.reset();
-            _text_box = text_box(_small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
+            _text_box = text_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
             _tutorial_timer = 0;
             _tutorial_cutscene_timer = 1;
 
@@ -660,20 +662,20 @@ void play_scene::update_tutorial(){
                 _tutorial_arrow->get_direction() != direction::UP){
             
             _text_box.reset();
-            _text_box.emplace(_small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
+            _text_box.emplace(_common_stuff.small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
             _tutorial_arrow.emplace(-60, -62, direction::UP);
         }
 
         if(_trogdor->get_trogmeter() >= 5){
-            _knights.emplace_front(-85, -15, true, _rand);
+            _knights.emplace_front(-85, -15, true, _common_stuff.rand);
             _knights.front().move_from(200, -145, -15);
-            _knights.emplace_front(85,-15,false, _rand);
+            _knights.emplace_front(85,-15,false, _common_stuff.rand);
             _knights.front().move_from(200, 145, -15);
             _archers.emplace_front(-50, true);
             _archers.front().move_from(60, 135, -50);
 
             _text_box.reset();
-            _text_box.emplace(_small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords.");
+            _text_box.emplace(_common_stuff.small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords.");
 
             _tutorial_cutscene_timer = 1;
 
@@ -686,11 +688,11 @@ void play_scene::update_tutorial(){
         //burnination / level winning tutorial
         if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
             _text_box.reset();
-            _text_box.emplace(_small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+            _text_box.emplace(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
         }
         if(_trogdor->get_burninating_time() == 1) _text_box.reset();
     }else if(some_cottages_burninated && !_text_box){
-        _text_box.emplace(_small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
+        _text_box.emplace(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
     }
 
     if(_tutorial_arrow){

@@ -2,27 +2,45 @@
 #include <bn_sprite_text_generator.h>
 #include <bn_random.h>
 #include <bn_sram.h>
+#include <bn_fixed_point.h>
+#include "constants.h"
 
 namespace trog {
 
-    struct level_save { 
+    enum class troghammer_state
+    {
+        ALERT,
+        AWAKE,
+        COMING,
+        ARRIVED,
+        UNALERTED
+    };
+
+    struct troghammer_status{
+        troghammer_state current_state;
+        unsigned short timer;
+        bn::fixed_point pos;
+    };
+
+    struct saved_session { 
         bool exists;
         uint8_t mans, level;
         unsigned short score;
-        bool visited_treasure_hut, troghammer, can_lose_trogmeter;
+        bool can_visit_treasure_hut, troghammer, can_lose_trogmeter;
         bn::array<bool, 6> cottage_burnination_status;
-        // troghammer_status thinfo;
+        troghammer_status thinfo;
     };
 
     struct saved_data {
         bn::array<char, 8> format_tag;
-        level_save save;
-        // bn::array<high_score_entry, 8> high_scores_table;
-        
         //options
         bn::fixed sound_vol, music_vol, voice_vol;
         bool troghammer, decrement_trogmeter;
         uint8_t starting_lives;
+
+        // bn::array<high_score_entry, 8> high_scores_table;
+
+        saved_session session;
     };
 
     class common_stuff { 
@@ -34,9 +52,11 @@ namespace trog {
 
             saved_data savefile;
             void save() {bn::sram::write(savefile);}
-            void clear_level_save();
+            void clear_saved_session();
 
             common_stuff();
+
+        private:
 
     };
 }

@@ -205,8 +205,6 @@ void troghammer::update(){
             _walkcycle.update();
         }
 
-        BN_LOG("time until next troghammer state: ", _timer, "/", _waiting_time_per_state);
-
         if(_timer == _waiting_time_per_state){
             advance_to_next_state();
         }

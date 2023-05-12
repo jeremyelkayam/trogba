@@ -8,22 +8,10 @@
 #include <bn_list.h>
 #include "bn_sprite_items_knight.h"
 #include "knight.h"
+#include "common_stuff.h"
 
 
-enum class troghammer_state
-{
-    ALERT,
-    AWAKE,
-    COMING,
-    ARRIVED,
-    UNALERTED
-};
 
-struct troghammer_status{
-    troghammer_state current_state;
-    unsigned short timer;
-    bn::fixed_point pos;
-};
 
 namespace trog {
     class troghammer : public knight { 
