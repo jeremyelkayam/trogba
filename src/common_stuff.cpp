@@ -18,7 +18,7 @@ common_stuff::common_stuff() :
     default_format_tag_stream.append(TROG_FORMAT_TAG);
 
     bn::sram::read(savefile);
-    //if there is no saved data, then we have to set it up.
+    //if the format tag is invalid, then we have to set it up.
     if(savefile.format_tag != default_format_tag){
         savefile.format_tag = default_format_tag;
 
