@@ -28,23 +28,17 @@ namespace trog{
 
         bn::fixed_point _start_pos, _finish_pos;
 
-
-        bn::sprite_text_generator &_text_generator;
+        common_stuff &_common_stuff;
         
         session_info &_sesh;
 
-        bn::random &_random;
-
         bool cutscene_over();
-
-        // void update_ending_cutscene();
-        // void update_lv5();
-
+        
         void write_text(const char* str);
 
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();
-        explicit movie_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &random);
+        explicit movie_scene(session_info &sesh, common_stuff &common_stuff);
 
     };
 }

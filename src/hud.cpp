@@ -38,6 +38,7 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER + 32, -75, 2));
 
+    //todo change common_stuff.set_sprite_arr_visible to use this
     for(bn::sprite_ptr &sprite : _burninatemeter_invert){
         sprite.set_visible(false);
         // sprite.set_bg_priority(1);

@@ -126,12 +126,12 @@ int main()
                 }
                 case trog::scene_type::MOVIE: {
                     hud.show();
-                    scene.reset(new trog::movie_scene(sesh, common_stuff.text_generator, common_stuff.rand));
+                    scene.reset(new trog::movie_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
                     hud.hide();
-                    scene.reset(new trog::hiscores_scene(sesh));
+                    scene.reset(new trog::hiscores_scene(sesh, common_stuff));
                     break;
                 }                
                 case trog::scene_type::CREDITS: {

@@ -33,6 +33,8 @@ common_stuff::common_stuff() :
         savefile.troghammer = true;
         savefile.decrement_trogmeter = true;
         savefile.starting_lives = 3;
+
+        savefile.high_scores_table.fill(high_score_entry("", 0, 0));
     }
 
     text_generator.set_left_alignment();
@@ -52,6 +54,35 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
         sprite.set_bg_priority(1);
     }
 }
+
+high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, unsigned short score) : 
+    _level(level),
+    _score(score) {
+
+    bn::istring_base name_istring(_name._data);
+    bn::ostringstream name_stream(name_istring);
+    name_stream.append(name);
+}
+
+high_score_entry::high_score_entry() : 
+    _level(0),
+    _score(0) {
+
+    bn::istring_base name_istring(_name._data);
+    bn::ostringstream name_stream(name_istring);
+    name_stream.append("DUMMY");
+}
+
+bn::string<9> high_score_entry::get_name(){
+    bn::string<9>result;
+    //go until you start hitting null chars
+    for(int z=0; _name[z] != 0; ++z){
+        result.append(_name[z]);
+    }
+
+    return result;
+}
+
 
 
 }

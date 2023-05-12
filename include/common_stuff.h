@@ -5,6 +5,7 @@
 #include <bn_fixed_point.h>
 #include <bn_sprite_ptr.h>
 #include <bn_vector.h>
+#include <bn_string.h>
 #include "constants.h"
 
 namespace trog {
@@ -24,6 +25,19 @@ namespace trog {
         bn::fixed_point pos;
     };
 
+    class high_score_entry {
+        private:
+            bn::array<char, 10>_name;
+            unsigned short _level;
+            unsigned int _score;
+        public:
+            high_score_entry();
+            high_score_entry(bn::string<9> name, unsigned short level, unsigned short score);
+            unsigned short get_level(){return _level;}
+            unsigned int get_score(){return _score;}
+            bn::string<9> get_name();
+            void set_name_char(char name_char, int index){_name[index] = name_char;}
+    };
     struct saved_session { 
         bool exists;
         uint8_t mans, level;
@@ -40,7 +54,7 @@ namespace trog {
         bool troghammer, decrement_trogmeter;
         uint8_t starting_lives;
 
-        // bn::array<high_score_entry, 8> high_scores_table;
+        bn::array<high_score_entry, 8> high_scores_table;
 
         saved_session session;
     };
