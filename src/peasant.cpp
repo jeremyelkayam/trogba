@@ -45,23 +45,22 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
 }
 
 void peasant::burninate(){
-    if(!dead() && !_onfire){
-        // set on fire
-        _onfire = true;
-        
-        // run fast the other way 
-        if(_returning){
-            _speed = _speed*2;
-        }else{
-            _speed = _speed*-2;
-        }
-        _currentdist+=_speed;
+    //no two peasants are not onfire(). awwww 
+    BN_ASSERT(!dead() && !onfire());
 
-        // change animation to flaming
-        set_sprite_ablaze();
-        bn::sound_items::peasantscream.play(TROG_DEFAULT_VOLUME);
-        sb_commentary::ignite_peasant();
+    // set on fire
+    _onfire = true;
+    
+    // run fast the other way 
+    if(_returning){
+        _speed = _speed*2;
+    }else{
+        _speed = _speed*-2;
     }
+    _currentdist+=_speed;
+
+    // change animation to flaming
+    set_sprite_ablaze();
 }
 
 void peasant::set_sprite_ablaze(){
@@ -72,10 +71,6 @@ void peasant::set_sprite_ablaze(){
 
 void peasant::update(){
     entity::update();
-    if(_time_dead == 1){
-        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
-        sb_commentary::stomp_peasant();
-    }
     
 
     if(_time_waiting == _waittime){

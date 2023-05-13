@@ -3,6 +3,7 @@
 #include <bn_sprite_animate_actions.h>
 #include "entity.h"
 #include "constants.h"
+#include "common_stuff.h"
 #include "enums.h"
 
 namespace trog {
@@ -14,8 +15,9 @@ namespace trog {
             bn::optional<bn::sprite_ptr> _flames;
             bn::optional<bn::sprite_animate_action<4>> _burningflames;
             int _time_burning;
+            common_stuff &_common_stuff;
         public:
-            cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated);
+            cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated, common_stuff &common_stuff);
             virtual void update() final;
             bool burninate();
             bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}

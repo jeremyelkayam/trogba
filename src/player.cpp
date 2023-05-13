@@ -236,6 +236,9 @@ void player::handle_peasant_collision(peasant &peasant){
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
+
+        bn::sound_items::stomp.play(TROG_DEFAULT_VOLUME);
+        sb_commentary::stomp_peasant();
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
         ++_trogmeter;

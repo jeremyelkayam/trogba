@@ -73,7 +73,7 @@ int main()
                 }
                 case trog::scene_type::LOGO: { 
                     hud.hide();
-                    scene.reset(new trog::logo_scene(sesh));
+                    scene.reset(new trog::logo_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::TITLE: { 
@@ -136,7 +136,7 @@ int main()
                 }                
                 case trog::scene_type::CREDITS: {
                     hud.hide();
-                    scene.reset(new trog::credits_scene(common_stuff.text_generator));
+                    scene.reset(new trog::credits_scene(common_stuff));
                     break;
                 }                
                 case trog::scene_type::FIREYRAGE: {
@@ -153,12 +153,12 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::kick.play(common_stuff.savefile.sound_vol);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::trogador.play(common_stuff.savefile.sound_vol);
             kicked=false;
         }
 

@@ -138,15 +138,15 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
     }else if(_sesh.get_level() == 43){
         write_text("2 cottages");
 
-        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false, false));
-        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false, false));
+        _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false, false, _common_stuff));
+        _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false, false, _common_stuff));
 
     }else if(_sesh.get_level() == 47){
         write_text("a funny joke");
         knight *k = new knight(-80, 0, false, _common_stuff.rand);
         k->update_anim_action_when_not_moving(false);
         _cutscene_objects.emplace_back(k);
-        archer *arch = new archer(-5, true);
+        archer *arch = new archer(-5, true, _common_stuff);
         arch->set_x(130);
         arch->move_to(20, 110, -5);
         arch->set_bow_drawn(true);
@@ -234,7 +234,7 @@ bn::optional<scene_type> movie_scene::update(){
         // trogdor incognito
         if(_timer == _cutscene_length / 3 + 30){
             //peasant breathes fire 
-            firebreath *f = new firebreath(_sesh);
+            firebreath *f = new firebreath(_sesh, _common_stuff);
             f->set_x(-5);
             f->set_y(-10);
             f->enable();
@@ -331,7 +331,7 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->stop_animating();
         }else if(_timer == 180){
             sbad->start_animating();
-            bn::sound_items::cutscene_congrats.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::cutscene_congrats.play(_common_stuff.savefile.sound_vol);
             _common_stuff.text_generator.generate(0, -60, "congratulations.", _text_sprites);
         }else if(_timer == 250){
             sbad->stop_animating();
@@ -350,7 +350,7 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
             _text_sprites.clear();
-            bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::cutscene_credits.play(_common_stuff.savefile.music_vol);
             _common_stuff.text_generator.generate(0, -60, "cast", _text_sprites);
         }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();
@@ -391,7 +391,7 @@ bn::optional<scene_type> movie_scene::update(){
             _common_stuff.text_generator.generate(0, -60, "the conjoined", _text_sprites);
             _common_stuff.text_generator.generate(0, -48, "archers", _text_sprites);
             for(int i = 0; i < 2 ; ++i){
-                archer *arch = new archer(0, i);
+                archer *arch = new archer(0, i, _common_stuff);
                 arch->set_x(10 - 20*i);
                 _cutscene_objects.emplace_back(arch);
             }
