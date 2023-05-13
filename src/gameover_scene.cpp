@@ -45,14 +45,16 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
             );
         }
     }
+
+    //todo: refactor this
     if(_sesh.last_killed_by_archer()){
         sb_commentary::gameover_arch();
-        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
+        bn::sound_items::gameover.play(common_stuff.savefile.sound_vol * bn::fixed(0.2));
     }else{
         if(sb_commentary::gameover(_sesh.get_score())){
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
+            bn::sound_items::gameover.play(common_stuff.savefile.sound_vol * bn::fixed(0.2));
         }else{
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::gameover.play(common_stuff.savefile.sound_vol);
         }
     }
 
