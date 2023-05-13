@@ -4,11 +4,12 @@
 
 namespace trog
 {
-    archer_factory::archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level, bn::random &random) : 
-        enemy_factory(random, 
+    archer_factory::archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short &level, common_stuff &common_stuff) : 
+        enemy_factory(common_stuff.rand, 
                     TROG_ARCHER_MIN_SPAWN_INTERVAL * (1 - (level / 10)*0.1), 
                     TROG_ARCHER_MAX_SPAWN_INTERVAL * (1 - (level / 10)*0.1)),
-        _archers(archers)
+        _archers(archers),
+        _common_stuff(common_stuff)
     {
 
         if(_min_spawn_interval == 0){
@@ -34,7 +35,7 @@ namespace trog
 
             bn::fixed spawn_ycor = _random.get_int(TROG_ARCHER_MIN_SPAWN_HEIGHT, TROG_ARCHER_MAX_SPAWN_HEIGHT);
 
-            _archers.emplace_front(spawn_ycor, direction);
+            _archers.emplace_front(spawn_ycor, direction, _common_stuff);
         }
     }
 

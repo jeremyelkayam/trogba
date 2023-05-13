@@ -3,10 +3,11 @@
 
 namespace trog { 
 
-archer::archer(bn::fixed ycor, bool facing_left) : 
+archer::archer(bn::fixed ycor, bool facing_left, common_stuff &common_stuff) : 
         entity(0, ycor, bn::fixed(0), bn::fixed(0), bn::sprite_items::archer.create_sprite(-300, ycor)),
         _facing_left(facing_left),
-        _time_since_spawn(0) {
+        _time_since_spawn(0),
+        _common_stuff(common_stuff) {
     _sprite.set_horizontal_flip(facing_left);
     if(facing_left){
         _pos.set_x(110);
@@ -37,7 +38,7 @@ void archer::update(){
 }
 
 void archer::shoot(){
-    bn::sound_items::shoot.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::shoot.play(_common_stuff.savefile.sound_vol);
     _arrow.emplace(_pos, _facing_left);
 }
 
