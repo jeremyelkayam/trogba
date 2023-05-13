@@ -41,7 +41,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     _flames.set_scale(0.7);
     _a_button.set_visible(false);
 
-    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::burninate.play(common_stuff.savefile.sound_vol);
 
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
