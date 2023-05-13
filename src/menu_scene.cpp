@@ -27,7 +27,7 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         _selected_option_index(0),
         _selection_anim_timer(0),
         _sesh(sesh) {
-    bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::trogador.play(_common_stuff.savefile.sound_vol);
 
 
     _flames.set_visible(false);
@@ -85,8 +85,7 @@ bn::optional<scene_type> menu_scene::update(){
                 select();
             }else{
                 _selection_anim_timer = 0;
-                // probably provide some type of WRONG sound effect to provide feedback
-                bn::sound_items::deleted.play(TROG_DEFAULT_VOLUME);
+                bn::sound_items::deleted.play(_common_stuff.savefile.sound_vol);
             }
         }else if(_selected_option_index == 1){
             select();
@@ -133,7 +132,7 @@ void menu_scene::select(){
     _flames.put_above();
     _flames.set_position(_cursor.position().x() + 2, _cursor.position().y() + 2);
     _flames_translate = bn::sprite_move_to_action(_flames, SELECTION_ANIM_LENGTH, _flames.position().x() + 40, _flames.position().y());
-    bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::burningcottage.play(_common_stuff.savefile.sound_vol);
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& text_generator){

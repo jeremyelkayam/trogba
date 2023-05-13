@@ -3,8 +3,8 @@
 #include <bn_regular_bg_ptr.h>
 #include <bn_bgs_mosaic_actions.h>
 #include "trogdor.h"
+#include "common_stuff.h"
 #include "scene.h"
-
 
 namespace trog{
 
@@ -18,7 +18,7 @@ namespace trog{
         trogdor _trogdor;
 
     public:
-        logo_scene(session_info &sesh);
+        logo_scene(session_info &sesh, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
