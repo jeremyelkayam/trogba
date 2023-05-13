@@ -38,10 +38,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _common_stuff(common_stuff),
         _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         //temp fix for f'ed up spawnage
-        (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
+        (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false, common_stuff)),
         _hud(hud),
         _pfact(_cottages,_peasants, common_stuff.rand),
-        _afact(_archers, sesh.get_level(), common_stuff.rand),
+        _afact(_archers, sesh.get_level(), common_stuff),
         _burninate_pause_time(0),
         _win_pause_time(0),
         _flashing_text_time(0),
@@ -139,7 +139,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                     ycor,
                     enumdir,
                     treasurehut,
-                    saved_sesh.exists && saved_sesh.cottage_burnination_status[i]
+                    saved_sesh.exists && saved_sesh.cottage_burnination_status[i],
+                    _common_stuff
                 );
             }
         }
@@ -398,7 +399,7 @@ bn::optional<scene_type> play_scene::update(){
                     (_sesh.get_level() == 27 ||
                      _sesh.get_level() == 59 ||
                      _sesh.get_level() == 91)
-                    ? 10 : 0, _sesh, true, init_trogmeter));
+                    ? 10 : 0, _sesh, true, _common_stuff, init_trogmeter));
                 _sesh.die();
                 
                 if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
@@ -609,8 +610,8 @@ void play_scene::update_tutorial(){
         if(_tutorial_timer) _tutorial_timer++;
 
         if(_tutorial_timer == 240){
-            _cottages.emplace_back(65, 5, direction::LEFT, false, false);
-            _cottages.emplace_back(-65, -45, direction::DOWN, false, false);
+            _cottages.emplace_back(65, 5, direction::LEFT, false, false, _common_stuff);
+            _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);
             _text_box.reset();
             _text_box = text_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
             _tutorial_timer = 0;
@@ -648,7 +649,7 @@ void play_scene::update_tutorial(){
             _knights.front().move_from(200, -145, -15);
             _knights.emplace_front(85,-15,false, _common_stuff.rand);
             _knights.front().move_from(200, 145, -15);
-            _archers.emplace_front(-50, true);
+            _archers.emplace_front(-50, true, _common_stuff);
             _archers.front().move_from(60, 135, -50);
 
             _text_box.reset();

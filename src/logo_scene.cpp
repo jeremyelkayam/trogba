@@ -13,7 +13,7 @@ logo_scene::logo_scene(session_info &sesh, common_stuff &common_stuff) :
         _bg(bn::regular_bg_items::videlectrix.create_bg(0, -40)),
         _frame_counter(0),
         _easter_egg(false),
-        _trogdor(140, 30, sesh, false) {
+        _trogdor(140, 30, sesh, false, common_stuff) {
 
     _trogdor.move_to(150, 0,30);
     _trogdor.set_horizontal_flip(true);

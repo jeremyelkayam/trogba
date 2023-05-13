@@ -5,9 +5,10 @@
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
+#include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, uint8_t initial_trogmeter) : 
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
         entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
         _speed(TROG_PLAYER_SPEED),
@@ -17,8 +18,9 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes,
         _time_dead(0),
         _majesty_flash_timer(0),
         _walk_cycle_frames(walk_cycle_frames),
-        _breath(sesh),
+        _breath(sesh, common_stuff),
         _sesh(sesh),
+        _common_stuff(common_stuff),
         _next_pos(xcor,ycor)
         {
     if(_trogmeter > 0){
@@ -107,12 +109,12 @@ void player::update(){
         }
         update_next_pos();
 
-        // #ifdef DEBUG
-        //     //Insta-burninate by pressing b
-        //     if(bn::keypad::b_pressed()){
-        //         start_burninating();   
-        //     }
-        // #endif
+        #ifdef DEBUG
+            //Insta-burninate by pressing b
+            if(bn::keypad::b_pressed()){
+                start_burninating();   
+            }
+        #endif
     }
 
 }

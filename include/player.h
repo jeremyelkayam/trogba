@@ -33,6 +33,7 @@ namespace trog {
 
             firebreath _breath;
             session_info &_sesh;
+            common_stuff &_common_stuff;
 
             void check_boundary_collision();
 
@@ -53,15 +54,21 @@ namespace trog {
             bn::fixed_point _next_pos;
             
         public:
-            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, uint8_t initial_trogmeter=0);
+            player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
             virtual void update();
 
             bool burninating();
+            
+            //refactor these into a burnable interface...
             bool handle_cottage_collision(cottage &cottage);
             void handle_peasant_collision(peasant &peasant);
+
+            //todo: refactor these into an interface maybe
             void handle_knight_collision(knight &knight);
             void handle_troghammer_collision(troghammer &troghammer);
             void handle_arrow_collision(archer &archer);
+
+
             void handle_wall_collision(const bn::fixed_rect &wall_hitbox);
             
             bool dead() {return _time_dead;}

@@ -28,7 +28,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
 
     if(_sesh.get_level() == 5){
         write_text("stompin' good!");
-        trogdor* mytrogdor = new trogdor(140,0,_sesh,false);
+        trogdor* mytrogdor = new trogdor(140,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
         _cutscene_objects.emplace_back(mytrogdor);
@@ -48,7 +48,9 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
     }else if(_sesh.get_level() == 9){
         write_text("fry 'em up dan.");
         
-        trogdor* mytrogdor = new trogdor(20,0,_sesh,false);
+        //todo: make the iframes param optional on trogdor.
+        // and maybe more optional params in the future
+        trogdor* mytrogdor = new trogdor(20,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 
@@ -56,7 +58,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         write_text("parade of trogdors");
         //create a parade of 9 trogdors
         for(int z = 0; z < 9; z++){
-            _cutscene_objects.emplace_back(new trogdor(140 + 40 * z, 0, sesh, false));
+            _cutscene_objects.emplace_back(new trogdor(140 + 40 * z, 0, sesh, false,_common_stuff));
             _cutscene_objects.at(z)->set_horizontal_flip(true);                
             _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }
@@ -79,20 +81,20 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
             k->animate_faster();
             _cutscene_objects.emplace_back(k);
         }
-        trogdor *p = new trogdor(0, 0, sesh, false);
+        trogdor *p = new trogdor(0, 0, sesh, false,_common_stuff);
         p->flip_every(15);
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
         write_text("flex it, troggie");
 
-        trogdor* mytrogdor = new trogdor(0,0,_sesh,false);
+        trogdor* mytrogdor = new trogdor(0,0,_sesh,false,_common_stuff);
         mytrogdor->flex();
         _cutscene_objects.emplace_back(mytrogdor);
     }else if(_sesh.get_level() == 25){
         write_text("peasant dominoes");
 
-        trogdor* mytrogdor = new trogdor(80,0,_sesh,false);
+        trogdor* mytrogdor = new trogdor(80,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 
@@ -114,7 +116,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
     }else if(_sesh.get_level() == 35){
         write_text("go trogdor # 2!");
         for(int z = 0; z < 2; ++z){
-            trogdor *trog = new trogdor(-140, 30*z, sesh, false);
+            trogdor *trog = new trogdor(-140, 30*z, sesh, false,_common_stuff);
             trog->move_by(1 + 0.5*z, 0);
             _cutscene_objects.emplace_back(trog);
         }
@@ -153,7 +155,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _cutscene_objects.emplace_back(arch);
     }else if(_sesh.get_level() == 51){
         write_text("smote that kerrek!");
-        _cutscene_objects.emplace_back(new trogdor(-25,10,_sesh,false));
+        _cutscene_objects.emplace_back(new trogdor(-25,10,_sesh,false,_common_stuff));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
         _cutscene_length *= 1.75; 
@@ -355,7 +357,7 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();
             _common_stuff.text_generator.generate(0, -60, "trogdor", _text_sprites);
-            _cutscene_objects.emplace_back(new trogdor(0, 0, _sesh, false));
+            _cutscene_objects.emplace_back(new trogdor(0, 0, _sesh, false,_common_stuff));
         }else if(_timer == credits_start_time + credits_interval*2){
             _cutscene_objects.at(1)->set_visible(false);
             _text_sprites.clear();

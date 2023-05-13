@@ -110,7 +110,7 @@ int main()
                     // we need to store the play scene so that we may return to it later.
                     previous_play_scene = bn::move(scene);
 
-                    scene.reset(new trog::bonus_scene(sesh));
+                    scene.reset(new trog::bonus_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::LOSE: { 
