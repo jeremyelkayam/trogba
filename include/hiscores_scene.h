@@ -37,6 +37,7 @@ namespace trog{
         
         short _table_index, _string_index, _selectable_letters_index;
         uint8_t _blink_timer, _hold_down_timer;
+        unsigned short _nothing_pressed_timer;
 
         bool _go_to_credits;
 

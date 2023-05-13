@@ -144,6 +144,8 @@ void hiscores_scene::draw_name_entry(){
 
 void hiscores_scene::update_name_entry(){
     ++_blink_timer;
+
+    if(_nothing_pressed_timer < 15 SECONDS) ++_nothing_pressed_timer;
     if(_blink_timer > 30){
         _blink_timer = 0;
     }
@@ -155,6 +157,15 @@ void hiscores_scene::update_name_entry(){
     //Redraw the table when strictly necessary (e.g. changing letters
     // or when the cursor blinks)
 
+    if(bn::keypad::any_pressed()) _nothing_pressed_timer = 0;
+    
+    if(_nothing_pressed_timer == 10 SECONDS){
+        _header_sprites.clear();
+        _text_generator.set_center_alignment();
+        _text_generator.set_palette_item(RED_PALETTE);
+        _text_generator.generate(0, -72, "PRESS START WHEN YORE DONE", _header_sprites);
+        _text_generator.set_palette_item(BROWN_PALETTE);
+    }
 
     if(bn::keypad::a_pressed()){
         ++_string_index;
