@@ -354,13 +354,13 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_troghammer->awake_alert()){
                 _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
-                _th_sound = troghammer_sound(1);                      
+                _th_sound.emplace(1, _common_stuff.savefile.sound_vol);                      
             }else if(_troghammer->coming_alert()){
                 _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
-                _th_sound = troghammer_sound(2);                      
+                _th_sound.emplace(2, _common_stuff.savefile.sound_vol);                      
             }else if(_troghammer->arrived_alert()){
                 _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
-                _th_sound = troghammer_sound(3);      
+                _th_sound.emplace(3, _common_stuff.savefile.sound_vol);      
             }
         }
         if(_th_sound){
@@ -545,11 +545,12 @@ void play_scene::set_visible(bool visible){
 
 }
 
-troghammer_sound::troghammer_sound(unsigned short phrase) : 
+troghammer_sound::troghammer_sound(const unsigned short &phrase, const bn::fixed &volume) : 
     _phrase(phrase), 
     _timer(0),
-    _length(70) {
-    bn::sound_items::troghammer.play(1);
+    _length(70),
+    _vol(volume) {
+    bn::sound_items::troghammer.play(volume);
 }
 
 void troghammer_sound::update(){
@@ -557,16 +558,16 @@ void troghammer_sound::update(){
     if(_timer == _length){
         switch(_phrase){
             case 0:
-                bn::sound_items::troghammer_alert.play(1);
+                bn::sound_items::troghammer_alert.play(_vol);
             break;
             case 1:
-                bn::sound_items::troghammer_awake.play(1);
+                bn::sound_items::troghammer_awake.play(_vol);
             break;
             case 2:
-                bn::sound_items::troghammer_coming.play(1);
+                bn::sound_items::troghammer_coming.play(_vol);
             break;
             case 3:
-                bn::sound_items::troghammer_arrived.play(1);
+                bn::sound_items::troghammer_arrived.play(_vol);
             break;
             default:
                 BN_ERROR("Invalid phrase ID passed into troghammer_sound: ", _phrase);
@@ -584,10 +585,10 @@ void play_scene::spawn_troghammer(bool alert){
             //If the troghammer spawns in immediately, 
             // use the "ARRIVES" notification instead of the "STIRS" one
             _hud.scroll_text("THE TROGHAMMER ARRIVES!");
-            _th_sound = troghammer_sound(3);          
+            _th_sound.emplace(3, _common_stuff.savefile.sound_vol);          
         }else{
             _hud.scroll_text("THE TROGHAMMER STIRS...");   
-            _th_sound = troghammer_sound(0);          
+            _th_sound.emplace(0, _common_stuff.savefile.sound_vol);          
         }
     }
 }

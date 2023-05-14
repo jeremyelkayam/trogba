@@ -23,12 +23,13 @@ namespace trog{
 
     class troghammer_sound{
         private:
-            unsigned short _phrase;
+            const unsigned short _phrase;
             unsigned short _timer;
-            unsigned short _length;
+            const unsigned short _length;
+            bn::fixed _vol;
         public:
-            troghammer_sound(unsigned short phrase);
-            bool done() {return _timer > _length;}
+            troghammer_sound(const unsigned short &phrase, const bn::fixed &volume);
+            bool done() const {return _timer > _length;} 
             void update();
     };
 
