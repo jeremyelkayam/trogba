@@ -70,7 +70,7 @@ bool cottage::burninate(){
 
         _time_burning=1;
         _flames->set_z_order(MID_ZORDER);
-        sb_commentary::ignite_cottage();
+        _common_stuff.commentary.ignite_cottage();
         bn::sound_items::burningcottage.play(_common_stuff.savefile.sound_vol);
         return true;
     }

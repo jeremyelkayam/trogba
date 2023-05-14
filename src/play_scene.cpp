@@ -184,7 +184,7 @@ bn::optional<scene_type> play_scene::update(){
     if(_overlay_text) _overlay_text->update();
 
     if(_win_pause_time == 1){
-        sb_commentary::level_win_pause();
+        _common_stuff.commentary.level_win_pause();
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
@@ -288,7 +288,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            sb_commentary::burninate();
+            _common_stuff.commentary.burninate();
             _overlay_text.reset(new burninate_text());
         }else if(!_trogdor->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
@@ -305,7 +305,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
-                sb_commentary::arrowed();
+                _common_stuff.commentary.arrowed();
             }
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
@@ -321,7 +321,7 @@ bn::optional<scene_type> play_scene::update(){
         
         if(_trogdor->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
-                sb_commentary::sworded();
+                _common_stuff.commentary.sworded();
             }
             bn::string<13> str = "SWORDED!";
             //2% chance to get it wrong

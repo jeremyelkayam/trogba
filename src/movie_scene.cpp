@@ -169,7 +169,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
-        sb_commentary::im_in_this_game();
+        _common_stuff.commentary.im_in_this_game();
 
         _cutscene_length = 1350;
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
@@ -319,7 +319,7 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == 50){
             ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
         }else if(_timer == _cutscene_length / 2 + 30){
-            sb_commentary::roast_kerrek();
+            _common_stuff.commentary.roast_kerrek();
         }
     }
 
@@ -346,7 +346,7 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->start_animating();
             _common_stuff.text_generator.generate(0, -36, "good score", _text_sprites);
         }else if(_timer == 380){
-            sb_commentary::i_sound_realistic();
+            _common_stuff.commentary.i_sound_realistic();
         }else if(_timer == 390){
             sbad->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400

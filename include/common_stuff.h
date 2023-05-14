@@ -7,6 +7,7 @@
 #include <bn_vector.h>
 #include <bn_string.h>
 #include "constants.h"
+#include "sb_commentary.h"
 
 namespace trog {
 
@@ -65,6 +66,7 @@ namespace trog {
             bn::sprite_text_generator big_generator;
             bn::sprite_text_generator small_generator;
             bn::random rand;
+            sb_commentary commentary;
 
             saved_data savefile;
             void save() {bn::sram::write(savefile);}
