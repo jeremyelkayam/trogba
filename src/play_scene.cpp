@@ -58,7 +58,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     _countryside.put_below();
 
     if(_sesh.get_level() == 1 && _sesh.get_mans() == 30){
-        bn::sound_items::secret_unlocked.play(TROG_DEFAULT_VOLUME);
+        bn::sound_items::secret_unlocked.play(_common_stuff.savefile.sound_vol);
     }
 
 
@@ -619,7 +619,7 @@ void play_scene::update_tutorial(){
 
             _cottages.at(0).drop();
             _cottages.at(1).drop();
-            bn::sound_items::heavylanding.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::heavylanding.play(_common_stuff.savefile.sound_vol);
         }
 
     }else if(_knights.size() == 0){
