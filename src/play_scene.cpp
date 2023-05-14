@@ -48,7 +48,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _player_paused(false),
         _tutorial_timer(0),
         _tutorial_cutscene_timer(0),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
+        _voices_volume(0)
 {
     saved_session &saved_sesh = common_stuff.savefile.session; 
 
@@ -163,15 +164,19 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _void_tower->put_below();
 
         if(saved_sesh.exists && saved_sesh.thinfo.current_state != troghammer_state::UNALERTED){
-            _troghammer.emplace(saved_sesh.thinfo, true, _sesh.get_level(), common_stuff.rand);
+            _troghammer.reset(new troghammer(saved_sesh.thinfo, true, _sesh.get_level(), common_stuff.rand));
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
         }
     }
 
     if(_sesh.get_level() == 0){
         //Initialize tutorial
-        _text_box = text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
+        _text_box.reset(new text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!"));
         bn::music_items::skoa.play(common_stuff.savefile.music_vol);
+        _voices_volume = common_stuff.savefile.voice_vol;
+
+        //Temporarily turn voices off.
+        common_stuff.savefile.voice_vol = 0;
     }
 }
 
@@ -188,8 +193,7 @@ bn::optional<scene_type> play_scene::update(){
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
-            _text_box.reset();
-            _text_box = text_box(_common_stuff.small_generator, "Congrats! You finished the tutorial.");
+            _text_box.reset(new text_box(_common_stuff.small_generator, "Congrats! You finished the tutorial."));
         }
     }
     if(_autosave_visibility_time != 0){
@@ -354,13 +358,13 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_troghammer->awake_alert()){
                 _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
-                _th_sound.emplace(1, _common_stuff.savefile.sound_vol);                      
+                _th_sound.reset(new troghammer_sound(1, _common_stuff.savefile.sound_vol));                      
             }else if(_troghammer->coming_alert()){
                 _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
-                _th_sound.emplace(2, _common_stuff.savefile.sound_vol);                      
+                _th_sound.reset(new troghammer_sound(2, _common_stuff.savefile.sound_vol));                      
             }else if(_troghammer->arrived_alert()){
                 _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
-                _th_sound.emplace(3, _common_stuff.savefile.sound_vol);      
+                _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.sound_vol));      
             }
         }
         if(_th_sound){
@@ -466,6 +470,7 @@ bn::optional<scene_type> play_scene::update(){
     if(result && result != scene_type::BONUS){
         _hud.clear_scrolling_text();
         if(bn::music::playing()) bn::music::stop();
+        if(_voices_volume != 0) _common_stuff.savefile.voice_vol = _voices_volume;
     }
 
     return result;
@@ -577,7 +582,7 @@ void troghammer_sound::update(){
 }
 
 void play_scene::spawn_troghammer(bool alert){
-    _troghammer.emplace(_void_tower->position(), true, _sesh.get_level(), _common_stuff.rand);  
+    _troghammer.reset(new troghammer(_void_tower->position(), true, _sesh.get_level(), _common_stuff.rand));  
     _void_tower->set_item(bn::sprite_items::voidtower, 1);
 
     if(alert){
@@ -585,10 +590,10 @@ void play_scene::spawn_troghammer(bool alert){
             //If the troghammer spawns in immediately, 
             // use the "ARRIVES" notification instead of the "STIRS" one
             _hud.scroll_text("THE TROGHAMMER ARRIVES!");
-            _th_sound.emplace(3, _common_stuff.savefile.sound_vol);          
+            _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.sound_vol));          
         }else{
             _hud.scroll_text("THE TROGHAMMER STIRS...");   
-            _th_sound.emplace(0, _common_stuff.savefile.sound_vol);          
+            _th_sound.reset(new troghammer_sound(0, _common_stuff.savefile.sound_vol));          
         }
     }
 }
@@ -596,12 +601,6 @@ void play_scene::spawn_troghammer(bool alert){
 void play_scene::update_tutorial(){
     BN_ASSERT(_sesh.get_level() == 0, "Tutorial can only play on level 0");
     
-    //but not all, since if all cottages were burninated, we win
-    bool some_cottages_burninated = false;
-    for(cottage &c : _cottages){
-        if(c.burninated()) some_cottages_burninated = true;
-    }
-
     if(_cottages.size() == 0){
         //tutorial phase 1
         if(_tutorial_timer == 0 && (bn::keypad::up_pressed() || bn::keypad::down_pressed() ||
@@ -613,8 +612,7 @@ void play_scene::update_tutorial(){
         if(_tutorial_timer == 240){
             _cottages.emplace_back(65, 5, direction::LEFT, false, false, _common_stuff);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);
-            _text_box.reset();
-            _text_box = text_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it.");
+            _text_box.reset(new text_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it."));
             _tutorial_timer = 0;
             _tutorial_cutscene_timer = 1;
 
@@ -629,7 +627,7 @@ void play_scene::update_tutorial(){
             bn::fixed arrow_ycor = _peasants.front().get_y();
             bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
-                _tutorial_arrow.emplace(arrow_xcor, arrow_ycor, direction::RIGHT);
+                _tutorial_arrow.reset(new tutorial_arrow(arrow_xcor, arrow_ycor, direction::RIGHT));
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
                 _tutorial_arrow->set_x(arrow_xcor);
@@ -640,9 +638,8 @@ void play_scene::update_tutorial(){
         //this direction clause is just to make sure this only runs once
                 _tutorial_arrow->get_direction() != direction::UP){
             
-            _text_box.reset();
-            _text_box.emplace(_common_stuff.small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!");
-            _tutorial_arrow.emplace(-60, -62, direction::UP);
+            _text_box.reset(new text_box(_common_stuff.small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!"));
+            _tutorial_arrow.reset(new tutorial_arrow(-60, -62, direction::UP));
         }
 
         if(_trogdor->get_trogmeter() >= 5){
@@ -653,8 +650,7 @@ void play_scene::update_tutorial(){
             _archers.emplace_front(-50, true, _common_stuff);
             _archers.front().move_from(60, 135, -50);
 
-            _text_box.reset();
-            _text_box.emplace(_common_stuff.small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords.");
+            _text_box.reset(new text_box(_common_stuff.small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords."));
 
             _tutorial_cutscene_timer = 1;
 
@@ -667,11 +663,11 @@ void play_scene::update_tutorial(){
         //burnination / level winning tutorial
         if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
             _text_box.reset();
-            _text_box.emplace(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility.");
+            _text_box.reset(new text_box(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility."));
         }
         if(_trogdor->get_burninating_time() == 1) _text_box.reset();
-    }else if(some_cottages_burninated && !_text_box){
-        _text_box.emplace(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level.");
+    }else if(!_text_box){
+        _text_box.reset(new text_box(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level."));
     }
 
     if(_tutorial_arrow){

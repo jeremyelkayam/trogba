@@ -59,12 +59,13 @@ namespace trog{
 
         //there will be at most 2 knights: red knight, blue knight.
         bn::forward_list<knight, 2> _knights;
-        bn::optional<troghammer> _troghammer;
-        bn::optional<troghammer_sound> _th_sound;
+        bn::unique_ptr<troghammer> _troghammer;
+        bn::unique_ptr<troghammer_sound> _th_sound;
         bn::optional<bn::sprite_ptr> _void_tower;
-        bn::optional<tutorial_arrow> _tutorial_arrow;
+        bn::unique_ptr<tutorial_arrow> _tutorial_arrow;
 
-        bn::optional<text_box> _text_box;
+        bn::unique_ptr<text_box> _text_box;
+        bn::fixed _voices_volume;
 
         bool level_complete();
 
