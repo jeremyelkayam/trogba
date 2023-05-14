@@ -78,15 +78,9 @@ int main()
                 }
                 case trog::scene_type::TITLE: { 
                     hud.hide();
-                    scene.reset(new trog::title_scene());
+                    scene.reset(new trog::title_scene(common_stuff));
                     break;
                 }
-                // instructions scene has been replaced by menu scene.
-                // case trog::scene_type::INSTRUCTIONS: { 
-                //     hud.hide();
-                //     scene.reset(new trog::instructions_scene(sesh, text_generator));
-                //     break;
-                // }
                 case trog::scene_type::MENU: { 
                     hud.hide();
                     scene.reset(new trog::menu_scene(sesh, common_stuff));

@@ -171,7 +171,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     if(_sesh.get_level() == 0){
         //Initialize tutorial
         _text_box = text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!");
-        bn::music_items::skoa.play(0.5);
+        bn::music_items::skoa.play(common_stuff.savefile.music_vol);
     }
 }
 
