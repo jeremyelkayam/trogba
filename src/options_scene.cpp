@@ -17,7 +17,8 @@ namespace trog {
 options_scene::options_scene(common_stuff &common_stuff) : 
         _common_stuff(common_stuff),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
-        _index(0) {
+        _index(0),
+        _old_save(common_stuff.savefile) {
     _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
@@ -53,19 +54,37 @@ bn::optional<scene_type> options_scene::update(){
         
         
         if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() && _index == _options_vec.size() - 1)){
-            _options_vec.clear();
 
-            _common_stuff.small_generator.set_center_alignment();
-            _common_stuff.small_generator.set_palette_item(RED_PALETTE);
-            _common_stuff.small_generator.generate(0, -50, "IMPORTANT!", _notice_sprites);
+            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.troghammer;
+            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.decrement_trogmeter;
 
-            _common_stuff.small_generator.set_palette_item(BROWN_PALETTE);
-            _common_stuff.small_generator.generate(0, -35, "Changes to difficulty settings ", _notice_sprites);
-            _common_stuff.small_generator.generate(0, -25, "(e.g. troghammer, starting lives)", _notice_sprites);
-            _common_stuff.small_generator.generate(0, -15, "will be applied the next time ", _notice_sprites);
-            _common_stuff.small_generator.generate(0, -5, "you start a new game.", _notice_sprites);
+            if(troghammer_changed || trogmeter_changed) {
+                bn::vector<bn::string<32>, 5>  _changed_settings;
+                if(troghammer_changed) _changed_settings.emplace_back("Troghammer");
+                if(trogmeter_changed) _changed_settings.emplace_back("Trogmeter depreciation");
+                _options_vec.clear();
 
-            _common_stuff.small_generator.generate(0, 20, "Press A to continue", _notice_sprites);
+                _common_stuff.small_generator.set_center_alignment();
+                _common_stuff.small_generator.set_palette_item(RED_PALETTE);
+                _common_stuff.small_generator.generate(0, -50, "IMPORTANT!", _notice_sprites);
+
+                _common_stuff.small_generator.set_palette_item(BROWN_PALETTE);
+                _common_stuff.small_generator.generate(0, -35, "Changes to the following settings:", _notice_sprites);
+                bn::fixed ycor = -15;
+                for(bn::string<32> &change : _changed_settings){
+                    _common_stuff.small_generator.generate(0, ycor, change, _notice_sprites);
+                    ycor+=10;
+                }
+
+                _common_stuff.small_generator.generate(0, 40, "will be applied the next time ", _notice_sprites);
+                _common_stuff.small_generator.generate(0, 50, "you start a new game.", _notice_sprites);
+
+                _common_stuff.small_generator.generate(0, 65, "Press A to continue", _notice_sprites);
+            }else{
+                _common_stuff.save();
+                result = scene_type::MENU;
+            }
+
         }
     }else{
         if(bn::keypad::a_pressed()){
