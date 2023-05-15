@@ -92,9 +92,10 @@ bn::optional<scene_type> menu_scene::update(){
                 _selection_anim_timer = 0;
                 bn::sound_items::deleted.play(_common_stuff.savefile.sound_vol);
             }
+        }else if(_selected_option_index == 1){
+            _common_stuff.savefile.session.exists = false;
         }else if(_selected_option_index == 2){
             _sesh.set_level(0);
-            select();
         }
 
         if(_selected_option_index != 0){
