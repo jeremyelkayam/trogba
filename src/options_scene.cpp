@@ -30,6 +30,7 @@ options_scene::options_scene(common_stuff &common_stuff) :
     _options_vec.emplace_back(new percent_option("Music Volume", _common_stuff.savefile.music_vol, volume_vec));
     _options_vec.emplace_back(new percent_option("Sound Volume", _common_stuff.savefile.sound_vol, volume_vec));
     _options_vec.emplace_back(new percent_option("Voice Volume", _common_stuff.savefile.voice_vol, volume_vec));
+    _options_vec.emplace_back(new option("back"));
 
     for(uint8_t z = 0; z < _options_vec.size(); z++){
         _options_vec.at(z)->redraw(_index == z, _common_stuff.small_generator, ycor(z));
@@ -57,7 +58,7 @@ bn::optional<scene_type> options_scene::update(){
         _options_vec.at(_index)->redraw(true, _common_stuff.small_generator, ycor(_index));
     }
 
-    if(bn::keypad::b_pressed()){
+    if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() && _index == _options_vec.size() - 1)){
         //TODO: Make an alert that says options will be applied on starting a new game
         _common_stuff.save();
         result = scene_type::MENU;

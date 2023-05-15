@@ -26,7 +26,7 @@ namespace trog{
         common_stuff & _common_stuff;
 
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
-        bn::sprite_ptr _cursor, _flames;
+        bn::sprite_ptr _cursor, _flames, _troghammer_icon, _trogmeter_degrade_icon;
         bn::sprite_animate_action<4> _flames_anim;
         bn::sprite_scale_to_action _flames_scale;
         bn::regular_bg_ptr _bg;

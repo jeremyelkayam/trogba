@@ -15,15 +15,15 @@ namespace trog{
     class option {
         protected:
             bn::vector<bn::sprite_ptr, 16> _text_sprites;
-            option(const bn::string<32> &name) : _name(name){}
             bn::string<32> _name;
         public: 
+            option(const bn::string<32> &name) : _name(name){}
             virtual ~option() = default;
-            virtual void left() = 0;
-            virtual void right() = 0;
+            virtual void left() {}
+            virtual void right() {}
             virtual void redraw(const bool &selected, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
             void hide(){_text_sprites.clear();}
-            virtual bool taller() = 0;
+            virtual bool taller() {return false;}
     };
 
     // dang ... hope our govt figures out that public option 
@@ -48,7 +48,7 @@ namespace trog{
             virtual void left() final;
             virtual void right() final;
             virtual void redraw(const bool &selected, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) final;
-            virtual bool taller() {return true;}
+            virtual bool taller() {return false;}
     };
 
     class options_scene : public scene{ 
