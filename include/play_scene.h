@@ -52,6 +52,7 @@ namespace trog{
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
+        
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
         bn::forward_list<peasant, 20> _peasants;

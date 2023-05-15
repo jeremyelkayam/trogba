@@ -149,6 +149,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
 
     common_stuff.text_generator.set_center_alignment();
+    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
     common_stuff.text_generator.generate(0, 55, "paused", _paused_text);
     common_stuff.text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);

@@ -14,8 +14,9 @@
 
 namespace trog {
 
-options_scene::options_scene(common_stuff &common_stuff) : 
+options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_scene) : 
         _common_stuff(common_stuff),
+        _last_scene(last_scene),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
         _index(0),
         _old_save(common_stuff.savefile) {
@@ -82,14 +83,14 @@ bn::optional<scene_type> options_scene::update(){
                 _common_stuff.small_generator.generate(0, 65, "Press A to continue", _notice_sprites);
             }else{
                 _common_stuff.save();
-                result = scene_type::MENU;
+                result = _last_scene;
             }
 
         }
     }else{
         if(bn::keypad::a_pressed()){
             _common_stuff.save();
-            result = scene_type::MENU;
+            result = _last_scene;
         }
     }
 

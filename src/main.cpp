@@ -42,6 +42,7 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> last_scene;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
@@ -92,7 +93,6 @@ int main()
                     if(previous_play_scene){
                         //this means we are returning from an interruption
                         //so we should go back to the play scene from before 
-                        BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
                         scene.reset(new trog::play_scene(sesh, hud, common_stuff));
@@ -141,7 +141,12 @@ int main()
                 }                
                 case trog::scene_type::OPTIONS: {
                     hud.hide();
-                    scene.reset(new trog::options_scene(common_stuff));
+
+                    if(last_scene == trog::scene_type::PLAY){
+                        previous_play_scene = bn::move(scene);
+                    }
+
+                    scene.reset(new trog::options_scene(common_stuff, *last_scene));
                     break;
                 }
                 default: { 
@@ -149,6 +154,7 @@ int main()
                     break;
                 }
             }
+            last_scene = next_scene;
         }
 
         if(!kicked && bn::keypad::select_pressed()){

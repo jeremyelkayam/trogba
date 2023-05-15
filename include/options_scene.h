@@ -55,6 +55,7 @@ namespace trog{
     private:
 
         common_stuff &_common_stuff;
+        const scene_type _last_scene;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
         bn::vector<bn::sprite_ptr, 64> _notice_sprites;        
@@ -66,7 +67,7 @@ namespace trog{
         saved_data _old_save;
 
     public:
-        explicit options_scene(common_stuff &common_stuff);
+        explicit options_scene(common_stuff &common_stuff, const scene_type &last_scene);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
