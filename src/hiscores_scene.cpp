@@ -9,11 +9,12 @@
 
 namespace trog {
 
-hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff) : 
+hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
         _selectable_letters({'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                              'O','P','Q','R','S','T','U','V','W','X','Y','Z','!','?', ' '}),
         _sesh(sesh),
         _common_stuff(common_stuff),
+        _last_scene(last_scene),
         _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(0,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(_common_stuff.savefile.high_scores_table),
@@ -23,39 +24,40 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff) :
         _blink_timer(0),
         _go_to_credits(false) {
     
-    if(_sesh.get_level() == 101){
-        //101 isn't a real level. If you beat the game, the game ends before you start level 101.
-        // So we count you as ending on level 100.
-        // Maybe add a crown or something if you beat the game? 
-        _go_to_credits = true;
-    }
-
-    //Propagate the player's score within the scores list (if applicable)
-    if(_sesh.get_score() > _high_scores_table[7].get_score()){
-        BN_LOG("you got a high score: ", _sesh.get_score());
-        _high_scores_table[7] = high_score_entry("         ", _sesh.get_level(), _sesh.get_score());
-        _table_index=7;
-        for(int z = 6; z >= 0; --z){
-            high_score_entry& current = _high_scores_table[z];
-            high_score_entry& previous = _high_scores_table[z+1];
-            if(previous.get_score() >= current.get_score()){
-                bn::swap(previous, current);
-                _table_index=z;
-            }
+    if(last_scene != scene_type::PLAY && last_scene != scene_type::MENU){
+        if(_sesh.get_level() == 101){
+            //101 isn't a real level. If you beat the game, the game ends before you start level 101.
+            // So we count you as ending on level 100.
+            // Maybe add a crown or something if you beat the game? 
+            _go_to_credits = true;
         }
-        //move our cursor into position
-        _cursor_sprite.set_y(-42 + _table_index*15);
+
+        //Propagate the player's score within the scores list (if applicable)
+        if(_sesh.get_score() > _high_scores_table[7].get_score()){
+            BN_LOG("you got a high score: ", _sesh.get_score());
+            _high_scores_table[7] = high_score_entry("         ", _sesh.get_level(), _sesh.get_score());
+            _table_index=7;
+            for(int z = 6; z >= 0; --z){
+                high_score_entry& current = _high_scores_table[z];
+                high_score_entry& previous = _high_scores_table[z+1];
+                if(previous.get_score() >= current.get_score()){
+                    bn::swap(previous, current);
+                    _table_index=z;
+                }
+            }
+            //move our cursor into position
+            _cursor_sprite.set_y(-42 + _table_index*15);
+        }
+
+
+        BN_LOG("score", _sesh.get_score());
+        BN_LOG("score entry at index ", _table_index);
+        _cursor_sprite.set_palette(BROWN_PALETTE);
+        _cursor_sprite.set_visible(false);
+
+        _sesh.reset();
     }
-
-
-    BN_LOG("score", _sesh.get_score());
-    BN_LOG("score entry at index ", _table_index);
-    _cursor_sprite.set_palette(BROWN_PALETTE);
-    _cursor_sprite.set_visible(false);
-
     draw_high_scores_table();
-    _sesh.reset();
-
 }
 
 void hiscores_scene::draw_high_scores_table(){
@@ -114,10 +116,12 @@ bn::optional<scene_type> hiscores_scene::update(){
         if(bn::keypad::start_pressed()){
             end_name_entry();
         }
-    }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()){
+    }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()|| bn::keypad::b_pressed()){
         if(_go_to_credits){
             result = scene_type::CREDITS;
-        }else{
+        }else if(_last_scene == scene_type::PLAY){
+            result = scene_type::PLAY;
+        }else {
             result = scene_type::MENU;
         }
         _text_sprites.clear();

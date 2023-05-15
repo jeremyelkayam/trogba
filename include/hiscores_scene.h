@@ -20,6 +20,7 @@ namespace trog{
 
         session_info &_sesh;
         common_stuff &_common_stuff;
+        const scene_type _last_scene;
 
         bn::vector<bn::sprite_ptr, 128> _text_sprites;
         bn::vector<bn::sprite_ptr, 8> _name_entry_sprites, _header_sprites;
@@ -42,7 +43,7 @@ namespace trog{
 
 
     public:
-        explicit hiscores_scene(session_info &sesh, common_stuff &common_stuff);
+        explicit hiscores_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
