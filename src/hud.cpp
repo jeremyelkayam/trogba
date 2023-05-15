@@ -21,6 +21,8 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
     for(int i = 0; i < trogmeter_max; i++){
         bn::sprite_ptr peasanthead_sprite = bn::sprite_items::peasanthead.create_sprite(
             trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR, 1);
+        peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
+        peasanthead_sprite.put_below();
         _trogmeter_sprites.emplace_back(peasanthead_sprite);
     }
 
@@ -38,6 +40,12 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER + 32, -75, 2));
 
+    for(bn::sprite_ptr &_sprite : _burninatemeter_invert) { 
+        _sprite.set_z_order(FURTHEST_BACK_ZORDER);
+        _sprite.set_bg_priority(3);
+    }
+
+
     //todo change common_stuff.set_sprite_arr_visible to use this
     for(bn::sprite_ptr &sprite : _burninatemeter_invert){
         sprite.set_visible(false);
@@ -49,13 +57,13 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
 void hud::update_trogmeter(unsigned short trogmeter_value){
     if(!scrolling_text()){
         for(int i = 0; i < TROG_TROGMETER_MAX; i++){
-            // BN_LOG("trogmeter_value ", trogmeter_value);
-            bn::sprite_ptr peasanthead_sprite = _trogmeter_sprites.at(i);
+            bn::sprite_ptr &peasanthead_sprite = _trogmeter_sprites.at(i);
             if(i < trogmeter_value) {
                 peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
             }else{
                 peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
             }
+            peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
         }
     }
 }
@@ -116,39 +124,35 @@ void hud::update() {
     }
 
     if(_enabled){
-            _score_text_sprites.clear();
-            _mans_lv_text_sprites.clear();
+        _score_text_sprites.clear();
+        _mans_lv_text_sprites.clear();
 
-            _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+        _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+        _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
 
-            bn::string<64> score_str, mans_lv_str;
-            bn::ostringstream score_string_stream(score_str);
-            score_string_stream << _sesh.get_score();
+        bn::string<64> score_str, mans_lv_str;
+        bn::ostringstream score_string_stream(score_str);
+        score_string_stream << _sesh.get_score();
 
-            _common_stuff.text_generator.set_left_alignment();
-            _common_stuff.text_generator.generate(-120, -76, score_str, _score_text_sprites);   
+        _common_stuff.text_generator.set_left_alignment();
+        _common_stuff.text_generator.generate(-120, -76, score_str, _score_text_sprites);   
 
-            //TODO: don't just right align this. The text should be right aligned and the numbers
-            // should be left aligned
-            bn::ostringstream mans_lv_string_stream(mans_lv_str);
+        //TODO: don't just right align this. The text should be right aligned and the numbers
+        // should be left aligned
+        bn::ostringstream mans_lv_string_stream(mans_lv_str);
 
-            if(_sesh.get_level() == 0){
-                mans_lv_string_stream << "TUTORIAL";
-            }else{
-                mans_lv_string_stream << "MANS:";
-                mans_lv_string_stream << _sesh.get_mans();
-                mans_lv_string_stream << " Lv:";
-                mans_lv_string_stream << _sesh.get_level();
-            }
+        if(_sesh.get_level() == 0){
+            mans_lv_string_stream << "TUTORIAL";
+        }else{
+            mans_lv_string_stream << "MANS:";
+            mans_lv_string_stream << _sesh.get_mans();
+            mans_lv_string_stream << " Lv:";
+            mans_lv_string_stream << _sesh.get_level();
+        }
 
-
-            _common_stuff.text_generator.set_right_alignment();
-            _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
-            for(bn::sprite_ptr sprite : _mans_lv_text_sprites) {
-                // need to do this for it to be covered up by the fire on the level win scene
-                sprite.put_below();
-            }
-        
+        _common_stuff.text_generator.set_right_alignment();
+        _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
+        // BN_LOG("fuck. z order for trogmeter ", _trogmeter_sprites.at(0).z_order());
     }
 }
 
@@ -157,9 +161,9 @@ void hud::scroll_text(const char *text){
 
     _common_stuff.text_generator.set_left_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
 
     _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
-    BN_LOG("scroll text: ",text);
 
 }
 
