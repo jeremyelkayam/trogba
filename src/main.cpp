@@ -12,10 +12,6 @@
 #include <bn_sound.h>
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
-#include <bn_sprite_text_generator.h>
-#include "trogdor_variable_8x16_sprite_font.h"
-#include "trogdor_variable_32x64_sprite_font.h"
-#include "trogdor_variable_8x8_sprite_font.h"
 #include "player.h"
 #include "title_scene.h"
 // #include "instructions_scene.h"
@@ -31,6 +27,8 @@
 #include "devs_scene.h"
 #include "fireyrage_scene.h"
 #include "enums.h"
+#include "common_stuff.h"
+#include "options_scene.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -44,18 +42,18 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
-    trog::session_info sesh;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
-    bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
-    bn::sprite_text_generator big_text_generator(trog::variable_32x64_sprite_font);
-    bn::sprite_text_generator small_text_generator(trog::variable_8x8_sprite_font);
-    bn::random rand;
-    text_generator.set_center_alignment();
+
+    trog::common_stuff common_stuff;
+    trog::session_info sesh(common_stuff);
+
+
+    common_stuff.text_generator.set_center_alignment();
 
     bool logo_scene = true;
 
-    trog::hud hud(sesh, text_generator, TROG_TROGMETER_MAX);
+    trog::hud hud(sesh, common_stuff, TROG_TROGMETER_MAX);
     hud.hide();
 
 
@@ -76,23 +74,17 @@ int main()
                 }
                 case trog::scene_type::LOGO: { 
                     hud.hide();
-                    scene.reset(new trog::logo_scene(sesh));
+                    scene.reset(new trog::logo_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::TITLE: { 
                     hud.hide();
-                    scene.reset(new trog::title_scene());
+                    scene.reset(new trog::title_scene(common_stuff));
                     break;
                 }
-                // instructions scene has been replaced by menu scene.
-                // case trog::scene_type::INSTRUCTIONS: { 
-                //     hud.hide();
-                //     scene.reset(new trog::instructions_scene(sesh, text_generator));
-                //     break;
-                // }
                 case trog::scene_type::MENU: { 
                     hud.hide();
-                    scene.reset(new trog::menu_scene(sesh, text_generator, small_text_generator));
+                    scene.reset(new trog::menu_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
@@ -103,7 +95,7 @@ int main()
                         BN_LOG("returning from treasure hut");
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, text_generator, small_text_generator, rand));
+                        scene.reset(new trog::play_scene(sesh, hud, common_stuff));
                     }
                     break;
                 }
@@ -113,38 +105,43 @@ int main()
                     // we need to store the play scene so that we may return to it later.
                     previous_play_scene = bn::move(scene);
 
-                    scene.reset(new trog::bonus_scene(sesh));
+                    scene.reset(new trog::bonus_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::LOSE: { 
                     hud.show();
                     scene.reset();
-                    scene.reset(new trog::gameover_scene(sesh, text_generator, rand));
+                    scene.reset(new trog::gameover_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, text_generator, small_text_generator, rand));
+                    scene.reset(new trog::level_win_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::MOVIE: {
                     hud.show();
-                    scene.reset(new trog::movie_scene(sesh, text_generator, rand));
+                    scene.reset(new trog::movie_scene(sesh, common_stuff));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
                     hud.hide();
-                    scene.reset(new trog::hiscores_scene(sesh));
+                    scene.reset(new trog::hiscores_scene(sesh, common_stuff));
                     break;
                 }                
                 case trog::scene_type::CREDITS: {
                     hud.hide();
-                    scene.reset(new trog::credits_scene(text_generator));
+                    scene.reset(new trog::credits_scene(common_stuff));
                     break;
                 }                
                 case trog::scene_type::FIREYRAGE: {
                     hud.hide();
                     scene.reset(new trog::fireyrage_scene(sesh));
+                    break;
+                }                
+                case trog::scene_type::OPTIONS: {
+                    hud.hide();
+                    scene.reset(new trog::options_scene(common_stuff));
                     break;
                 }
                 default: { 
@@ -156,12 +153,12 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::kick.play(common_stuff.savefile.sound_vol);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(TROG_DEFAULT_VOLUME);
+            bn::sound_items::trogador.play(common_stuff.savefile.sound_vol);
             kicked=false;
         }
 
@@ -173,7 +170,7 @@ int main()
 
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
-        rand.update();
+        common_stuff.rand.update();
 
         bn::core::update();
     }

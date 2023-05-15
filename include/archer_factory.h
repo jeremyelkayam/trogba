@@ -17,6 +17,7 @@ namespace trog{
     private:
 
         bn::forward_list<archer, 4>& _archers;
+        common_stuff &_common_stuff;
 
         /*
          * Spawn a new archer into the archer array.
@@ -31,7 +32,7 @@ namespace trog{
          *                  spawned by the factory.
          * @param level     The level currently being played.
          */
-        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short level, bn::random &random);
-    };
+        archer_factory(bn::forward_list<archer, 4>& archers, const unsigned short &level, common_stuff &common_stuff);
+    };        
 
 }

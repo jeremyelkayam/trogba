@@ -13,7 +13,7 @@ namespace trog {
         private:
             session_info& _sesh;
 
-            bn::sprite_text_generator& _text_generator;  
+            common_stuff &_common_stuff;
 
             bn::vector<bn::sprite_ptr, 32> _score_text_sprites, 
                                            _mans_lv_text_sprites,
@@ -37,9 +37,8 @@ namespace trog {
         public:
 
             //todo this shouldn't be in hud; maybe throw it in a common functions class
-            void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible);
 
-            hud(session_info &sesh, bn::sprite_text_generator& generator, unsigned short trogmeter_max);
+            hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
             void update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time);

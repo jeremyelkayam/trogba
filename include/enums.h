@@ -13,7 +13,6 @@ namespace trog {
         DEVS,
         LOGO,
         TITLE,
-        INSTRUCTIONS,
         PLAY,
         BONUS,
         LEVELBEAT,
@@ -22,7 +21,8 @@ namespace trog {
         MOVIE,
         MENU,
         HISCORES,
-        CREDITS
+        CREDITS,
+        OPTIONS
     };
     enum class direction
     {

@@ -10,9 +10,9 @@
 
 namespace trog {
 
-credits_scene::credits_scene(bn::sprite_text_generator& text_generator) : 
+credits_scene::credits_scene(common_stuff &common_stuff) : 
     _time(0),
-    _text_generator(text_generator) {
+    _common_stuff(common_stuff) {
 
 
 }
@@ -24,12 +24,13 @@ void credits_scene::setup_credits(){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, ycor, z));
     }
 
-    _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(WHITE_PALETTE);
+    _common_stuff.small_generator.set_center_alignment();
+    _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
 
     bn::string<64> butano_str;
     bn::ostringstream butano_string_stream(butano_str);
     butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor() << "." << bn::version::patch();
+
 
     bn::string<64> credits[] = {
         "The GBA Game",
@@ -48,17 +49,17 @@ void credits_scene::setup_credits(){
     ycor += 25;
 
     for(bn::string<64> str : credits){ 
-        _text_generator.generate(0, ycor,str, _text_sprites);
+        _common_stuff.small_generator.generate(0, ycor,str, _text_sprites);
 
         ycor += 16;
     }
 
     ycor += 30;
-    _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", _text_sprites);   
+    _common_stuff.text_generator.set_center_alignment();
+    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", _text_sprites);   
     ycor += 30;
-
-    _text_generator.set_palette_item(WHITE_PALETTE);    
+ 
     bn::string<64> original_game_credits[] = {
         "",
         "Designed by", 
@@ -74,10 +75,10 @@ void credits_scene::setup_credits(){
         "The Brothers Chaps",
         "and James Ernest"
     };
-    bn::sound_items::cutscene_credits.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::cutscene_credits.play(_common_stuff.savefile.music_vol);
 
     for(bn::string<64> str : original_game_credits){ 
-        _text_generator.generate(0, ycor,str, _text_sprites);
+        _common_stuff.small_generator.generate(0, ycor,str, _text_sprites);
         ycor += 16;
     }
 }
@@ -86,6 +87,7 @@ void credits_scene::setup_credits(){
 
 bn::optional<scene_type> credits_scene::update(){
     //have to do this because we construct the new scene before discarding the old one
+    //and if we do that, then we risk taking up too much ram
     if(_time == 0) setup_credits();
 
     bn::optional<scene_type> result;

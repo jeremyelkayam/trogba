@@ -10,10 +10,11 @@
 
 namespace trog {
 
-cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
+cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated, common_stuff &common_stuff) : 
         entity(xcor, ycor, TROG_COTTAGE_HITBOX_WIDTH, TROG_COTTAGE_HITBOX_HEIGHT, bn::sprite_items::cottage.create_sprite(xcor, ycor, 2)),
         _direction(direction),
-        _has_treasure(has_treasure) {
+        _has_treasure(has_treasure),
+        _common_stuff(common_stuff) {
     switch(direction) {
         case direction::UP:
             _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 0);
@@ -69,8 +70,8 @@ bool cottage::burninate(){
 
         _time_burning=1;
         _flames->set_z_order(MID_ZORDER);
-        sb_commentary::ignite_cottage();
-        bn::sound_items::burningcottage.play(TROG_DEFAULT_VOLUME);
+        _common_stuff.commentary.ignite_cottage();
+        bn::sound_items::burningcottage.play(_common_stuff.savefile.sound_vol);
         return true;
     }
     return false;

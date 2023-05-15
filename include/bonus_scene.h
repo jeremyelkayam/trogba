@@ -25,7 +25,7 @@ namespace trog{
 
 
     public:
-        bonus_scene(session_info &sesh);
+        bonus_scene(session_info &sesh, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
 
     };

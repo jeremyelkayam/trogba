@@ -5,9 +5,10 @@
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
+#include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, uint8_t initial_trogmeter) : 
+player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
         entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
         _speed(TROG_PLAYER_SPEED),
@@ -17,8 +18,9 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes,
         _time_dead(0),
         _majesty_flash_timer(0),
         _walk_cycle_frames(walk_cycle_frames),
-        _breath(sesh),
+        _breath(sesh, common_stuff),
         _sesh(sesh),
+        _common_stuff(common_stuff),
         _next_pos(xcor,ycor)
         {
     if(_trogmeter > 0){
@@ -107,12 +109,12 @@ void player::update(){
         }
         update_next_pos();
 
-        // #ifdef DEBUG
-        //     //Insta-burninate by pressing b
-        //     if(bn::keypad::b_pressed()){
-        //         start_burninating();   
-        //     }
-        // #endif
+        #ifdef DEBUG
+            //Insta-burninate by pressing b
+            if(bn::keypad::b_pressed()){
+                start_burninating();   
+            }
+        #endif
     }
 
 }
@@ -236,6 +238,9 @@ void player::handle_peasant_collision(peasant &peasant){
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
         BN_LOG("stomped.");
         peasant.stomp();
+
+        bn::sound_items::stomp.play(_common_stuff.savefile.sound_vol);
+        _common_stuff.commentary.stomp_peasant();
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
         ++_trogmeter;
@@ -250,7 +255,7 @@ void player::start_burninating(){
     _burninate_time = _burninate_length;
     _breath.enable();
 
-    bn::sound_items::burninate.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::burninate.play(_common_stuff.savefile.sound_vol);
 }
 
 void player::handle_knight_collision(knight &knight){
@@ -273,7 +278,7 @@ void player::handle_arrow_collision(archer &archer){
 }
 
 void player::die(uint8_t death_index){
-    bn::sound_items::death.play(TROG_DEFAULT_VOLUME);
+    bn::sound_items::death.play(_common_stuff.savefile.sound_vol);
     _time_dead = 1;
     _breath.disable();
     _sprite.set_tiles(_spritem.tiles_item(), death_index + _walk_cycle_frames);

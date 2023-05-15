@@ -23,11 +23,12 @@
 
 namespace trog {
 
-gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &rand) : 
+gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) : 
         _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), rand),
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
+        _common_stuff(common_stuff),
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
@@ -44,41 +45,33 @@ gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &te
             );
         }
     }
+
+    //todo: refactor this
     if(_sesh.last_killed_by_archer()){
-        sb_commentary::gameover_arch();
-        bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
+        _common_stuff.commentary.gameover_arch();
+        bn::sound_items::gameover.play(common_stuff.savefile.sound_vol * bn::fixed(0.2));
+    }else if(_common_stuff.commentary.gameover(_sesh.get_score()))
+    {
+        bn::sound_items::gameover.play(common_stuff.savefile.sound_vol * bn::fixed(0.2));
     }else{
-        if(sb_commentary::gameover(_sesh.get_score())){
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME * bn::fixed(0.2));
-        }else{
-            bn::sound_items::gameover.play(TROG_DEFAULT_VOLUME);
-        }
+        bn::sound_items::gameover.play(common_stuff.savefile.sound_vol);
     }
 
-    text_generator.set_center_alignment();
-    text_generator.set_palette_item(RED_PALETTE);
-    text_generator.generate(1, -49, "CHALLENGE", _challengeagain_text_sprites);
-    text_generator.generate(0, -36, "AGAIN!", _challengeagain_text_sprites);
+    common_stuff.text_generator.set_center_alignment();
+    common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    common_stuff.text_generator.generate(1, -49, "CHALLENGE", _challengeagain_text_sprites);
+    common_stuff.text_generator.generate(0, -36, "AGAIN!", _challengeagain_text_sprites);
 
-    text_generator.generate(0, -4, "VIEW", _hiscores_text_sprites);
-    text_generator.generate(2, 9, "HI-SCORES", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(0, -4, "VIEW", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(2, 9, "HI-SCORES", _hiscores_text_sprites);
 
-    text_generator.generate(0, 50, "BACK", _back_text_sprites);
+    common_stuff.text_generator.generate(0, 50, "BACK", _back_text_sprites);
 
-    set_sprites_visible(_challengeagain_text_sprites, false);
-    set_sprites_visible(_hiscores_text_sprites, false);
-    set_sprites_visible(_back_text_sprites, false);
-
-    //Once you get a game over, you cannot restore your progress.
-    bn::sram::clear(sizeof(_sesh));
+    common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
 }
 
-void gameover_scene::set_sprites_visible(bn::ivector<bn::sprite_ptr> &sprites, bool visible){
-    for(bn::sprite_ptr &sprite : sprites){
-        sprite.set_visible(visible);
-        sprite.set_bg_priority(1);
-    }
-}
 
 bn::optional<scene_type> gameover_scene::update(){
 
@@ -92,8 +85,6 @@ bn::optional<scene_type> gameover_scene::update(){
 
 
     if(_menu){
-        //todo fix this to be more nice-looking and less stupid 
-
         if(bn::keypad::up_pressed()){
             if(_menu_option == 0){
                 _menu_option = 2;
@@ -151,9 +142,9 @@ bn::optional<scene_type> gameover_scene::update(){
 }
 
 void gameover_scene::set_current_menu_option_visible(){
-    set_sprites_visible(_challengeagain_text_sprites, _menu_option == 0);
-    set_sprites_visible(_hiscores_text_sprites, _menu_option == 1);
-    set_sprites_visible(_back_text_sprites, _menu_option == 2);
+    _common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, _menu_option == 0);
+    _common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, _menu_option == 1);
+    _common_stuff.set_sprite_arr_visible(_back_text_sprites, _menu_option == 2);
 }
 
 }

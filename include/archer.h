@@ -12,6 +12,7 @@
 #include "bn_sprite_items_archer.h"
 #include "entity.h"
 #include "constants.h"
+#include "common_stuff.h"
 #include "arrow.h"
 
 namespace trog {
@@ -21,9 +22,10 @@ namespace trog {
             unsigned short _time_since_spawn;
             void shoot();
             bn::optional<arrow> _arrow;
+            common_stuff &_common_stuff;
 
         public:
-            archer(bn::fixed ycor, bool facing_left);
+            archer(bn::fixed ycor, bool facing_left, common_stuff &common_stuff);
             virtual void update() final;
 
             /**
@@ -39,7 +41,7 @@ namespace trog {
              * Override from entity.
              * @return  the hitbox of the arrow shot by this archer.
              */
-            virtual bn::fixed_rect get_hitbox() final;
+            virtual bn::fixed_rect get_hitbox() const final;
 
             /**
              * 

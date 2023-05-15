@@ -6,8 +6,6 @@
 
 namespace trog { 
 
-//TODO: Make a saved_data class/struct so that we can save troghammer status
-
 troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand) :
     knight(pos.x(), pos.y(), facingRight, rand),
     _total_wait_time(120 SECONDS)
@@ -204,8 +202,6 @@ void troghammer::update(){
             }
             _walkcycle.update();
         }
-
-        BN_LOG("time until next troghammer state: ", _timer, "/", _waiting_time_per_state);
 
         if(_timer == _waiting_time_per_state){
             advance_to_next_state();

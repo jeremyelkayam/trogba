@@ -22,16 +22,16 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _jump_height(0) {
 }
 
-void entity::move_to(short time, bn::fixed x, bn::fixed y){
+void entity::move_to(const short &time, const bn::fixed &x, const bn::fixed &y){
     _move_action.reset(new bn::sprite_move_to_action(_sprite, time, x, y));
 }
 
-void entity::move_from(short time, bn::fixed x, bn::fixed y){
+void entity::move_from(const short &time, const bn::fixed &x, const bn::fixed &y){
     _sprite.set_position(x, y);
     move_to(time, _pos.x(), _pos.y());
 }
 
-void entity::move_to_and_back(short time, bn::fixed x, bn::fixed y){
+void entity::move_to_and_back(const short &time, const bn::fixed &x, const bn::fixed &y){
     _starting_pos = _pos;
     _move_action.reset(new bn::sprite_move_to_action(_sprite, time/2, x, y));
     _return_to_starting_point = true;
@@ -109,11 +109,11 @@ void entity::update_anim(){
     }
 }
 
-void entity::flip_every(unsigned short frames){
+void entity::flip_every(const uint8_t &frames){
     _flip_action.reset(new bn::sprite_horizontal_flip_toggle_action(_sprite, frames));
 }
 
-void entity::jump(short time, bn::fixed height, bool repeating){
+void entity::jump(const short &time, const bn::fixed &height, const bool &repeating){
     _jump_timer = 1;
     _jump_time = time;
     _jump_height = height;
@@ -121,7 +121,7 @@ void entity::jump(short time, bn::fixed height, bool repeating){
 }
 
 
-bool entity::collides_with(entity &e){
+bool entity::collides_with(const entity &e){
     return _hitbox.intersects(e.get_hitbox());
 }
 
@@ -174,12 +174,12 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
     return box.intersects(new_hitbox);
 }
 
-void entity::move_by(bn::fixed x, bn::fixed y){
+void entity::move_by(const bn::fixed &x, const bn::fixed &y){
     BN_LOG("help me");
     _move_by_action.reset(new bn::sprite_move_by_action(_sprite, x, y));
 }
 
-void entity::squish(short time){
+void entity::squish(const short &time){
     _sprite.set_vertical_scale(0.8);
     _sprite.set_horizontal_scale(1.2);
     _vst_action.reset(new bn::sprite_vertical_scale_to_action(_sprite, time, 1));

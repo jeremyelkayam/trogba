@@ -3,6 +3,7 @@
 #include <bn_vector.h>
 #include <bn_sprite_ptr.h>
 #include "scene.h"
+#include "common_stuff.h"
 
 
 namespace trog{
@@ -15,7 +16,7 @@ namespace trog{
         
         int _frame_counter;
     public:
-        title_scene();
+        title_scene(common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

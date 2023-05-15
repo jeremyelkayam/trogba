@@ -3,6 +3,7 @@
 #include <bn_sprite_ptr.h>
 #include "scene.h"
 #include "session_info.h"
+#include "common_stuff.h"
 
 
 namespace trog{
@@ -22,8 +23,8 @@ namespace trog{
 
         bn::vector<menu_option, 4> _menu_options;
 
-        bn::sprite_text_generator& _text_generator;
-        // bn::sprite_text_generator& _small_text_generator;
+        common_stuff & _common_stuff;
+
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
         bn::sprite_ptr _cursor, _flames;
         bn::sprite_animate_action<4> _flames_anim;
@@ -34,14 +35,11 @@ namespace trog{
         uint8_t _selected_option_index, _selection_anim_timer;
 
         session_info &_sesh;
-        session_info _loaded_sesh;
-
-        void setup_instructions();
 
         void select();
 
     public:
-        explicit menu_scene(session_info &sesh, bn::sprite_text_generator& text_generator, bn::sprite_text_generator &small_generator);
+        explicit menu_scene(session_info &sesh, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

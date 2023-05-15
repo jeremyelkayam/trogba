@@ -8,6 +8,7 @@ namespace trog {
 big_text::big_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette) :
         _bigger(bigger) {
 
+    //todo: make this use one of the centralized generators
     bn::sprite_text_generator generator(_bigger ? 
         trog::variable_32x64_sprite_font : trog::variable_16x32_sprite_font);
     generator.set_center_alignment();
