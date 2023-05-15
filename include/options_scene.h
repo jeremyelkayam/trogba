@@ -38,12 +38,11 @@ namespace trog{
     };
     class percent_option : public option {
         private:
-            // bn::vector<bn::fixed, 5> _options;
-            bn::fixed &_value;
-            // uint8_t current_index();
+            bn::fixed &_value, _speed;
             bn::vector<bn::sprite_ptr, 4> _vol_text_sprites;
             bn::vector<bn::sprite_ptr, 3> _vol_graph;
             bn::sprite_ptr _slider_bar;
+            uint8_t _hold_timer;
         public:
             percent_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value);
             virtual void update();
@@ -58,10 +57,10 @@ namespace trog{
         common_stuff &_common_stuff;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
+        bn::vector<bn::sprite_ptr, 64> _notice_sprites;        
         bn::vector<bn::unique_ptr<option>, 8> _options_vec;
         bn::regular_bg_ptr _scroll;
 
-        bool _go_to_credits;
         uint8_t _index;
         bn::fixed ycor(const uint8_t &index);
 
