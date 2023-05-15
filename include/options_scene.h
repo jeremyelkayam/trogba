@@ -14,41 +14,42 @@ namespace trog{
 
     class option {
         protected:
-            bn::vector<bn::sprite_ptr, 16> _text_sprites;
-            option(const bn::string<32> &name) : _name(name){}
+            bn::vector<bn::sprite_ptr, 8> _text_sprites;
             bn::string<32> _name;
+            bn::sprite_text_generator &_text_generator;
         public: 
+            option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
             virtual ~option() = default;
-            virtual void left() = 0;
-            virtual void right() = 0;
-            virtual void redraw(const bool &selected, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
+            virtual void update() {}
+            virtual void set_selected(const bool &selected);
             void hide(){_text_sprites.clear();}
-            virtual bool taller() = 0;
+            virtual bool taller() {return false;}
     };
 
     // dang ... hope our govt figures out that public option 
     class bool_option : public option {
         private:
-            bn::vector<bool, 2> _options;
             bool &_value;
+            bn::sprite_ptr _checkbox;
         public:
-            bool_option(const bn::string<32> &name, bool &value);
-            virtual void left() final;
-            virtual void right() final;
-            virtual void redraw(const bool &selected, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) final;
-            virtual bool taller() {return false;}
+            bool_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value);
+            virtual void update();
+            virtual void set_selected(const bool &selected);
     };
     class percent_option : public option {
         private:
-            bn::vector<bn::fixed, 5> _options;
+            // bn::vector<bn::fixed, 5> _options;
             bn::fixed &_value;
-            uint8_t current_index();
+            // uint8_t current_index();
+            bn::vector<bn::sprite_ptr, 4> _vol_text_sprites;
+            bn::vector<bn::sprite_ptr, 3> _vol_graph;
+            bn::sprite_ptr _slider_bar;
         public:
-            percent_option(const bn::string<32> &name, bn::fixed &value, const bn::vector<bn::fixed, 5> &options);
-            virtual void left() final;
-            virtual void right() final;
-            virtual void redraw(const bool &selected, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) final;
-            virtual bool taller() {return true;}
+            percent_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value);
+            virtual void update();
+            void update_text_and_slider();
+            virtual void set_selected(const bool &selected);
+
     };
 
     class options_scene : public scene{ 

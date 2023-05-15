@@ -6,6 +6,8 @@
 #include "menu_scene.h"
 #include "bn_sprite_items_trogdorhead.h"
 #include "bn_sprite_items_firebreath.h"
+#include "bn_sprite_items_troghammer_icon.h"
+#include "bn_sprite_items_trogmeter_degrade_icon.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
@@ -20,6 +22,8 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
+        _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(45,-60)),
+        _trogmeter_degrade_icon(bn::sprite_items::trogmeter_degrade_icon.create_sprite(55,-60)),
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
@@ -29,6 +33,8 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         _sesh(sesh) {
     bn::sound_items::trogador.play(_common_stuff.savefile.sound_vol);
 
+    _troghammer_icon.set_visible(false);
+    _trogmeter_degrade_icon.set_visible(false);
 
     _flames.set_visible(false);
     _flames.set_scale(0.01);
@@ -50,6 +56,9 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         common_stuff.small_generator.generate(5, -46, session_summary, _menu_text_sprites);
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+
+        _troghammer_icon.set_visible(loaded_sesh.troghammer);
+        _trogmeter_degrade_icon.set_visible(loaded_sesh.can_lose_trogmeter);
     }else{
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         common_stuff.small_generator.generate(5, -46, "no data saved.", _menu_text_sprites);
