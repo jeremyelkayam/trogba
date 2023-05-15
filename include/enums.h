@@ -21,7 +21,8 @@ namespace trog {
         MOVIE,
         MENU,
         HISCORES,
-        CREDITS
+        CREDITS,
+        OPTIONS
     };
     enum class direction
     {

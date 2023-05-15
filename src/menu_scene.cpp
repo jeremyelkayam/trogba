@@ -71,14 +71,19 @@ bn::optional<scene_type> menu_scene::update(){
         _flames_anim.update();
         _flames_scale.update();
         _flames_translate->update();
-        if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()) 
-            result = scene_type::PLAY;
+        if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
+            if(_selected_option_index == 3){
+                result = scene_type::OPTIONS;
+            }else{
+                result = scene_type::PLAY;
+            }
+
+        } 
     }
 
     if(bn::keypad::a_pressed()){
             _selection_anim_timer = 1;
         if(_selected_option_index == 0){
-            //load file
             if(_common_stuff.savefile.session.exists){
                 _sesh.import_save();
                 BN_LOG("loaded the file");
@@ -87,12 +92,13 @@ bn::optional<scene_type> menu_scene::update(){
                 _selection_anim_timer = 0;
                 bn::sound_items::deleted.play(_common_stuff.savefile.sound_vol);
             }
-        }else if(_selected_option_index == 1){
-            select();
         }else if(_selected_option_index == 2){
-            //Tutorial level is lv. 0 
             _sesh.set_level(0);
             select();
+        }
+
+        if(_selected_option_index != 0){
+                select();
         }
 
 
@@ -111,14 +117,14 @@ bn::optional<scene_type> menu_scene::update(){
     }
     _cursor.set_y(_menu_options.at(_selected_option_index).y());
 
-    //highlighting selected menu option
-    // for(uint8_t i = 0; i < _menu_options.size(); i++){
-    //     if(i == _selected_option_index) {
-    //         _menu_options.at(i).turn_red();
-    //     } else {
-    //         _menu_options.at(i).turn_white();
-    //     }
-    // }
+    // highlighting selected menu option
+    for(uint8_t i = 0; i < _menu_options.size(); i++){
+        if(i == _selected_option_index) {
+            _menu_options.at(i).turn_red();
+        } else {
+            _menu_options.at(i).turn_white();
+        }
+    }
 
 
 

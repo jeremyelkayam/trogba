@@ -28,6 +28,7 @@
 #include "fireyrage_scene.h"
 #include "enums.h"
 #include "common_stuff.h"
+#include "options_scene.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -136,6 +137,11 @@ int main()
                 case trog::scene_type::FIREYRAGE: {
                     hud.hide();
                     scene.reset(new trog::fireyrage_scene(sesh));
+                    break;
+                }                
+                case trog::scene_type::OPTIONS: {
+                    hud.hide();
+                    scene.reset(new trog::options_scene(common_stuff));
                     break;
                 }
                 default: { 

@@ -1,7 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_log.h>
-#include <bn_sram.h>
 #include <bn_string.h>
 
 #include "bn_regular_bg_items_hi_scores_bg.h"
@@ -15,7 +14,6 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff) :
                              'O','P','Q','R','S','T','U','V','W','X','Y','Z','!','?', ' '}),
         _sesh(sesh),
         _common_stuff(common_stuff),
-        _text_generator(fixed_8x16_sprite_font),
         _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(0,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(_common_stuff.savefile.high_scores_table),
@@ -70,29 +68,29 @@ void hiscores_scene::draw_high_scores_table(){
         title_text = "YE OLDE SCROLL OF HI-SCORES";
     }
 
-    _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, -72, title_text, _header_sprites);
+    _common_stuff.text_generator.set_center_alignment();
+    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.generate(0, -72, title_text, _header_sprites);
 
-    _text_generator.set_palette_item(BROWN_PALETTE);
-    _text_generator.generate(-52, -55, "name", _text_sprites);
-    _text_generator.generate(16, -55, "level", _text_sprites);
-    _text_generator.generate(68, -55, "score", _text_sprites);
+    _common_stuff.text_generator.set_palette_item(BROWN_PALETTE);
+    _common_stuff.text_generator.generate(-52, -55, "name", _text_sprites);
+    _common_stuff.text_generator.generate(16, -55, "level", _text_sprites);
+    _common_stuff.text_generator.generate(68, -55, "score", _text_sprites);
 
 
     for(int z = 0; z < _high_scores_table.size(); ++z){
-        _text_generator.set_right_alignment();
+        _common_stuff.text_generator.set_right_alignment();
         bn::string<3> place;
         bn::ostringstream place_string_stream(place);
         place_string_stream << z + 1 << ".";
 
-        _text_generator.generate(-76, -43 + z*15, place, _text_sprites);   
+        _common_stuff.text_generator.generate(-76, -43 + z*15, place, _text_sprites);   
 
-        _text_generator.set_left_alignment();
-        _text_generator.generate(-74, -43 + z*15, _high_scores_table.at(z).get_name(), _text_sprites);   
+        _common_stuff.text_generator.set_left_alignment();
+        _common_stuff.text_generator.generate(-74, -43 + z*15, _high_scores_table.at(z).get_name(), _text_sprites);   
 
         if(_high_scores_table.at(z).get_score() != 0){
-            _text_generator.set_center_alignment();
+            _common_stuff.text_generator.set_center_alignment();
             bn::string<3> level;
             bn::ostringstream lv_string_stream(level);
             lv_string_stream << _high_scores_table.at(z).get_level();
@@ -101,8 +99,8 @@ void hiscores_scene::draw_high_scores_table(){
             bn::ostringstream score_string_stream(score);
             score_string_stream << _high_scores_table.at(z).get_score();
 
-            _text_generator.generate(16, -43 + z*15, level, _text_sprites);
-            _text_generator.generate(68, -43 + z*15, score, _text_sprites);
+            _common_stuff.text_generator.generate(16, -43 + z*15, level, _text_sprites);
+            _common_stuff.text_generator.generate(68, -43 + z*15, score, _text_sprites);
         }
     }
 }
@@ -130,7 +128,7 @@ bn::optional<scene_type> hiscores_scene::update(){
 void hiscores_scene::draw_name_entry(){
     BN_ASSERT(_table_index != -1);
     _name_entry_sprites.clear();
-    _text_generator.set_left_alignment();
+    _common_stuff.text_generator.set_left_alignment();
 
     if(_blink_timer == 15){
         _cursor_sprite.set_visible(true);
@@ -139,7 +137,7 @@ void hiscores_scene::draw_name_entry(){
     }
     _cursor_sprite.set_x(-70 + _string_index * 8);
 
-    _text_generator.generate(-74, -43 + _table_index*15, _high_scores_table.at(_table_index).get_name(), _name_entry_sprites);   
+    _common_stuff.text_generator.generate(-74, -43 + _table_index*15, _high_scores_table.at(_table_index).get_name(), _name_entry_sprites);   
 }
 
 void hiscores_scene::update_name_entry(){
@@ -161,10 +159,10 @@ void hiscores_scene::update_name_entry(){
     
     if(_nothing_pressed_timer == 10 SECONDS){
         _header_sprites.clear();
-        _text_generator.set_center_alignment();
-        _text_generator.set_palette_item(RED_PALETTE);
-        _text_generator.generate(0, -72, "PRESS START WHEN YORE DONE", _header_sprites);
-        _text_generator.set_palette_item(BROWN_PALETTE);
+        _common_stuff.text_generator.set_center_alignment();
+        _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+        _common_stuff.text_generator.generate(0, -72, "PRESS START WHEN YORE DONE", _header_sprites);
+        _common_stuff.text_generator.set_palette_item(BROWN_PALETTE);
     }
 
     if(bn::keypad::a_pressed()){
@@ -201,7 +199,7 @@ void hiscores_scene::update_name_entry(){
     if(bn::keypad::down_held() || bn::keypad::up_held()){
         ++_hold_down_timer;
 
-        if(_hold_down_timer >= 30 && _hold_down_timer % 6 == 0){
+        if(_hold_down_timer >= 30 && _hold_down_timer % 3 == 0){
 
             if(bn::keypad::down_held())
                 ++_selectable_letters_index;
@@ -226,9 +224,9 @@ void hiscores_scene::end_name_entry(){
 
     _header_sprites.clear();
     
-    _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(RED_PALETTE);
-    _text_generator.generate(0, -72, "YE OLDE SCROLL OF HI-SCORES", _header_sprites);
+    _common_stuff.text_generator.set_center_alignment();
+    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.generate(0, -72, "YE OLDE SCROLL OF HI-SCORES", _header_sprites);
 }
 
 
