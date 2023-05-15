@@ -58,7 +58,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     common_stuff.text_generator.generate(70, 40, line2, _levelbeated_text_sprites);
     common_stuff.commentary.level_win_scene();
 
-    if(sesh.get_level() != 101){
+    if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
     }
 
@@ -70,6 +70,8 @@ void level_win_scene::save(){
     // the level doesn't technically advance until later in the animation
     //  so we should increment it here if it hasn't happened yet
     if(_timer < 40) _common_stuff.savefile.session.level++;
+
+    _common_stuff.save();
 
 
     //todo: maybe improve the look of this ... 
