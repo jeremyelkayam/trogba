@@ -52,7 +52,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _tutorial_cutscene_timer(0),
         _pause_menu_index(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _pause_menu(bn::regular_bg_items::pause_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y)),
+        _pause_menu(bn::regular_bg_items::pause_menu.create_bg(0, 0)),
         _voices_volume(0)
 {
     saved_session &saved_sesh = common_stuff.savefile.session; 
@@ -747,6 +747,11 @@ void play_scene::unpause(){
 void play_scene::redraw_pause_menu_option(){
     _paused_text.clear();
     _common_stuff.text_generator.set_center_alignment();
+
+    _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
+
+    _common_stuff.text_generator.generate(0,60, "PAUSED", _paused_text);
+
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.set_bg_priority(0);
     bn::fixed_point pos;
@@ -754,20 +759,17 @@ void play_scene::redraw_pause_menu_option(){
 
     switch(_pause_menu_index){
         case 0:
-            pos = bn::fixed_point(-30,-30);
-            text = "OPTIONS";
+            _common_stuff.text_generator.generate(-49,-31, "OPTIONS", _paused_text);
         break;
         case 1:
-            pos = bn::fixed_point(30,-30);
-            text = "VIEW HI-SCORES";
+            _common_stuff.text_generator.generate(50,-37, "VIEW", _paused_text);
+            _common_stuff.text_generator.generate(50,-25, "HI-SCORES", _paused_text);
         break;
         case 2:
-            pos = bn::fixed_point(-30,30);
-            text = "QUIT";
+            _common_stuff.text_generator.generate(-49,22, "QUIT", _paused_text);
         break;
         case 3:
-            pos = bn::fixed_point(30,30);
-            text = "RESUME";
+            _common_stuff.text_generator.generate(51,22, "RESUME", _paused_text);
         break;
         default:
             BN_ERROR("invalid pause menu index");
