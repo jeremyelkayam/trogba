@@ -35,6 +35,7 @@
 #define WHITE_PALETTE bn::sprite_items::trogdor_variable_8x16_font.palette_item()
 #define BROWN_PALETTE bn::sprite_items::trogdor_variable_8x16_font_brown.palette_item()
 #define GRAY_PALETTE bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()
+#define BLACK_PALETTE bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()
 
 // The maximum amount of peasants contained in your trogmeter.
 // After stomping this many peasants, burnination is achieved

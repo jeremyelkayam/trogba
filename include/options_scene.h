@@ -14,7 +14,7 @@ namespace trog{
 
     class option {
         protected:
-            bn::vector<bn::sprite_ptr, 8> _text_sprites;
+            bn::vector<bn::sprite_ptr, 16> _text_sprites;
             bn::string<32> _name;
             bn::sprite_text_generator &_text_generator;
         public: 
