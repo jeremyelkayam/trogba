@@ -13,6 +13,7 @@
 #include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogdead.h"
+#include "bn_regular_bg_items_suckdead.h"
 #include "bn_regular_bg_items_game_over_menu.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
@@ -24,7 +25,7 @@
 namespace trog {
 
 gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) : 
-        _dead_trogdor(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
+        _dead_dragon(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
@@ -70,6 +71,18 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
+
+    switch(_sesh.get_dragon()){
+        case dragon::TROGDOR:
+            _dead_dragon.set_item(bn::regular_bg_items::trogdead);
+        break;
+        case dragon::SUCKS:
+            _dead_dragon.set_item(bn::regular_bg_items::suckdead);
+        break;
+        default:
+            BN_ERROR("Invalid dragon type found in session info");
+        break;
+    }
 }
 
 
@@ -108,7 +121,7 @@ bn::optional<scene_type> gameover_scene::update(){
             _menu = bn::regular_bg_items::game_over_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y);
             _menu->set_priority(1);
             bn::blending::set_transparency_alpha(0.5);
-            _dead_trogdor.set_blending_enabled(true);
+            _dead_dragon.set_blending_enabled(true);
             for(bn::sprite_ptr &sprite : _secret_sprites) {
                 sprite.set_blending_enabled(true);
             }

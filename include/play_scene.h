@@ -38,7 +38,7 @@ namespace trog{
         
         session_info& _sesh;
         common_stuff &_common_stuff;
-        bn::unique_ptr<player> _trogdor;
+        bn::unique_ptr<player> _player;
         hud& _hud;
         peasant_factory _pfact;
         archer_factory _afact;

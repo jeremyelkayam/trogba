@@ -209,7 +209,7 @@ bn::optional<scene_type> play_scene::update(){
         BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
     }else if(level_complete()){
         _win_pause_time++;
-        _trogdor->update_win_anim();
+        _player->update_win_anim();
     }else if(_player_paused){
         result=update_pause_menu();
 
@@ -241,23 +241,23 @@ bn::optional<scene_type> play_scene::update(){
         if(_sesh.get_level() == 0) update_tutorial();
 
 
-        if(!_trogdor->dead() && _autosave_visibility_time == 0){
+        if(!_player->dead() && _autosave_visibility_time == 0){
             _common_stuff.set_autosave_text_visible(false);
         }
 
         //first update HUD info with trogdor's info from the last frame
-        _hud.update_burninatemeter(_trogdor->get_burninating_time(), _trogdor->get_burninating_length());
-        _hud.update_trogmeter(_trogdor->get_trogmeter());
+        _hud.update_burninatemeter(_player->get_burninating_time(), _player->get_burninating_length());
+        _hud.update_trogmeter(_player->get_trogmeter());
 
-        bool was_burninating = _trogdor->burninating();
+        bool was_burninating = _player->burninating();
 
-        _trogdor->update();        
+        _player->update();        
         
 
 
         for(peasant &p : _peasants) {
             p.update();
-            _trogdor->handle_peasant_collision(p);
+            _player->handle_peasant_collision(p);
 
             //TODO this nest goes too deep
 
@@ -279,15 +279,15 @@ bn::optional<scene_type> play_scene::update(){
                 }else if(!p.dead()){
                     // if the peasant didn't die, we should decrement the trogmeter
                     // if the option is enabled 
-                    if(_sesh.can_lose_trogmeter()) _trogdor->drop_trogmeter();
+                    if(_sesh.can_lose_trogmeter()) _player->drop_trogmeter();
                 }
             }
         }
-        if(_trogdor->burninating() && !was_burninating){
+        if(_player->burninating() && !was_burninating){
             _burninate_pause_time = 1;
             _common_stuff.commentary.burninate();
             _overlay_text.reset(new burninate_text());
-        }else if(!_trogdor->burninating() && was_burninating){
+        }else if(!_player->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
             if(!_troghammer && _sesh.troghammer_enabled()){
@@ -295,12 +295,12 @@ bn::optional<scene_type> play_scene::update(){
             }
         }
 
-        bool was_dead = _trogdor->dead();        
+        bool was_dead = _player->dead();        
         for(archer &a : _archers) {
             a.update();
-            _trogdor->handle_arrow_collision(a);
+            _player->handle_arrow_collision(a);
         }
-        if(_trogdor->dead() && !was_dead) {
+        if(_player->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
                 _common_stuff.commentary.arrowed();
             }
@@ -310,13 +310,13 @@ bn::optional<scene_type> play_scene::update(){
             autosave(true);
         }
 
-        was_dead = _trogdor->dead();  
+        was_dead = _player->dead();  
         for(knight &k : _knights){
             k.update();
-            _trogdor->handle_knight_collision(k);
+            _player->handle_knight_collision(k);
         }
         
-        if(_trogdor->dead() && !was_dead) {
+        if(_player->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
                 _common_stuff.commentary.sworded();
             }
@@ -336,14 +336,14 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_troghammer){
-            was_dead = _trogdor->dead();  
+            was_dead = _player->dead();  
             _troghammer->update();
 
             if(_troghammer->in_play()){
-                _trogdor->handle_troghammer_collision(*_troghammer.get());
+                _player->handle_troghammer_collision(*_troghammer.get());
             }
 
-            if(_trogdor->dead() && !was_dead){
+            if(_player->dead() && !was_dead){
                 //todo: add a secret animation where he's passed out drunk
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
                 autosave(true);
@@ -382,14 +382,14 @@ bn::optional<scene_type> play_scene::update(){
 
 
 
-        if(_trogdor->ready_to_respawn()){
+        if(_player->ready_to_respawn()){
             _overlay_text.reset();
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
             }else{
                 uint8_t init_trogmeter = 0;
-                if(_sesh.get_level() == 0 && _trogdor->get_trogmeter() != 10){
-                    init_trogmeter = _trogdor->get_trogmeter();
+                if(_sesh.get_level() == 0 && _player->get_trogmeter() != 10){
+                    init_trogmeter = _player->get_trogmeter();
                 }
                 respawn(true, init_trogmeter);
                 _sesh.die();
@@ -421,7 +421,7 @@ bn::optional<scene_type> play_scene::update(){
     //but you shouldn't be able to pause during other animations 
     //that block input (e.g. death/burninate!/winning a level)
     if(bn::keypad::start_pressed() && _burninate_pause_time == 0 
-       && _win_pause_time == 0 && !_trogdor->dead() && _sesh.get_level() != 0){
+       && _win_pause_time == 0 && !_player->dead() && _sesh.get_level() != 0){
         _player_paused = !_player_paused;
         if(_player_paused){
 
@@ -439,7 +439,7 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         // only run the collision check while unpaused
-        if(!_burninate_pause_time && _trogdor->handle_cottage_collision(c)){
+        if(!_burninate_pause_time && _player->handle_cottage_collision(c)){
             //the above if statement returns true if we hit a treasure hut
             result = scene_type::BONUS;
             //this marks the cottage as visited so that we can no longer return
@@ -573,7 +573,7 @@ bn::optional<scene_type> play_scene::update_pause_menu(){
 }
 
 void play_scene::set_visible(bool visible){
-    _trogdor->set_visible(visible);
+    _player->set_visible(visible);
     for(cottage &c : _cottages){
         c.set_visible(visible);
     }
@@ -685,7 +685,7 @@ void play_scene::update_tutorial(){
 
     }else if(_knights.size() == 0){
         //tutorial phase 2
-        if(_peasants.size() > 0 && _trogdor->get_trogmeter() == 0){
+        if(_peasants.size() > 0 && _player->get_trogmeter() == 0){
             bn::fixed arrow_ycor = _peasants.front().get_y();
             bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
@@ -696,7 +696,7 @@ void play_scene::update_tutorial(){
             }
         }
 
-        if(_trogdor->get_trogmeter() >= 1 && 
+        if(_player->get_trogmeter() >= 1 && 
         //this direction clause is just to make sure this only runs once
                 _tutorial_arrow->get_direction() != direction::UP){
             
@@ -704,7 +704,7 @@ void play_scene::update_tutorial(){
             _tutorial_arrow.reset(new tutorial_arrow(-60, -62, direction::UP));
         }
 
-        if(_trogdor->get_trogmeter() >= 5){
+        if(_player->get_trogmeter() >= 5){
             _knights.emplace_front(-85, -15, true, _common_stuff.rand);
             _knights.front().move_from(200, -145, -15);
             _knights.emplace_front(85,-15,false, _common_stuff.rand);
@@ -717,14 +717,14 @@ void play_scene::update_tutorial(){
             _tutorial_cutscene_timer = 1;
 
         }
-    }else if(_trogdor->burninating()){
+    }else if(_player->burninating()){
         _tutorial_arrow.reset();
         //burnination / level winning tutorial
-        if(_trogdor->get_burninating_time() == _trogdor->get_burninating_length()){
+        if(_player->get_burninating_time() == _player->get_burninating_length()){
             _text_box.reset();
             _text_box.reset(new text_box(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility."));
         }
-        if(_trogdor->get_burninating_time() == 1) _text_box.reset();
+        if(_player->get_burninating_time() == 1) _text_box.reset();
     }else if(!_text_box){
         _text_box.reset(new text_box(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level."));
     }
@@ -732,10 +732,10 @@ void play_scene::update_tutorial(){
     if(_tutorial_arrow){
         _tutorial_arrow->update();
         if(_tutorial_arrow->get_direction() == direction::UP){
-            if(_trogdor->get_trogmeter() == 0){
+            if(_player->get_trogmeter() == 0){
                 _tutorial_arrow->set_x(-64);
             }else{
-                _tutorial_arrow->set_x(-73 + 9 * _trogdor->get_trogmeter());
+                _tutorial_arrow->set_x(-73 + 9 * _player->get_trogmeter());
             }
         }
     }
@@ -807,12 +807,12 @@ void play_scene::redraw_pause_menu_option(){
 void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
-            _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+            _player.reset(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
             (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
             _sesh, iframes, _common_stuff, init_trogmeter));
         break;
         case dragon::SUCKS:
-            _trogdor.reset(new sucks(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+            _player.reset(new sucks(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
             (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
             _sesh, iframes, _common_stuff, init_trogmeter));
         break;

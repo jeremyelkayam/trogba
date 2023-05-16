@@ -10,6 +10,7 @@
 #include "sb_commentary.h"
 
 #include "bn_regular_bg_items_trogsmile.h"
+#include "bn_regular_bg_items_sucksmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
@@ -20,7 +21,7 @@
 namespace trog {
 
 level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff) : 
-        _happy_trogdor(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
+        _happy_dragon(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _nose_smoke(bn::sprite_items::nose_smoke.create_sprite(40, -35)),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
         _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
@@ -60,6 +61,17 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
     if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
+    }
+    switch(_sesh.get_dragon()){
+        case dragon::TROGDOR:
+            _happy_dragon.set_item(bn::regular_bg_items::trogsmile);
+        break;
+        case dragon::SUCKS:
+            _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
+        break;
+        default:
+            BN_ERROR("Invalid dragon type found in session info");
+        break;
     }
 
 }

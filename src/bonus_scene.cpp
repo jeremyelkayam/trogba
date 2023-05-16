@@ -1,6 +1,8 @@
 #include "bonus_scene.h"
 #include "bn_regular_bg_items_cottageinterior.h"
 #include "bn_sprite_items_debug_box.h"
+#include "sucks.h"
+
 #include <bn_log.h>
 #include <bn_sound_items.h>
 
@@ -11,6 +13,18 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
         _exit(110,0,20,20),
         _player(new trogdor(80,10, sesh, false, common_stuff)),
         _sesh(sesh) {
+
+    switch(_sesh.get_dragon()){
+        case dragon::TROGDOR:
+            _player.reset(new trogdor(80,10, sesh, false, common_stuff));
+        break;
+        case dragon::SUCKS:
+            _player.reset(new sucks(80,10, sesh, false, common_stuff));
+        break;
+        default:
+            BN_ERROR("Invalid dragon type found in session info");
+        break;
+    }
     _player->set_horizontal_flip(true);
 
     //todo refactor this into an array of pairs with a for loop. would be cleaner
