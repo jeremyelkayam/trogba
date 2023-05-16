@@ -20,18 +20,18 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
         _last_scene(last_scene),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
         _index(0),
-        _old_save(common_stuff.savefile) {
+        _old_save(common_stuff.savefile.options) {
     _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
 
     bn::sprite_text_generator &txtgen = common_stuff.small_generator;
 
-    _options_vec.emplace_back(new bool_option("Troghammer", txtgen, ycor(0), _common_stuff.savefile.troghammer));
-    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", txtgen, ycor(1), _common_stuff.savefile.decrement_trogmeter));
-    _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(2), _common_stuff.savefile.music_vol));
-    _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(3), _common_stuff.savefile.sound_vol));
-    _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(4), _common_stuff.savefile.voice_vol));
+    _options_vec.emplace_back(new bool_option("Troghammer", txtgen, ycor(0), _common_stuff.savefile.options.troghammer));
+    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", txtgen, ycor(1), _common_stuff.savefile.options.decrement_trogmeter));
+    _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(2), _common_stuff.savefile.options.music_vol));
+    _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(3), _common_stuff.savefile.options.sound_vol));
+    _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(4), _common_stuff.savefile.options.voice_vol));
     _options_vec.emplace_back(new option("confirm", txtgen, ycor(5)));
     _options_vec.emplace_back(new option("cancel", txtgen, ycor(6)));
     _options_vec.at(_index)->set_selected(true);
@@ -58,8 +58,8 @@ bn::optional<scene_type> options_scene::update(){
         
         if((bn::keypad::a_pressed() && _index == _options_vec.size() -2)){
 
-            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.troghammer;
-            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.decrement_trogmeter;
+            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.options.troghammer;
+            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.options.decrement_trogmeter;
 
             if(troghammer_changed || trogmeter_changed) {
                 bn::vector<bn::string<32>, 5>  _changed_settings;
@@ -89,8 +89,9 @@ bn::optional<scene_type> options_scene::update(){
 
             
 
-        }else if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() &&_index == _options_vec.size() -2)){
+        }else if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() &&_index == _options_vec.size() -1)){
             result = _last_scene;
+            _common_stuff.savefile.options = _old_save;
         }
     }else{
         if(bn::keypad::a_pressed()){

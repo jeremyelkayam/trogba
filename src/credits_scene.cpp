@@ -75,7 +75,7 @@ void credits_scene::setup_credits(){
         "The Brothers Chaps",
         "and James Ernest"
     };
-    bn::sound_items::cutscene_credits.play(_common_stuff.savefile.music_vol);
+    bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
 
     for(bn::string<64> str : original_game_credits){ 
         _common_stuff.small_generator.generate(0, ycor,str, _text_sprites);

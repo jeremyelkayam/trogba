@@ -16,7 +16,7 @@ title_scene::title_scene(common_stuff &common_stuff) :
 
     _version_label.set_item(bn::sprite_items::versionlabel, 2);
 
-    bn::sound_items::themesong.play(common_stuff.savefile.music_vol);
+    bn::sound_items::themesong.play(common_stuff.savefile.options.music_vol);
 
     for(int z = 0; z < 4 ; ++z){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_TITLE_TEXT_Y, z));

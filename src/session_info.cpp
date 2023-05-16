@@ -23,13 +23,13 @@ void session_info::score(const unsigned int &num_points){
 }
 
 void session_info::reset(){
-    _mans = TROG_STARTING_LIVES;
+    _mans = _common_stuff.savefile.options.starting_lives;
     _score = 0;
     _level = TROG_STARTING_LEVEL;
 
     _killed_by_archer = false;
-    _troghammer = _common_stuff.savefile.troghammer;
-    _can_lose_trogmeter = _common_stuff.savefile.decrement_trogmeter;
+    _troghammer = _common_stuff.savefile.options.troghammer;
+    _can_lose_trogmeter = _common_stuff.savefile.options.decrement_trogmeter;
     _dragon = dragon::TROGDOR;
 }
 

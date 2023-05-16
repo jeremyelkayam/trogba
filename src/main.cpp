@@ -162,12 +162,12 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(common_stuff.savefile.sound_vol);
+            bn::sound_items::kick.play(common_stuff.savefile.options.sound_vol);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(common_stuff.savefile.sound_vol);
+            bn::sound_items::trogador.play(common_stuff.savefile.options.sound_vol);
             kicked=false;
         }
 

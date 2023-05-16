@@ -10,7 +10,7 @@ common_stuff::common_stuff() :
     text_generator(trog::variable_8x16_sprite_font),
     big_generator(trog::variable_32x64_sprite_font),
     small_generator(trog::variable_8x8_sprite_font),
-    commentary(savefile.voice_vol, rand) { 
+    commentary(savefile.options.voice_vol, rand) { 
 
     //DEFAULT format tag
     bn::array<char, 8> default_format_tag;
@@ -28,12 +28,12 @@ common_stuff::common_stuff() :
         savefile.session.exists = false;
 
         //default settings!
-        savefile.sound_vol = 0.75;
-        savefile.music_vol = 0.75;
-        savefile.voice_vol = 0.75;
-        savefile.troghammer = true;
-        savefile.decrement_trogmeter = true;
-        savefile.starting_lives = 3;
+        savefile.options.sound_vol = 0.75;
+        savefile.options.music_vol = 0.75;
+        savefile.options.voice_vol = 0.75;
+        savefile.options.troghammer = true;
+        savefile.options.decrement_trogmeter = true;
+        savefile.options.starting_lives = 3;
 
         savefile.high_scores_table.fill(high_score_entry("", 0, 0));
     }
@@ -83,7 +83,6 @@ bn::string<9> high_score_entry::get_name(){
 
     return result;
 }
-
 
 
 }

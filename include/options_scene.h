@@ -64,7 +64,7 @@ namespace trog{
 
         uint8_t _index;
         bn::fixed ycor(const uint8_t &index);
-        saved_data _old_save;
+        saved_options _old_save;
 
     public:
         explicit options_scene(common_stuff &common_stuff, const scene_type &last_scene);

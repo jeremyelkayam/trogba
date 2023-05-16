@@ -38,7 +38,7 @@ void archer::update(){
 }
 
 void archer::shoot(){
-    bn::sound_items::shoot.play(_common_stuff.savefile.sound_vol);
+    bn::sound_items::shoot.play(_common_stuff.savefile.options.sound_vol);
     _arrow.emplace(_pos, _facing_left);
 }
 
