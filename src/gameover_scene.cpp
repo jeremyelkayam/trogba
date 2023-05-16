@@ -21,7 +21,7 @@
 #include "bn_sprite_items_jonathan_howe.h"
 #include "bn_sprite_items_jeremy_elkayam.h"
 
-#define NEW_HISCORE_Y 25
+#define NEW_HISCORE_Y 18
 
 namespace trog {
 
@@ -62,23 +62,37 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
 
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    common_stuff.text_generator.generate(1, -49, "CHALLENGE", _challengeagain_text_sprites);
-    common_stuff.text_generator.generate(0, -36, "AGAIN!", _challengeagain_text_sprites);
+    common_stuff.text_generator.generate(1, -51, "CHALLENGE", _challengeagain_text_sprites);
+    common_stuff.text_generator.generate(0, -38, "AGAIN!", _challengeagain_text_sprites);
 
-    common_stuff.text_generator.generate(0, -4, "VIEW", _hiscores_text_sprites);
-    common_stuff.text_generator.generate(2, 9, "HI-SCORES", _hiscores_text_sprites);
-
-    common_stuff.text_generator.generate(0, 50, "BACK", _back_text_sprites);
+    bn::fixed ycor_top = -4;
+    bn::fixed ycor_bottom = 9;
 
     if(_sesh.get_score() > common_stuff.savefile.high_scores_table[7].get_score()){
+        ycor_top -=4;
+        ycor_bottom -=4;
         common_stuff.small_generator.set_one_sprite_per_character(true);
         common_stuff.small_generator.set_center_alignment();
         common_stuff.small_generator.set_palette_item(RED_PALETTE);
         common_stuff.small_generator.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
         common_stuff.small_generator.set_one_sprite_per_character(false);
     }
+    common_stuff.text_generator.generate(0, ycor_top, "VIEW", _hiscores_highlight_sprites);
+    common_stuff.text_generator.generate(0, ycor_bottom, "HI-SCORES", _hiscores_highlight_sprites);
+
+    common_stuff.text_generator.generate(0, 52, "BACK", _back_text_sprites);
+
+    common_stuff.text_generator.set_palette_item(GRAY_PALETTE);
+    common_stuff.text_generator.generate(-1, ycor_top + 1, "VIEW", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(-1, ycor_bottom + 1, "HI-SCORES", _hiscores_text_sprites);
+    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
+    common_stuff.text_generator.generate(0, ycor_top, "VIEW", _hiscores_text_sprites);
+    common_stuff.text_generator.generate(0, ycor_bottom, "HI-SCORES", _hiscores_text_sprites);
+
+
 
     common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_hiscores_highlight_sprites, false);
     common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_new_high_score_text_sprites, false);
@@ -139,7 +153,7 @@ bn::optional<scene_type> gameover_scene::update(){
 
     if(bn::keypad::a_pressed()){
         if(!_menu){
-            _menu = bn::regular_bg_items::game_over_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y);
+            _menu = bn::regular_bg_items::game_over_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y + 2);
             _menu->set_priority(1);
             bn::blending::set_transparency_alpha(0.5);
             _dead_dragon.set_blending_enabled(true);
@@ -149,6 +163,7 @@ bn::optional<scene_type> gameover_scene::update(){
             _itsover_text.set_blending_enabled(true);
             set_current_menu_option_visible();
             _common_stuff.set_sprite_arr_visible(_new_high_score_text_sprites, true);
+            _common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, true);
         }else{
             switch(_menu_option){
                 case 0:
@@ -178,7 +193,7 @@ bn::optional<scene_type> gameover_scene::update(){
 
 void gameover_scene::set_current_menu_option_visible(){
     _common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, _menu_option == 0);
-    _common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, _menu_option == 1);
+    _common_stuff.set_sprite_arr_visible(_hiscores_highlight_sprites, _menu_option == 1);
     _common_stuff.set_sprite_arr_visible(_back_text_sprites, _menu_option == 2);
 }
 
