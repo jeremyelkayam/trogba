@@ -15,7 +15,7 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
         _sesh(sesh),
         _common_stuff(common_stuff),
         _last_scene(last_scene),
-        _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(0,0,62)),
+        _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(130,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
         _high_scores_table(_common_stuff.savefile.high_scores_table),
         _table_index(-1),
@@ -23,14 +23,14 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
         _selectable_letters_index(28),
         _blink_timer(0),
         _go_to_credits(false) {
-    
+
+    if(_sesh.get_level() == 101){
+        //101 isn't a real level. If you beat the game, the game ends before you start level 101.
+        // So we count you as ending on level 100.
+        // Maybe add a crown or something if you beat the game? 
+        _go_to_credits = true;
+    }    
     if(last_scene != scene_type::PLAY && last_scene != scene_type::MENU){
-        if(_sesh.get_level() == 101){
-            //101 isn't a real level. If you beat the game, the game ends before you start level 101.
-            // So we count you as ending on level 100.
-            // Maybe add a crown or something if you beat the game? 
-            _go_to_credits = true;
-        }
 
         //Propagate the player's score within the scores list (if applicable)
         if(_sesh.get_score() > _high_scores_table[7].get_score()){

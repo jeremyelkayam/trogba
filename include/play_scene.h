@@ -44,11 +44,12 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time, _autosave_visibility_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time;
         bool _player_paused;
         uint8_t _tutorial_timer, _tutorial_cutscene_timer;
+        int8_t _pause_menu_index;
 
-        bn::regular_bg_ptr _countryside;
+        bn::regular_bg_ptr _countryside, _pause_menu;
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;
@@ -84,6 +85,10 @@ namespace trog{
 
 
         void update_tutorial();
+
+        void redraw_pause_menu_option();
+
+        void unpause();
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);
