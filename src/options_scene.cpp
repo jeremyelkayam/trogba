@@ -1,10 +1,11 @@
 #include <bn_keypad.h>
 #include <bn_string.h>
+#include <bn_log.h>
 
-#include "bn_regular_bg_items_hi_scores_bg.h"
 #include "options_scene.h"
 #include "constants.h"
 
+#include "bn_regular_bg_items_hi_scores_bg.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_brown.h"
 #include "bn_sprite_items_checkbox.h"
@@ -13,10 +14,12 @@
 
 namespace trog {
 
-options_scene::options_scene(common_stuff &common_stuff) : 
+options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_scene) : 
         _common_stuff(common_stuff),
+        _last_scene(last_scene),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
-        _index(0) {
+        _index(0),
+        _old_save(common_stuff.savefile) {
     _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
@@ -29,32 +32,70 @@ options_scene::options_scene(common_stuff &common_stuff) :
     _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(3), _common_stuff.savefile.sound_vol));
     _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(4), _common_stuff.savefile.voice_vol));
     _options_vec.emplace_back(new option("back", txtgen, ycor(5)));
-
+    _options_vec.at(_index)->set_selected(true);
 }
 
 bn::optional<scene_type> options_scene::update(){
     bn::optional<scene_type> result;
 
-    if(bn::keypad::up_pressed()){
-        _options_vec.at(_index)->set_selected(false);
-        if(_index == 0) _index = _options_vec.size();
-        _index--;
-        _options_vec.at(_index)->set_selected(true);
-    }else if(bn::keypad::down_pressed()){
-        _options_vec.at(_index)->set_selected(false);
-        _index++;
-        if(_index == _options_vec.size()) _index = 0;
-        _options_vec.at(_index)->set_selected(true);
+    if(!_options_vec.empty()){
+        if(bn::keypad::up_pressed()){
+            _options_vec.at(_index)->set_selected(false);
+            if(_index == 0) _index = _options_vec.size();
+            _index--;
+            _options_vec.at(_index)->set_selected(true);
+        }else if(bn::keypad::down_pressed()){
+            _options_vec.at(_index)->set_selected(false);
+            _index++;
+            if(_index == _options_vec.size()) _index = 0;
+            _options_vec.at(_index)->set_selected(true);
+        }
+
+        _options_vec.at(_index)->update();
+        
+        
+        if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() && _index == _options_vec.size() - 1)){
+
+            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.troghammer;
+            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.decrement_trogmeter;
+
+            if(troghammer_changed || trogmeter_changed) {
+                bn::vector<bn::string<32>, 5>  _changed_settings;
+                if(troghammer_changed) _changed_settings.emplace_back("Troghammer");
+                if(trogmeter_changed) _changed_settings.emplace_back("Trogmeter depreciation");
+                _options_vec.clear();
+
+                _common_stuff.small_generator.set_center_alignment();
+                _common_stuff.small_generator.set_palette_item(RED_PALETTE);
+                _common_stuff.small_generator.generate(0, -50, "IMPORTANT!", _notice_sprites);
+
+                _common_stuff.small_generator.set_palette_item(BROWN_PALETTE);
+                _common_stuff.small_generator.generate(0, -35, "Changes to the following settings:", _notice_sprites);
+                bn::fixed ycor = -15;
+                for(bn::string<32> &change : _changed_settings){
+                    _common_stuff.small_generator.generate(0, ycor, change, _notice_sprites);
+                    ycor+=10;
+                }
+
+                _common_stuff.small_generator.generate(0, 40, "will be applied the next time ", _notice_sprites);
+                _common_stuff.small_generator.generate(0, 50, "you start a new game.", _notice_sprites);
+
+                _common_stuff.small_generator.generate(0, 65, "Press A to continue", _notice_sprites);
+            }else{
+                _common_stuff.save();
+                result = _last_scene;
+            }
+
+        }
+    }else{
+        if(bn::keypad::a_pressed()){
+            _common_stuff.save();
+            result = _last_scene;
+        }
     }
 
-    _options_vec.at(_index)->update();
-    
-    
-    if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() && _index == _options_vec.size() - 1)){
-        //TODO: Make an alert that says options will be applied on starting a new game
-        _common_stuff.save();
-        result = scene_type::MENU;
-    }
+
+
 
     return result;
 }
@@ -80,20 +121,26 @@ bool_option::bool_option(const bn::string<32> &name, bn::sprite_text_generator &
 
 
 void bool_option::update(){
-    if(bn::keypad::a_pressed()) _value = !_value;
-    _checkbox.set_item(bn::sprite_items::checkbox, _value);
+    if(bn::keypad::a_pressed()){
+        _value = !_value;
+        _checkbox.set_item(bn::sprite_items::checkbox, _value);
+        _checkbox.set_palette(RED_PALETTE);
+    }
 }
 
 void bool_option::set_selected(const bool &selected){
     option::set_selected(selected);
     _checkbox.set_palette(_text_sprites.at(0).palette());
+    
 }
 
 percent_option::percent_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value) : 
     option(name, text_generator, ycor),
     // _options(options),
     _value(value),
-    _slider_bar(bn::sprite_items::slider_bar.create_sprite(0,ycor)){
+    _speed(0.01),
+    _slider_bar(bn::sprite_items::slider_bar.create_sprite(0,ycor)),
+    _hold_timer(0){
     
     for(int z = 0; z < _vol_graph.max_size() ; ++z){
         _vol_graph.push_back(bn::sprite_items::volume_graph.create_sprite(32*z, ycor, z));
@@ -104,13 +151,22 @@ percent_option::percent_option(const bn::string<32> &name, bn::sprite_text_gener
 }
 
 void percent_option::update(){
-    //todo make it start slow and speed up
-    if(bn::keypad::right_held()){
-        _value += 0.01;
+    
+    if(bn::keypad::right_held() || bn::keypad::left_held()){
+        _hold_timer++;
+    }else if(bn::keypad::right_released() || bn::keypad::left_released()){
+        _hold_timer = 0;
     }
-    else if(bn::keypad::left_held()){
-        _value -= 0.01;
+
+    // if(_hold_timer == 60 || _hold_timer == 90) _speed*=2; 
+
+    if(bn::keypad::right_pressed() || (bn::keypad::right_held() && _hold_timer > 20)){
+        _value += _speed;
     }
+    else if(bn::keypad::left_pressed() || (bn::keypad::left_held() && _hold_timer > 20)){
+        _value -= _speed;
+    }
+
 
     if(_value < 0) _value = 0;
     if(_value > 1) _value = 1;
