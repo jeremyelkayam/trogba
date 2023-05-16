@@ -13,13 +13,14 @@ namespace trog{
         bn::regular_bg_ptr _dead_dragon;
         bn::optional<bn::regular_bg_ptr> _menu;
         bn::vector<bn::sprite_ptr, 8> _challengeagain_text_sprites, _hiscores_text_sprites, _back_text_sprites;
+        bn::vector<bn::sprite_ptr, 16> _new_high_score_text_sprites;
         bn::vector<bn::sprite_ptr, 3> _secret_sprites;
         bn::vector<bn::sprite_animate_action<6>, 3> _secret_anims;
         
         session_info &_sesh;
         bloody_text _itsover_text;
         common_stuff &_common_stuff;
-        unsigned short _menu_option;
+        uint8_t _timer, _menu_option;
 
         //todo make this a global or something
         void set_current_menu_option_visible();        

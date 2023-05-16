@@ -21,6 +21,7 @@
 #include "bn_sprite_items_jonathan_howe.h"
 #include "bn_sprite_items_jeremy_elkayam.h"
 
+#define NEW_HISCORE_Y 25
 
 namespace trog {
 
@@ -30,6 +31,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
         _common_stuff(common_stuff),
+        _timer(0),
         _menu_option(0) {
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
@@ -68,9 +70,18 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
 
     common_stuff.text_generator.generate(0, 50, "BACK", _back_text_sprites);
 
+    if(_sesh.get_score() > common_stuff.savefile.high_scores_table[7].get_score()){
+        common_stuff.small_generator.set_one_sprite_per_character(true);
+        common_stuff.small_generator.set_center_alignment();
+        common_stuff.small_generator.set_palette_item(RED_PALETTE);
+        common_stuff.small_generator.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
+        common_stuff.small_generator.set_one_sprite_per_character(false);
+    }
+
     common_stuff.set_sprite_arr_visible(_challengeagain_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_hiscores_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
+    common_stuff.set_sprite_arr_visible(_new_high_score_text_sprites, false);
 
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
@@ -98,6 +109,7 @@ bn::optional<scene_type> gameover_scene::update(){
 
 
     if(_menu){
+        ++_timer;
         if(bn::keypad::up_pressed()){
             if(_menu_option == 0){
                 _menu_option = 2;
@@ -113,6 +125,15 @@ bn::optional<scene_type> gameover_scene::update(){
             }
             set_current_menu_option_visible();
         }
+        for(uint8_t i = 0; i < _new_high_score_text_sprites.size(); ++i){
+            if(i == _timer/5){
+                _new_high_score_text_sprites.at(i).set_y(NEW_HISCORE_Y - 1);
+            }else{
+                _new_high_score_text_sprites.at(i).set_y(NEW_HISCORE_Y);
+            }
+        }
+
+        if(_timer == 120) _timer = 0;
         
     }
 
@@ -127,6 +148,7 @@ bn::optional<scene_type> gameover_scene::update(){
             }
             _itsover_text.set_blending_enabled(true);
             set_current_menu_option_visible();
+            _common_stuff.set_sprite_arr_visible(_new_high_score_text_sprites, true);
         }else{
             switch(_menu_option){
                 case 0:
