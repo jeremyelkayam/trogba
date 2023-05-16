@@ -49,7 +49,7 @@ namespace trog{
         uint8_t _tutorial_timer, _tutorial_cutscene_timer;
         int8_t _pause_menu_index;
 
-        bn::regular_bg_ptr _countryside, _pause_menu;
+        bn::regular_bg_ptr _countryside, _pause_menu, _gray_bg;
 
         bn::unique_ptr<big_text> _overlay_text;
         bn::vector<bn::sprite_ptr, 8> _paused_text;

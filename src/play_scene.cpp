@@ -19,6 +19,7 @@
 #include "bn_regular_bg_items_dawn.h"
 #include "bn_regular_bg_items_dusk.h"
 #include "bn_regular_bg_items_pause_menu.h"
+#include "bn_regular_bg_items_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
@@ -53,12 +54,15 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _pause_menu_index(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _pause_menu(bn::regular_bg_items::pause_menu.create_bg(0, 0)),
+        _gray_bg(bn::regular_bg_items::gray.create_bg(0, 0)),
         _voices_volume(0)
 {
     saved_session &saved_sesh = common_stuff.savefile.session; 
     _pause_menu.set_visible(false);
     _pause_menu.set_priority(0);
-    _pause_menu.set_blending_enabled(false);
+    _gray_bg.set_priority(1);
+    _gray_bg.set_blending_enabled(true);
+
 
 
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
