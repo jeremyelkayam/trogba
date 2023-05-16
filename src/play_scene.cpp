@@ -12,13 +12,16 @@
 #include <bn_blending.h>
 #include <bn_music_items.h>
 #include <bn_music.h>
+#include <bn_bg_palette_ptr.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
 #include "bn_regular_bg_items_dawn.h"
 #include "bn_regular_bg_items_dusk.h"
+#include "bn_regular_bg_items_pause_menu.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_voidtower.h"
 #include "bn_sprite_items_tutorial_arrow.h"
 
@@ -44,14 +47,18 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _afact(_archers, sesh.get_level(), common_stuff),
         _burninate_pause_time(0),
         _win_pause_time(0),
-        _flashing_text_time(0),
         _player_paused(false),
         _tutorial_timer(0),
         _tutorial_cutscene_timer(0),
+        _pause_menu_index(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
+        _pause_menu(bn::regular_bg_items::pause_menu.create_bg(TROG_GAMEOVER_MENU_X, TROG_GAMEOVER_MENU_Y)),
         _voices_volume(0)
 {
     saved_session &saved_sesh = common_stuff.savefile.session; 
+    _pause_menu.set_visible(false);
+    _pause_menu.set_priority(0);
+    _pause_menu.set_blending_enabled(false);
 
 
     BN_ASSERT(_sesh.get_level() <= 100, "There are only 100 levels");
@@ -148,12 +155,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     }
 
 
-    common_stuff.text_generator.set_center_alignment();
-    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
-    common_stuff.text_generator.generate(0, 55, "paused", _paused_text);
-    common_stuff.text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
-    set_paused_text_visible(false);
-
     if(_sesh.get_level() != 0){
         _knights.emplace_front(-59, 31, false, common_stuff.rand);
         _knights.emplace_front(33,-50,true, common_stuff.rand);
@@ -183,7 +184,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
 
 bn::optional<scene_type> play_scene::update(){
-    set_visible(true);
+    if(!_countryside.visible()) set_visible(true);
 
     bn::optional<scene_type> result;
 
@@ -212,14 +213,51 @@ bn::optional<scene_type> play_scene::update(){
         _win_pause_time++;
         _trogdor->update_win_anim();
     }else if(_player_paused){
-        if(_flashing_text_time == 15){
-            set_paused_text_visible(false);
-        }else if(_flashing_text_time == 30){
-            _flashing_text_time = 0;
-        }else if(_flashing_text_time == 1){
-            set_paused_text_visible(true);
+        if(bn::keypad::up_pressed()){
+            _pause_menu_index -= 2;
+            if(_pause_menu_index < 0) _pause_menu_index +=2;
+        }else if(bn::keypad::down_pressed()){
+            _pause_menu_index += 2;
+            if(_pause_menu_index > 3) _pause_menu_index -=2;
+        }else if(bn::keypad::left_pressed()){
+            _pause_menu_index -= 1;
+            if(_pause_menu_index < 0) _pause_menu_index +=1;
+        }else if(bn::keypad::right_pressed()){
+            _pause_menu_index += 1;
+            if(_pause_menu_index > 3) _pause_menu_index -=1;
         }
-        ++_flashing_text_time;
+
+        if(bn::keypad::any_pressed()) redraw_pause_menu_option();
+
+        if(bn::keypad::b_pressed() ) unpause();
+
+        if(bn::keypad::a_pressed()){
+            //idk why but this bugs out if we dont do it this way
+            switch(_pause_menu_index){
+            case 0:
+                //options
+                result = scene_type::OPTIONS;
+                set_visible(false);
+            break;
+            case 1:
+                result = scene_type::HISCORES;
+                set_visible(false);
+            break;
+            case 2:
+                result = scene_type::MENU;
+                unpause();
+            break;
+            case 3:
+                unpause();
+            break;
+            default:
+                BN_ERROR("invalid pause menu index");
+            break;
+
+            }
+        }
+        
+
     }else if(_tutorial_cutscene_timer > 0){
         ++_tutorial_cutscene_timer;
         if(_archers.empty()){
@@ -251,7 +289,6 @@ bn::optional<scene_type> play_scene::update(){
         if(!_trogdor->dead() && _autosave_visibility_time == 0){
             _common_stuff.set_autosave_text_visible(false);
         }
-        set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_trogdor->get_burninating_time(), _trogdor->get_burninating_length());
@@ -438,14 +475,12 @@ bn::optional<scene_type> play_scene::update(){
         _player_paused = !_player_paused;
         if(_player_paused){
             //Apply a dimming effect and display text when the game is paused.
-            bn::sprite_palettes::set_fade(bn::color(16, 16, 16), 0.6);
-            bn::bg_palettes::set_fade(bn::color(16, 16, 16), 0.6);
-            set_paused_text_visible(true);
-
+            // bn::sprite_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+            // bn::bg_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+            _pause_menu.set_visible(true);
+            redraw_pause_menu_option();
         }else{
-            bn::sprite_palettes::set_fade_intensity(0); 
-            bn::bg_palettes::set_fade_intensity(0);
-            set_paused_text_visible(false);
+            unpause();
         }
     } 
 
@@ -548,6 +583,23 @@ void play_scene::set_visible(bool visible){
     }
 
     _countryside.set_visible(visible);
+
+    if(_player_paused){
+        _pause_menu.set_visible(visible);
+        for(bn::sprite_ptr &sprite : _paused_text) {
+            BN_LOG("setting visible while paused: ", visible);
+            sprite.set_visible(visible);
+            sprite.put_above();
+
+        }
+        // if(visible){
+        //     bn::sprite_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+        //     bn::bg_palettes::set_fade(bn::color(16, 16, 16), 0.6);
+        // }else{
+        //     bn::sprite_palettes::set_fade_intensity(0); 
+        //     bn::bg_palettes::set_fade_intensity(0);
+        // }
+    }
 
 }
 
@@ -681,6 +733,49 @@ void play_scene::update_tutorial(){
             }
         }
     }
+
+}
+
+void play_scene::unpause(){
+    _player_paused = false;
+    // bn::sprite_palettes::set_fade_intensity(0); 
+    // bn::bg_palettes::set_fade_intensity(0);
+    _pause_menu.set_visible(false);
+    _paused_text.clear();
+}
+
+void play_scene::redraw_pause_menu_option(){
+    _paused_text.clear();
+    _common_stuff.text_generator.set_center_alignment();
+    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    _common_stuff.text_generator.set_bg_priority(0);
+    bn::fixed_point pos;
+    bn::string<16> text;
+
+    switch(_pause_menu_index){
+        case 0:
+            pos = bn::fixed_point(-30,-30);
+            text = "OPTIONS";
+        break;
+        case 1:
+            pos = bn::fixed_point(30,-30);
+            text = "VIEW HI-SCORES";
+        break;
+        case 2:
+            pos = bn::fixed_point(-30,30);
+            text = "QUIT";
+        break;
+        case 3:
+            pos = bn::fixed_point(30,30);
+            text = "RESUME";
+        break;
+        default:
+            BN_ERROR("invalid pause menu index");
+        break;
+    }
+
+    
+    _common_stuff.text_generator.generate(pos, text, _paused_text);
 
 }
 
