@@ -32,7 +32,7 @@
 #include "burninate_text.h"
 #include "level_data.h"
 #include "sb_commentary.h"
-
+#include "sucks.h"
 
 
 namespace trog {
@@ -40,9 +40,6 @@ namespace trog {
 play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff) : 
         _sesh(sesh),
         _common_stuff(common_stuff),
-        _trogdor(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
-        //temp fix for f'ed up spawnage
-        (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false, common_stuff)),
         _hud(hud),
         _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
@@ -55,6 +52,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _voices_volume(0)
 {
+
+    respawn(false);
+
     saved_session &saved_sesh = common_stuff.savefile.session;
 
 
@@ -391,12 +391,7 @@ bn::optional<scene_type> play_scene::update(){
                 if(_sesh.get_level() == 0 && _trogdor->get_trogmeter() != 10){
                     init_trogmeter = _trogdor->get_trogmeter();
                 }
-                _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, 
-                //temp fix for f'ed up spawnage
-                    (_sesh.get_level() == 27 ||
-                     _sesh.get_level() == 59 ||
-                     _sesh.get_level() == 91)
-                    ? 10 : 0, _sesh, true, _common_stuff, init_trogmeter));
+                respawn(true, init_trogmeter);
                 _sesh.die();
                 
                 if(!_troghammer && _sesh.troghammer_enabled()) spawn_troghammer(true);
@@ -762,6 +757,7 @@ void play_scene::setup_pause_menu(){
     _common_stuff.small_generator.set_center_alignment();
     _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);    
     _common_stuff.small_generator.generate(0,65, "paused.", _paused_label);
+    _timer = 0;
 }
 
 void play_scene::unpause(){
@@ -805,6 +801,25 @@ void play_scene::redraw_pause_menu_option(){
 
     
     _common_stuff.text_generator.generate(pos, text, _paused_selected_option);
+
+}
+
+void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
+    switch(_sesh.get_dragon()){
+        case dragon::TROGDOR:
+            _trogdor.reset(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+            (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
+            _sesh, iframes, _common_stuff, init_trogmeter));
+        break;
+        case dragon::SUCKS:
+            _trogdor.reset(new sucks(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+            (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
+            _sesh, iframes, _common_stuff, init_trogmeter));
+        break;
+        default:
+            BN_ERROR("Invalid dragon type found in session info");
+        break;
+    }
 
 }
 

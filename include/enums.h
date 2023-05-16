@@ -31,4 +31,9 @@ namespace trog {
         LEFT,
         RIGHT
     };
+    enum class dragon 
+    {
+        TROGDOR,
+        SUCKS
+    };
 }

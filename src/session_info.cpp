@@ -9,7 +9,7 @@ session_info::session_info(common_stuff &common_stuff) :
     reset();
 }
 
-void session_info::score(unsigned int num_points){
+void session_info::score(const unsigned int &num_points){
     //once we cross 300 points, you get a 1up
     //we can see what multiple of 300 you're on with division
     int old_multiple = _score/TROG_POINTS_FOR_1UP;
@@ -27,12 +27,10 @@ void session_info::reset(){
     _score = 0;
     _level = TROG_STARTING_LEVEL;
 
-    // _format_tag = default_format_tag();
     _killed_by_archer = false;
     _troghammer = _common_stuff.savefile.troghammer;
     _can_lose_trogmeter = _common_stuff.savefile.decrement_trogmeter;
-    // clear_burnination_array();
-    // reset_troghammer_status();
+    _dragon = dragon::TROGDOR;
 }
 
 void session_info::import_save(){
@@ -60,7 +58,7 @@ saved_session session_info::export_save(){
     return result;
 }
 
-void session_info::set_level(unsigned short level){
+void session_info::set_level(const unsigned short &level){
     _level = level;
 }
 

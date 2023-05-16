@@ -93,6 +93,8 @@ namespace trog{
         void unpause();
         [[nodiscard]] bn::optional<scene_type> update_pause_menu();
 
+        void respawn(const bool &iframes, const uint8_t &init_trogmeter=0);
+
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
