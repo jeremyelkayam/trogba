@@ -36,6 +36,8 @@ void credits_scene::setup_credits(){
         "The GBA Game",
         "",
         "programmed by Jeremy Elkayam",
+        "New art by Jeremy Elkayam",
+        "Dust effects by WeenterMakesGames",
         "",
         butano_str,
         "by Gustavo Valiente",

@@ -10,18 +10,20 @@ namespace trog{
 
     class menu_option {
         private:
-            bn::vector<bn::sprite_ptr, 8> _text_sprites;
+            bn::vector<bn::sprite_ptr, 4> _text_sprites;
+            bn::vector<bn::sprite_ptr, 4> _drop_shadow_sprites;
             bn::vector<bn::sprite_ptr, 4> _red_text_sprites;
         public:
             menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator);
-            bn::fixed y(){return _text_sprites.at(0).y();}
+            bn::fixed y() const {return _text_sprites.at(0).y();}
             void turn_red();
             void turn_white();
+            void set_y(const bn::fixed &y);
     };
     class menu_scene : public scene{ 
     private:
 
-        bn::vector<menu_option, 4> _menu_options;
+        bn::vector<menu_option, 6> _menu_options;
 
         common_stuff & _common_stuff;
 
@@ -35,6 +37,8 @@ namespace trog{
         uint8_t _selected_option_index, _selection_anim_timer;
 
         session_info &_sesh;
+
+        bn::fixed _scroll_speed;
 
         void select();
 
