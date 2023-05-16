@@ -85,13 +85,15 @@ bn::optional<scene_type> options_scene::update(){
                 _common_stuff.small_generator.generate(0, 65, "Press A to continue", _notice_sprites);
             }else{
                 _common_stuff.save();
+                result = _last_scene;
             }
 
             
 
         }else if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() &&_index == _options_vec.size() -1)){
-            result = _last_scene;
+            //revert to the saved data;
             _common_stuff.savefile.options = _old_save;
+            result = _last_scene;
         }
     }else{
         if(bn::keypad::a_pressed()){
