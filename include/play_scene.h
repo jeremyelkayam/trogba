@@ -46,13 +46,14 @@ namespace trog{
 
         unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time;
         bool _player_paused;
-        uint8_t _tutorial_timer, _tutorial_cutscene_timer;
+        uint8_t _timer, _tutorial_cutscene_timer;
         int8_t _pause_menu_index;
 
-        bn::regular_bg_ptr _countryside, _pause_menu, _gray_bg;
+        bn::regular_bg_ptr _countryside;
+        bn::optional<bn::regular_bg_ptr>_pause_menu, _gray_bg;
 
         bn::unique_ptr<big_text> _overlay_text;
-        bn::vector<bn::sprite_ptr, 8> _paused_text;
+        bn::vector<bn::sprite_ptr, 4> _paused_selected_option, _paused_label;
         
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
@@ -77,7 +78,7 @@ namespace trog{
 
         void set_visible(bool visible);
 
-        void set_paused_text_visible(const bool &visible) {_common_stuff.set_sprite_arr_visible(_paused_text, visible);}
+        void set_paused_text_visible(const bool &visible) {_common_stuff.set_sprite_arr_visible(_paused_selected_option, visible);}
 
         void autosave(bool just_died);
 
@@ -88,7 +89,9 @@ namespace trog{
 
         void redraw_pause_menu_option();
 
+        void setup_pause_menu();
         void unpause();
+        [[nodiscard]] bn::optional<scene_type> update_pause_menu();
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);

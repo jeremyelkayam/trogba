@@ -38,9 +38,9 @@ common_stuff::common_stuff() :
         savefile.high_scores_table.fill(high_score_entry("", 0, 0));
     }
 
-    text_generator.set_left_alignment();
-    text_generator.set_palette_item(WHITE_PALETTE);        
-    text_generator.generate(-120, 75, "autosaved.", _autosave_text);
+    small_generator.set_left_alignment();
+    small_generator.set_palette_item(WHITE_PALETTE);        
+    small_generator.generate(-120, 77, "autosaved.", _autosave_text);
     bn::blending::set_transparency_alpha(0.5);
     for(bn::sprite_ptr &sprite : _autosave_text) { 
         sprite.set_blending_enabled(true);
