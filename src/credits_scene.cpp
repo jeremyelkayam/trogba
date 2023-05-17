@@ -36,16 +36,22 @@ void credits_scene::setup_credits(){
         "The GBA Game",
         "",
         "programmed by Jeremy Elkayam",
-        "New art by Jeremy Elkayam",
+        "New graphics & sound by Jeremy Elkayam",
+        "",
+        "",
         "Dust effects by WeenterMakesGames",
+        "weentermakesgames.itch.io",
+        "",
         "",
         butano_str,
         "by Gustavo Valiente",
         "github.com/GValiente/butano",
         "",
+        "",
         "Thanks to",
-        "Mips96 + TrogdorReburninated",
+        "Mips96 and Trogdor Reburninated",
         "for inspiration/code reference",
+        "github.com/Mips96/Trogdor-Reburninated"
     };
 
     ycor += 25;
@@ -53,7 +59,7 @@ void credits_scene::setup_credits(){
     for(bn::string<64> str : credits){ 
         _common_stuff.small_generator.generate(0, ycor,str, _text_sprites);
 
-        ycor += 16;
+        ycor += 14;
     }
 
     ycor += 30;
@@ -66,16 +72,16 @@ void credits_scene::setup_credits(){
         "",
         "Designed by", 
         "Mike and Matt Chapman",
+        "videlectrix.itch.io",
         "",
-        "Original Flash ver.", 
-        "programmed by Jonathan Howe",
+        "Original Flash ver. programmed by ", 
+        "Jonathan Howe",
         "",
         "HTML5 ver. programmed by",
         "Aeon Softworks",
         "",
         "Board game by ",
-        "The Brothers Chaps",
-        "and James Ernest"
+        "The Brothers Chaps and James Ernest"
     };
     bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
 
@@ -109,7 +115,8 @@ bn::optional<scene_type> credits_scene::update(){
         sprite.set_y(sprite.y() - speed);
     }
 
-    if(_text_sprites.back().y() < -90){
+    if(_text_sprites.back().y() < -90 || bn::keypad::start_pressed()){
+        _text_sprites.clear();
         result = scene_type::TITLE;
     }
 

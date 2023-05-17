@@ -180,6 +180,7 @@ int main()
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
         common_stuff.rand.update();
+        common_stuff.commentary.update();
 
         bn::core::update();
     }

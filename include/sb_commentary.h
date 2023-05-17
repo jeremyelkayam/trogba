@@ -12,6 +12,7 @@ namespace trog {
         protected:
             const bn::fixed &_volume;
             bn::random &_rand;
+            uint8_t _timer;
             
 
         public:
@@ -33,5 +34,7 @@ namespace trog {
             void stomp_peasant(); // called by peasant
             void ignite_peasant(); // called by peasant
             void ignite_cottage(); // called by cottage
+
+            void update();
     };
 }

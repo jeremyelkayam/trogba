@@ -141,7 +141,7 @@ bn::optional<scene_type> gameover_scene::update(){
         }
         for(uint8_t i = 0; i < _new_high_score_text_sprites.size(); ++i){
             if(i == _timer/5){
-                _new_high_score_text_sprites.at(i).set_y(NEW_HISCORE_Y - 1);
+                _new_high_score_text_sprites.at(i).set_y(NEW_HISCORE_Y - 2);
             }else{
                 _new_high_score_text_sprites.at(i).set_y(NEW_HISCORE_Y);
             }
