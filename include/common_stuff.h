@@ -62,6 +62,8 @@ namespace trog {
         bn::array<high_score_entry, 8> high_scores_table;
 
         saved_session session;
+
+        bool cheat_unlocked; 
     };
 
     class common_stuff { 

@@ -35,7 +35,8 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
     lives_options.emplace_back(0);
     lives_options.emplace_back(3);
     lives_options.emplace_back(5);
-    lives_options.emplace_back(30);
+    if(_common_stuff.savefile.cheat_unlocked)
+        lives_options.emplace_back(30);
 
     _options_vec.emplace_back(new selector_option("Starting Lives", txtgen, ycor(2), _common_stuff.savefile.options.starting_lives, lives_options));
     _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(3), _common_stuff.savefile.options.music_vol));

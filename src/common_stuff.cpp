@@ -36,6 +36,8 @@ common_stuff::common_stuff() :
         savefile.options.starting_lives = 3;
 
         savefile.high_scores_table.fill(high_score_entry("", 0, 0));
+
+        savefile.cheat_unlocked = false;
     }
 
     small_generator.set_left_alignment();
