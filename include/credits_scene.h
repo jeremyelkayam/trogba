@@ -10,14 +10,17 @@
 
 namespace trog{
 
+    struct credit_line { 
+        bn::vector<bn::sprite_ptr, 8> sprites;
+        bn::fixed ycor;
+        bn::string<40> str;
+    };
+
     class credits_scene : public scene{ 
     private:
 
-        bn::vector<bn::sprite_ptr, 256> _text_sprites;
+        bn::vector<credit_line, 64> _credits;
 
-        bn::vector<bn::sprite_ptr, 4> _title_sprites;
-
-        unsigned int _time;
         void setup_credits();
 
         common_stuff &_common_stuff;
