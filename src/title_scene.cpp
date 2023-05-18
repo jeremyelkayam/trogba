@@ -10,28 +10,54 @@
 namespace trog {
 
 title_scene::title_scene(common_stuff &common_stuff) : 
+        _common_stuff(common_stuff),
         _titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)),
         _version_label(bn::sprite_items::versionlabel.create_sprite(-104, 77)),
-        _frame_counter(0) {
+        _frame_counter(0),
+        _secret_code_index(0) {
 
     _version_label.set_item(bn::sprite_items::versionlabel, 2);
 
-    bn::sound_items::themesong.play(common_stuff.savefile.music_vol);
+    bn::sound_items::themesong.play(common_stuff.savefile.options.music_vol);
 
     for(int z = 0; z < 4 ; ++z){
         _title_sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, TROG_TITLE_TEXT_Y, z));
     }
+
+    _secret_code.emplace_back(bn::keypad::key_type::UP);
+    _secret_code.emplace_back(bn::keypad::key_type::UP);
+    _secret_code.emplace_back(bn::keypad::key_type::DOWN);
+    _secret_code.emplace_back(bn::keypad::key_type::DOWN);
+    _secret_code.emplace_back(bn::keypad::key_type::LEFT);
+    _secret_code.emplace_back(bn::keypad::key_type::RIGHT);
+    _secret_code.emplace_back(bn::keypad::key_type::LEFT);
+    _secret_code.emplace_back(bn::keypad::key_type::RIGHT);
+    _secret_code.emplace_back(bn::keypad::key_type::B);
+    _secret_code.emplace_back(bn::keypad::key_type::A);
 }
 
 bn::optional<scene_type> title_scene::update(){
     bn::optional<scene_type> result;
     _frame_counter++;
-    // BN_LOG(frame_counter);
+
+    if(bn::keypad::any_pressed() && _secret_code_index < _secret_code.size()){
+        if(bn::keypad::pressed(_secret_code.at(_secret_code_index))){
+            ++_secret_code_index;
+        }else{
+            _secret_code_index=0;
+        }
+    }
 
     if(_frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::MENU;
+        if(_secret_code_index == _secret_code.size()){
+            _common_stuff.savefile.cheat_unlocked = true;
+            _common_stuff.savefile.options.starting_lives = 30;
+            _common_stuff.save();
+        }
     }
-    
+
+
     return result;
 }
 

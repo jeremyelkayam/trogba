@@ -18,7 +18,7 @@ logo_scene::logo_scene(session_info &sesh, common_stuff &common_stuff) :
     _trogdor.move_to(150, 0,30);
     _trogdor.set_horizontal_flip(true);
 
-    bn::sound_items::videlectrix_jingle.play(common_stuff.savefile.music_vol);
+    bn::sound_items::videlectrix_jingle.play(common_stuff.savefile.options.music_vol);
     
     //hack to make trogdor appear white
     bn::sprite_palettes::set_brightness(1);

@@ -14,7 +14,7 @@ namespace trog{
 
     class option {
         protected:
-            bn::vector<bn::sprite_ptr, 8> _text_sprites;
+            bn::vector<bn::sprite_ptr, 16> _text_sprites;
             bn::string<32> _name;
             bn::sprite_text_generator &_text_generator;
         public: 
@@ -48,7 +48,21 @@ namespace trog{
             virtual void update();
             void update_text_and_slider();
             virtual void set_selected(const bool &selected);
+    };
 
+    class selector_option : public option {
+        private:
+            uint8_t &_value;
+            int8_t _timer;
+            bn::vector<bn::sprite_ptr, 4> _selector_text_sprites;
+            bn::sprite_ptr _left_sprite, _right_sprite;
+            bn::vector<uint8_t, 10> _selector_options;
+        public:
+            selector_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options);
+            virtual void update();
+            virtual void set_selected(const bool &selected);
+            void update_text();
+            uint8_t current_index();
     };
 
     class options_scene : public scene{ 
@@ -64,7 +78,7 @@ namespace trog{
 
         uint8_t _index;
         bn::fixed ycor(const uint8_t &index);
-        saved_data _old_save;
+        saved_options _old_save;
 
     public:
         explicit options_scene(common_stuff &common_stuff, const scene_type &last_scene);

@@ -12,7 +12,7 @@ namespace trog{
     private:
         bn::regular_bg_ptr _dead_dragon;
         bn::optional<bn::regular_bg_ptr> _menu;
-        bn::vector<bn::sprite_ptr, 8> _challengeagain_text_sprites, _hiscores_text_sprites, _back_text_sprites;
+        bn::vector<bn::sprite_ptr, 8> _challengeagain_text_sprites, _hiscores_highlight_sprites, _back_text_sprites, _hiscores_text_sprites;        
         bn::vector<bn::sprite_ptr, 16> _new_high_score_text_sprites;
         bn::vector<bn::sprite_ptr, 3> _secret_sprites;
         bn::vector<bn::sprite_animate_action<6>, 3> _secret_anims;

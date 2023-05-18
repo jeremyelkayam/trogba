@@ -8,6 +8,8 @@
 #include "bn_regular_bg_items_hi_scores_bg.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_brown.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
+#include "bn_sprite_items_trogdor_variable_8x8_font.h"
 #include "bn_sprite_items_checkbox.h"
 #include "bn_sprite_items_slider_bar.h"
 #include "bn_sprite_items_volume_graph.h"
@@ -19,19 +21,29 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
         _last_scene(last_scene),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
         _index(0),
-        _old_save(common_stuff.savefile) {
+        _old_save(common_stuff.savefile.options) {
     _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
 
     bn::sprite_text_generator &txtgen = common_stuff.small_generator;
 
-    _options_vec.emplace_back(new bool_option("Troghammer", txtgen, ycor(0), _common_stuff.savefile.troghammer));
-    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", txtgen, ycor(1), _common_stuff.savefile.decrement_trogmeter));
-    _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(2), _common_stuff.savefile.music_vol));
-    _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(3), _common_stuff.savefile.sound_vol));
-    _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(4), _common_stuff.savefile.voice_vol));
-    _options_vec.emplace_back(new option("back", txtgen, ycor(5)));
+    _options_vec.emplace_back(new bool_option("Troghammer", txtgen, ycor(0), _common_stuff.savefile.options.troghammer));
+    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", txtgen, ycor(1), _common_stuff.savefile.options.decrement_trogmeter));
+
+    bn::vector<uint8_t,4 > lives_options;
+    lives_options.emplace_back(0);
+    lives_options.emplace_back(3);
+    lives_options.emplace_back(5);
+    if(_common_stuff.savefile.cheat_unlocked)
+        lives_options.emplace_back(30);
+
+    _options_vec.emplace_back(new selector_option("Starting Lives", txtgen, ycor(2), _common_stuff.savefile.options.starting_lives, lives_options));
+    _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(3), _common_stuff.savefile.options.music_vol));
+    _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(4), _common_stuff.savefile.options.sound_vol));
+    _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(5), _common_stuff.savefile.options.voice_vol));
+    _options_vec.emplace_back(new option("confirm", txtgen, ycor(6)));
+    _options_vec.emplace_back(new option("cancel", txtgen, ycor(7)));
     _options_vec.at(_index)->set_selected(true);
 }
 
@@ -54,22 +66,24 @@ bn::optional<scene_type> options_scene::update(){
         _options_vec.at(_index)->update();
         
         
-        if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() && _index == _options_vec.size() - 1)){
+        if((bn::keypad::a_pressed() && _index == _options_vec.size() -2)){
 
-            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.troghammer;
-            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.decrement_trogmeter;
+            bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.options.troghammer;
+            bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.options.decrement_trogmeter;
+            bool lives_changed = _old_save.starting_lives != _common_stuff.savefile.options.starting_lives;
 
-            if(troghammer_changed || trogmeter_changed) {
+            if(troghammer_changed || trogmeter_changed || lives_changed) {
                 bn::vector<bn::string<32>, 5>  _changed_settings;
                 if(troghammer_changed) _changed_settings.emplace_back("Troghammer");
                 if(trogmeter_changed) _changed_settings.emplace_back("Trogmeter depreciation");
+                if(lives_changed) _changed_settings.emplace_back("Starting lives");
                 _options_vec.clear();
 
                 _common_stuff.small_generator.set_center_alignment();
                 _common_stuff.small_generator.set_palette_item(RED_PALETTE);
                 _common_stuff.small_generator.generate(0, -50, "IMPORTANT!", _notice_sprites);
 
-                _common_stuff.small_generator.set_palette_item(BROWN_PALETTE);
+                _common_stuff.small_generator.set_palette_item(BLACK_PALETTE);
                 _common_stuff.small_generator.generate(0, -35, "Changes to the following settings:", _notice_sprites);
                 bn::fixed ycor = -15;
                 for(bn::string<32> &change : _changed_settings){
@@ -86,6 +100,12 @@ bn::optional<scene_type> options_scene::update(){
                 result = _last_scene;
             }
 
+            
+
+        }else if(bn::keypad::b_pressed() || (bn::keypad::a_pressed() &&_index == _options_vec.size() -1)){
+            //revert to the saved data;
+            _common_stuff.savefile.options = _old_save;
+            result = _last_scene;
         }
     }else{
         if(bn::keypad::a_pressed()){
@@ -117,6 +137,7 @@ bool_option::bool_option(const bn::string<32> &name, bn::sprite_text_generator &
     option(name, text_generator, ycor),
     _value(value),
     _checkbox(bn::sprite_items::checkbox.create_sprite(80, ycor, value)) {
+    _checkbox.set_palette(BLACK_PALETTE);
 }
 
 
@@ -173,14 +194,6 @@ void percent_option::update(){
     update_text_and_slider();
 }
 
-// uint8_t percent_option::current_index(){
-//     for(uint8_t z = 0; z < _options.size(); z++){
-//         if(_options.at(z) == _value) return z;
-//     }
-//     BN_ERROR("Current value not in option list: ", _value);
-//     return -1;
-// }
-
 void percent_option::update_text_and_slider(){
     _vol_text_sprites.clear();
     _text_generator.set_left_alignment();
@@ -207,17 +220,107 @@ void percent_option::set_selected(const bool &selected){
 
 option::option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) : 
     _name(name), _text_generator(text_generator) { 
-    text_generator.set_palette_item(BROWN_PALETTE);
+
     text_generator.set_left_alignment();
+    text_generator.set_palette_item(BLACK_PALETTE);
     text_generator.generate(-90, ycor, _name, _text_sprites);
 }
 
 void option::set_selected(const bool &selected){
-    bn::sprite_palette_item palette_item = BROWN_PALETTE;
+    bn::sprite_palette_item palette_item = BLACK_PALETTE;
     if(selected) palette_item = RED_PALETTE;
     for(bn::sprite_ptr &s : _text_sprites) {
         s.set_palette(palette_item);
     }
+}
+
+
+uint8_t selector_option::current_index(){
+    for(uint8_t z = 0; z < _selector_options.size(); z++){
+        if(_selector_options.at(z) == _value) return z;
+    }
+    BN_ERROR("Current value not in option list: ", _value);
+    return -1;
+}
+
+selector_option::selector_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options) : 
+    option(name, text_generator, ycor),
+    _value(value),
+    _timer(0),
+    _left_sprite(bn::sprite_items::trogdor_variable_8x8_font.create_sprite(0, ycor, 27)),
+    _right_sprite(bn::sprite_items::trogdor_variable_8x8_font.create_sprite(0, ycor, 29)),
+    _selector_options(selector_options)
+    {
+    
+    _left_sprite.set_palette(RED_PALETTE);
+    _right_sprite.set_palette(RED_PALETTE);    
+    update_text();
+    set_selected(false);
+}
+
+void selector_option::update(){
+    uint8_t index = current_index();
+
+    update_text();
+
+    if(bn::keypad::right_pressed() && index < _selector_options.size() - 1){
+        _value = _selector_options.at(index + 1);
+    }
+    else if(bn::keypad::left_pressed() && index > 0){
+        _value = _selector_options.at(index - 1);
+    }
+
+}
+
+void selector_option::update_text(){ 
+    _selector_text_sprites.clear();
+    bn::string<16> selected;
+    bn::ostringstream stream(selected);
+
+    stream << _value;            
+
+    _text_generator.set_palette_item(RED_PALETTE);
+    _text_generator.set_center_alignment();
+    _text_generator.generate(80, _text_sprites.at(0).y(), selected, _selector_text_sprites);
+
+    _left_sprite.set_visible(current_index() != 0);
+    _right_sprite.set_visible(current_index() != _selector_options.size() - 1);
+
+    if(bn::keypad::left_pressed()){
+        _timer = -1;
+    }else if(bn::keypad::right_pressed()){
+        _timer = 1;
+    }
+    
+
+
+    if(_timer < 0){
+        _left_sprite.set_x(80 - 10);
+        --_timer;
+    }else{
+        _left_sprite.set_x(80 - 8);
+    }
+    if(_timer > 0){
+        _right_sprite.set_x(80 + 10);
+        ++_timer;
+    }else{
+        _right_sprite.set_x(80 + 8);
+    }
+
+    if(_timer < -5 || _timer > 5 ) _timer = 0;
+
+}
+
+void selector_option::set_selected(const bool &selected){
+    option::set_selected(selected);
+    bn::sprite_palette_item palette_item = BLACK_PALETTE;
+    if(selected) palette_item = RED_PALETTE;
+    for(bn::sprite_ptr &s : _selector_text_sprites) {
+        s.set_palette(palette_item);
+    }
+    
+    _left_sprite.set_visible(selected);
+    _right_sprite.set_visible(selected);
 }
 
 }

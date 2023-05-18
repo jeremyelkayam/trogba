@@ -48,16 +48,22 @@ namespace trog {
         troghammer_status thinfo;
     };
 
+    struct saved_options {
+        bn::fixed sound_vol, music_vol, voice_vol;
+        bool troghammer, decrement_trogmeter;
+        uint8_t starting_lives;        
+    };
+
     struct saved_data {
         bn::array<char, 8> format_tag;
         //options
-        bn::fixed sound_vol, music_vol, voice_vol;
-        bool troghammer, decrement_trogmeter;
-        uint8_t starting_lives;
+        saved_options options;
 
         bn::array<high_score_entry, 8> high_scores_table;
 
         saved_session session;
+
+        bool cheat_unlocked; 
     };
 
     class common_stuff { 
@@ -76,7 +82,6 @@ namespace trog {
             void set_autosave_text_visible(const bool &visible) {set_sprite_arr_visible(_autosave_text, visible);};
 
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
-
 
         private:
 

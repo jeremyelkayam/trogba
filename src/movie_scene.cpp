@@ -333,7 +333,7 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->stop_animating();
         }else if(_timer == 180){
             sbad->start_animating();
-            bn::sound_items::cutscene_congrats.play(_common_stuff.savefile.sound_vol);
+            bn::sound_items::cutscene_congrats.play(_common_stuff.savefile.options.sound_vol);
             _common_stuff.text_generator.generate(0, -60, "congratulations.", _text_sprites);
         }else if(_timer == 250){
             sbad->stop_animating();
@@ -352,7 +352,7 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
             _text_sprites.clear();
-            bn::sound_items::cutscene_credits.play(_common_stuff.savefile.music_vol);
+            bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
             _common_stuff.text_generator.generate(0, -60, "cast", _text_sprites);
         }else if(_timer == credits_start_time + credits_interval){
             _text_sprites.clear();

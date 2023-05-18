@@ -40,7 +40,7 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
             for(int z = 6; z >= 0; --z){
                 high_score_entry& current = _high_scores_table[z];
                 high_score_entry& previous = _high_scores_table[z+1];
-                if(previous.get_score() >= current.get_score()){
+                if(previous.get_score() > current.get_score()){
                     bn::swap(previous, current);
                     _table_index=z;
                 }

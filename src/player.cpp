@@ -239,7 +239,7 @@ void player::handle_peasant_collision(peasant &peasant){
         BN_LOG("stomped.");
         peasant.stomp();
 
-        bn::sound_items::stomp.play(_common_stuff.savefile.sound_vol);
+        bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
         _common_stuff.commentary.stomp_peasant();
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
@@ -255,7 +255,7 @@ void player::start_burninating(){
     _burninate_time = _burninate_length;
     _breath.enable();
 
-    bn::sound_items::burninate.play(_common_stuff.savefile.sound_vol);
+    bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
 }
 
 void player::handle_knight_collision(knight &knight){
@@ -278,7 +278,7 @@ void player::handle_arrow_collision(archer &archer){
 }
 
 void player::die(uint8_t death_index){
-    bn::sound_items::death.play(_common_stuff.savefile.sound_vol);
+    bn::sound_items::death.play(_common_stuff.savefile.options.sound_vol);
     _time_dead = 1;
     _breath.disable();
     _sprite.set_tiles(_spritem.tiles_item(), death_index + _walk_cycle_frames);

@@ -10,11 +10,19 @@ namespace trog{
 
     class title_scene : public scene{ 
     private:
+        common_stuff &_common_stuff;
+
         bn::regular_bg_ptr _titlebg;
         bn::vector<bn::sprite_ptr, 4> _title_sprites;
         bn::sprite_ptr _version_label;
         
-        int _frame_counter;
+        uint16_t _frame_counter;
+        uint8_t _secret_code_index;
+
+        bn::vector<bn::keypad::key_type, 10> _secret_code;
+
+        
+
     public:
         title_scene(common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;

@@ -64,7 +64,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     _countryside.put_below();
 
     if(_sesh.get_level() == 1 && _sesh.get_mans() == 30){
-        bn::sound_items::secret_unlocked.play(_common_stuff.savefile.sound_vol);
+        bn::sound_items::secret_unlocked.play(_common_stuff.savefile.options.sound_vol);
     }
 
 
@@ -172,11 +172,11 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     if(_sesh.get_level() == 0){
         //Initialize tutorial
         _text_box.reset(new text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!"));
-        bn::music_items::skoa.play(common_stuff.savefile.music_vol);
-        _voices_volume = common_stuff.savefile.voice_vol;
+        bn::music_items::skoa.play(common_stuff.savefile.options.music_vol);
+        _voices_volume = common_stuff.savefile.options.voice_vol;
 
         //Temporarily turn voices off.
-        common_stuff.savefile.voice_vol = 0;
+        common_stuff.savefile.options.voice_vol = 0;
     }
 }
 
@@ -351,13 +351,13 @@ bn::optional<scene_type> play_scene::update(){
 
             if(_troghammer->awake_alert()){
                 _hud.scroll_text("THE TROGHAMMER HAS AWOKEN...");   
-                _th_sound.reset(new troghammer_sound(1, _common_stuff.savefile.sound_vol));                      
+                _th_sound.reset(new troghammer_sound(1, _common_stuff.savefile.options.sound_vol));                      
             }else if(_troghammer->coming_alert()){
                 _hud.scroll_text("THE TROGHAMMER APPROACHES...");   
-                _th_sound.reset(new troghammer_sound(2, _common_stuff.savefile.sound_vol));                      
+                _th_sound.reset(new troghammer_sound(2, _common_stuff.savefile.options.sound_vol));                      
             }else if(_troghammer->arrived_alert()){
                 _hud.scroll_text("THE TROGHAMMER ARRIVES!");   
-                _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.sound_vol));      
+                _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.options.sound_vol));      
             }
         }
         if(_th_sound){
@@ -452,7 +452,7 @@ bn::optional<scene_type> play_scene::update(){
     if(result && result != scene_type::BONUS){
         _hud.clear_scrolling_text();
         if(bn::music::playing()) bn::music::stop();
-        if(_voices_volume != 0) _common_stuff.savefile.voice_vol = _voices_volume;
+        if(_voices_volume != 0) _common_stuff.savefile.options.voice_vol = _voices_volume;
     }
 
     return result;
@@ -652,10 +652,10 @@ void play_scene::spawn_troghammer(bool alert){
             //If the troghammer spawns in immediately, 
             // use the "ARRIVES" notification instead of the "STIRS" one
             _hud.scroll_text("THE TROGHAMMER ARRIVES!");
-            _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.sound_vol));          
+            _th_sound.reset(new troghammer_sound(3, _common_stuff.savefile.options.sound_vol));          
         }else{
             _hud.scroll_text("THE TROGHAMMER STIRS...");   
-            _th_sound.reset(new troghammer_sound(0, _common_stuff.savefile.sound_vol));          
+            _th_sound.reset(new troghammer_sound(0, _common_stuff.savefile.options.sound_vol));          
         }
     }
 }
@@ -680,7 +680,7 @@ void play_scene::update_tutorial(){
 
             _cottages.at(0).drop();
             _cottages.at(1).drop();
-            bn::sound_items::heavylanding.play(_common_stuff.savefile.sound_vol);
+            bn::sound_items::heavylanding.play(_common_stuff.savefile.options.sound_vol);
         }
 
     }else if(_knights.size() == 0){

@@ -57,7 +57,7 @@ void firebreath::handle_peasant_collision(peasant &peasant){
     bn::fixed_rect pbox = peasant.get_hitbox();
     if(_hitbox.intersects(pbox) && !peasant.dead() && !peasant.onfire()){
         peasant.burninate();        
-        bn::sound_items::peasantscream.play(_common_stuff.savefile.sound_vol);
+        bn::sound_items::peasantscream.play(_common_stuff.savefile.options.sound_vol);
         _common_stuff.commentary.ignite_peasant();
     }
 }

@@ -162,12 +162,12 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(common_stuff.savefile.sound_vol);
+            bn::sound_items::kick.play(common_stuff.savefile.options.sound_vol);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(common_stuff.savefile.sound_vol);
+            bn::sound_items::trogador.play(common_stuff.savefile.options.sound_vol);
             kicked=false;
         }
 
@@ -180,6 +180,7 @@ int main()
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
         common_stuff.rand.update();
+        common_stuff.commentary.update();
 
         bn::core::update();
     }
