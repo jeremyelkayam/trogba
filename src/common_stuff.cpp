@@ -7,9 +7,9 @@ namespace trog {
 
 
 common_stuff::common_stuff() : 
-    text_generator(trog::variable_8x16_sprite_font),
-    big_generator(trog::variable_32x64_sprite_font),
-    small_generator(trog::variable_8x8_sprite_font),
+    text_generator(variable_8x16_sprite_font),
+    big_generator(variable_32x64_sprite_font),
+    small_generator(variable_8x8_sprite_font),
     commentary(savefile.options.voice_vol, rand) { 
 
     //DEFAULT format tag

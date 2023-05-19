@@ -12,6 +12,7 @@ namespace trog{
     private:
         common_stuff &_common_stuff;
 
+
         bn::regular_bg_ptr _titlebg, _titlegraphic;
         bn::sprite_ptr _version_label;
         

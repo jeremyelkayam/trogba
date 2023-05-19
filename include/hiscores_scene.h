@@ -20,6 +20,7 @@ namespace trog{
 
         session_info &_sesh;
         common_stuff &_common_stuff;
+        bn::sprite_text_generator _text_generator;
         const scene_type _last_scene;
 
         bn::vector<bn::sprite_ptr, 128> _text_sprites;

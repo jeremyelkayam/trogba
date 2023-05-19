@@ -4,6 +4,7 @@
 #include <bn_string.h>
 
 #include "bn_regular_bg_items_hi_scores_bg.h"
+#include "trogdor_fixed_8x16_sprite_font.h"
 #include "hiscores_scene.h"
 #include "constants.h"
 
@@ -14,6 +15,7 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
                              'O','P','Q','R','S','T','U','V','W','X','Y','Z','!','?', ' '}),
         _sesh(sesh),
         _common_stuff(common_stuff),
+        _text_generator(fixed_8x16_sprite_font),
         _last_scene(last_scene),
         _cursor_sprite(bn::sprite_items::trogdor_fixed_8x16_font.create_sprite(130,0,62)),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)), 
@@ -30,6 +32,10 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
         // Maybe add a crown or something if you beat the game? 
         _go_to_credits = true;
     }    
+
+
+    _text_generator.set_left_alignment();
+    _text_generator.set_palette_item(BROWN_PALETTE);
     if(last_scene != scene_type::PLAY && last_scene != scene_type::MENU){
 
         //Propagate the player's score within the scores list (if applicable)
@@ -132,16 +138,17 @@ bn::optional<scene_type> hiscores_scene::update(){
 void hiscores_scene::draw_name_entry(){
     BN_ASSERT(_table_index != -1);
     _name_entry_sprites.clear();
-    _common_stuff.text_generator.set_left_alignment();
 
     if(_blink_timer == 15){
         _cursor_sprite.set_visible(true);
     }else if(_blink_timer == 0){
         _cursor_sprite.set_visible(false);
     }
+
+
     _cursor_sprite.set_x(-70 + _string_index * 8);
 
-    _common_stuff.text_generator.generate(-74, -43 + _table_index*15, _high_scores_table.at(_table_index).get_name(), _name_entry_sprites);   
+    _text_generator.generate(-74, -43 + _table_index*15, _high_scores_table.at(_table_index).get_name(), _name_entry_sprites);   
 }
 
 void hiscores_scene::update_name_entry(){
