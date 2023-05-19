@@ -107,11 +107,13 @@ bn::optional<scene_type> menu_scene::update(){
                 _selection_anim_timer = 0;
                 bn::sound_items::deleted.play(_common_stuff.savefile.options.sound_vol);
             }
-        }else if(_selected_option_index == 1){
+        }else if(_selected_option_index == 1 || _selected_option_index == 2){
             //Erase the existing session if you're starting a new game
             _common_stuff.savefile.session.exists = false;
             _sesh.reset();
-        }else if(_selected_option_index == 2){
+        }
+        
+        if(_selected_option_index == 2){
             _sesh.set_level(0);
         }
 
