@@ -5,7 +5,7 @@
 #include <bn_version.h>
 #include <bn_sound_items.h>
 #include "credits_scene.h"
-#include "bn_sprite_items_titlegraphic.h"
+#include "bn_regular_bg_items_titlegraphic.h"
 #include "constants.h"
 
 namespace trog {
@@ -19,16 +19,12 @@ credits_scene::credits_scene(common_stuff &common_stuff) :
 void credits_scene::setup_credits(){
     int ycor = 100;
 
-    credit_line title;
 
 
-    for(int z = 0; z < 4 ; ++z){
-        //todo: change this back to a background layer?? Is that crazy? 
-        // title.sprites.push_back(bn::sprite_items::titlegraphic.create_sprite(TROG_TITLE_TEXT_X + 64*z, ycor, z));
-    }
-    title.ycor = ycor;
+    //todo: redraw this graphic. I already remade the logo in high res 
+    // so i can just downscale it
+    _titlegraphic = bn::regular_bg_items::titlegraphic.create_bg_optional(0, ycor);
 
-    _credits.emplace_back(title);
 
     bn::string<64> butano_str;
     bn::ostringstream butano_string_stream(butano_str);
@@ -122,7 +118,12 @@ bn::optional<scene_type> credits_scene::update(){
     }
 
      
-
+    if(_titlegraphic){
+        _titlegraphic->set_y(_titlegraphic->y() - speed);
+        if(_titlegraphic->y() < -100){
+            _titlegraphic.reset();
+        }
+    }
 
 
     for(credit_line &line : _credits ){

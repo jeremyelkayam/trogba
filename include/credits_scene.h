@@ -20,6 +20,7 @@ namespace trog{
     private:
 
         bn::vector<credit_line, 64> _credits;
+        bn::optional<bn::regular_bg_ptr> _titlegraphic;
 
         void setup_credits();
 
