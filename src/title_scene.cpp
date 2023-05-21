@@ -4,7 +4,7 @@
 
 #include "bn_regular_bg_items_titlebg.h"
 #include "bn_regular_bg_items_titlegraphic.h"
-#include "bn_sprite_items_versionlabel.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "title_scene.h"
 
 namespace trog {
@@ -13,11 +13,11 @@ title_scene::title_scene(common_stuff &common_stuff) :
         _common_stuff(common_stuff),
         _titlebg(bn::regular_bg_items::titlebg.create_bg(TROG_TITLE_BG_X, TROG_TITLE_BG_Y)),
         _titlegraphic(bn::regular_bg_items::titlegraphic.create_bg(0, TROG_TITLE_TEXT_Y)),
-        _version_label(bn::sprite_items::versionlabel.create_sprite(-104, 77)),
         _frame_counter(0),
         _secret_code_index(0) {
-
-    _version_label.set_item(bn::sprite_items::versionlabel, 2);
+    _common_stuff.small_generator.set_left_alignment();
+    _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
+    _common_stuff.small_generator.generate(-120, 77, "v2.0", _version_label);
 
     bn::sound_items::themesong.play(common_stuff.savefile.options.music_vol);
 

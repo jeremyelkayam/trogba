@@ -14,7 +14,7 @@ namespace trog{
 
 
         bn::regular_bg_ptr _titlebg, _titlegraphic;
-        bn::sprite_ptr _version_label;
+        bn::vector<bn::sprite_ptr,2> _version_label;
         
         uint16_t _frame_counter;
         uint8_t _secret_code_index;
