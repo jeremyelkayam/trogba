@@ -6,6 +6,16 @@ Partially inspired by that unfinished GBA port of Awexome Cross, and those DS ho
 
 ## Releases
 
+### 2.0
+Released 05/21/2023
+- Added the Troghammer from Trogdor: The Board Game
+- Added main menu
+- Added "how to play" mode
+- Added options menu
+- Added pause menu
+- Fixed a few bugs and made some slight balance changes.
+- [Full changelog here.](https://github.com/jeremyelkayam/trogba/releases/tag/release2.0)
+
 ### 1.0
 Released 01/13/2022
 - Initial public release. 
