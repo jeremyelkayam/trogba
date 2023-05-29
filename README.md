@@ -1,4 +1,4 @@
-# Trogba
+# Trogba (a.k.a. Trogdor for GBA)
 Remember that game [Trogdor](https://old.homestarrunner.com/trogdor-canvas/) from like 2003 or so? Well, have you ever wanted to play it on a console that was actually out in 2003? Such as the Nintendo Game Boy Advance? No, you don't care and think it's a stupid idea? Well, as a great man once said, when have I ever backed down from a bad idea, right? So I made Trogdor on the GBA
 
 ## What is this?
