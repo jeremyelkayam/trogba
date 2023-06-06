@@ -2,7 +2,6 @@
 #include <bn_math.h>
 #include "player.h"
 #include "entity.h"
-#include "bn_sprite_items_majesty.h"
 #include "bn_sprite_items_player.h"
 #include "bn_sprite_items_player_dead.h"
 
@@ -11,20 +10,15 @@ namespace trog {
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
         entity(xcor, ycor, 24, 34, bn::sprite_items::player.create_sprite(xcor, ycor)),
         _speed(0.87),
-        _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
-        _majesty_flash_timer(0),
         _breath(sesh),
         _sesh(sesh),
         _next_pos(xcor,ycor)
         {
-    _majesty.set_visible(false);
-    _majesty.set_z_order(FRONT_ZORDER);
-    _majesty.set_scale(2.3);
     _top_bound = -72;
     _sprite.set_z_order(FRONT_ZORDER);
 
@@ -286,24 +280,12 @@ bool player::invincible(){
 }
 
 void player::update_win_anim(){
-    _majesty_flash_timer++;
-
-    
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
     _sprite.set_scale(2);
-    // _sprite.set_item(bn::sprite_items::player);
+    _sprite.set_item(bn::sprite_items::player);
     _sprite.put_above();
-    _majesty.put_above();
-    
-    _majesty.set_visible(_majesty_flash_timer < 15);
     _breath.set_visible(false);
-
-    if(_majesty_flash_timer > 15 * 2){
-        _majesty_flash_timer = 0;
-    }
-
 }
-
 
 }
