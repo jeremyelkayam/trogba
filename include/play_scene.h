@@ -4,6 +4,7 @@
 #include <bn_affine_bg_actions.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_forward_list.h>
+#include <bn_unique_ptr.h>
 #include "scene.h"
 #include "session_info.h"
 #include "player.h"
@@ -26,7 +27,7 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _flashing_text_time;
+        uint8_t _burninate_pause_time, _win_pause_time, _flashing_text_time;
         bool _player_paused;
 
         bn::regular_bg_ptr _countryside;

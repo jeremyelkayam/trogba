@@ -124,10 +124,7 @@ bn::optional<scene_type> play_scene::update(){
     }
 
 
-    if(_burninate_pause_time > 0) {
-        _burninate_pause_time++;
-        BN_ASSERT(_overlay_text, "If we are paused due to burnination, THERE MUST BE TEXT");
-    }else if(level_complete()){
+    if(level_complete()){
         _win_pause_time++;
         _trogdor->update_win_anim();
     }else if(_player_paused){
@@ -141,6 +138,12 @@ bn::optional<scene_type> play_scene::update(){
         ++_flashing_text_time;
 
     }else{
+
+        //idk now it doesn't pause to burninate. maybe better maybe worse
+        if(_burninate_pause_time > 0) {
+            _burninate_pause_time++;
+            BN_ASSERT(_overlay_text, "If we have burnination, THERE MUST BE TEXT");
+        }
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame

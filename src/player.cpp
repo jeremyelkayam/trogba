@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "bn_sprite_items_majesty.h"
 #include "bn_sprite_items_player.h"
+#include "bn_sprite_items_player_dead.h"
 
 namespace trog {
 
@@ -241,20 +242,21 @@ void player::start_burninating(){
 
 void player::handle_knight_collision(knight &knight){
     if(collides_with(knight) && !invincible()) { 
-        die(5);
+        die(1);
     }
 }
 
 void player::handle_arrow_collision(archer &archer){
     if(collides_with(archer) &&  !invincible()) { 
-        die(4);
+        die(0);
         archer.destroy_arrow();
     }
 }
 
 void player::die(short frame_no){
     _time_dead = 1;
-    _sprite.set_tiles(bn::sprite_items::player.tiles_item(), frame_no);
+    _sprite.set_item(bn::sprite_items::player_dead, frame_no);
+    _sprite.set_y(_pos.y() + 10);
     _breath.disable();
 }
 
