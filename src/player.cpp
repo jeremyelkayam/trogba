@@ -201,18 +201,14 @@ void player::handle_wall_collision(const bn::fixed_rect &wall_hitbox){
 
 bool player::handle_cottage_collision(cottage &cottage){
     const bn::fixed_rect &cottagebox = cottage.get_hitbox();
-    if(!cottage.burninated() && !cottage.has_treasure()){
+    if(!cottage.burninated()){
         handle_wall_collision(cottagebox);
     }    
 
 
     if(_hitbox.intersects(cottagebox) && !cottage.burninated()){
-        if(cottage.has_treasure()){
-            return true;
-        }else{
-            //get him OUT of that box!!
-            free_from_collisionbox(cottagebox);
-        }
+        //get him OUT of that box!!
+        free_from_collisionbox(cottagebox);
     }
     if(burninating()){
         _breath.handle_cottage_collision(cottage);

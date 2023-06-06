@@ -60,7 +60,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 		if (levels[level_index][j] > 0) {
             //Index 1 in level data refers to the number of the treasure hut from 1-6
             // 0 if no treasure hut             
-            bool treasurehut = (i == (levels[level_index][1] - 1));
             bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
             bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
 
@@ -87,9 +86,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 			_cottages.emplace_back(
 				xcor,
                 ycor,
-				enumdir,
-                treasurehut,
-                false
+				enumdir
 			);
 		}
 	}

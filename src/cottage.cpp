@@ -3,23 +3,27 @@
 
 #include "bn_sprite_items_cottage.h"
 #include "bn_sprite_items_cottage_burninated.h"
+#include "bn_sprite_items_cottage_bits.h"
 #include "bn_sprite_items_cottagefire.h"
 
 namespace trog {
 
-cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated) : 
-        entity(xcor, ycor, 20, 20, bn::sprite_items::cottage.create_sprite(xcor, ycor, 2)),
+cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction) : 
+        entity(xcor, ycor, 20, 20, bn::sprite_items::cottage.create_sprite(xcor, ycor + 1, 2)),
         _direction(direction),
-        _has_treasure(has_treasure) {
+        _tippytop(bn::sprite_items::cottage_bits.create_sprite(xcor + 1, ycor - 19, 2)) {
     switch(direction) {
         case direction::UP:
             _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 0);
+            _tippytop.set_tiles(bn::sprite_items::cottage_bits.tiles_item(), 0);
         break;
         case direction::DOWN:
-            _sprite.set_tiles(bn::sprite_items::cottage.tiles_item(), 1);
+            _tippytop.set_tiles(bn::sprite_items::cottage_bits.tiles_item(), 1);
         break;
         case direction::RIGHT:
             _sprite.set_horizontal_flip(true);
+            _tippytop.set_horizontal_flip(true);
+            _tippytop.set_x(xcor - 1);
         break;
         default:
         break;
@@ -27,8 +31,6 @@ cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_t
     _time_burning = 0;
 
     _sprite.set_z_order(BACK_ZORDER);
-
-    if(burninated) _time_burning = 120 + 1;
 
 }
 
@@ -69,16 +71,4 @@ bool cottage::burninate(){
     }
     return false;
 }
-
-bool cottage::has_treasure(){
-    return false;
-}
-
-void cottage::set_visible(bool visible){
-    entity::set_visible(visible);
-    if(_flames) { //if the cottage is on fire
-        _flames->set_visible(visible);
-    }
-}
-
 }
