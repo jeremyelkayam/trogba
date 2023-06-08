@@ -8,6 +8,8 @@
 #include "session_info.h"
 #include "knight.h"
 #include "archer.h"
+#define BODY_XOFFSET 3
+#define BODY_YOFFSET -6
 
 namespace trog {
     class player : public entity { 

@@ -2,16 +2,16 @@
 #include <bn_math.h>
 #include "player.h"
 #include "entity.h"
-#include "bn_sprite_items_player.h"
+#include "bn_sprite_items_trogbody.h"
 #include "bn_sprite_items_player_dead.h"
 
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, 24, 34, bn::sprite_items::player.create_sprite(xcor, ycor)),
+        entity(xcor, ycor, 24, 34, bn::sprite_items::trogbody.create_sprite(xcor + BODY_XOFFSET, ycor + BODY_YOFFSET)),
         _speed(0.87),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 5, bn::sprite_items::player.tiles_item(), 0, 1, 2, 3)),
+                    _sprite, 5, bn::sprite_items::trogbody.tiles_item(), 0, 0, 0, 0)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -61,6 +61,7 @@ void player::update(){
     if(!dead()){
         update_pos();
         entity::update();
+
         if(any_dpad_input()){
             _walkcycle.update();
         }
@@ -94,6 +95,8 @@ void player::update(){
             _iframes = 0;
         }
         update_next_pos();
+        _sprite.set_x(_sprite.x() + ((_sprite.horizontal_flip() ? -1 : 1) * BODY_XOFFSET));
+        _sprite.set_y(_sprite.y() + BODY_YOFFSET);        
 
         // #ifdef DEBUG
         //     //Insta-burninate by pressing b
@@ -255,8 +258,8 @@ void player::update_firebreath(){
     if(_sprite.horizontal_flip()){
         xoffset=-xoffset;
     }
-    _breath.set_x(_sprite.position().x() + xoffset);
-    _breath.set_y(_sprite.position().y() + -8);        
+    _breath.set_x(_pos.x() + xoffset);
+    _breath.set_y(_pos.y() + -8);        
     _breath.update();
 }
 
@@ -283,7 +286,7 @@ void player::update_win_anim(){
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
     _sprite.set_scale(2);
-    _sprite.set_item(bn::sprite_items::player);
+    _sprite.set_item(bn::sprite_items::trogbody);
     _sprite.put_above();
     _breath.set_visible(false);
 }
