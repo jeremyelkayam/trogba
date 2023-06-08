@@ -73,7 +73,7 @@ namespace trog {
             void disable_breath(){_breath.disable();}
             void set_horizontal_flip(bool horizontal_flip);
 
-            void update_win_anim();
+            void setup_win_pose();
             void update_sprites();
     };
 }

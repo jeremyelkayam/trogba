@@ -111,19 +111,18 @@ void play_scene::set_paused_text_visible(bool visible){
 }
 
 bn::optional<scene_type> play_scene::update(){
-    set_visible(true);
 
     bn::optional<scene_type> result;
 
     if(_overlay_text) _overlay_text->update();
 
     if(_win_pause_time == 1){
+        _trogdor->setup_win_pose();
     }
 
 
     if(level_complete()){
         _win_pause_time++;
-        _trogdor->update_win_anim();
     }else if(_player_paused){
         if(_flashing_text_time == 15){
             set_paused_text_visible(false);

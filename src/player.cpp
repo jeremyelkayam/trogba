@@ -1,5 +1,7 @@
 #include <bn_keypad.h>
 #include <bn_math.h>
+#include <bn_vector.h>
+#include <bn_log.h>
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_trogbody.h"
@@ -17,7 +19,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _feet(bn::sprite_items::trogfeet.create_sprite(xcor, ycor)),
         _speed(0.87),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _feet, 5, bn::sprite_items::trogfeet.tiles_item(), 0, 1, 2, 3)),
+                    _feet, 6, bn::sprite_items::trogfeet.tiles_item(), 0, 1, 2, 3)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -56,20 +58,29 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 }
 
 void player::update_sprites(){
-    bn::fixed_point body_offset(3, -6), arm_offset(-15, -3),
-                    tail_offset(3, 14), feet_offset(0, tail_offset.y() + 7);
+    bn::fixed_point body_offset(3, -6), arm_offset(-15, -2),
+                    tail_offset(3, 14), feet_offset(0, tail_offset.y() + 6);
     if(_sprite.horizontal_flip()){
         body_offset.set_x(-body_offset.x());
         arm_offset.set_x(-arm_offset.x());
         tail_offset.set_x(-tail_offset.x());
         feet_offset.set_x(-feet_offset.x());
     } 
-    if(_walkcycle.current_index() == 2 || _walkcycle.current_index() == 3){
+
+    // for(const uint16_t &index : _walkcycle.graphics_indexes()){
+    //     BN_LOG("graphics indexes print: ", index);
+    // }
+
+    if(_walkcycle.current_index() == 0 || _walkcycle.current_index() == 3){
+        BN_LOG(_walkcycle.current_index());
         body_offset.set_y(body_offset.y() + 1);        
         arm_offset.set_y(arm_offset.y() + 1);        
-        tail_offset.set_y(tail_offset.y() + 1);        
-
+        tail_offset.set_y(tail_offset.y() + 1);  
+        _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 1);      
+    }else{
+        _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);      
     }
+
     _sprite.set_position(_pos + body_offset);
     _beefy_arm.set_position(_pos + arm_offset);
     _tail.set_position(_pos + tail_offset);
@@ -111,8 +122,14 @@ void player::update(){
             bool odd = _iframes % 2;
             if(odd){
                 _sprite.set_visible(false);
+                _beefy_arm.set_visible(false);
+                _tail.set_visible(false);
+                _feet.set_visible(false);
             }else{
                 _sprite.set_visible(true);
+                _beefy_arm.set_visible(true);
+                _tail.set_visible(true);
+                _feet.set_visible(true);
             }
             ++_iframes;
         }
@@ -271,6 +288,9 @@ void player::die(short frame_no){
     _sprite.set_item(bn::sprite_items::player_dead, frame_no);
     _sprite.set_y(_pos.y() + 10);
     _breath.disable();
+    _beefy_arm.set_visible(false);
+    _tail.set_visible(false);
+    _feet.set_visible(false);
 }
 
 void player::update_firebreath(){
@@ -305,12 +325,25 @@ bool player::invincible(){
     return _iframes || dead() || burninating();
 }
 
-void player::update_win_anim(){
-    _sprite.set_horizontal_flip(false);
-    _sprite.set_position(0, 0);
-    _sprite.set_scale(2);
-    _sprite.set_item(bn::sprite_items::trogbody);
-    _sprite.put_above();
+void player::setup_win_pose(){
+    _pos.set_x(0);
+    _pos.set_y(0);
+    set_horizontal_flip(false);
+    _feet.set_tiles(bn::sprite_items::trogfeet.tiles_item(), 1);
+    _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 1);
+    update_sprites();
+    bn::vector<bn::sprite_ptr, 4> _sprites;
+    _sprites.emplace_back(_sprite);
+    _sprites.emplace_back(_beefy_arm);
+    _sprites.emplace_back(_tail);
+    _sprites.emplace_back(_feet);
+
+    for(bn::sprite_ptr &sprite : _sprites) {
+        sprite.set_position(sprite.x() * 2, sprite.y() * 2);
+        sprite.set_scale(2);
+        sprite.put_above();
+    }
+    _feet.set_y(_feet.y() + 2);
     _breath.set_visible(false);
 }
 
