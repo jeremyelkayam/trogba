@@ -141,6 +141,7 @@ void player::update(){
         }
         update_next_pos();
         update_sprites();    
+        if(bn::keypad::b_pressed()) start_burninating();
     }
 
 }

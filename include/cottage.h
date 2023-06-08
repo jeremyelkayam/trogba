@@ -9,7 +9,7 @@ namespace trog {
         private:
             direction _direction;
 
-            bn::sprite_ptr _tippytop;
+            bn::vector<bn::sprite_ptr,2> _bits;
             bn::optional<bn::sprite_ptr> _flames;
             bn::optional<bn::sprite_animate_action<4>> _burningflames;
             uint8_t _time_burning;
