@@ -8,14 +8,12 @@
 #include "session_info.h"
 #include "knight.h"
 #include "archer.h"
-#define BODY_XOFFSET 3
-#define BODY_YOFFSET -6
 
 namespace trog {
     class player : public entity { 
         private:
+            bn::sprite_ptr _beefy_arm, _tail, _feet;
             const bn::fixed _speed;
-
 
             bn::fixed_point _direction;
  
@@ -76,5 +74,6 @@ namespace trog {
             void set_horizontal_flip(bool horizontal_flip);
 
             void update_win_anim();
+            void update_sprites();
     };
 }

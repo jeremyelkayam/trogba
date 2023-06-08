@@ -4,14 +4,20 @@
 #include "entity.h"
 #include "bn_sprite_items_trogbody.h"
 #include "bn_sprite_items_player_dead.h"
+#include "bn_sprite_items_beefy_arm.h"
+#include "bn_sprite_items_trogtail.h"
+#include "bn_sprite_items_trogfeet.h"
 
 namespace trog {
 
 player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes) : 
-        entity(xcor, ycor, 24, 34, bn::sprite_items::trogbody.create_sprite(xcor + BODY_XOFFSET, ycor + BODY_YOFFSET)),
+        entity(xcor, ycor, 24, 34, bn::sprite_items::trogbody.create_sprite(xcor, ycor)),
+        _beefy_arm(bn::sprite_items::beefy_arm.create_sprite(xcor, ycor)),
+        _tail(bn::sprite_items::trogtail.create_sprite(xcor, ycor)),
+        _feet(bn::sprite_items::trogfeet.create_sprite(xcor, ycor)),
         _speed(0.87),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 5, bn::sprite_items::trogbody.tiles_item(), 0, 0, 0, 0)),
+                    _feet, 5, bn::sprite_items::trogfeet.tiles_item(), 0, 1, 2, 3)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
@@ -37,6 +43,7 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
 	} else {
 		_burninate_length /= 0.7;
 	}
+    update_sprites();    
 
 
     //todo maybe condense all the timers into one?
@@ -46,6 +53,27 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
     }else{
         _iframes = 0;
     }
+}
+
+void player::update_sprites(){
+    bn::fixed_point body_offset(3, -6), arm_offset(-15, -3),
+                    tail_offset(3, 14), feet_offset(0, tail_offset.y() + 7);
+    if(_sprite.horizontal_flip()){
+        body_offset.set_x(-body_offset.x());
+        arm_offset.set_x(-arm_offset.x());
+        tail_offset.set_x(-tail_offset.x());
+        feet_offset.set_x(-feet_offset.x());
+    } 
+    if(_walkcycle.current_index() == 2 || _walkcycle.current_index() == 3){
+        body_offset.set_y(body_offset.y() + 1);        
+        arm_offset.set_y(arm_offset.y() + 1);        
+        tail_offset.set_y(tail_offset.y() + 1);        
+
+    }
+    _sprite.set_position(_pos + body_offset);
+    _beefy_arm.set_position(_pos + arm_offset);
+    _tail.set_position(_pos + tail_offset);
+    _feet.set_position(_pos + feet_offset);
 }
 
 bool player::burninating(){
@@ -95,15 +123,7 @@ void player::update(){
             _iframes = 0;
         }
         update_next_pos();
-        _sprite.set_x(_sprite.x() + ((_sprite.horizontal_flip() ? -1 : 1) * BODY_XOFFSET));
-        _sprite.set_y(_sprite.y() + BODY_YOFFSET);        
-
-        // #ifdef DEBUG
-        //     //Insta-burninate by pressing b
-        //     if(bn::keypad::b_pressed()){
-        //         start_burninating();   
-        //     }
-        // #endif
+        update_sprites();    
     }
 
 }
@@ -273,6 +293,9 @@ void player::set_visible(bool visible){
 void player::set_horizontal_flip(bool flip){
     entity::set_horizontal_flip(flip);
     _breath.set_horizontal_flip(flip);
+    _beefy_arm.set_horizontal_flip(flip);
+    _tail.set_horizontal_flip(flip);
+    _feet.set_horizontal_flip(flip);
 }
 
 bool player::invincible(){
