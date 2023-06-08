@@ -30,6 +30,8 @@ namespace trog{
         uint8_t _burninate_pause_time, _win_pause_time, _flashing_text_time;
         bool _player_paused;
 
+        bn::random &_rng;
+
         bn::regular_bg_ptr _countryside;
         bn::sprite_text_generator &_text_generator;
 
@@ -55,7 +57,7 @@ namespace trog{
 
 
     public:
-        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator);
+        play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::random &rng);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 }

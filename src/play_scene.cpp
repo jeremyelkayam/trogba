@@ -21,18 +21,19 @@
 
 namespace trog {
 
-play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator) : 
+play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &text_generator, bn::random &rng) : 
         _sesh(sesh),
         _trogdor(new player(40, 0 + 
         //temp fix for f'ed up spawnage
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, sesh, false)),
         _hud(hud),
-        _pfact(_cottages,_peasants),
-        _afact(_archers, sesh.get_level()),
+        _pfact(_cottages,_peasants, rng),
+        _afact(_archers, sesh.get_level(), rng),
         _burninate_pause_time(0),
         _win_pause_time(0),
         _flashing_text_time(0),
         _player_paused(false),
+        _rng(rng),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
         _text_generator(text_generator)
 {
@@ -98,8 +99,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);
 
-    _knights.emplace_front(-59, 31, false);
-    _knights.emplace_front(33,-50,true);
+    _knights.emplace_front(-59, 31, false, rng);
+    _knights.emplace_front(33,-50,true, rng);
 
 }
 
@@ -200,11 +201,10 @@ bn::optional<scene_type> play_scene::update(){
         if(_trogdor->dead() && !was_dead) {
             bn::string<13> str = "SWORDED!";
             //3% chance to get it wrong
-            short rand_num = rand() % 100;
-            if(rand_num % 100 == 0){
+            short rand_num = _rng.get_int(100);
+            if(rand_num == 0){
                 str = "SORDID!";
-                //maybe add that line of s.bad saying "A sordid affair"
-            }else if(rand_num % 100 == 1){
+            }else if(rand_num == 1){
                 str = "SORTED!";
             }
             _overlay_text.reset(new big_text(true, 0, 0, str.c_str(), 

@@ -2,6 +2,7 @@
 #include <bn_regular_bg_ptr.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_random.h>
 #include "scene.h"
 #include "session_info.h"
 
@@ -21,7 +22,7 @@ namespace trog{
         unsigned short _timer;
 
     public:
-        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &random);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

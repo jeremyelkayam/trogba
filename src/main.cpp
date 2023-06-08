@@ -33,6 +33,7 @@ int main()
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::sprite_text_generator text_generator(trog::variable_8x16_sprite_font);
+    bn::random rng;
     text_generator.set_center_alignment();
 
     trog::hud hud(sesh, text_generator, 10);
@@ -60,7 +61,7 @@ int main()
                         //so we should go back to the play scene from before 
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, text_generator));
+                        scene.reset(new trog::play_scene(sesh, hud, text_generator, rng));
                     }
                     break;
                 }
@@ -72,7 +73,7 @@ int main()
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, text_generator));
+                    scene.reset(new trog::level_win_scene(sesh, text_generator,rng));
                     break;
                 }
                 default: { 
@@ -98,7 +99,7 @@ int main()
 
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
-        rand();
+        rng.update();
         bn::core::update();
     }
 }

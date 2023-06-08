@@ -12,7 +12,7 @@
 
 namespace trog {
 
-level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator) : 
+level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &text_generator, bn::random &rng) : 
         _text_generator(text_generator),
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
         _burningflames(bn::create_sprite_animate_action_once(
@@ -31,7 +31,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     bn::string<7> line2 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(rand() % 33 == 0){
+    if(rng.get_int(33) == 0){
         line2 = "BEATED!";
     }
     _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);

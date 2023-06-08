@@ -14,7 +14,6 @@ namespace trog{
         virtual void spawn() final;
 
     public:
-        peasant_factory(bn::vector<cottage, 6>& cottages, bn::forward_list<peasant, 20>& peasants);
+        peasant_factory(bn::vector<cottage, 6>& cottages, bn::forward_list<peasant, 20>& peasants, bn::random &random);
     };
-
 }

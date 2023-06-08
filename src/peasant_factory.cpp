@@ -3,8 +3,8 @@
 
 namespace trog
 {
-    peasant_factory::peasant_factory(bn::vector<cottage, 6> &cottages, bn::forward_list<peasant, 20> &peasants) : 
-        enemy_factory(40, 120),
+    peasant_factory::peasant_factory(bn::vector<cottage, 6> &cottages, bn::forward_list<peasant, 20> &peasants, bn::random &random) : 
+        enemy_factory(40, 120, random),
         _cottages(cottages),
         _peasants(peasants)
     {

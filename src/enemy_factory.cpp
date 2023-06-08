@@ -3,9 +3,10 @@
 
 namespace trog
 {
-    enemy_factory::enemy_factory(int min, int max) : 
+    enemy_factory::enemy_factory(int min, int max, bn::random &random) : 
         _min_spawn_interval(min),
-        _max_spawn_interval(max)
+        _max_spawn_interval(max),
+        _random(random)
     {
         if(_min_spawn_interval == 0) {
             _min_spawn_interval = 60;
