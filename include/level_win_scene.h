@@ -5,6 +5,7 @@
 #include <bn_random.h>
 #include "scene.h"
 #include "session_info.h"
+#include "player.h"
 
 
 namespace trog{
@@ -16,6 +17,7 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 8> _levelbeated_text_sprites;
         bn::sprite_ptr _flames;
         bn::sprite_animate_action<4> _burningflames;
+        player _trogdor;
 
         session_info &_sesh;
 

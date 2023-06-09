@@ -17,6 +17,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
         _flames(bn::sprite_items::cottagefire.create_sprite(115, -78)),
         _burningflames(bn::create_sprite_animate_action_once(
                     _flames, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3)),
+        _trogdor(0, -5, sesh, false),
         _sesh(sesh),
         _timer(0) {
 
@@ -27,15 +28,16 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _text_generator.generate(73, 5, "nice work!", _nicework_text_sprites);
+    _text_generator.generate(0, -60, "nice work!", _nicework_text_sprites);
 
-    bn::string<7> line2 = "BEATEN!";
+    bn::string<20> word2 = "BEATEN!";
     //3% chance that the game misspells it lol
     if(rng.get_int(33) == 0){
-        line2 = "BEATED!";
+        word2 = "BEATED!";
     }
-    _text_generator.generate(70, 40, "LEVEL", _levelbeated_text_sprites);
-    _text_generator.generate(70, 55, line2, _levelbeated_text_sprites);
+    _trogdor.setup_win_pose();
+    _trogdor.flex();
+    _text_generator.generate(0, 60, "LEVEL " + word2, _levelbeated_text_sprites);
 
 }
 

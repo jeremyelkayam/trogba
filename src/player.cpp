@@ -331,7 +331,7 @@ void player::setup_win_pose(){
     _pos.set_y(0);
     set_horizontal_flip(false);
     _feet.set_tiles(bn::sprite_items::trogfeet.tiles_item(), 1);
-    _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 1);
+    _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);
     update_sprites();
     bn::vector<bn::sprite_ptr, 4> _sprites;
     _sprites.emplace_back(_sprite);
@@ -346,6 +346,12 @@ void player::setup_win_pose(){
     }
     _feet.set_y(_feet.y() + 2);
     _breath.set_visible(false);
+}
+
+void player::flex(){
+    _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);
+    _beefy_arm.set_vertical_flip(true);
+    _beefy_arm.set_y(_pos.y() - 10 * _beefy_arm.vertical_scale());
 }
 
 }

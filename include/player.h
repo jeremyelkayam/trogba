@@ -75,5 +75,6 @@ namespace trog {
 
             void setup_win_pose();
             void update_sprites();
+            void flex();
     };
 }

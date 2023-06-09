@@ -13,8 +13,10 @@ namespace trog{
         session_info &_sesh;
         big_text _itsover_text;
 
+        bn::sprite_ptr _dead_trogdor;
+
     public:
-        explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
+        explicit gameover_scene(session_info &sesh);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
