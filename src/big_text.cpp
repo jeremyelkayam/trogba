@@ -5,10 +5,9 @@ namespace trog {
 
 
 
-big_text::big_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette, const bn::sprite_palette_item &bg_palette) :
+big_text::big_text(bool bigger, const bn::fixed &x, const bn::fixed &y, const char *text, const bn::sprite_palette_item &palette, const bn::sprite_palette_item &bg_palette, bn::sprite_text_generator &generator) :
         _bigger(bigger) {
 
-    bn::sprite_text_generator generator(trog::variable_8x16_sprite_font);
     generator.set_center_alignment();
     generator.set_palette_item(bg_palette);
     generator.generate(x, y, text, _text_sprites);

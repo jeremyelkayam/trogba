@@ -16,7 +16,7 @@ namespace trog{
         bn::sprite_ptr _dead_trogdor;
 
     public:
-        explicit gameover_scene(session_info &sesh);
+        explicit gameover_scene(session_info &sesh, bn::sprite_text_generator &text_generator);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

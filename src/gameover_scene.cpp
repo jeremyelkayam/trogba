@@ -15,11 +15,11 @@
 
 namespace trog {
 
-gameover_scene::gameover_scene(session_info &sesh) : 
+gameover_scene::gameover_scene(session_info &sesh, bn::sprite_text_generator &generator) : 
         _sesh(sesh),
         _itsover_text(false, 0, -50, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(),
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), generator),
         _dead_trogdor(bn::sprite_items::player_dead.create_sprite(0, 20, 1)) {
         _dead_trogdor.set_scale(2);
 }

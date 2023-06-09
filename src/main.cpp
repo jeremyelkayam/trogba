@@ -68,7 +68,7 @@ int main()
                 case trog::scene_type::LOSE: { 
                     hud.show();
                     scene.reset();
-                    scene.reset(new trog::gameover_scene(sesh));
+                    scene.reset(new trog::gameover_scene(sesh, text_generator));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {

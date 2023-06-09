@@ -134,13 +134,13 @@ bn::optional<scene_type> play_scene::update(){
         }
         ++_flashing_text_time;
 
+    }else if(_burninate_pause_time > 0) {
+        _burninate_pause_time++;
+        BN_ASSERT(_overlay_text, "If we have burnination, THERE MUST BE TEXT");
     }else{
 
         //idk now it doesn't pause to burninate. maybe better maybe worse
-        if(_burninate_pause_time > 0) {
-            _burninate_pause_time++;
-            BN_ASSERT(_overlay_text, "If we have burnination, THERE MUST BE TEXT");
-        }
+
         set_paused_text_visible(false);
 
         //first update HUD info with trogdor's info from the last frame
@@ -177,7 +177,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_trogdor->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _overlay_text.reset(new burninate_text());
+            _overlay_text.reset(new burninate_text(_text_generator));
         }
 
         bool was_dead = _trogdor->dead();        
@@ -189,7 +189,8 @@ bn::optional<scene_type> play_scene::update(){
 
             _overlay_text.reset(new big_text(true, 0, 0, "ARROWED!", 
                 bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(),
-                bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+                bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(),
+                _text_generator));
         }
 
         was_dead = _trogdor->dead();  
@@ -209,7 +210,8 @@ bn::optional<scene_type> play_scene::update(){
             }
             _overlay_text.reset(new big_text(true, 0, 0, str.c_str(), 
                 bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(),
-                bn::sprite_items::trogdor_variable_8x16_font_black.palette_item()));
+                bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(),
+                _text_generator));
         }
 
         //despawn any peasants that need to be despawned
