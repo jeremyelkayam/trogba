@@ -30,7 +30,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.generate(0, -60, "nice work!", _nicework_text_sprites);
 
-    bn::string<20> word2 = "BEATEN!";
+    bn::string<13> word2 = "BEATEN!";
     //3% chance that the game misspells it lol
     if(rng.get_int(33) == 0){
         word2 = "BEATED!";

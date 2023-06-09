@@ -1,7 +1,6 @@
 #include <bn_keypad.h>
 #include <bn_math.h>
 #include <bn_vector.h>
-#include <bn_log.h>
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_trogbody.h"
@@ -67,12 +66,7 @@ void player::update_sprites(){
         feet_offset.set_x(-feet_offset.x());
     } 
 
-    // for(const uint16_t &index : _walkcycle.graphics_indexes()){
-    //     BN_LOG("graphics indexes print: ", index);
-    // }
-
     if(_walkcycle.current_index() == 0 || _walkcycle.current_index() == 3){
-        BN_LOG(_walkcycle.current_index());
         body_offset.set_y(body_offset.y() + 1);        
         arm_offset.set_y(arm_offset.y() + 1);        
         tail_offset.set_y(tail_offset.y() + 1);  

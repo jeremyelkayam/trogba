@@ -1,6 +1,5 @@
 
 #include "cottage.h"
-#include <bn_log.h>
 
 #include "bn_sprite_items_cottage.h"
 #include "bn_sprite_items_cottage_burninated.h"
