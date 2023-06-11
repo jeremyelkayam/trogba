@@ -11,7 +11,7 @@ knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &ran
     _random(random),
     //todo: this is incomplete; fix it plz
     _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 20, bn::sprite_items::knight.tiles_item(), 0, 1))
+                    _sprite, 20, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3))
 {
     _sprite.set_horizontal_flip(facingRight);
 }

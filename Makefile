@@ -25,7 +25,7 @@
 #
 # All directories are specified relative to the project directory where the makefile is found.
 #---------------------------------------------------------------------------------------------------------------------
-TARGET 		:= 	$(notdir $(CURDIR))_mb
+TARGET      :=  $(notdir $(CURDIR))
 BUILD       :=  build
 LIBBUTANO   :=  ../butano/butano
 PYTHON      :=  python
