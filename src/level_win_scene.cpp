@@ -33,7 +33,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     if(rng.get_int(33) == 0){
         word2 = "BEATED!";
     }
-    _trogdor.setup_win_pose();
+    _trogdor.setup_win_pose(0, -2.5);
     _trogdor.flex();
     _text_generator.generate(0, 60, "LEVEL " + word2, _levelbeated_text_sprites);
 }

@@ -325,10 +325,10 @@ bool player::invincible(){
     return _iframes || dead() || burninating();
 }
 
-void player::setup_win_pose(){
+void player::setup_win_pose(const bn::fixed &x, const bn::fixed &y){
     _majesty_flash_timer++;
-    _pos.set_x(0);
-    _pos.set_y(0);
+    _pos.set_x(x);
+    _pos.set_y(y);
     set_horizontal_flip(false);
     _feet.set_tiles(bn::sprite_items::trogfeet.tiles_item(), 1);
     _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);
@@ -360,7 +360,7 @@ void player::setup_win_pose(){
 void player::flex(){
     _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);
     _beefy_arm.set_vertical_flip(true);
-    _beefy_arm.set_y(_pos.y() - 10 * _beefy_arm.vertical_scale());
+    _beefy_arm.set_y(_beefy_arm.y() - 9 * _beefy_arm.vertical_scale());
 }
 
 }

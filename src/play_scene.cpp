@@ -119,7 +119,7 @@ bn::optional<scene_type> play_scene::update(){
 
     if(level_complete()){
         _win_pause_time++;
-        _trogdor->setup_win_pose();
+        _trogdor->setup_win_pose(0,0);
     }else if(_player_paused){
         if(_flashing_text_time == 15){
             set_paused_text_visible(false);

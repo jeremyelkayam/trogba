@@ -70,7 +70,7 @@ namespace trog {
             void disable_breath(){_breath.disable();}
             void set_horizontal_flip(bool horizontal_flip);
 
-            void setup_win_pose();
+            void setup_win_pose(const bn::fixed &x, const bn::fixed &y);
             void update_sprites();
             void flex();
     };
