@@ -23,7 +23,7 @@ namespace trog {
             
             uint8_t _trogmeter;
             unsigned short _burninate_time;
-            unsigned short _burninate_length; //temporarily this can be 10 seconds 
+            unsigned short _burninate_length;
             uint8_t _time_dead;
             uint8_t _iframes;
             uint8_t _majesty_flash_timer;
@@ -31,17 +31,11 @@ namespace trog {
             firebreath _breath;
             session_info &_sesh;
 
-            //it's probably bad for this to have a reference to the cottage
-            // vector, but I just need to get this working!!
-            // TODO: Refactor trogdor to have direction
-            // bn::vector<cottage, 10> &_cottages;
-
             void check_boundary_collision();
 
             bool invincible();
             void die(short frame_no);
 
-            //todo: this doesn't need to be in this class
             bool any_dpad_input();
 
             void free_from_collisionbox(const bn::fixed_rect &box);

@@ -25,20 +25,17 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
     _flames.put_above();
     _flames.set_scale(0.7);
 
-
     _text_generator.set_center_alignment();
     _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.generate(0, -60, "nice work!", _nicework_text_sprites);
 
     bn::string<13> word2 = "BEATEN!";
-    //3% chance that the game misspells it lol
     if(rng.get_int(33) == 0){
         word2 = "BEATED!";
     }
     _trogdor.setup_win_pose();
     _trogdor.flex();
     _text_generator.generate(0, 60, "LEVEL " + word2, _levelbeated_text_sprites);
-
 }
 
 
@@ -56,7 +53,6 @@ bn::optional<scene_type> level_win_scene::update(){
     if(_burningflames.done()){
         _flames.set_visible(false);
     }
-
 
     if(_timer >= 50 && bn::keypad::a_pressed()){
         result = scene_type::PLAY;
