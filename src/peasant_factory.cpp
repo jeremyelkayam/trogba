@@ -54,7 +54,7 @@ namespace trog
             bn::fixed dist = _random.get_int(TROG_PEASANT_MIN_WALK_DISTANCE, max_dist);
 
 
-            _peasants.emplace_front(spawn_xcor, spawn_ycor, TROG_PEASANT_SPEED, dist, home.get_direction());
+            _peasants.emplace_front(spawn_xcor, spawn_ycor, TROG_PEASANT_SPEED, dist, home);
         }
     }
 

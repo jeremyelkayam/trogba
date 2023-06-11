@@ -259,24 +259,18 @@ bn::optional<scene_type> play_scene::update(){
             p.update();
             _player->handle_peasant_collision(p);
 
-            //TODO this nest goes too deep
-
             if(p.remove_from_map()){
                 if(p.onfire()){
                     //check if it should burn any cottages
-                    for(cottage &c : _cottages){
-                        if(p.collides_with(c)){
-                            bool cottage_burninated = c.burninate();
-                            if(cottage_burninated) {
-                                //bonus points if the peasant burns his house down
-                                _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
-                            }else{
-                                //the peasant is still dead so you get points
-                                _sesh.score(TROG_PEASANT_STOMP_SCORE);
-                            }
-                        }
+                    bool cottage_burninated = p.get_home().burninate();
+                    if(cottage_burninated) {
+                        //bonus points if the peasant burns his house down
+                        _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
+                    }else{
+                        //the peasant is still dead so you get points
+                        _sesh.score(TROG_PEASANT_STOMP_SCORE);
                     }
-                }else if(!p.dead()){
+                }else if(!p.dead() && !p.onfire()){
                     // if the peasant didn't die, we should decrement the trogmeter
                     // if the option is enabled 
                     if(_sesh.can_lose_trogmeter()) _player->drop_trogmeter();

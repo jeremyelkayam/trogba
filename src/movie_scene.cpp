@@ -17,7 +17,8 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
     _timer(0),
     _cutscene_length(270),
     _common_stuff(common_stuff),
-    _sesh(sesh)
+    _sesh(sesh),
+    _dummy_cottage(-240, -240, direction::DOWN, false, false, common_stuff)
 {
     if(_sesh.get_level() != 101) {
         bn::sound_items::intermish.play();
@@ -41,7 +42,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         blueknight->move_to_and_back(_cutscene_length, 30, 5);
         _cutscene_objects.emplace_back(blueknight);
 
-        peasant* p = new peasant(-60, 0, 0, 0, direction::DOWN);
+        peasant* p = new peasant(-60, 0, 0, 0, _dummy_cottage);
         p->update();
         _cutscene_objects.emplace_back(p);
 
@@ -67,7 +68,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         for(int z=0; z < 10; z++){
             int xcor = 100 - (z/2)*13;
             int ycor = -12 + (z/2)*2;
-            peasant *p = new peasant(z % 2 == 0 ? xcor : -xcor, ycor, 0, 0, direction::DOWN);
+            peasant *p = new peasant(z % 2 == 0 ? xcor : -xcor, ycor, 0, 0, _dummy_cottage);
             p->set_sprite_ablaze();
             p->update_anim_action_when_not_moving(true);
             _cutscene_objects.emplace_back(p);
@@ -99,7 +100,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _cutscene_objects.emplace_back(mytrogdor);
 
         for(int z = 0; z < 7; ++z){
-            peasant* p = new peasant(45 - 20*z, 0, 0, 0, direction::DOWN);
+            peasant* p = new peasant(45 - 20*z, 0, 0, 0, _dummy_cottage);
             _cutscene_objects.emplace_back(p);
         }
 
@@ -108,7 +109,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
 
         for(int z = 0; z < 2 ; ++z){
             int sign = z == 0 ? 1 : -1;
-            peasant *p = new peasant(130*sign, 0, 0, 0, direction::DOWN);
+            peasant *p = new peasant(130*sign, 0, 0, 0, _dummy_cottage);
             p->move_to(_cutscene_length / 3, 20*sign, 0);
             p->update_anim_action_when_not_moving(true);
             _cutscene_objects.emplace_back(p);
@@ -121,14 +122,14 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
             _cutscene_objects.emplace_back(trog);
         }
         for(int z = 0; z < 7 ; ++z){
-            peasant *p = new peasant(-60 + 20*z, -25 + (13*z) % 5, 0, 0, direction::DOWN);
+            peasant *p = new peasant(-60 + 20*z, -25 + (13*z) % 5, 0, 0, _dummy_cottage);
             p->jump(10 + z*2, 5, true);
             _cutscene_objects.emplace_back(p);
         }
     }else if(_sesh.get_level() == 39){
         write_text("forbidden peasant love");
         for(int z = 0; z < 2 ; ++z){
-            peasant *p = new peasant(40 + 20*z, 0, 0, 0, direction::DOWN);  
+            peasant *p = new peasant(40 + 20*z, 0, 0, 0, _dummy_cottage);  
             p->move_to(_cutscene_length / 2, -60 + 20*z, 0);      
             _cutscene_objects.emplace_back(p);
         }
@@ -197,7 +198,7 @@ bn::optional<scene_type> movie_scene::update(){
         //fryemup dan
         for(int z = 0; z < 4 ; ++z){
             if(_timer == 30*z){
-                peasant* p = new peasant(-130, 0, 0, 0, direction::DOWN);
+                peasant* p = new peasant(-130, 0, 0, 0, _dummy_cottage);
                 p->move_to(_cutscene_length / 4, -10, 0);
                 _cutscene_objects.emplace_back(p);
             }
@@ -362,19 +363,19 @@ bn::optional<scene_type> movie_scene::update(){
             _cutscene_objects.at(1)->set_visible(false);
             _text_sprites.clear();
             _common_stuff.text_generator.generate(0, -60, "perez", _text_sprites);
-            _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, direction::DOWN));
+            _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, _dummy_cottage));
         }else if(_timer == credits_start_time + credits_interval*3){
             _cutscene_objects.at(2)->set_visible(false);
             _text_sprites.clear();
             _common_stuff.text_generator.generate(0, -60, "hackworth", _text_sprites);
-            peasant *hackworth = new peasant(0, 0, 0, 0, direction::DOWN);
+            peasant *hackworth = new peasant(0, 0, 0, 0, _dummy_cottage);
             hackworth->set_frame(1);
             _cutscene_objects.emplace_back(hackworth);
         }else if(_timer == credits_start_time + credits_interval*4){
             _cutscene_objects.at(3)->set_visible(false);
             _text_sprites.clear();
             _common_stuff.text_generator.generate(0, -60, "'the steve'", _text_sprites);
-            peasant *the_steve = new peasant(0, 0, 0, 0, direction::DOWN);
+            peasant *the_steve = new peasant(0, 0, 0, 0, _dummy_cottage);
             the_steve->set_sprite_ablaze();
             _cutscene_objects.emplace_back(the_steve);
         }else if(_timer == credits_start_time + credits_interval*5){

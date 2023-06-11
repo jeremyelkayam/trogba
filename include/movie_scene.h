@@ -23,6 +23,7 @@ namespace trog{
 
         bn::vector<bn::unique_ptr<entity>, 20> _cutscene_objects;
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
+        
 
         unsigned short _timer, _cutscene_length;
 
@@ -31,6 +32,8 @@ namespace trog{
         common_stuff &_common_stuff;
         
         session_info &_sesh;
+
+        cottage _dummy_cottage;
 
         bool cutscene_over();
         
