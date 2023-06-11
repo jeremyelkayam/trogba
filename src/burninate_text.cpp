@@ -21,7 +21,6 @@ burninate_text::burninate_text(bn::sprite_text_generator &generator) :
     for(bn::sprite_ptr &sprite : _text_sprites) {
         sprite.put_above();
     }
-
 }
 
 void burninate_text::update(){

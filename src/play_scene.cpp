@@ -157,17 +157,13 @@ bn::optional<scene_type> play_scene::update(){
 
             if(p.remove_from_map() && p.onfire()){
                 //check if it should burn any cottages
-                for(cottage &c : _cottages){
-                    if(p.collides_with(c)){
-                        bool cottage_burninated = c.burninate();
-                        if(cottage_burninated) {
-                            //bonus points if the peasant burns his house down
-                            _sesh.score(10);
-                        }else{
-                            //the peasant is still dead so you get points
-                            _sesh.score(2);
-                        }
-                    }
+                bool cottage_burninated = p.get_home().burninate();
+                if(cottage_burninated) {
+                    //bonus points if the peasant burns his house down
+                    _sesh.score(10);
+                }else{
+                    //the peasant is still dead so you get points
+                    _sesh.score(2);
                 }
             }
         }

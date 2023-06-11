@@ -51,7 +51,7 @@ namespace trog
             bn::fixed dist = _random.get_int(2, max_dist);
 
 
-            _peasants.emplace_front(spawn_xcor, spawn_ycor, 0.435, dist, home.get_direction());
+            _peasants.emplace_front(spawn_xcor, spawn_ycor, 0.435, dist, home);
         }
     }
 

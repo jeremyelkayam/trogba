@@ -6,11 +6,12 @@
 
 namespace trog {
 
-peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, direction direction) : 
+peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, cottage &home) : 
         entity(xcor, ycor, 8, 16, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
         _speed(speed),
+        _home(home),
         _time_waiting(0),
         _time_dead(0),
         _onfire(false),
@@ -18,6 +19,7 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)){
     _sprite.set_z_order(MID_ZORDER);
+    direction direction = home.get_direction();
 
     switch(direction) {
         case direction::UP:
