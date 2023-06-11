@@ -12,7 +12,7 @@
 #include "bn_regular_bg_items_day.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
-#include "bn_sprite_items_trogdor_variable_8x8_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 #include "play_scene.h"
 #include "big_text.h"
@@ -94,7 +94,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, bn::sprite_text_generator &
 
 
     _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x8_font.palette_item());
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _text_generator.generate(0, 55, "paused", _paused_text);
     _text_generator.generate(0, 70, "press 'START' to resume", _paused_text);
     set_paused_text_visible(false);

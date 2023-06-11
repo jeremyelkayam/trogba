@@ -6,7 +6,6 @@
 #include "instructions_scene.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_green.h"
-#include "bn_sprite_items_trogdor_variable_8x8_font.h"
 
 namespace trog {
 
@@ -79,7 +78,7 @@ void instructions_scene::setup_instructions(){
     };
 
     for(bn::string<64> line : instructions) { 
-        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x8_font.palette_item(), 14);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
     }
 
 
@@ -99,7 +98,7 @@ void instructions_scene::setup_secret_hints(){
     };
     
     for(bn::string<64> line : instructions) { 
-        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x8_font.palette_item(), 16);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 16);
     }
     
     write_instruction("-What's a treasure hut?!?!", bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 16);
@@ -120,7 +119,7 @@ void instructions_scene::setup_credits(){
     };
 
     for(bn::string<64> line : credits) { 
-        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x8_font.palette_item(), 14);
+        write_instruction(line.c_str(), bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
     }    
 
     bn::string<32> butano_str;
@@ -128,7 +127,7 @@ void instructions_scene::setup_credits(){
     butano_string_stream << "Created using Butano " << bn::version::major() << "." << bn::version::minor();
 
     write_instruction(butano_str.c_str(), bn::sprite_items::trogdor_variable_8x16_font_red.palette_item(), 14);
-    write_instruction("by Gustavo Valiente", bn::sprite_items::trogdor_variable_8x8_font.palette_item(), 14);
+    write_instruction("by Gustavo Valiente", bn::sprite_items::trogdor_variable_8x16_font.palette_item(), 14);
 }
 
 void instructions_scene::write_instruction(const char* str, const bn::sprite_palette_item &palette, int line_spacing){
