@@ -9,7 +9,6 @@
 
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_player_dead.h"
 
 

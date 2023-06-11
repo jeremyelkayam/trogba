@@ -5,8 +5,8 @@
 
 #include "level_win_scene.h"
 
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
+#include "bn_sprite_items_trogdor_variable_8x8_font.h"
 #include "bn_sprite_items_cottagefire.h"
 
 
@@ -27,7 +27,7 @@ level_win_scene::level_win_scene(session_info &sesh, bn::sprite_text_generator &
 
 
     _text_generator.set_center_alignment();
-    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    _text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x8_font.palette_item());
     _text_generator.generate(0, -60, "nice work!", _nicework_text_sprites);
 
     bn::string<13> word2 = "BEATEN!";

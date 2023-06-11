@@ -1,5 +1,4 @@
 #include "big_text.h"
-#include "trogdor_variable_8x16_sprite_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 namespace trog { 
 
