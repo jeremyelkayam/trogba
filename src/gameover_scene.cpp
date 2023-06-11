@@ -32,7 +32,7 @@ bn::optional<scene_type> gameover_scene::update(){
 
     if(bn::keypad::a_pressed()){
         _sesh.reset();
-        result = scene_type::PLAY;
+        result = scene_type::INSTRUCTIONS;
     }
 
     return result;
