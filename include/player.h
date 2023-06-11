@@ -15,6 +15,8 @@ namespace trog {
             bn::sprite_ptr _beefy_arm, _tail, _feet;
             const bn::fixed _speed;
 
+            bn::sprite_ptr _majesty;
+            
             bn::fixed_point _direction;
  
             bn::sprite_animate_action<4> _walkcycle;
@@ -24,6 +26,7 @@ namespace trog {
             unsigned short _burninate_length; //temporarily this can be 10 seconds 
             uint8_t _time_dead;
             uint8_t _iframes;
+            uint8_t _majesty_flash_timer;
 
             firebreath _breath;
             session_info &_sesh;

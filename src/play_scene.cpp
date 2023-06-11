@@ -117,13 +117,9 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_overlay_text) _overlay_text->update();
 
-    if(_win_pause_time == 1){
-        _trogdor->setup_win_pose();
-    }
-
-
     if(level_complete()){
         _win_pause_time++;
+        _trogdor->setup_win_pose();
     }else if(_player_paused){
         if(_flashing_text_time == 15){
             set_paused_text_visible(false);
@@ -244,9 +240,6 @@ bn::optional<scene_type> play_scene::update(){
     if(level_complete() && _win_pause_time > 150){
         result = scene_type::LEVELBEAT;
     }
-
-
-    if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
 
 
     //START pauses the game

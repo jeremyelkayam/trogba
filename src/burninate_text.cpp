@@ -16,8 +16,11 @@ burninate_text::burninate_text(bn::sprite_text_generator &generator) :
     _fire_anim(bn::create_sprite_animate_action_forever(_fire, 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3))
     {
     _fire.set_scale(0.01);
-    _fire.put_below();
+    _fire.put_above();
     _fire_scale = bn::sprite_scale_loop_action(_fire, 30, 2);
+    for(bn::sprite_ptr &sprite : _text_sprites) {
+        sprite.put_above();
+    }
 
 }
 

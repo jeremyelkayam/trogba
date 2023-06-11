@@ -4,6 +4,7 @@
 #include "player.h"
 #include "entity.h"
 #include "bn_sprite_items_trogbody.h"
+#include "bn_sprite_items_majesty.h"
 #include "bn_sprite_items_player_dead.h"
 #include "bn_sprite_items_beefy_arm.h"
 #include "bn_sprite_items_trogtail.h"
@@ -17,15 +18,20 @@ player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes)
         _tail(bn::sprite_items::trogtail.create_sprite(xcor, ycor)),
         _feet(bn::sprite_items::trogfeet.create_sprite(xcor, ycor)),
         _speed(0.87),
+        _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _feet, 6, bn::sprite_items::trogfeet.tiles_item(), 0, 1, 2, 3)),
         _trogmeter(0),
         _burninate_time(0),
         _time_dead(0),
+        _majesty_flash_timer(0),
         _breath(sesh),
         _sesh(sesh),
         _next_pos(xcor,ycor)
         {
+    _majesty.set_visible(false);
+    _majesty.set_z_order(FRONT_ZORDER);
+    _majesty.set_scale(2.3);
     _top_bound = -72;
     _sprite.set_z_order(FRONT_ZORDER);
 
@@ -134,8 +140,7 @@ void player::update(){
             _iframes = 0;
         }
         update_next_pos();
-        update_sprites();    
-        if(bn::keypad::b_pressed()) start_burninating();
+        update_sprites();
     }
 
 }
@@ -321,6 +326,7 @@ bool player::invincible(){
 }
 
 void player::setup_win_pose(){
+    _majesty_flash_timer++;
     _pos.set_x(0);
     _pos.set_y(0);
     set_horizontal_flip(false);
@@ -339,8 +345,17 @@ void player::setup_win_pose(){
         sprite.put_above();
     }
     _feet.set_y(_feet.y() + 2);
+    _majesty.put_above();
+    
+    _majesty.set_visible(_majesty_flash_timer >= 15);
     _breath.set_visible(false);
+
+    if(_majesty_flash_timer > 15 * 2){
+        _majesty_flash_timer = 0;
+    }
+
 }
+
 
 void player::flex(){
     _beefy_arm.set_tiles(bn::sprite_items::beefy_arm.tiles_item(), 0);
