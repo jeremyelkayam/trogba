@@ -189,10 +189,14 @@ bn::optional<scene_type> movie_scene::update(){
         e->update_anim();
     }
 
-    if(_sesh.get_level() == 5 && _timer == _cutscene_length / 2){
-        //stompin good
-        ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
-        ((peasant *) _cutscene_objects.at(3).get())->stomp();        
+    if(_sesh.get_level() == 5 ){
+        if(_timer == _cutscene_length / 2){
+            //stompin good
+            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
+            ((peasant *) _cutscene_objects.at(3).get())->stomp();        
+        }if(_cutscene_objects.at(0)->sprite_x() > 120){
+            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
+        }
     }
     if(_sesh.get_level() == 9){
         //fryemup dan
