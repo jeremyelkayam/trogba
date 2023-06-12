@@ -36,6 +36,7 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
 
     _burninatemeter.set_visible(false);
     _burninatemeter.set_priority(0);
+    _burninatemeter.put_below();
 
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER - 32, -75, 0));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
@@ -43,6 +44,7 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
 
     for(bn::sprite_ptr &sprite : _burninatemeter_invert) { 
         sprite.set_z_order(FURTHEST_BACK_ZORDER);
+        sprite.put_below();
         sprite.set_bg_priority(3);
     }
 
@@ -150,7 +152,6 @@ void hud::update() {
 
         _common_stuff.text_generator.set_right_alignment();
         _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
-        // BN_LOG("fuck. z order for trogmeter ", _trogmeter_sprites.at(0).z_order());
     }
 }
 
