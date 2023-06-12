@@ -514,10 +514,10 @@ bn::optional<scene_type> play_scene::update_pause_menu(){
     }else if(bn::keypad::down_pressed()){
         _pause_menu_index += 2;
         if(_pause_menu_index > 3) _pause_menu_index -=2;
-    }else if(bn::keypad::left_pressed()){
+    }else if(bn::keypad::left_pressed() && _pause_menu_index != 2){
         _pause_menu_index -= 1;
         if(_pause_menu_index < 0) _pause_menu_index +=1;
-    }else if(bn::keypad::right_pressed()){
+    }else if(bn::keypad::right_pressed() && _pause_menu_index != 1){
         _pause_menu_index += 1;
         if(_pause_menu_index > 3) _pause_menu_index -=1;
     }
