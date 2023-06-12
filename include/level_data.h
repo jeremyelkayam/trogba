@@ -32,7 +32,7 @@ constexpr auto DIR_DOWN = 2;
 constexpr auto DIR_LEFT = 3;
 constexpr auto DIR_RIGHT = 4;
 
-const short levels[33][20] = {
+const int levels[33][20] = {
 	/* 1 */ { 1, 0,
 	DIR_LEFT, 1585, -666,
 	DIR_RIGHT, -1813, 291,
@@ -107,7 +107,7 @@ const short levels[33][20] = {
 	DIR_RIGHT, -2365, -486,
 	DIR_LEFT, 1204, 918,
 	DIR_DOWN, -1084, -1055,
-	DIR_LEFT, 1526, 135,
+	DIR_LEFT, 1726, 135,
 	DIR_DOWN, -1520, -450,
 	DIR_UP, 2076, 865 },
 	/* 12 */ { 4, 0,
@@ -170,14 +170,14 @@ const short levels[33][20] = {
 	DIR_RIGHT, -1345, 853,
 	DIR_LEFT, 1204, 918,
 	DIR_UP, -2104, 824,
-	DIR_LEFT, 1526, 135,
+	DIR_LEFT, 1726, 135,
 	DIR_RIGHT, -2140, 70,
 	DIR_UP, 2076, 865 },
 	/* 21 */ { 4, 0,
-	DIR_RIGHT, -905, -47,
+	DIR_RIGHT, -1205, -47,
 	DIR_UP, 1204, 1178,
 	DIR_DOWN, 1256, -155,
-	DIR_LEFT, 166, -765,
+	DIR_LEFT, -266, -765,
 	DIR_DOWN, -2020, -1010,
 	DIR_UP, 1916, 1185 },
 	/* 22 */ { 4, 0,

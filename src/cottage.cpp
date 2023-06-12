@@ -9,7 +9,7 @@
 namespace trog {
 
 cottage::cottage(bn::fixed xcor, bn::fixed ycor, direction direction) : 
-        entity(xcor, ycor, 20, 20, bn::sprite_items::cottage.create_sprite(xcor, ycor + 1, 2)),
+        entity(xcor, ycor, 23, 23, bn::sprite_items::cottage.create_sprite(xcor, ycor + 1, 2)),
         _direction(direction){
 
     bn::sprite_ptr tippytop = bn::sprite_items::cottage_bits.create_sprite(xcor + 1, ycor - 19, 2);
