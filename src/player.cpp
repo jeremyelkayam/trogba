@@ -113,7 +113,6 @@ void player::update(){
             _trogmeter = 0;
             _breath.disable();
         }
-        update_firebreath();
 
         //update trogdor to show iframes
         if(_iframes){
@@ -141,6 +140,7 @@ void player::update(){
         }
         update_next_pos();
         update_sprites();
+        update_firebreath();
     }
 
 }
