@@ -17,7 +17,7 @@ title_scene::title_scene(common_stuff &common_stuff) :
         _secret_code_index(0) {
     _common_stuff.small_generator.set_left_alignment();
     _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
-    _common_stuff.small_generator.generate(-120, 77, "v2.0", _version_label);
+    _common_stuff.small_generator.generate(-120, 77, "v2.1", _version_label);
 
     bn::sound_items::themesong.play(common_stuff.savefile.options.music_vol);
 
