@@ -23,6 +23,7 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
             trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR, 1);
         peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
         peasanthead_sprite.put_below();
+        peasanthead_sprite.set_bg_priority(3);
         _trogmeter_sprites.emplace_back(peasanthead_sprite);
     }
 
@@ -40,17 +41,13 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER + 32, -75, 2));
 
-    for(bn::sprite_ptr &_sprite : _burninatemeter_invert) { 
-        _sprite.set_z_order(FURTHEST_BACK_ZORDER);
-        _sprite.set_bg_priority(3);
+    for(bn::sprite_ptr &sprite : _burninatemeter_invert) { 
+        sprite.set_z_order(FURTHEST_BACK_ZORDER);
+        sprite.set_bg_priority(3);
     }
 
 
-    //todo change common_stuff.set_sprite_arr_visible to use this
-    for(bn::sprite_ptr &sprite : _burninatemeter_invert){
-        sprite.set_visible(false);
-        // sprite.set_bg_priority(1);
-    }
+    _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, false);
 }
 
 
@@ -129,6 +126,7 @@ void hud::update() {
 
         _common_stuff.text_generator.set_palette_item(RED_PALETTE);
         _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
+        _common_stuff.text_generator.set_bg_priority(3);
 
         bn::string<64> score_str, mans_lv_str;
         bn::ostringstream score_string_stream(score_str);
@@ -162,8 +160,10 @@ void hud::scroll_text(const char *text){
     _common_stuff.text_generator.set_left_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
+    _common_stuff.text_generator.set_bg_priority(3);
 
     _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
+
 
 }
 

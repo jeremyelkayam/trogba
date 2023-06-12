@@ -418,7 +418,7 @@ bn::optional<scene_type> play_scene::update(){
        && _win_pause_time == 0 && !_player->dead() && _sesh.get_level() != 0){
         _player_paused = !_player_paused;
         if(_player_paused){
-
+            _pause_menu_index = 3;
         }else{
             unpause();
         }
