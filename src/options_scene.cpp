@@ -166,7 +166,7 @@ bool_option::bool_option(const bn::string<32> &name, const bn::string<128> &desc
 
 
 void bool_option::update(){
-    if(bn::keypad::a_pressed()){
+    if(bn::keypad::a_pressed() || bn::keypad::left_pressed() || bn::keypad::right_pressed()){
         _value = !_value;
         _checkbox.set_item(bn::sprite_items::checkbox, _value);
         _checkbox.set_palette(RED_PALETTE);
@@ -225,7 +225,7 @@ void percent_option::update_text_and_slider(){
     bn::string<16> percentage;
     bn::ostringstream pct_stream(percentage);
 
-    pct_stream << (_value * 100).integer() << "%";;            
+    pct_stream << (_value * 100).integer() << "%";           
 
     _text_generator.set_palette_item(RED_PALETTE);
     _text_generator.generate(72, _slider_bar.y(), percentage, _vol_text_sprites);
