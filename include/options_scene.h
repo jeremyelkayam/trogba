@@ -5,10 +5,8 @@
 #include <bn_unordered_map.h>
 
 #include "scene.h"
-
-
 #include "session_info.h"
-
+#include "text_box.h"
 
 namespace trog{
 
@@ -16,14 +14,16 @@ namespace trog{
         protected:
             bn::vector<bn::sprite_ptr, 16> _text_sprites;
             bn::string<32> _name;
+            bn::string<128> _description;
             bn::sprite_text_generator &_text_generator;
         public: 
-            option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
+            option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
             virtual ~option() = default;
             virtual void update() {}
             virtual void set_selected(const bool &selected);
             void hide(){_text_sprites.clear();}
             virtual bool taller() {return false;}
+            bn::string<128> &get_description() {return _description;}
     };
 
     // dang ... hope our govt figures out that public option 
@@ -32,7 +32,7 @@ namespace trog{
             bool &_value;
             bn::sprite_ptr _checkbox;
         public:
-            bool_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value);
+            bool_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value);
             virtual void update();
             virtual void set_selected(const bool &selected);
     };
@@ -44,7 +44,7 @@ namespace trog{
             bn::sprite_ptr _slider_bar;
             uint8_t _hold_timer;
         public:
-            percent_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value);
+            percent_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value);
             virtual void update();
             void update_text_and_slider();
             virtual void set_selected(const bool &selected);
@@ -58,7 +58,7 @@ namespace trog{
             bn::sprite_ptr _left_sprite, _right_sprite;
             bn::vector<uint8_t, 10> _selector_options;
         public:
-            selector_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options);
+            selector_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options);
             virtual void update();
             virtual void set_selected(const bool &selected);
             void update_text();
@@ -67,9 +67,9 @@ namespace trog{
 
     class options_scene : public scene{ 
     private:
-
         common_stuff &_common_stuff;
         const scene_type _last_scene;
+        text_box _description_box;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
         bn::vector<bn::sprite_ptr, 64> _notice_sprites;        

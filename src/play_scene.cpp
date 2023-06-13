@@ -155,7 +155,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
     if(_sesh.get_level() != 0){
         _knights.emplace_front(-59, 31, false, common_stuff.rand);
-        _knights.emplace_front(33,-50,true, common_stuff.rand);
+        _knights.emplace_front(33, -50, true, common_stuff.rand);
     }
 
     if(_sesh.troghammer_enabled()){

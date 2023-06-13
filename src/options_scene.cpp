@@ -28,8 +28,8 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
 
     bn::sprite_text_generator &txtgen = common_stuff.small_generator;
 
-    _options_vec.emplace_back(new bool_option("Troghammer", txtgen, ycor(0), _common_stuff.savefile.options.troghammer));
-    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", txtgen, ycor(1), _common_stuff.savefile.options.decrement_trogmeter));
+    _options_vec.emplace_back(new bool_option("Troghammer", "Toggles the Troghammer: a new, tougher variant of the knight that appears if you take too long to beat a level.", txtgen, ycor(0), _common_stuff.savefile.options.troghammer));
+    _options_vec.emplace_back(new bool_option("Trogmeter Depreciation", "If enabled, the Trog-Meter will decrease by one every time an unburninated peasant returns to their home cottage.", txtgen, ycor(1), _common_stuff.savefile.options.decrement_trogmeter));
 
     bn::vector<uint8_t,4 > lives_options;
     lives_options.emplace_back(0);
@@ -38,35 +38,59 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
     if(_common_stuff.savefile.cheat_unlocked)
         lives_options.emplace_back(30);
 
-    _options_vec.emplace_back(new selector_option("Starting Lives", txtgen, ycor(2), _common_stuff.savefile.options.starting_lives, lives_options));
-    _options_vec.emplace_back(new percent_option("Music Volume", txtgen, ycor(3), _common_stuff.savefile.options.music_vol));
-    _options_vec.emplace_back(new percent_option("Sound Volume", txtgen, ycor(4), _common_stuff.savefile.options.sound_vol));
-    _options_vec.emplace_back(new percent_option("Voice Volume", txtgen, ycor(5), _common_stuff.savefile.options.voice_vol));
-    _options_vec.emplace_back(new option("confirm", txtgen, ycor(6)));
-    _options_vec.emplace_back(new option("cancel", txtgen, ycor(7)));
+    _options_vec.emplace_back(new selector_option("Starting Lives", "Controls the number of lives Trogdor starts out with.", txtgen, ycor(2), _common_stuff.savefile.options.starting_lives, lives_options));
+    _options_vec.emplace_back(new percent_option("Music Volume", "Controls the volume of any music playing.", txtgen, ycor(3), _common_stuff.savefile.options.music_vol));
+    _options_vec.emplace_back(new percent_option("Sound Volume", "Controls the volume of any sound effects playing.", txtgen, ycor(4), _common_stuff.savefile.options.sound_vol));
+    _options_vec.emplace_back(new percent_option("Voice Volume", "Controls the volume of any voice clips playing.", txtgen, ycor(5), _common_stuff.savefile.options.voice_vol));
+    _options_vec.emplace_back(new option("confirm", "Save changes and return.", txtgen, ycor(6)));
+    _options_vec.emplace_back(new option("cancel", "Exit without saving changes.", txtgen, ycor(7)));
     _options_vec.at(_index)->set_selected(true);
+
+    txtgen.set_center_alignment();
+    txtgen.generate(0, 65, "Press L or R for more information.", _notice_sprites);
 }
 
 bn::optional<scene_type> options_scene::update(){
     bn::optional<scene_type> result;
 
     if(!_options_vec.empty()){
-        if(bn::keypad::up_pressed()){
+        //this logic pattern is kinda lame but idk what to do bout it 
+        if(bn::keypad::up_pressed() || bn::keypad::down_pressed()){
+
             _options_vec.at(_index)->set_selected(false);
-            if(_index == 0) _index = _options_vec.size();
-            _index--;
+
+            if(bn::keypad::up_pressed()){
+                if(_index == 0) _index = _options_vec.size();
+                _index--;
+            }else if(bn::keypad::down_pressed()){
+                _index++;
+                if(_index == _options_vec.size()) _index = 0;
+            }
+
             _options_vec.at(_index)->set_selected(true);
-        }else if(bn::keypad::down_pressed()){
-            _options_vec.at(_index)->set_selected(false);
-            _index++;
-            if(_index == _options_vec.size()) _index = 0;
-            _options_vec.at(_index)->set_selected(true);
+
+            if(!_description_box.is_off_screen()){
+                _description_box.set_text(_common_stuff.small_generator, _options_vec.at(_index)->get_description().c_str());
+            }
+
+
+        }else if(bn::keypad::l_pressed() || bn::keypad::r_pressed()) {
+            //might be weird but it prevents making the thing judder by spamming L and R
+            //less responsive though idk
+            if(_description_box.is_off_screen()){
+                _description_box.move_on_screen();
+                _description_box.set_text(_common_stuff.small_generator, _options_vec.at(_index)->get_description().c_str());
+            }else{
+                _description_box.move_off_screen();
+            }
         }
 
         _options_vec.at(_index)->update();
+        _description_box.update();
         
         
         if((bn::keypad::a_pressed() && _index == _options_vec.size() -2)){
+            _notice_sprites.clear();
 
             bool troghammer_changed = _old_save.troghammer != _common_stuff.savefile.options.troghammer;
             bool trogmeter_changed = _old_save.decrement_trogmeter != _common_stuff.savefile.options.decrement_trogmeter;
@@ -133,8 +157,8 @@ bn::fixed options_scene::ycor(const uint8_t &index){
 
 
 
-bool_option::bool_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value) : 
-    option(name, text_generator, ycor),
+bool_option::bool_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value) : 
+    option(name, description, text_generator, ycor),
     _value(value),
     _checkbox(bn::sprite_items::checkbox.create_sprite(80, ycor, value)) {
     _checkbox.set_palette(BLACK_PALETTE);
@@ -155,8 +179,8 @@ void bool_option::set_selected(const bool &selected){
     
 }
 
-percent_option::percent_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value) : 
-    option(name, text_generator, ycor),
+percent_option::percent_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value) : 
+    option(name, description, text_generator, ycor),
     // _options(options),
     _value(value),
     _speed(0.01),
@@ -218,8 +242,10 @@ void percent_option::set_selected(const bool &selected){
     _slider_bar.set_palette(palette);
 }
 
-option::option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) : 
-    _name(name), _text_generator(text_generator) { 
+option::option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor) : 
+    _name(name),
+    _description(description),
+    _text_generator(text_generator) { 
 
     text_generator.set_left_alignment();
     text_generator.set_palette_item(BLACK_PALETTE);
@@ -243,8 +269,8 @@ uint8_t selector_option::current_index(){
     return -1;
 }
 
-selector_option::selector_option(const bn::string<32> &name, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options) : 
-    option(name, text_generator, ycor),
+selector_option::selector_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options) : 
+    option(name, description, text_generator, ycor),
     _value(value),
     _timer(0),
     _left_sprite(bn::sprite_items::trogdor_variable_8x8_font.create_sprite(0, ycor, 27)),
