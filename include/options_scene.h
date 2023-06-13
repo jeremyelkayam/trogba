@@ -69,7 +69,7 @@ namespace trog{
     private:
         common_stuff &_common_stuff;
         const scene_type _last_scene;
-        text_box _description_box;
+        bn::optional<text_box> _description_box;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
         bn::vector<bn::sprite_ptr, 64> _notice_sprites;        
