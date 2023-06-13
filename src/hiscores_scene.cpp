@@ -12,7 +12,8 @@ namespace trog {
 
 hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
         _selectable_letters({'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
-                             'O','P','Q','R','S','T','U','V','W','X','Y','Z','!','?', ' '}),
+                             'O','P','Q','R','S','T','U','V','W','X','Y','Z',
+                             '0','1','2','3','4','5','6','7','8','9','.',',','!','?',' '}),
         _sesh(sesh),
         _common_stuff(common_stuff),
         _text_generator(fixed_8x16_sprite_font),
@@ -22,7 +23,7 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
         _high_scores_table(_common_stuff.savefile.high_scores_table),
         _table_index(-1),
         _string_index(0),
-        _selectable_letters_index(28),
+        _selectable_letters_index(_selectable_letters.size() - 1),
         _blink_timer(0),
         _go_to_credits(false) {
 
@@ -193,7 +194,7 @@ void hiscores_scene::update_name_entry(){
     }else if(bn::keypad::b_pressed()){
         if(_string_index != 0){
             --_string_index;
-            _selectable_letters_index = 28;
+            _selectable_letters_index = _selectable_letters.size() - 1;
         }
     }else if(bn::keypad::left_pressed()){
         if(_string_index != 0){
@@ -222,7 +223,7 @@ void hiscores_scene::update_name_entry(){
     }
 
     if(bn::keypad::down_released() || bn::keypad::up_released()) _hold_down_timer = 0;
-    _selectable_letters_index = (_selectable_letters_index + _selectable_letters.max_size()) % _selectable_letters.max_size();
+    _selectable_letters_index = (_selectable_letters_index + _selectable_letters.size()) % _selectable_letters.size();
 
     current_entry.set_name_char(_selectable_letters[_selectable_letters_index], _string_index);
 }
@@ -245,12 +246,18 @@ void hiscores_scene::set_selectable_chars_index_to_current_char_in_str(){
     char &current_char = _high_scores_table[_table_index].get_name().at(_string_index);
     if('A' <= current_char && current_char <= 'Z' ){
         _selectable_letters_index = current_char - 65;
+    }if('0' <= current_char && current_char <= '9' ){
+        _selectable_letters_index = current_char - 22;
     }else if(current_char == ' '){
-        _selectable_letters_index = 28;
-    }else if(current_char == '!'){
-        _selectable_letters_index = 26;
+        _selectable_letters_index = _selectable_letters.size() - 1;
     }else if(current_char == '?'){
-        _selectable_letters_index = 27;
+        _selectable_letters_index = _selectable_letters.size() - 2;
+    }else if(current_char == '!'){
+        _selectable_letters_index = _selectable_letters.size() - 3;
+    }else if(current_char == ','){
+        _selectable_letters_index = _selectable_letters.size() - 4;
+    }else if(current_char == '.'){
+        _selectable_letters_index = _selectable_letters.size() - 5;
     }
 }
 
