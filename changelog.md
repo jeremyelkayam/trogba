@@ -4,9 +4,11 @@
 
 ### New features
 - Press L or R on the options menu to view descriptions of each option.
+- Added numbers, comma, and period as options in high score name entry.
 
 ### Changes and tweaks
 - The default option on the pause menu has been changed to "continue".
+- Added version label to credits.
 
 ### Fixes
 - Fixed a bug where the Trog-Meter and burninate meter would appear on top of Trogdor when he walked around the top of the screen.
