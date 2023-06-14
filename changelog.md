@@ -11,6 +11,7 @@
 - Added version label to credits.
 
 ### Fixes
+- Fixed a graphical bug where the Trog-Meter would appear to be at maximum even after burninating if you won a level or entered a treasure hut while the Troghammer's scrolling text was on screen.
 - Fixed a bug where the Trog-Meter and burninate meter would appear on top of Trogdor when he walked around the top of the screen.
 - Pressing left and right in the pause menu can no longer select an option on a different row
 - Fixed a bug where the text in the HUD would appear over objects such as Trogdor after pausing.

@@ -54,16 +54,14 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
 
 
 void hud::update_trogmeter(unsigned short trogmeter_value){
-    if(!scrolling_text()){
-        for(int i = 0; i < TROG_TROGMETER_MAX; i++){
-            bn::sprite_ptr &peasanthead_sprite = _trogmeter_sprites.at(i);
-            if(i < trogmeter_value) {
-                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
-            }else{
-                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
-            }
-            peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        bn::sprite_ptr &peasanthead_sprite = _trogmeter_sprites.at(i);
+        if(i < trogmeter_value) {
+            peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
+        }else{
+            peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
         }
+        peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
     }
 }
 
