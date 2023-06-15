@@ -46,18 +46,18 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    common_stuff.text_generator.generate(73, 5, "nice work!", _nicework_text_sprites);
 
-    bn::string<7> line2 = "BEATEN!";
+    bn::string<7> line3 = "BEATEN!";
     //3% chance that the game misspells it lol
     if(common_stuff.rand.get_int(33) == 0){
-        line2 = "BEATED!";
+        line3 = "BEATED!";
     }
     
 
-    common_stuff.text_generator.generate(70, 25, "LEVEL", _levelbeated_text_sprites);
-    common_stuff.text_generator.generate(70, 40, line2, _levelbeated_text_sprites);
+
     common_stuff.commentary.level_win_scene();
+
+    bn::fixed nicework_x = 73, nicework_y = 5;
 
     if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
@@ -68,11 +68,18 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
         break;
         case dragon::SUCKS:
             _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
+            _nose_smoke.set_position(30, 30);
+            nicework_y = -8;
+            nicework_x = 78;
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");
         break;
     }
+
+    common_stuff.text_generator.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
+    common_stuff.text_generator.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);
+    common_stuff.text_generator.generate(nicework_x - 3, nicework_y + 35, line3, _levelbeated_text_sprites);
 
 }
 
@@ -98,7 +105,7 @@ bn::optional<scene_type> level_win_scene::update(){
     _a_button_anim.update();
     if(_sesh.get_level() == 0 && !_text_box){
         _sesh.reset_score();
-        _text_box = text_box(_common_stuff.small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
+        _text_box.emplace(_common_stuff.small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
     }
 
     if(30 < _timer && !_burningflames.done()){
