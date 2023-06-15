@@ -8,6 +8,7 @@
 #include <bn_string.h>
 #include "constants.h"
 #include "sb_commentary.h"
+#include "enums.h"
 
 namespace trog {
 
@@ -46,6 +47,7 @@ namespace trog {
         bool can_visit_treasure_hut, troghammer, can_lose_trogmeter;
         bn::array<bool, 6> cottage_burnination_status;
         troghammer_status thinfo;
+        dragon current_dragon;
     };
 
     struct saved_options {
@@ -85,8 +87,38 @@ namespace trog {
 
         private:
 
-
             bn::vector<bn::sprite_ptr, 8> _autosave_text;
+            bn::array<char, 8> str_to_format_tag(const char *str);
 
     };
+
+
+
+
+
+
+
+    //old save formats
+
+
+    struct saved_session_v20 { 
+        bool exists;
+        uint8_t mans, level;
+        unsigned short score;
+        bool can_visit_treasure_hut, troghammer, can_lose_trogmeter;
+        bn::array<bool, 6> cottage_burnination_status;
+        troghammer_status thinfo;
+    };
+    struct saved_data_v20 {
+        bn::array<char, 8> format_tag;
+        //options
+        saved_options options;
+
+        bn::array<high_score_entry, 8> high_scores_table;
+
+        saved_session_v20 session;
+
+        bool cheat_unlocked; 
+    };
+
 }

@@ -13,14 +13,37 @@ common_stuff::common_stuff() :
     commentary(savefile.options.voice_vol, rand) { 
 
     //DEFAULT format tag
-    bn::array<char, 8> default_format_tag;
-    bn::istring_base default_format_tag_istring(default_format_tag._data);
-    bn::ostringstream default_format_tag_stream(default_format_tag_istring);
-    default_format_tag_stream.append(TROG_FORMAT_TAG);
+    bn::array<char, 8> default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
+
+    //2.0 format tag
 
     bn::sram::read(savefile);
     //if the format tag is invalid, then we have to set it up.
-    if(savefile.format_tag != default_format_tag){
+    if(savefile.format_tag == str_to_format_tag("trog2.0")){
+        //CONVERT TO 3.0 SAVE FORMAT.
+        saved_data_v20 old_save;
+        bn::sram::read(old_save);
+        savefile.format_tag = default_format_tag;
+        savefile.options = old_save.options;
+        savefile.high_scores_table = old_save.high_scores_table;
+        savefile.cheat_unlocked = old_save.cheat_unlocked;
+
+        //session variables
+        savefile.session.exists = old_save.session.exists;
+        savefile.session.mans = old_save.session.mans;
+        savefile.session.level = old_save.session.level;
+        savefile.session.score = old_save.session.score;
+        savefile.session.can_visit_treasure_hut = old_save.session.can_visit_treasure_hut;
+        savefile.session.troghammer = old_save.session.troghammer;
+        savefile.session.can_lose_trogmeter = old_save.session.can_lose_trogmeter;
+        savefile.session.cottage_burnination_status = old_save.session.cottage_burnination_status;
+        //new session parameter
+        savefile.session.current_dragon = dragon::TROGDOR;
+
+        bn::sram::write(savefile);
+
+        
+    }else if(savefile.format_tag != default_format_tag){
         savefile.format_tag = default_format_tag;
 
         //as long as this flag is set to false,
@@ -57,6 +80,14 @@ void common_stuff::set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, 
     }
 }
 
+bn::array<char, 8> common_stuff::str_to_format_tag(const char *str){
+    bn::array<char, 8> result;
+    bn::istring_base result_istring(result._data);
+    bn::ostringstream result_stream(result_istring);
+    result_stream.append(str);
+    return result;
+}
+
 high_score_entry::high_score_entry(bn::string<9> name, unsigned short level, unsigned short score) : 
     _level(level),
     _score(score) {
@@ -84,6 +115,5 @@ bn::string<9> high_score_entry::get_name(){
 
     return result;
 }
-
 
 }

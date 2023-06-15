@@ -35,6 +35,7 @@ namespace trog {
     enum class dragon 
     {
         TROGDOR,
-        SUCKS
+        SUCKS,
+        CHIAROSCURO
     };
 }

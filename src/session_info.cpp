@@ -41,6 +41,7 @@ void session_info::import_save(){
     _level = sesh.level;
     _troghammer = sesh.troghammer;
     _can_lose_trogmeter = sesh.can_lose_trogmeter;
+    _dragon = sesh.current_dragon;
 }
 
 saved_session session_info::export_save(){
@@ -51,6 +52,7 @@ saved_session session_info::export_save(){
     result.level = _level;
     result.can_lose_trogmeter = _can_lose_trogmeter;
     result.troghammer = _troghammer;
+    result.current_dragon = _dragon;
     result.cottage_burnination_status = {false, false, false, 
                                          false, false, false};
     result.can_visit_treasure_hut = true;
