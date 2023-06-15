@@ -179,6 +179,7 @@ int main()
         // soft reset code
         if(bn::keypad::start_held() && bn::keypad::select_held() &&
                 bn::keypad::a_held() && bn::keypad::b_held() && !logo_scene){
+            scene.reset();
             bn::core::reset();
         }
 

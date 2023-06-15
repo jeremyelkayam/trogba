@@ -16,7 +16,7 @@ namespace trog{
     class hiscores_scene : public scene{ 
     private:
 
-        bn::array<char, 29> _selectable_letters;
+        bn::array<char, 41> _selectable_letters;
 
         session_info &_sesh;
         common_stuff &_common_stuff;

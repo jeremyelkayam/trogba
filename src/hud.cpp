@@ -23,6 +23,7 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
             trogmeter_start + i*(TROG_HUD_PEASANT_HEAD_WIDTH + TROG_HUD_PEASANT_HEAD_SPACING), TROG_HUD_TROGMETER_YCOR, 1);
         peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
         peasanthead_sprite.put_below();
+        peasanthead_sprite.set_bg_priority(3);
         _trogmeter_sprites.emplace_back(peasanthead_sprite);
     }
 
@@ -35,36 +36,32 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
 
     _burninatemeter.set_visible(false);
     _burninatemeter.set_priority(0);
+    _burninatemeter.put_below();
 
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER - 32, -75, 0));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER, -75, 1));
     _burninatemeter_invert.emplace_back(bn::sprite_items::burninometer_inverted.create_sprite(TROG_HUD_BURNINATEMETER_CENTER + 32, -75, 2));
 
-    for(bn::sprite_ptr &_sprite : _burninatemeter_invert) { 
-        _sprite.set_z_order(FURTHEST_BACK_ZORDER);
-        _sprite.set_bg_priority(3);
+    for(bn::sprite_ptr &sprite : _burninatemeter_invert) { 
+        sprite.set_z_order(FURTHEST_BACK_ZORDER);
+        sprite.put_below();
+        sprite.set_bg_priority(3);
     }
 
 
-    //todo change common_stuff.set_sprite_arr_visible to use this
-    for(bn::sprite_ptr &sprite : _burninatemeter_invert){
-        sprite.set_visible(false);
-        // sprite.set_bg_priority(1);
-    }
+    _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, false);
 }
 
 
 void hud::update_trogmeter(unsigned short trogmeter_value){
-    if(!scrolling_text()){
-        for(int i = 0; i < TROG_TROGMETER_MAX; i++){
-            bn::sprite_ptr &peasanthead_sprite = _trogmeter_sprites.at(i);
-            if(i < trogmeter_value) {
-                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
-            }else{
-                peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
-            }
-            peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
+    for(int i = 0; i < TROG_TROGMETER_MAX; i++){
+        bn::sprite_ptr &peasanthead_sprite = _trogmeter_sprites.at(i);
+        if(i < trogmeter_value) {
+            peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 0);
+        }else{
+            peasanthead_sprite.set_tiles(bn::sprite_items::peasanthead.tiles_item(), 1);
         }
+        peasanthead_sprite.set_z_order(FURTHEST_BACK_ZORDER);
     }
 }
 
@@ -129,6 +126,7 @@ void hud::update() {
 
         _common_stuff.text_generator.set_palette_item(RED_PALETTE);
         _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
+        _common_stuff.text_generator.set_bg_priority(3);
 
         bn::string<64> score_str, mans_lv_str;
         bn::ostringstream score_string_stream(score_str);
@@ -152,7 +150,6 @@ void hud::update() {
 
         _common_stuff.text_generator.set_right_alignment();
         _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
-        // BN_LOG("fuck. z order for trogmeter ", _trogmeter_sprites.at(0).z_order());
     }
 }
 
@@ -162,8 +159,10 @@ void hud::scroll_text(const char *text){
     _common_stuff.text_generator.set_left_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
+    _common_stuff.text_generator.set_bg_priority(3);
 
     _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
+
 
 }
 

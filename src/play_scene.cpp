@@ -155,7 +155,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
     if(_sesh.get_level() != 0){
         _knights.emplace_front(-59, 31, false, common_stuff.rand);
-        _knights.emplace_front(33,-50,true, common_stuff.rand);
+        _knights.emplace_front(33, -50, true, common_stuff.rand);
     }
 
     if(_sesh.troghammer_enabled()){
@@ -418,7 +418,7 @@ bn::optional<scene_type> play_scene::update(){
        && _win_pause_time == 0 && !_player->dead() && _sesh.get_level() != 0){
         _player_paused = !_player_paused;
         if(_player_paused){
-
+            _pause_menu_index = 3;
         }else{
             unpause();
         }
@@ -514,10 +514,10 @@ bn::optional<scene_type> play_scene::update_pause_menu(){
     }else if(bn::keypad::down_pressed()){
         _pause_menu_index += 2;
         if(_pause_menu_index > 3) _pause_menu_index -=2;
-    }else if(bn::keypad::left_pressed()){
+    }else if(bn::keypad::left_pressed() && _pause_menu_index != 2){
         _pause_menu_index -= 1;
         if(_pause_menu_index < 0) _pause_menu_index +=1;
-    }else if(bn::keypad::right_pressed()){
+    }else if(bn::keypad::right_pressed() && _pause_menu_index != 1){
         _pause_menu_index += 1;
         if(_pause_menu_index > 3) _pause_menu_index -=1;
     }

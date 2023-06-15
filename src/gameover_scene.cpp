@@ -62,6 +62,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
 
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.set_palette_item(RED_PALETTE);
+    common_stuff.text_generator.set_bg_priority(1);
     common_stuff.text_generator.generate(1, -51, "CHALLENGE", _challengeagain_text_sprites);
     common_stuff.text_generator.generate(0, -38, "AGAIN!", _challengeagain_text_sprites);
 
@@ -73,6 +74,8 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         ycor_bottom -=4;
         common_stuff.small_generator.set_one_sprite_per_character(true);
         common_stuff.small_generator.set_center_alignment();
+        
+        common_stuff.small_generator.set_bg_priority(1);
         common_stuff.small_generator.set_palette_item(RED_PALETTE);
         common_stuff.small_generator.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
         common_stuff.small_generator.set_one_sprite_per_character(false);

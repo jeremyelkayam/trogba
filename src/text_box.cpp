@@ -1,25 +1,43 @@
 #include "text_box.h"
+#include "constants.h"
 #include "trogdor_variable_8x8_sprite_font.h"
 #include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 namespace trog { 
 
 text_box::text_box(bn::sprite_text_generator &text_generator, const char *text) : 
-    _box(bn::regular_bg_items::textbox.create_bg(0, 67)){
+    _box(bn::regular_bg_items::textbox.create_bg(0, 67)) {
     _box.set_priority(2);
+    set_text(text_generator, text);
+}
 
+text_box::text_box() : 
+    _box(bn::regular_bg_items::textbox.create_bg(0, 103)) {
+    _box.set_priority(2);
+}
+
+void text_box::set_text(bn::sprite_text_generator &text_generator, const char *text){
+    _text_sprites.clear();
     bn::vector<bn::string<64>, 3> lines = split_into_lines(text);
-    for(uint8_t i = 0; i < lines.size(); i++ ){
-        text_generator.set_left_alignment();
-        text_generator.generate(-115, 55 + i*9, lines.at(i), _text_sprites);
+    text_generator.set_bg_priority(0);
+    text_generator.set_left_alignment();
+    text_generator.set_palette_item(WHITE_PALETTE);
+    for(uint8_t i = 0; i < lines.size(); i++ ){    
+        text_generator.generate(_box.x() - 115, _box.y() - 12 + i*9, lines.at(i), _text_sprites);
+    }
+}
+
+void text_box::update(){
+    _box.set_y(_box.y() + _speed);
+    for(bn::sprite_ptr &text_sprite : _text_sprites) {
+        text_sprite.set_y(text_sprite.y() + _speed);
     }
 
-    //So it appears on top of the text box...
-    for(bn::sprite_ptr &sprite : _text_sprites) {
-        sprite.set_bg_priority(0);
+    if(_box.y() <= 67 || is_off_screen()){
+        _speed = 0;
     }
-    
 }
 
 
@@ -69,8 +87,6 @@ bn::vector<bn::string<64>, 3> text_box::split_into_lines(const char *text){
             //we are effectively un-setting these variables by zeroing them
             line_width = 0;
             line_end = 0;
-
-            BN_LOG("line: ", result.at(line_num), "  length: ", result.at(line_num).length()); 
 
             ++line_num;
         }

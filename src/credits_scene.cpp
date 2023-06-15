@@ -19,8 +19,6 @@ credits_scene::credits_scene(common_stuff &common_stuff) :
 void credits_scene::setup_credits(){
     int ycor = 100;
 
-
-
     //todo: redraw this graphic. I already remade the logo in high res 
     // so i can just downscale it
     _titlegraphic = bn::regular_bg_items::titlegraphic.create_bg_optional(0, ycor);
@@ -33,6 +31,7 @@ void credits_scene::setup_credits(){
 
     bn::string<64> credits[] = {
         "The GBA Game",
+        bn::string<64>("version ") + TROG_SEMANTIC_VERSION_NUMBER,
         "",
         "programmed by Jeremy Elkayam",
         "New graphics & sound by Jeremy Elkayam",
