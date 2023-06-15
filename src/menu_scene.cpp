@@ -95,7 +95,6 @@ bn::optional<scene_type> menu_scene::update(){
                 result = scene_type::PLAY;
             }
         } 
-        if(bn::keypad::select_pressed()) _sesh.set_dragon(dragon::SUCKS);
     }
 
     if(bn::keypad::a_pressed()){
