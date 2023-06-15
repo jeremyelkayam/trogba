@@ -12,9 +12,10 @@
 #include <bn_sound.h>
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
+#include "enums.h"
+#include "common_stuff.h"
 #include "player.h"
 #include "title_scene.h"
-// #include "instructions_scene.h"
 #include "play_scene.h"
 #include "gameover_scene.h"
 #include "level_win_scene.h"
@@ -26,9 +27,8 @@
 #include "credits_scene.h"
 #include "devs_scene.h"
 #include "fireyrage_scene.h"
-#include "enums.h"
-#include "common_stuff.h"
 #include "options_scene.h"
+#include "dragon_select_scene.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -141,7 +141,7 @@ int main()
                     hud.hide();
                     scene.reset(new trog::fireyrage_scene(sesh));
                     break;
-                }                
+                }       
                 case trog::scene_type::OPTIONS: {
                     hud.hide();
 
@@ -150,6 +150,11 @@ int main()
                     }
 
                     scene.reset(new trog::options_scene(common_stuff, *last_scene));
+                    break;
+                }                
+                case trog::scene_type::DRAGON_SELECT: {
+                    hud.hide();
+                    scene.reset(new trog::dragon_select_scene(sesh, common_stuff));
                     break;
                 }
                 default: { 

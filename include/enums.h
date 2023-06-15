@@ -22,7 +22,8 @@ namespace trog {
         MENU,
         HISCORES,
         CREDITS,
-        OPTIONS
+        OPTIONS,
+        DRAGON_SELECT
     };
     enum class direction
     {

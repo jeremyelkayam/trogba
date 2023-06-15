@@ -83,7 +83,9 @@ bn::optional<scene_type> menu_scene::update(){
         _flames_scale.update();
         _flames_translate->update();
         if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
-            if(_selected_option_index == 3){
+            if(_selected_option_index == 1){
+                result = scene_type::DRAGON_SELECT;
+            }else if(_selected_option_index == 3){
                 result = scene_type::OPTIONS;
             }else if(_selected_option_index == 4){
                 result = scene_type::HISCORES;
