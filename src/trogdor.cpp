@@ -27,14 +27,13 @@ void trogdor::flex(){
 
 void trogdor::update_anim(){
     entity::update_anim();
-    if((_move_action && !_move_action->done()) || _move_by_action){
+    if((_move_action && !_move_action->done()) || _move_by_action || _update_anim_when_not_moving){
         _walkcycle.update();
     }
     if(_flex){
         _flex->update();
     }
     update_firebreath();
-
 }
 
 void trogdor::update(){

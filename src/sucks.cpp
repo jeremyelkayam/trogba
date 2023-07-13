@@ -16,4 +16,12 @@ void sucks::update(){
     }
 }
 
+void sucks::update_anim(){
+    entity::update_anim();
+    if((_move_action && !_move_action->done()) || _move_by_action || _update_anim_when_not_moving){
+        _walkcycle.update();
+    }
+    update_firebreath();
+}
+
 }

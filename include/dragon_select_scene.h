@@ -5,12 +5,13 @@
 #include "scene.h"
 #include "session_info.h"
 #include "text_box.h"
-
+#include "player.h"
 
 namespace trog{
     struct dragon_option {
         dragon dragon_type;
         bn::string<16> name;
+        bn::unique_ptr<player> player_entity;
     };
 
     class dragon_select_scene : public scene{ 
