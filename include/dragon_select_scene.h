@@ -16,7 +16,7 @@ namespace trog{
 
     class dragon_select_scene : public scene{ 
     private:
-        uint8_t _index;
+        uint8_t _index, _selection_timer;
         bn::vector<dragon_option,2> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
 

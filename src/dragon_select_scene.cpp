@@ -5,13 +5,14 @@
 #include "trogdor.h"
 
 #include <bn_keypad.h>
-#define SPACING 60
+#define SPACING 70
 
 
 namespace trog {
 
 dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &common_stuff) : 
         _index(0),
+        _selection_timer(0),
         _sesh(sesh),
         _common_stuff(common_stuff) {
     _selectable_dragons.emplace_back(dragon::TROGDOR, "TROGDOR", bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)));
@@ -34,35 +35,54 @@ bn::optional<scene_type> dragon_select_scene::update(){
     for(auto &opt : _selectable_dragons){
         opt.player_entity->update_anim();
     }
-
     bn::optional<scene_type> result;
 
-    if(bn::keypad::left_pressed()){
-        if(_index != 0) _index--;
+    if(_selection_timer == 0){
+        if(bn::keypad::left_pressed()){
+            if(_index != 0) _index--;
 
-        //looping code
-        // if(_index == 0)
-        //     _index = _selectable_dragons.size() - 1;
-        // else _index--;
-    }if(bn::keypad::right_pressed()){
-        if(_index != _selectable_dragons.size() - 1) _index++;
-        //looping code
-        // if(_index == _selectable_dragons.size() - 1)
-        //     _index = 0;
-        // else _index++;
-    }
+            //looping code
+            // if(_index == 0)
+            //     _index = _selectable_dragons.size() - 1;
+            // else _index--;
+        }if(bn::keypad::right_pressed()){
+            if(_index != _selectable_dragons.size() - 1) _index++;
 
-    if(bn::keypad::left_pressed() || bn::keypad::right_pressed()) {
-        update_text();
-        for(uint8_t z = 0; z < _selectable_dragons.size(); z++){
-            _selectable_dragons.at(z).player_entity->move_to(10, (z - _index) * SPACING, 0);
-        }    
-    }
+            //looping code
+            // if(_index == _selectable_dragons.size() - 1)
+            //     _index = 0;
+            // else _index++;
+        }
 
-    if(bn::keypad::a_pressed()){
-        _sesh.set_dragon(_selectable_dragons.at(_index).dragon_type);
+        if(bn::keypad::left_pressed() || bn::keypad::right_pressed()) {
+            update_text();
+            for(uint8_t z = 0; z < _selectable_dragons.size(); z++){
+                _selectable_dragons.at(z).player_entity->move_to(10, (z - _index) * SPACING, 0);
+            }    
+        }
+
+        if(bn::keypad::a_pressed()){
+            dragon dtype = _selectable_dragons.at(_index).dragon_type;
+            _sesh.set_dragon(dtype);
+            _selectable_dragons.at(_index).player_entity.get()->update_anim_action_when_not_moving(false);
+            switch(dtype){
+                case dragon::TROGDOR:
+                    ((trogdor *) _selectable_dragons.at(_index).player_entity.get())->flex();
+                    //play trogdor jingle
+                break;
+                case dragon::SUCKS:
+                    //play sucks jingle
+                break;
+                default:
+                break;
+            }
+            _selection_timer = 1;
+        }
+    }else if(_selection_timer == 240){
         result = scene_type::PLAY;
     }
+
+    if(_selection_timer) ++_selection_timer;
 
     return result;
 }
