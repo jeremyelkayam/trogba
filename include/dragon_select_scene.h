@@ -7,6 +7,7 @@
 #include "session_info.h"
 #include "text_box.h"
 #include "player.h"
+#include "big_text.h"
 
 namespace trog{
     struct dragon_option {
@@ -20,6 +21,8 @@ namespace trog{
         uint8_t _index, _selection_timer;
         bn::vector<dragon_option,2> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
+
+        big_text _title;
 
 
         session_info &_sesh;

@@ -1,6 +1,7 @@
 #include "dragon_select_scene.h"
 #include "constants.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "sucks.h"
 #include "trogdor.h"
 
@@ -14,6 +15,7 @@ namespace trog {
 dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &common_stuff) : 
         _index(0),
         _selection_timer(0),
+        _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
     _selectable_dragons.emplace_back(dragon::TROGDOR, "TROGDOR", bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)));
@@ -31,7 +33,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
 void dragon_select_scene::update_text(){
     _selected_text.clear();
     _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
-    _common_stuff.text_generator.generate(0, -60, _selectable_dragons.at(_index).name, _selected_text);
+    _common_stuff.text_generator.generate(0, -40, _selectable_dragons.at(_index).name, _selected_text);
 }
 
 bn::optional<scene_type> dragon_select_scene::update(){
