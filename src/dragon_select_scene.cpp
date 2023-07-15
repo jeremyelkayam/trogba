@@ -6,6 +6,7 @@
 
 #include <bn_keypad.h>
 #define SPACING 70
+#define MSATIME 10 //move selection animation time 
 
 
 namespace trog {
@@ -21,7 +22,10 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
 
     for(auto &opt : _selectable_dragons){
         opt.player_entity->update_anim_action_when_not_moving(true);
+        opt.player_entity->set_grayscale(1);
     }
+
+    _selectable_dragons.at(_index).player_entity->set_grayscale(0);
 }
 
 void dragon_select_scene::update_text(){
@@ -57,8 +61,14 @@ bn::optional<scene_type> dragon_select_scene::update(){
         if(bn::keypad::left_pressed() || bn::keypad::right_pressed()) {
             update_text();
             for(uint8_t z = 0; z < _selectable_dragons.size(); z++){
-                _selectable_dragons.at(z).player_entity->move_to(10, (z - _index) * SPACING, 0);
+                _selectable_dragons.at(z).player_entity->move_to(MSATIME, (z - _index) * SPACING, 0);
             }    
+            _selectable_dragons.at(_index).player_entity->grayscale_to(MSATIME, 0);
+            
+            int8_t previous_selection_offset = bn::keypad::left_pressed() ? 1 : -1;
+
+            _selectable_dragons.at(_index + previous_selection_offset).player_entity->grayscale_to(MSATIME, 1);
+
         }
 
         if(bn::keypad::a_pressed()){

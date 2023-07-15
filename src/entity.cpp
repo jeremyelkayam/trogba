@@ -53,7 +53,7 @@ void entity::update_anim(){
     }
 
     //drop clause
-    //this is fucking garbage and i'm ashamed of what i have
+    //this is fucking garbage and i'm ashamed of what i have done
     if(_move_action && _move_action->done() && _drop){
         //once it's dropped, start the dust cloud animation
         if(!_dust_cloud){
@@ -107,6 +107,9 @@ void entity::update_anim(){
     if(_scale_action && !_scale_action->done()){
         _scale_action->update();
     }
+    if(_gst_action && !_gst_action->done()){
+        _gst_action->update();
+    }
 }
 
 void entity::flip_every(const uint8_t &frames){
@@ -118,6 +121,11 @@ void entity::jump(const short &time, const bn::fixed &height, const bool &repeat
     _jump_time = time;
     _jump_height = height;
     _keep_jumping = repeating;
+}
+
+void entity::set_grayscale(const bn::fixed &intensity){
+    bn::sprite_palette_ptr palette = _sprite.palette();
+    palette.set_grayscale_intensity(intensity);
 }
 
 
@@ -184,6 +192,10 @@ void entity::squish(const short &time){
     _sprite.set_horizontal_scale(1.2);
     _vst_action.reset(new bn::sprite_vertical_scale_to_action(_sprite, time, 1));
     _hst_action.reset(new bn::sprite_horizontal_scale_to_action(_sprite, time, 1));
+}
+
+void entity::grayscale_to(const int &duration_updates, const bn::fixed &final_intensity){
+    _gst_action.reset(new bn::sprite_palette_grayscale_to_action(_sprite.palette(), duration_updates, final_intensity));
 }
 
 void entity::drop(){

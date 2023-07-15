@@ -2,6 +2,7 @@
 #include <bn_regular_bg_ptr.h>
 #include <bn_sprite_text_generator.h>
 #include <bn_sprite_animate_actions.h>
+#include <bn_sprite_palette_actions.h>
 #include "scene.h"
 #include "session_info.h"
 #include "text_box.h"
