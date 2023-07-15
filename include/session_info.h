@@ -25,8 +25,6 @@ namespace trog
             unsigned short get_level() const {return _level;}
             bool last_killed_by_archer() const {return _killed_by_archer;}
 
-            bool current_level_has_cutscene();
-
             void import_save();
             saved_session export_save();
 

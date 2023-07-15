@@ -6,6 +6,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_vector.h>
 #include <bn_string.h>
+#include <bn_unordered_map.h>
 #include "constants.h"
 #include "sb_commentary.h"
 #include "enums.h"
@@ -35,9 +36,9 @@ namespace trog {
         public:
             high_score_entry();
             high_score_entry(bn::string<9> name, unsigned short level, unsigned short score);
-            unsigned short get_level(){return _level;}
-            unsigned int get_score(){return _score;}
-            bn::string<9> get_name();
+            unsigned short get_level() const {return _level;}
+            unsigned int get_score() const {return _score;}
+            bn::string<9> get_name() const ;
             void set_name_char(char name_char, int index){_name[index] = name_char;}
     };
     struct saved_session { 
@@ -66,6 +67,8 @@ namespace trog {
         saved_session session;
 
         bool cheat_unlocked; 
+
+        bn::array<bool, 13> unlocked_cutscenes;
     };
 
     class common_stuff { 
@@ -85,9 +88,12 @@ namespace trog {
 
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
 
+            bool current_level_has_cutscene(const uint8_t &current_level) const;
+
         private:
 
             bn::vector<bn::sprite_ptr, 8> _autosave_text;
+            bn::vector<uint8_t, 13> _cutscene_levels;
             bn::array<char, 8> str_to_format_tag(const char *str);
 
     };
@@ -99,8 +105,6 @@ namespace trog {
 
 
     //old save formats
-
-
     struct saved_session_v20 { 
         bool exists;
         uint8_t mans, level;

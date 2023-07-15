@@ -5,12 +5,30 @@
 #include "trogdor_variable_8x8_sprite_font.h"
 namespace trog { 
 
-
 common_stuff::common_stuff() : 
     text_generator(variable_8x16_sprite_font),
     big_generator(variable_32x64_sprite_font),
     small_generator(variable_8x8_sprite_font),
     commentary(savefile.options.voice_vol, rand) { 
+
+    _cutscene_levels.emplace_back(5);
+    _cutscene_levels.emplace_back(9);
+    _cutscene_levels.emplace_back(13);
+    _cutscene_levels.emplace_back(17);
+    _cutscene_levels.emplace_back(21);
+    _cutscene_levels.emplace_back(25);
+    _cutscene_levels.emplace_back(31);
+    _cutscene_levels.emplace_back(35);
+    _cutscene_levels.emplace_back(39);
+    _cutscene_levels.emplace_back(43);
+    _cutscene_levels.emplace_back(47);
+    _cutscene_levels.emplace_back(51);
+    _cutscene_levels.emplace_back(101);
+    
+    bn::array<bool, 13> base_unlocked_cutscenes;
+    for(bool &unlocked : base_unlocked_cutscenes){
+        unlocked = false;
+    }
 
     //DEFAULT format tag
     bn::array<char, 8> default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
@@ -40,6 +58,18 @@ common_stuff::common_stuff() :
         //new session parameter
         savefile.session.current_dragon = dragon::TROGDOR;
 
+        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+
+        uint8_t max_level_reached = savefile.session.level;
+        for(const high_score_entry &entry : savefile.high_scores_table) {
+            if(entry.get_level() > max_level_reached) 
+                max_level_reached = entry.get_level();
+        }
+        for(uint8_t i = 0; i < savefile.unlocked_cutscenes.size(); i++){
+            //if we have reached a level higher than this cutscene level, we should unlock it
+            savefile.unlocked_cutscenes[i] = max_level_reached > _cutscene_levels.at(i);
+        }
+
         bn::sram::write(savefile);
 
         
@@ -61,6 +91,8 @@ common_stuff::common_stuff() :
         savefile.high_scores_table.fill(high_score_entry("", 0, 0));
 
         savefile.cheat_unlocked = false;
+
+        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
     }
 
     small_generator.set_left_alignment();
@@ -106,7 +138,7 @@ high_score_entry::high_score_entry() :
     name_stream.append("DUMMY");
 }
 
-bn::string<9> high_score_entry::get_name(){
+bn::string<9> high_score_entry::get_name() const {
     bn::string<9>result;
     //go until you start hitting null chars
     for(int z=0; _name[z] != 0; ++z){
@@ -115,5 +147,13 @@ bn::string<9> high_score_entry::get_name(){
 
     return result;
 }
+
+bool common_stuff::current_level_has_cutscene(const uint8_t &current_level) const {
+    for(const uint8_t &lv : _cutscene_levels) {
+        if(lv == current_level) return true;
+    }
+    return false;
+}
+
 
 }

@@ -132,7 +132,7 @@ bn::optional<scene_type> level_win_scene::update(){
         //we will just advance it for you
         if(_timer < 40) _sesh.advance_level();
 
-        if(_sesh.current_level_has_cutscene()) {
+        if(_common_stuff.current_level_has_cutscene(_sesh.get_level())) {
             result = scene_type::MOVIE;
         }else{
             result = scene_type::PLAY;
