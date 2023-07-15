@@ -83,6 +83,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
                     //play trogdor jingle
                 break;
                 case dragon::SUCKS:
+                    ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
                     //play sucks jingle
                 break;
                 default:
