@@ -52,6 +52,10 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     if(common_stuff.rand.get_int(33) == 0){
         line3 = "BEATED!";
     }
+
+    for(uint8_t i = 0; i < common_stuff.savefile.unlocked_cutscenes.size(); i++){
+        BN_LOG("cutscene ", i, "unlocked? ", common_stuff.savefile.unlocked_cutscenes[i]);
+    }
     
 
 
@@ -89,6 +93,9 @@ void level_win_scene::save(){
     // the level doesn't technically advance until later in the animation
     //  so we should increment it here if it hasn't happened yet
     if(_timer < 40) _common_stuff.savefile.session.level++;
+
+    //save that we've viewed the cutscene at this level if applicable
+    _common_stuff.unlock_cutscene_at_level(_common_stuff.savefile.session.level);
 
     _common_stuff.save();
 
@@ -132,7 +139,7 @@ bn::optional<scene_type> level_win_scene::update(){
         //we will just advance it for you
         if(_timer < 40) _sesh.advance_level();
 
-        if(_common_stuff.current_level_has_cutscene(_sesh.get_level())) {
+        if(_common_stuff.level_has_cutscene(_sesh.get_level())) {
             result = scene_type::MOVIE;
         }else{
             result = scene_type::PLAY;

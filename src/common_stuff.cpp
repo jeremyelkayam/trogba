@@ -148,12 +148,19 @@ bn::string<9> high_score_entry::get_name() const {
     return result;
 }
 
-bool common_stuff::current_level_has_cutscene(const uint8_t &current_level) const {
+bool common_stuff::level_has_cutscene(const uint8_t &current_level) const {
     for(const uint8_t &lv : _cutscene_levels) {
         if(lv == current_level) return true;
     }
     return false;
 }
 
+void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
+    for(int i = 0; i < _cutscene_levels.size(); ++i) {
+        if(_cutscene_levels[i] == current_level){
+            savefile.unlocked_cutscenes[i] = true;
+        }
+    }
+}
 
 }

@@ -112,13 +112,13 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                 if(saved_sesh.exists && !saved_sesh.can_visit_treasure_hut){
                     treasurehut = false;
                 }
-                BN_LOG("treasure hut? ", treasurehut);            
-                BN_LOG("cottage #", i + 1);
-                BN_LOG("direction: ", levels[level_index][j]);
+                // BN_LOG("treasure hut? ", treasurehut);            
+                // BN_LOG("cottage #", i + 1);
+                // BN_LOG("direction: ", levels[level_index][j]);
                 bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
-                BN_LOG("xcor ", xcor);
+                // BN_LOG("xcor ", xcor);
                 bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
-                BN_LOG("ycor ", ycor);
+                // BN_LOG("ycor ", ycor);
 
                 direction enumdir;
                 switch(levels[level_index][j]){

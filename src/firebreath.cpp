@@ -44,7 +44,6 @@ void firebreath::handle_cottage_collision(cottage &cottage){
     BN_ASSERT(enabled());
     bn::fixed_rect cottagebox = cottage.get_hitbox();
     if(_hitbox.intersects(cottagebox)){
-        BN_LOG("burninate the cottage?");        
         bool burninate_success = cottage.burninate();
         if(burninate_success){
             _sesh.score(TROG_COTTAGE_BREATHBURN_SCORE);

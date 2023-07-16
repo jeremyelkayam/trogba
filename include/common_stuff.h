@@ -88,7 +88,8 @@ namespace trog {
 
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
 
-            bool current_level_has_cutscene(const uint8_t &current_level) const;
+            bool level_has_cutscene(const uint8_t &current_level) const;
+            void unlock_cutscene_at_level(const uint8_t &current_level);
 
         private:
 

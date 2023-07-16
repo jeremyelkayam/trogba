@@ -77,7 +77,6 @@ void sb_commentary::level_win_scene(){
 
 void sb_commentary::stomp_peasant(){
     unsigned short rand_num = _rand.get_int(60);
-    BN_LOG("rand num (peasant stomp): ", rand_num);
     if(_timer == 0){
         if(rand_num == 0){
             bn::sound_items::sb_asquisha.play(_volume);
