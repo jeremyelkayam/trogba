@@ -55,6 +55,9 @@ namespace trog{
 
         void drop();
 
+        void scale_to(const int &duration_updates, const bn::fixed &scale_factor);
+        void set_scale(const bn::fixed &scale) {_sprite.set_scale(scale);}
+
     protected:
         explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
         

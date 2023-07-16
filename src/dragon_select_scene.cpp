@@ -8,6 +8,8 @@
 #include <bn_keypad.h>
 #define SPACING 70
 #define MSATIME 10 //move selection animation time 
+#define SELY 20
+#define SELSCALE 2
 
 
 namespace trog {
@@ -28,6 +30,8 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
     }
 
     _selectable_dragons.at(_index).player_entity->set_grayscale(0);
+    _selectable_dragons.at(_index).player_entity->set_scale(2);
+    _selectable_dragons.at(_index).player_entity->set_y(SELY);
 }
 
 void dragon_select_scene::update_text(){
@@ -63,14 +67,16 @@ bn::optional<scene_type> dragon_select_scene::update(){
         if(bn::keypad::left_pressed() || bn::keypad::right_pressed()) {
             update_text();
             for(uint8_t z = 0; z < _selectable_dragons.size(); z++){
-                _selectable_dragons.at(z).player_entity->move_to(MSATIME, (z - _index) * SPACING, 0);
+                bn::fixed ycor = z == _index ? SELY : 0;
+                _selectable_dragons.at(z).player_entity->move_to(MSATIME, (z - _index) * SPACING, ycor);
             }    
             _selectable_dragons.at(_index).player_entity->grayscale_to(MSATIME, 0);
-            
+            _selectable_dragons.at(_index).player_entity->scale_to(MSATIME, 2);
+
             int8_t previous_selection_offset = bn::keypad::left_pressed() ? 1 : -1;
 
             _selectable_dragons.at(_index + previous_selection_offset).player_entity->grayscale_to(MSATIME, 1);
-
+            _selectable_dragons.at(_index + previous_selection_offset).player_entity->scale_to(MSATIME, 1);
         }
 
         if(bn::keypad::a_pressed()){

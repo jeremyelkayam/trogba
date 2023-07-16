@@ -205,5 +205,8 @@ void entity::drop(){
     _drop = true;
 }
 
+void entity::scale_to(const int &duration_updates, const bn::fixed &scale_factor){
+    _scale_action.reset(new bn::sprite_scale_to_action(_sprite, duration_updates, scale_factor));
+}
 
 }
