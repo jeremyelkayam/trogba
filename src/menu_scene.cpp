@@ -71,6 +71,7 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
     _menu_options.emplace_back(5, 47, "OPTIONS", common_stuff.text_generator);
     _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
     _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
+    _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
 }
 
 bn::optional<scene_type> menu_scene::update(){
@@ -91,6 +92,8 @@ bn::optional<scene_type> menu_scene::update(){
                 result = scene_type::HISCORES;
             }else if(_selected_option_index == 5){
                 result = scene_type::CREDITS;
+            }else if(_selected_option_index == 6){
+                result = scene_type::CUTSCENE_VIEWER;
             }else{
                 result = scene_type::PLAY;
             }

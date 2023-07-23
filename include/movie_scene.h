@@ -25,7 +25,7 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
 
         
-        const scene_type &_last_scene;
+        const scene_type _last_scene;
         unsigned short _timer, _cutscene_length;
 
         bn::fixed_point _start_pos, _finish_pos;

@@ -163,4 +163,41 @@ void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
     }
 }
 
+const char* common_stuff::scene_type_to_string(const scene_type &type) const{
+    switch(type){
+        case scene_type::BONUS:
+            return "bonus";
+        case scene_type::CREDITS:
+            return "credits";
+        case scene_type::CUTSCENE_VIEWER:
+            return "cutscene viewer";
+        case scene_type::DEVS:
+            return "devs";
+        case scene_type::DRAGON_SELECT:
+            return "dragon select";
+        case scene_type::FIREYRAGE:
+            return "firey rage";
+        case scene_type::HISCORES:
+            return "hi scores";
+        case scene_type::LEVELBEAT:
+            return "level beat";
+        case scene_type::LOGO:
+            return "logo";
+        case scene_type::LOSE:
+            return "game over";
+        case scene_type::MENU:
+            return "main menu";
+        case scene_type::MOVIE:
+            return "movie";
+        case scene_type::OPTIONS:
+            return "options";
+        case scene_type::PLAY:
+            return "play";
+        case scene_type::TITLE:
+            return "title";
+        default:
+            return "unknown scene";
+    }
+}
+
 }

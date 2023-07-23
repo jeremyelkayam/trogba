@@ -20,6 +20,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     _sesh(sesh),
     _dummy_cottage(-240, -240, direction::DOWN, false, false, common_stuff)
 {
+    BN_LOG("last scene: ", common_stuff.scene_type_to_string(_last_scene));
     if(_sesh.get_level() != 101) {
         bn::sound_items::intermish.play();
     }
@@ -426,6 +427,7 @@ bn::optional<scene_type> movie_scene::update(){
     }
 
     if(cutscene_over()) {
+        BN_LOG("last scene: ", _common_stuff.scene_type_to_string(_last_scene));
         if(_last_scene == scene_type::CUTSCENE_VIEWER){
             result = scene_type::CUTSCENE_VIEWER;
         }else if(_sesh.get_level() == 101){
