@@ -12,8 +12,8 @@
 //this class is terrible! But it's the best I've got 
 namespace trog{
 
-movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) : 
-    
+movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
+    _last_scene(last_scene),    
     _timer(0),
     _cutscene_length(270),
     _common_stuff(common_stuff),
@@ -425,10 +425,14 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
 
-    if(cutscene_over() && _sesh.get_level() != 101) {
-        result = scene_type::PLAY;
-    }else if(cutscene_over() && _sesh.get_level() == 101){
-        result = scene_type::HISCORES;
+    if(cutscene_over()) {
+        if(_last_scene == scene_type::CUTSCENE_VIEWER){
+            result = scene_type::CUTSCENE_VIEWER;
+        }else if(_sesh.get_level() == 101){
+            result = scene_type::HISCORES;
+        }else{
+            result = scene_type::PLAY;
+        }
     }
 
     _timer++;

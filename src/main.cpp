@@ -29,6 +29,7 @@
 #include "fireyrage_scene.h"
 #include "options_scene.h"
 #include "dragon_select_scene.h"
+#include "cutsceneviewer_scene.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -41,7 +42,7 @@ int main()
     // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::CUTSCENE_VIEWER;
     bn::optional<trog::scene_type> last_scene;
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
@@ -121,7 +122,7 @@ int main()
                 }
                 case trog::scene_type::MOVIE: {
                     hud.show();
-                    scene.reset(new trog::movie_scene(sesh, common_stuff));
+                    scene.reset(new trog::movie_scene(sesh, common_stuff, *last_scene));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
@@ -155,6 +156,11 @@ int main()
                 case trog::scene_type::DRAGON_SELECT: {
                     hud.hide();
                     scene.reset(new trog::dragon_select_scene(sesh, common_stuff));
+                    break;
+                }                
+                case trog::scene_type::CUTSCENE_VIEWER: {
+                    hud.hide();
+                    scene.reset(new trog::cutsceneviewer_scene(sesh, common_stuff));
                     break;
                 }
                 default: { 

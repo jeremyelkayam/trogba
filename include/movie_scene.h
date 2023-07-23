@@ -23,8 +23,9 @@ namespace trog{
 
         bn::vector<bn::unique_ptr<entity>, 20> _cutscene_objects;
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
-        
 
+        
+        const scene_type &_last_scene;
         unsigned short _timer, _cutscene_length;
 
         bn::fixed_point _start_pos, _finish_pos;
@@ -41,7 +42,7 @@ namespace trog{
 
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();
-        explicit movie_scene(session_info &sesh, common_stuff &common_stuff);
+        explicit movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene);
 
     };
 }
