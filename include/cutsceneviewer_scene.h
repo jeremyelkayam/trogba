@@ -22,7 +22,7 @@ namespace trog{
         common_stuff &_common_stuff;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
-        bn::vector<cvoption, 13> _options_vec;
+        bn::vector<cvoption, 14> _options_vec;
         bn::regular_bg_ptr _scroll;
 
         uint8_t _index;

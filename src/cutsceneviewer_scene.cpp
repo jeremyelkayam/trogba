@@ -33,6 +33,7 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
             _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 2>(), bn::vector<bn::sprite_ptr, 6>(), nm, lv);
         }
     }
+    _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 2>(), bn::vector<bn::sprite_ptr, 6>(), bn::string<32>("back"), 0);
 
 
 
@@ -56,20 +57,23 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
 
     if(_options_vec.at(0).lv_text_sprites.empty()){
         bn::sprite_text_generator &txtgen = _common_stuff.small_generator;
+        txtgen.set_left_alignment();
+        txtgen.set_palette_item(BLACK_PALETTE);
+        txtgen.set_one_sprite_per_character(false);
+
         for(uint8_t z = 0; z < _options_vec.size(); z++){
-            txtgen.set_left_alignment();
-            txtgen.set_palette_item(BLACK_PALETTE);
+            if(z == _options_vec.size() - 1){
+                txtgen.generate(-90, -52 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).lv_text_sprites);
+            }else{
+                bn::string<32> opt_str;
+                bn::ostringstream opt_string_stream(opt_str);
 
-            bn::string<32> opt_str;
-            bn::ostringstream opt_string_stream(opt_str);
+                opt_string_stream << "Lv" << _options_vec.at(z).level << ".";
+                
 
-            opt_string_stream << "Lv" << _options_vec.at(z).level << ".";
-            
-
-            txtgen.set_one_sprite_per_character(false);
-            txtgen.generate(-90, -50 + 9 * z, opt_str, _options_vec.at(z).lv_text_sprites);
-            txtgen.generate(-55, -50 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).title_text_sprites);
-
+                txtgen.generate(-90, -52 + 9 * z, opt_str, _options_vec.at(z).lv_text_sprites);
+                txtgen.generate(-55, -52 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).title_text_sprites);
+            }
 
 
             //trick to set our index to the last selected option when returning from this menu
@@ -94,8 +98,12 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
     }
 
     if(bn::keypad::a_pressed()){
-        result = scene_type::MOVIE;
-        _sesh.set_level(_options_vec.at(_index).level);
+        if(_index == _options_vec.size() - 1){
+            result = scene_type::MENU;
+        }else{
+            result = scene_type::MOVIE;
+            _sesh.set_level(_options_vec.at(_index).level);
+        }
     }
         
     return result;

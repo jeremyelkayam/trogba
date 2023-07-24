@@ -164,6 +164,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 
 void movie_scene::write_text(bn::string<32> str){
     _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
+    _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.generate(0, -60, str, _text_sprites);
 }
 
