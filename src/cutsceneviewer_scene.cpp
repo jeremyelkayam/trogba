@@ -42,6 +42,11 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
         opt_string_stream << "Lv" << _options_vec.at(z).level << ": " << _options_vec.at(z).title;
 
         txtgen.generate(-70, -50 + 9 * z, opt_str, _options_vec.at(z).text_sprites);
+
+        //trick to set our index to the last selected option when returning from this menu
+        if(_sesh.get_level() == _options_vec.at(z).level){
+            _index = z;
+        }
     }
     update_selection();
 
