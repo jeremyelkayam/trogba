@@ -113,7 +113,7 @@ void hud::update() {
             sprite.set_x(sprite.x() - TROG_HUD_TEXT_SCROLL_SPEED);
             text_still_onscreen = text_still_onscreen || (sprite.x() > -120);
         }
-        
+
         if(!text_still_onscreen){
             _scrolling_text_sprites.clear();
             set_all_visible(true);
@@ -162,8 +162,6 @@ void hud::scroll_text(const char *text){
     _common_stuff.text_generator.set_bg_priority(3);
 
     _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
-
-
 }
 
 }

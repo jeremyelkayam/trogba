@@ -38,7 +38,7 @@ namespace trog{
 
         bool cutscene_over();
         
-        void write_text(const char* str);
+        void write_text(bn::string<32> str);
 
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();

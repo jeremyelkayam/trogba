@@ -11,20 +11,21 @@ common_stuff::common_stuff() :
     small_generator(variable_8x8_sprite_font),
     commentary(savefile.options.voice_vol, rand) { 
 
-    _cutscene_levels.emplace_back(5);
-    _cutscene_levels.emplace_back(9);
-    _cutscene_levels.emplace_back(13);
-    _cutscene_levels.emplace_back(17);
-    _cutscene_levels.emplace_back(21);
-    _cutscene_levels.emplace_back(25);
-    _cutscene_levels.emplace_back(31);
-    _cutscene_levels.emplace_back(35);
-    _cutscene_levels.emplace_back(39);
-    _cutscene_levels.emplace_back(43);
-    _cutscene_levels.emplace_back(47);
-    _cutscene_levels.emplace_back(51);
-    _cutscene_levels.emplace_back(101);
-    
+    cutscene_levels.emplace_back(5, "stompin' good");
+    cutscene_levels.emplace_back(9, "fry 'em up dan.");
+    cutscene_levels.emplace_back(13, "parade of trogdors");
+    cutscene_levels.emplace_back(17, "dancin' time");
+    cutscene_levels.emplace_back(21, "flex it, troggie");
+    cutscene_levels.emplace_back(25, "peasant dominoes");
+    cutscene_levels.emplace_back(31, "trogdor incognito");
+    cutscene_levels.emplace_back(35, "go trogdor #2!");
+    cutscene_levels.emplace_back(39, "forbidden peasant love");
+    cutscene_levels.emplace_back(43, "2 cottages");
+    cutscene_levels.emplace_back(47, "a funny joke");
+    cutscene_levels.emplace_back(51, "smote that kerrek!");
+    cutscene_levels.emplace_back(101, "ending");
+
+
     bn::array<bool, 13> base_unlocked_cutscenes;
     for(bool &unlocked : base_unlocked_cutscenes){
         unlocked = false;
@@ -67,7 +68,7 @@ common_stuff::common_stuff() :
         }
         for(uint8_t i = 0; i < savefile.unlocked_cutscenes.size(); i++){
             //if we have reached a level higher than this cutscene level, we should unlock it
-            savefile.unlocked_cutscenes[i] = max_level_reached > _cutscene_levels.at(i);
+            savefile.unlocked_cutscenes[i] = max_level_reached > cutscene_levels.at(i).first;
         }
 
         bn::sram::write(savefile);
@@ -148,19 +149,31 @@ bn::string<9> high_score_entry::get_name() const {
     return result;
 }
 
+//N.B. : yes, binary search WOULD be faster here. However, this is running on an array
+// of 13 elements and only runs once per level on the completion screen. 
+// I think linear search will be fine for our purposes. 
 bool common_stuff::level_has_cutscene(const uint8_t &current_level) const {
-    for(const uint8_t &lv : _cutscene_levels) {
-        if(lv == current_level) return true;
+    for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {
+        if(entry.first == current_level) return true;
     }
     return false;
 }
 
 void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
-    for(int i = 0; i < _cutscene_levels.size(); ++i) {
-        if(_cutscene_levels[i] == current_level){
+    for(int i = 0; i < cutscene_levels.size(); ++i) {
+        if(cutscene_levels.at(i).first == current_level){
             savefile.unlocked_cutscenes[i] = true;
         }
     }
+}
+
+//todo: maybe binary search would be better for this lol
+bn::string<32> common_stuff::cutscene_name_for_level(const uint8_t &level){
+    for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {
+        if(entry.first == level) return entry.second;
+    }
+    BN_ERROR("invalid level passed into common_stuff.cutscene_name_for_level");
+    return bn::string<32>();
 }
 
 const char* common_stuff::scene_type_to_string(const scene_type &type) const{

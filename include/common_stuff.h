@@ -77,6 +77,8 @@ namespace trog {
             bn::sprite_text_generator big_generator;
             bn::sprite_text_generator small_generator;
             bn::random rand;
+            bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
+
             sb_commentary commentary;
 
             saved_data savefile;
@@ -93,10 +95,11 @@ namespace trog {
 
             const char* scene_type_to_string(const scene_type &type) const;
 
+            bn::string<32> cutscene_name_for_level(const uint8_t &level);
+
         private:
 
             bn::vector<bn::sprite_ptr, 8> _autosave_text;
-            bn::vector<uint8_t, 13> _cutscene_levels;
             bn::array<char, 8> str_to_format_tag(const char *str);
 
     };

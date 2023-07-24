@@ -25,22 +25,34 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE CUTSCENE VIEWER", _header_sprites);
 
-    _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 8>(), "stompin' good", 5);
+
+    for(bn::pair<uint8_t, bn::string<32>> cutscene : _common_stuff.cutscene_levels){
+        _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 8>(), cutscene.second, cutscene.first);
+    }
 
     bn::sprite_text_generator &txtgen = common_stuff.small_generator;
 
     for(uint8_t z = 0; z < _options_vec.size(); z++){
         txtgen.set_left_alignment();
         txtgen.set_palette_item(BLACK_PALETTE);
-        txtgen.generate(-70, -50 + 8 * z, _options_vec.at(z).title, _options_vec.at(z).text_sprites);
+
+        bn::string<32> opt_str;
+        bn::ostringstream opt_string_stream(opt_str);
+
+        opt_string_stream << "Lv" << _options_vec.at(z).level << ": " << _options_vec.at(z).title;
+
+        txtgen.generate(-70, -50 + 9 * z, opt_str, _options_vec.at(z).text_sprites);
     }
     update_selection();
 
 }
 
 void cutsceneviewer_scene::update_selection(){
-    for(bn::sprite_ptr &sprite : _options_vec.at(_index).text_sprites){
-        sprite.set_palette(RED_PALETTE);
+    for(uint8_t z = 0; z < _options_vec.size(); z++){
+        for(bn::sprite_ptr &sprite : _options_vec.at(z).text_sprites){
+            if(z == _index) sprite.set_palette(RED_PALETTE);
+            else sprite.set_palette(BLACK_PALETTE);
+        }
     }
 }
 
@@ -49,7 +61,6 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
 
     //this logic pattern is kinda lame but idk what to do bout it 
     if(bn::keypad::up_pressed() || bn::keypad::down_pressed()){
-        update_selection();
 
         if(bn::keypad::up_pressed()){
             if(_index == 0) _index = _options_vec.size();
@@ -58,6 +69,7 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
             _index++;
             if(_index == _options_vec.size()) _index = 0;
         }
+        update_selection();
 
     }
 
