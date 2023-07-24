@@ -9,7 +9,8 @@
 namespace trog{
 
     struct cvoption {
-        bn::vector<bn::sprite_ptr, 8> text_sprites;
+        bn::vector<bn::sprite_ptr, 2> lv_text_sprites;
+        bn::vector<bn::sprite_ptr, 6> title_text_sprites;
         bn::string<32> title;
         uint8_t level;
     };

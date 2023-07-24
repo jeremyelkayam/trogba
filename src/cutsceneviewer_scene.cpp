@@ -30,7 +30,7 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
         if(_common_stuff.savefile.unlocked_cutscenes[z]){
             uint8_t lv = _common_stuff.cutscene_levels.at(z).first;
             bn::string<32> nm = _common_stuff.cutscene_levels.at(z).second;
-            _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 8>(), nm, lv);
+            _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 2>(), bn::vector<bn::sprite_ptr, 6>(), nm, lv);
         }
     }
 
@@ -40,7 +40,11 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
 
 void cutsceneviewer_scene::update_selection(){
     for(uint8_t z = 0; z < _options_vec.size(); z++){
-        for(bn::sprite_ptr &sprite : _options_vec.at(z).text_sprites){
+        for(bn::sprite_ptr &sprite : _options_vec.at(z).lv_text_sprites){
+            if(z == _index) sprite.set_palette(RED_PALETTE);
+            else sprite.set_palette(BLACK_PALETTE);
+        }
+        for(bn::sprite_ptr &sprite : _options_vec.at(z).title_text_sprites){
             if(z == _index) sprite.set_palette(RED_PALETTE);
             else sprite.set_palette(BLACK_PALETTE);
         }
@@ -50,7 +54,7 @@ void cutsceneviewer_scene::update_selection(){
 bn::optional<scene_type> cutsceneviewer_scene::update(){
     bn::optional<scene_type> result;
 
-    if(_options_vec.at(0).text_sprites.empty()){
+    if(_options_vec.at(0).lv_text_sprites.empty()){
         bn::sprite_text_generator &txtgen = _common_stuff.small_generator;
         for(uint8_t z = 0; z < _options_vec.size(); z++){
             txtgen.set_left_alignment();
@@ -59,10 +63,14 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
             bn::string<32> opt_str;
             bn::ostringstream opt_string_stream(opt_str);
 
-            opt_string_stream << "Lv" << _options_vec.at(z).level << ". " << _options_vec.at(z).title;
+            opt_string_stream << "Lv" << _options_vec.at(z).level << ".";
+            
 
             txtgen.set_one_sprite_per_character(false);
-            txtgen.generate(-70, -50 + 9 * z, opt_str, _options_vec.at(z).text_sprites);
+            txtgen.generate(-90, -50 + 9 * z, opt_str, _options_vec.at(z).lv_text_sprites);
+            txtgen.generate(-55, -50 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).title_text_sprites);
+
+
 
             //trick to set our index to the last selected option when returning from this menu
             if(_sesh.get_level() == _options_vec.at(z).level){
