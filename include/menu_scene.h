@@ -23,7 +23,7 @@ namespace trog{
     class menu_scene : public scene{ 
     private:
 
-        bn::vector<menu_option, 6> _menu_options;
+        bn::vector<menu_option, 7> _menu_options;
 
         common_stuff & _common_stuff;
 

@@ -3,6 +3,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_math.h>
 #include <bn_sprite_actions.h>
+#include <bn_sprite_palette_actions.h>
 #include <bn_sprite_animate_actions.h>
 #include <bn_unique_ptr.h>
 #define FRONT_ZORDER 0
@@ -45,10 +46,17 @@ namespace trog{
         void jump(const short &time, const bn::fixed &height, const bool &repeating);
         void squish(const short &time);
 
+        void grayscale_to(const int &duration_updates, const bn::fixed &final_intensity);
+
+        void set_grayscale(const bn::fixed &intensity);
+
         void set_blending_enabled(const bool &enabled) 
             {_sprite.set_blending_enabled(enabled);}
 
         void drop();
+
+        void scale_to(const int &duration_updates, const bn::fixed &scale_factor);
+        void set_scale(const bn::fixed &scale) {_sprite.set_scale(scale);}
 
     protected:
         explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
@@ -79,6 +87,7 @@ namespace trog{
         bn::unique_ptr<bn::sprite_scale_to_action> _scale_action;
         bn::unique_ptr<bn::sprite_vertical_scale_to_action> _vst_action;
         bn::unique_ptr<bn::sprite_horizontal_scale_to_action> _hst_action;
+        bn::unique_ptr<bn::sprite_palette_grayscale_to_action> _gst_action;
 
         //for dropping only
         bn::optional<bn::sprite_ptr> _dust_cloud;

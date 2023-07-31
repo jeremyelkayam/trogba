@@ -6,6 +6,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_vector.h>
 #include <bn_string.h>
+#include <bn_unordered_map.h>
 #include "constants.h"
 #include "sb_commentary.h"
 #include "enums.h"
@@ -35,9 +36,9 @@ namespace trog {
         public:
             high_score_entry();
             high_score_entry(bn::string<9> name, unsigned short level, unsigned short score);
-            unsigned short get_level(){return _level;}
-            unsigned int get_score(){return _score;}
-            bn::string<9> get_name();
+            unsigned short get_level() const {return _level;}
+            unsigned int get_score() const {return _score;}
+            bn::string<9> get_name() const ;
             void set_name_char(char name_char, int index){_name[index] = name_char;}
     };
     struct saved_session { 
@@ -66,6 +67,8 @@ namespace trog {
         saved_session session;
 
         bool cheat_unlocked; 
+
+        bn::array<bool, 13> unlocked_cutscenes;
     };
 
     class common_stuff { 
@@ -74,6 +77,8 @@ namespace trog {
             bn::sprite_text_generator big_generator;
             bn::sprite_text_generator small_generator;
             bn::random rand;
+            bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
+
             sb_commentary commentary;
 
             saved_data savefile;
@@ -84,6 +89,13 @@ namespace trog {
             void set_autosave_text_visible(const bool &visible) {set_sprite_arr_visible(_autosave_text, visible);};
 
             void set_sprite_arr_visible(bn::ivector<bn::sprite_ptr> &sprites, const bool &visible);
+
+            bool level_has_cutscene(const uint8_t &current_level) const;
+            void unlock_cutscene_at_level(const uint8_t &current_level);
+
+            const char* scene_type_to_string(const scene_type &type) const;
+
+            bn::string<32> cutscene_name_for_level(const uint8_t &level);
 
         private:
 
@@ -99,8 +111,6 @@ namespace trog {
 
 
     //old save formats
-
-
     struct saved_session_v20 { 
         bool exists;
         uint8_t mans, level;

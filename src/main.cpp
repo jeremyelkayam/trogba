@@ -29,6 +29,7 @@
 #include "fireyrage_scene.h"
 #include "options_scene.h"
 #include "dragon_select_scene.h"
+#include "cutsceneviewer_scene.h"
 
 //debug settings for emulator
 #define BN_LOG_BACKEND_MGBA true
@@ -120,8 +121,12 @@ int main()
                     break;
                 }
                 case trog::scene_type::MOVIE: {
-                    hud.show();
-                    scene.reset(new trog::movie_scene(sesh, common_stuff));
+                    if(last_scene == trog::scene_type::LEVELBEAT){
+                        hud.show();
+                    }else{
+                        hud.hide();
+                    }
+                    scene.reset(new trog::movie_scene(sesh, common_stuff, *last_scene));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
@@ -155,6 +160,11 @@ int main()
                 case trog::scene_type::DRAGON_SELECT: {
                     hud.hide();
                     scene.reset(new trog::dragon_select_scene(sesh, common_stuff));
+                    break;
+                }                
+                case trog::scene_type::CUTSCENE_VIEWER: {
+                    hud.hide();
+                    scene.reset(new trog::cutsceneviewer_scene(sesh, common_stuff));
                     break;
                 }
                 default: { 

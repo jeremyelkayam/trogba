@@ -5,12 +5,31 @@
 #include "trogdor_variable_8x8_sprite_font.h"
 namespace trog { 
 
-
 common_stuff::common_stuff() : 
     text_generator(variable_8x16_sprite_font),
     big_generator(variable_32x64_sprite_font),
     small_generator(variable_8x8_sprite_font),
     commentary(savefile.options.voice_vol, rand) { 
+
+    cutscene_levels.emplace_back(5, "stompin' good");
+    cutscene_levels.emplace_back(9, "fry 'em up dan.");
+    cutscene_levels.emplace_back(13, "parade of trogdors");
+    cutscene_levels.emplace_back(17, "dancin' time");
+    cutscene_levels.emplace_back(21, "flex it, troggie");
+    cutscene_levels.emplace_back(25, "peasant dominoes");
+    cutscene_levels.emplace_back(31, "trogdor incognito");
+    cutscene_levels.emplace_back(35, "go trogdor #2!");
+    cutscene_levels.emplace_back(39, "forbidden peasant love");
+    cutscene_levels.emplace_back(43, "2 cottages");
+    cutscene_levels.emplace_back(47, "a funny joke");
+    cutscene_levels.emplace_back(51, "smote that kerrek!");
+    cutscene_levels.emplace_back(101, "ending");
+
+
+    bn::array<bool, 13> base_unlocked_cutscenes;
+    for(bool &unlocked : base_unlocked_cutscenes){
+        unlocked = false;
+    }
 
     //DEFAULT format tag
     bn::array<char, 8> default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
@@ -40,6 +59,18 @@ common_stuff::common_stuff() :
         //new session parameter
         savefile.session.current_dragon = dragon::TROGDOR;
 
+        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+
+        uint8_t max_level_reached = savefile.session.level;
+        for(const high_score_entry &entry : savefile.high_scores_table) {
+            if(entry.get_level() > max_level_reached) 
+                max_level_reached = entry.get_level();
+        }
+        for(uint8_t i = 0; i < savefile.unlocked_cutscenes.size(); i++){
+            //if we have reached a level higher than this cutscene level, we should unlock it
+            savefile.unlocked_cutscenes[i] = max_level_reached > cutscene_levels.at(i).first;
+        }
+
         bn::sram::write(savefile);
 
         
@@ -61,6 +92,8 @@ common_stuff::common_stuff() :
         savefile.high_scores_table.fill(high_score_entry("", 0, 0));
 
         savefile.cheat_unlocked = false;
+
+        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
     }
 
     small_generator.set_left_alignment();
@@ -106,7 +139,7 @@ high_score_entry::high_score_entry() :
     name_stream.append("DUMMY");
 }
 
-bn::string<9> high_score_entry::get_name(){
+bn::string<9> high_score_entry::get_name() const {
     bn::string<9>result;
     //go until you start hitting null chars
     for(int z=0; _name[z] != 0; ++z){
@@ -114,6 +147,70 @@ bn::string<9> high_score_entry::get_name(){
     }
 
     return result;
+}
+
+//N.B. : yes, binary search WOULD be faster here. However, this is running on an array
+// of 13 elements and only runs once per level on the completion screen. 
+// I think linear search will be fine for our purposes. 
+bool common_stuff::level_has_cutscene(const uint8_t &current_level) const {
+    for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {
+        if(entry.first == current_level) return true;
+    }
+    return false;
+}
+
+void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
+    for(int i = 0; i < cutscene_levels.size(); ++i) {
+        if(cutscene_levels.at(i).first == current_level){
+            savefile.unlocked_cutscenes[i] = true;
+        }
+    }
+}
+
+//todo: maybe binary search would be better for this lol
+bn::string<32> common_stuff::cutscene_name_for_level(const uint8_t &level){
+    for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {
+        if(entry.first == level) return entry.second;
+    }
+    BN_ERROR("invalid level passed into common_stuff.cutscene_name_for_level");
+    return bn::string<32>();
+}
+
+const char* common_stuff::scene_type_to_string(const scene_type &type) const{
+    switch(type){
+        case scene_type::BONUS:
+            return "bonus";
+        case scene_type::CREDITS:
+            return "credits";
+        case scene_type::CUTSCENE_VIEWER:
+            return "cutscene viewer";
+        case scene_type::DEVS:
+            return "devs";
+        case scene_type::DRAGON_SELECT:
+            return "dragon select";
+        case scene_type::FIREYRAGE:
+            return "firey rage";
+        case scene_type::HISCORES:
+            return "hi scores";
+        case scene_type::LEVELBEAT:
+            return "level beat";
+        case scene_type::LOGO:
+            return "logo";
+        case scene_type::LOSE:
+            return "game over";
+        case scene_type::MENU:
+            return "main menu";
+        case scene_type::MOVIE:
+            return "movie";
+        case scene_type::OPTIONS:
+            return "options";
+        case scene_type::PLAY:
+            return "play";
+        case scene_type::TITLE:
+            return "title";
+        default:
+            return "unknown scene";
+    }
 }
 
 }

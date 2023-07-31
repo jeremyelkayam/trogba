@@ -12,23 +12,24 @@
 //this class is terrible! But it's the best I've got 
 namespace trog{
 
-movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) : 
-    
+movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
+    _last_scene(last_scene),    
     _timer(0),
     _cutscene_length(270),
     _common_stuff(common_stuff),
     _sesh(sesh),
     _dummy_cottage(-240, -240, direction::DOWN, false, false, common_stuff)
 {
+    BN_LOG("last scene: ", common_stuff.scene_type_to_string(_last_scene));
     if(_sesh.get_level() != 101) {
         bn::sound_items::intermish.play();
+        write_text(_common_stuff.cutscene_name_for_level(_sesh.get_level()));
     }
 
     _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     _common_stuff.text_generator.set_center_alignment();
 
     if(_sesh.get_level() == 5){
-        write_text("stompin' good!");
         trogdor* mytrogdor = new trogdor(140,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
@@ -47,8 +48,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 9){
-        write_text("fry 'em up dan.");
-        
         //todo: make the iframes param optional on trogdor.
         // and maybe more optional params in the future
         trogdor* mytrogdor = new trogdor(20,0,_sesh,false,_common_stuff);
@@ -56,7 +55,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _cutscene_objects.emplace_back(mytrogdor);
 
     }else if(_sesh.get_level() == 13){
-        write_text("parade of trogdors");
         //create a parade of 9 trogdors
         for(int z = 0; z < 9; z++){
             _cutscene_objects.emplace_back(new trogdor(140 + 40 * z, 0, sesh, false,_common_stuff));
@@ -64,7 +62,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
             _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }
     }else if(_sesh.get_level() == 17){
-        write_text("dancin' time");
         for(int z=0; z < 10; z++){
             int xcor = 100 - (z/2)*13;
             int ycor = -12 + (z/2)*2;
@@ -87,14 +84,10 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
-        write_text("flex it, troggie");
-
         trogdor* mytrogdor = new trogdor(0,0,_sesh,false,_common_stuff);
         mytrogdor->flex();
         _cutscene_objects.emplace_back(mytrogdor);
     }else if(_sesh.get_level() == 25){
-        write_text("peasant dominoes");
-
         trogdor* mytrogdor = new trogdor(80,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
@@ -105,8 +98,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         }
 
     }else if(_sesh.get_level() == 31){
-        write_text("trogdor incognito");
-
         for(int z = 0; z < 2 ; ++z){
             int sign = z == 0 ? 1 : -1;
             peasant *p = new peasant(130*sign, 0, 0, 0, _dummy_cottage);
@@ -115,7 +106,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
             _cutscene_objects.emplace_back(p);
         }
     }else if(_sesh.get_level() == 35){
-        write_text("go trogdor # 2!");
         for(int z = 0; z < 2; ++z){
             trogdor *trog = new trogdor(-140, 30*z, sesh, false,_common_stuff);
             trog->move_by(1 + 0.5*z, 0);
@@ -127,7 +117,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
             _cutscene_objects.emplace_back(p);
         }
     }else if(_sesh.get_level() == 39){
-        write_text("forbidden peasant love");
         for(int z = 0; z < 2 ; ++z){
             peasant *p = new peasant(40 + 20*z, 0, 0, 0, _dummy_cottage);  
             p->move_to(_cutscene_length / 2, -60 + 20*z, 0);      
@@ -139,13 +128,10 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
 
 
     }else if(_sesh.get_level() == 43){
-        write_text("2 cottages");
-
         _cutscene_objects.emplace_back(new cottage(30, 0, direction::LEFT, false, false, _common_stuff));
         _cutscene_objects.emplace_back(new cottage(-30, 0, direction::RIGHT, false, false, _common_stuff));
 
     }else if(_sesh.get_level() == 47){
-        write_text("a funny joke");
         knight *k = new knight(-80, 0, false, _common_stuff.rand);
         k->update_anim_action_when_not_moving(false);
         _cutscene_objects.emplace_back(k);
@@ -155,7 +141,6 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         arch->set_bow_drawn(true);
         _cutscene_objects.emplace_back(arch);
     }else if(_sesh.get_level() == 51){
-        write_text("smote that kerrek!");
         _cutscene_objects.emplace_back(new trogdor(-25,10,_sesh,false,_common_stuff));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
@@ -177,9 +162,10 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff) :
         _sesh.get_level());
 }
 
-void movie_scene::write_text(const char* str){
+void movie_scene::write_text(bn::string<32> str){
+    _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
+    _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.generate(0, -60, str, _text_sprites);
-
 }
 
 bn::optional<scene_type> movie_scene::update(){
@@ -425,10 +411,15 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
 
-    if(cutscene_over() && _sesh.get_level() != 101) {
-        result = scene_type::PLAY;
-    }else if(cutscene_over() && _sesh.get_level() == 101){
-        result = scene_type::HISCORES;
+    if(cutscene_over()) {
+        BN_LOG("last scene: ", _common_stuff.scene_type_to_string(_last_scene));
+        if(_last_scene == scene_type::CUTSCENE_VIEWER){
+            result = scene_type::CUTSCENE_VIEWER;
+        }else if(_sesh.get_level() == 101){
+            result = scene_type::HISCORES;
+        }else{
+            result = scene_type::PLAY;
+        }
     }
 
     _timer++;
