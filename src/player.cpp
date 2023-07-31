@@ -74,9 +74,6 @@ void player::update(){
     if(!dead()){
         update_pos();
         entity::update();
-        // if(any_dpad_input()){
-        //     _walkcycle.update();
-        // }
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -106,7 +103,9 @@ void player::update(){
             _sprite.set_visible(true);
             _iframes = 0;
         }
-        update_next_pos();
+        if(can_move()){
+            update_next_pos();
+        }
         update_firebreath();
 
         #ifdef DEBUG

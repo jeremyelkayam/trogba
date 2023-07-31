@@ -52,6 +52,8 @@ namespace trog {
             void update_firebreath();
 
             bn::fixed_point _next_pos;
+
+            virtual bool can_move() {return true;}
             
         public:
             player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
