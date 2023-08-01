@@ -168,6 +168,7 @@ void troghammer::update(){
         if(_timer > 120){
             knight::update();
         }else{
+            _freeze_timer = 0;
             //left
             if(_pos.x() < 0) _pos.set_x(_pos.x() + bn::fixed(0.3));
             //right

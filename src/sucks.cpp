@@ -25,6 +25,8 @@ void sucks::update(){
 
     if(_stomp_timer){
         ++_stomp_timer;
+        if(dead()) _stomp_timer = 0; // this prevents us from stomping after we die
+        
         if(_stomp_timer == 20){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());

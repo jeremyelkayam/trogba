@@ -17,7 +17,7 @@ namespace trog {
             virtual void update_anim() final;
             void stomp();
 
-            bool can_stomp() {return _stomp_timer == 0 && !burninating();}
+            bool can_stomp() {return _stomp_timer == 0 && !burninating() && !dead();}
             uint8_t stomp_timer() {return _stomp_timer;}
 
             virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 40;}

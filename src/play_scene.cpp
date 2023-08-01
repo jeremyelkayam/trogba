@@ -259,6 +259,9 @@ bn::optional<scene_type> play_scene::update(){
                         k.freeze();
                     }
                 }
+                if(_troghammer && _common_stuff.euclidean_dist(player->foot_pos(), _troghammer->get_pos()) < TROG_SUCK_STOMP_RADIUS){
+                    // _troghammer->freeze();
+                }
             }
             if(player->stomp_timer() == 25){
                 _countryside.set_y(_countryside.y() - 5);
