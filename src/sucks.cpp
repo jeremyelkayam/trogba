@@ -30,12 +30,16 @@ void sucks::update(){
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
         }
-        if(_stomp_timer >= 20){
+        if(_stomp_timer >= 20 && !_shockwave_anim.done()){
             _shockwave_anim.update();
         }
         if(_shockwave_anim.done()){
-            _stomp_timer = 0;
             _shockwave.set_visible(false);
+        }
+
+        //This ensures you can't stomp again until after the knights unfreeze.
+        if(_stomp_timer >= 20 + TROG_KNIGHT_FREEZE_TIME){
+            _stomp_timer = 0;
         }
     }
 

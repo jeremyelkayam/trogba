@@ -17,10 +17,10 @@ namespace trog {
             virtual void update_anim() final;
             void stomp();
 
-            bool can_stomp() {return _stomp_timer == 0;}
+            bool can_stomp() {return _stomp_timer == 0 && !burninating();}
             uint8_t stomp_timer() {return _stomp_timer;}
 
-            virtual bool can_move() override final {return _stomp_timer == 0;}
+            virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 40;}
 
             bn::fixed_point foot_pos();
 

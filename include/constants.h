@@ -50,6 +50,9 @@
 
 #define TROG_PLAYER_SPEED bn::fixed(0.87)
 
+//the radius of the S is for sucks dragon's stomp's area of effect in pixels 
+#define TROG_SUCK_STOMP_RADIUS 70
+
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (6 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)
@@ -108,6 +111,7 @@
 
 #define TROG_KNIGHT_SPEED TROG_PLAYER_SPEED*bn::fixed(0.6)
 #define TROG_KNIGHT_MOVE_CYCLE_TIME 180
+#define TROG_KNIGHT_FREEZE_TIME 3.5 SECONDS
 
 #define TROG_HAMMER_SPEEDUP_FACTOR bn::fixed(1.4)
 #define TROG_HAMMER_WIDTH 16

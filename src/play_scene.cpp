@@ -253,9 +253,10 @@ bn::optional<scene_type> play_scene::update(){
             if(player->stomp_timer() == 20){
                 _countryside.set_y(_countryside.y() + 5);
                 for(knight &k : _knights){
-                    if(_common_stuff.euclidean_dist(player->foot_pos(), k.get_pos()) < 64){
-                        // freeze the guy
-                        BN_LOG("a knight got frozen");
+                    //yes, euclidean distance is an expensive operation here. However, 
+                    // we're only doing it on these 2 knights so it's prob fine 
+                    if(_common_stuff.euclidean_dist(player->foot_pos(), k.get_pos()) < TROG_SUCK_STOMP_RADIUS){
+                        k.freeze();
                     }
                 }
             }

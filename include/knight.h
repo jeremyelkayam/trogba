@@ -15,11 +15,11 @@ namespace trog {
     class knight : public entity { 
         protected:
             
-		    unsigned short _timer;
+		    uint8_t _walkcycle_timer, _freeze_timer;
 			unsigned short _rotation;
             bn::fixed _speed;
 
-            short _cycletime;
+            uint8_t _cycletime;
 
         	bn::random &_random; 
             bn::sprite_animate_action<4> _walkcycle;
@@ -32,5 +32,6 @@ namespace trog {
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
             void update_anim() override final;
+            void freeze() {_freeze_timer = 1;}
     };
 }

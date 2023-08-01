@@ -5,7 +5,8 @@ namespace trog {
 
 knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random) :
     entity(xcor, ycor, bn::fixed(TROG_KNIGHT_WIDTH), bn::fixed(TROG_KNIGHT_HEIGHT), bn::sprite_items::knight.create_sprite(xcor, ycor)),
-    _timer(0),
+    _walkcycle_timer(0),
+    _freeze_timer(0),
     _rotation(0),
     _speed(TROG_KNIGHT_SPEED),
     _cycletime(TROG_KNIGHT_MOVE_CYCLE_TIME),
@@ -25,61 +26,71 @@ void knight::update_anim(){
 }
 
 void knight::update(){
+    ++_walkcycle_timer;
     entity::update();
-    _walkcycle.update();
-    ++_timer;
 
+    if(_freeze_timer){
+        BN_LOG("freeze timer: ", _freeze_timer);
+        ++_freeze_timer;
+        if(_freeze_timer % 4 == 0){
+            set_x(_pos.x() + 1);
+        }else if (_freeze_timer % 4 == 2){
+            set_x(_pos.x() - 1);
+        }
+        if(_freeze_timer == TROG_KNIGHT_FREEZE_TIME){
+            _freeze_timer = 0;
+        }
+    }else{
+        _walkcycle.update();
 
-    if(_timer == _cycletime) {
-        _timer = 0;
-    }
-
-    bn::fixed xdist = 0;
-    bn::fixed ydist = 0;
-
-    //todo i hate these 'while true' / 'break' loops
-    // change this one
-    while(true){
-        if(_timer < _cycletime / 2){
-            xdist = _speed;
-            ydist = -_speed;
-        }else{
-            xdist = -(_speed - 0.1);
+        if(_walkcycle_timer == _cycletime) {
+            _walkcycle_timer = 0;
         }
 
-        if(_sprite.horizontal_flip()){
-            xdist = -xdist;
-        }
+        bn::fixed xdist = 0;
+        bn::fixed ydist = 0;
 
-        switch(_rotation){
-            case 1:
-                ydist = -ydist;
-                bn::swap(xdist, ydist);
-                break;
-            case 2:
+        //todo i hate these 'while true' / 'break' loops
+        // change this one
+        while(true){
+            if(_walkcycle_timer < _cycletime / 2){
+                xdist = _speed;
+                ydist = -_speed;
+            }else{
+                xdist = -(_speed - 0.1);
+            }
+
+            if(_sprite.horizontal_flip()){
                 xdist = -xdist;
-                ydist = -ydist;
-                break;
-            case 3:
-                xdist = -xdist;
-                bn::swap(xdist, ydist);                
-                break;
-            default:
+            }
+
+            switch(_rotation){
+                case 1:
+                    ydist = -ydist;
+                    bn::swap(xdist, ydist);
+                    break;
+                case 2:
+                    xdist = -xdist;
+                    ydist = -ydist;
+                    break;
+                case 3:
+                    xdist = -xdist;
+                    bn::swap(xdist, ydist);                
+                    break;
+                default:
+                    break;
+                }
+            
+            if(going_to_go_offscreen_x(_pos.x() + xdist) || 
+                going_to_go_offscreen_y(_pos.y() + ydist) ){
+                change_direction();
+            }else{
                 break;
             }
-        
-
-        if(going_to_go_offscreen_x(_pos.x() + xdist) || 
-            going_to_go_offscreen_y(_pos.y() + ydist) ){
-            change_direction();
-        }else{
-            break;
         }
+        _pos.set_x(_pos.x() + xdist);
+        _pos.set_y(_pos.y() + ydist);
     }
-
-    _pos.set_x(_pos.x() + xdist);
-    _pos.set_y(_pos.y() + ydist);
-
 }
 
 void knight::change_direction(){

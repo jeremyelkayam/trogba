@@ -23,7 +23,7 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, 
 
     // speed the troghammer up a bit
     _speed *= TROG_HAMMER_SPEEDUP_FACTOR;
-    _cycletime = (bn::fixed(_cycletime) / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer();
+    _cycletime = (bn::fixed(TROG_KNIGHT_MOVE_CYCLE_TIME) / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer();
 
     //hitboxes are bigger to make it harder
     _hitbox.set_width(TROG_HAMMER_WIDTH);
