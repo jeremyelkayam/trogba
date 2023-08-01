@@ -27,8 +27,7 @@ void sucks::update(){
         ++_stomp_timer;
         if(_stomp_timer == 20){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
-            bn::fixed xoffset = 13 * (_sprite.horizontal_flip() ? -1 : 1);
-            _shockwave.set_position(get_x() + xoffset, get_y() + 20);
+            _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
         }
         if(_stomp_timer >= 20){
@@ -45,6 +44,11 @@ void sucks::update(){
         stomp();
     }
 
+}
+
+bn::fixed_point sucks::foot_pos(){
+    bn::fixed xoffset = 13 * (_sprite.horizontal_flip() ? -1 : 1);
+    return bn::fixed_point(get_x() + xoffset, get_y() + 20);
 }
 
 void sucks::update_anim(){

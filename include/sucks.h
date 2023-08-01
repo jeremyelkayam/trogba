@@ -18,9 +18,11 @@ namespace trog {
             void stomp();
 
             bool can_stomp() {return _stomp_timer == 0;}
-            bool moment_of_stomp() {return _stomp_timer == 20;}
+            uint8_t stomp_timer() {return _stomp_timer;}
 
             virtual bool can_move() override final {return _stomp_timer == 0;}
+
+            bn::fixed_point foot_pos();
 
     };
 }

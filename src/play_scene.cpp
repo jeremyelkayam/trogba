@@ -246,7 +246,23 @@ bn::optional<scene_type> play_scene::update(){
 
         bool was_burninating = _player->burninating();
 
-        _player->update();        
+        _player->update(); 
+
+        if(_sesh.get_dragon() == dragon::SUCKS){
+            sucks *player = (sucks *) _player.get();
+            if(player->stomp_timer() == 20){
+                _countryside.set_y(_countryside.y() + 5);
+                for(knight &k : _knights){
+                    if(_common_stuff.euclidean_dist(player->foot_pos(), k.get_pos()) < 64){
+                        // freeze the guy
+                        BN_LOG("a knight got frozen");
+                    }
+                }
+            }
+            if(player->stomp_timer() == 25){
+                _countryside.set_y(_countryside.y() - 5);
+            }
+        }       
         
 
 

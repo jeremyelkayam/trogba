@@ -21,6 +21,7 @@ namespace trog{
         bool collides_with(const entity &e);
         bn::fixed get_x() { return _pos.x();}
         bn::fixed get_y() { return _pos.y();}
+        bn::fixed_point get_pos() { return _pos; }
         bn::fixed sprite_x() { return _sprite.x();}
         bn::fixed sprite_y() { return _sprite.y();}
         void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}

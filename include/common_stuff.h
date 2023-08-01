@@ -95,7 +95,9 @@ namespace trog {
 
             const char* scene_type_to_string(const scene_type &type) const;
 
-            bn::string<32> cutscene_name_for_level(const uint8_t &level);
+            bn::string<32> cutscene_name_for_level(const uint8_t &level) const;
+
+            bn::fixed euclidean_dist(const bn::fixed_point &a, const bn::fixed_point &b) const;
 
         private:
 
