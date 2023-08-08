@@ -73,6 +73,7 @@ namespace trog{
         bool level_complete();
 
         //probably would be better if i figured out how to harness friends for this.
+        // haha wouldn't it be great if i knew how to make friends? 
         static bool peasant_deletable(peasant &p) {return p.remove_from_map();}
         static bool archer_deletable(archer &a) {return a.remove_from_map();}
 
@@ -94,6 +95,7 @@ namespace trog{
         [[nodiscard]] bn::optional<scene_type> update_pause_menu();
 
         void respawn(const bool &iframes, const uint8_t &init_trogmeter=0);
+        bn::vector<freezable, 27> all_enemies();
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);

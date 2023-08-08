@@ -29,15 +29,7 @@ void knight::update(){
     ++_walkcycle_timer;
     entity::update();
 
-    if(_freeze_timer){
-        BN_LOG("freeze time left: ", _freeze_timer);
-        --_freeze_timer;
-        if(_freeze_timer % 4 == 0){
-            set_x(_pos.x() + 1);
-        }else if (_freeze_timer % 4 == 2){
-            set_x(_pos.x() - 1);
-        }
-    }else{
+    if(!_freeze_timer){
         _walkcycle.update();
 
         if(_walkcycle_timer == _cycletime) {

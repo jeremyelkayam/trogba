@@ -235,7 +235,7 @@ void player::handle_peasant_collision(peasant &peasant){
     if(burninating()){
         _breath.handle_peasant_collision(peasant);
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
-        peasant.stomp();
+        peasant.squish();
 
         bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
         _common_stuff.commentary.stomp_peasant();

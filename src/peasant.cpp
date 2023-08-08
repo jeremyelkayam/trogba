@@ -10,7 +10,7 @@
 namespace trog {
 
 peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, cottage &home) : 
-        entity(xcor, ycor, TROG_PEASANT_WIDTH, TROG_PEASANT_HEIGHT, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
+        freezable(xcor, ycor, TROG_PEASANT_WIDTH, TROG_PEASANT_HEIGHT, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
         _home(home),
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
@@ -51,7 +51,13 @@ void peasant::burninate(){
 
     // set on fire
     _onfire = true;
-    
+    run_to_house();
+
+    // change animation to flaming
+    set_sprite_ablaze();
+}
+
+void peasant::run_to_house(){
     // run fast the other way 
     if(_returning){
         _speed = _speed*2;
@@ -59,9 +65,6 @@ void peasant::burninate(){
         _speed = _speed*-2;
     }
     _currentdist+=_speed;
-
-    // change animation to flaming
-    set_sprite_ablaze();
 }
 
 void peasant::set_sprite_ablaze(){
@@ -92,14 +95,13 @@ void peasant::update(){
     }else if(_time_dead > 0){
         _time_dead++;
         
-    }else {
-        // BN_LOG("waiting", _time_waiting, " of ", _waittime);
+    }else if(!_returning){
         _time_waiting++;
     }
 }
 
-void peasant::stomp(){
-    //cannot stomp a peasant that is already stomped.
+void peasant::squish(){
+    //cannot squish a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
         _time_dead=1;
