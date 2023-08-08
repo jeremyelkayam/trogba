@@ -95,7 +95,7 @@ namespace trog{
         [[nodiscard]] bn::optional<scene_type> update_pause_menu();
 
         void respawn(const bool &iframes, const uint8_t &init_trogmeter=0);
-        bn::vector<freezable, 27> all_enemies();
+        bn::vector<freezable *, 23> all_freezables();
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);

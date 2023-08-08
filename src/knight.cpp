@@ -4,9 +4,8 @@
 namespace trog { 
 
 knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random) :
-    entity(xcor, ycor, bn::fixed(TROG_KNIGHT_WIDTH), bn::fixed(TROG_KNIGHT_HEIGHT), bn::sprite_items::knight.create_sprite(xcor, ycor)),
+    freezable(xcor, ycor, bn::fixed(TROG_KNIGHT_WIDTH), bn::fixed(TROG_KNIGHT_HEIGHT), bn::sprite_items::knight.create_sprite(xcor, ycor)),
     _walkcycle_timer(0),
-    _freeze_timer(0),
     _rotation(0),
     _speed(TROG_KNIGHT_SPEED),
     _cycletime(TROG_KNIGHT_MOVE_CYCLE_TIME),
@@ -26,10 +25,10 @@ void knight::update_anim(){
 }
 
 void knight::update(){
-    ++_walkcycle_timer;
     entity::update();
 
     if(!_freeze_timer){
+        ++_walkcycle_timer;
         _walkcycle.update();
 
         if(_walkcycle_timer == _cycletime) {
@@ -79,7 +78,7 @@ void knight::update(){
         }
         _pos.set_x(_pos.x() + xdist);
         _pos.set_y(_pos.y() + ydist);
-    }
+    }else update_freeze();
 }
 
 void knight::change_direction(){

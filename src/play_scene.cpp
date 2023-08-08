@@ -252,19 +252,16 @@ bn::optional<scene_type> play_scene::update(){
             sucks *player = (sucks *) _player.get();
             if(player->stomp_timer() == 20){
                 _countryside.set_y(_countryside.y() + 5);
-                for(knight &k : _knights){
+
+                //stomp c
+                for(freezable *f : all_freezables()){
                     //yes, euclidean distance is an expensive operation here. However, 
-                    // we're only doing it on these 2 knights so it's prob fine 
-                    if(_common_stuff.euclidean_dist(player->foot_pos(), k.get_pos()) < TROG_SUCK_STOMP_RADIUS){
-                        k.freeze();
+                    // we're only doing it on a max of 20 actors so hopefully it's ok
+                    if(_common_stuff.euclidean_dist(player->foot_pos(), f->get_pos()) < TROG_SUCK_STOMP_RADIUS){
+                        f->freeze();
                     }else{
-                        //alert
+                        f->alert();
                     }
-                }
-                if(_troghammer && _common_stuff.euclidean_dist(player->foot_pos(), _troghammer->get_pos()) < TROG_SUCK_STOMP_RADIUS){
-                    _troghammer->freeze();
-                }else{
-                    //alert
                 }
             }
             if(player->stomp_timer() == 25){
@@ -834,6 +831,21 @@ void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
         break;
     }
 
+}
+
+bn::vector<freezable *, 23> play_scene::all_freezables(){
+    bn::vector<freezable *, 23> result;
+
+    if(_troghammer){
+        result.emplace_back(_troghammer.get());
+    }
+    for(knight &k : _knights){
+        result.emplace_back(&k);
+    }
+    for(peasant &p : _peasants){
+        result.emplace_back(&p);
+    }
+    return result;
 }
 
 }

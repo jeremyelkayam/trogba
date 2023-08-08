@@ -51,6 +51,7 @@ void peasant::burninate(){
 
     // set on fire
     _onfire = true;
+    _freeze_timer = 0;
     run_to_house();
 
     // change animation to flaming
@@ -75,29 +76,31 @@ void peasant::set_sprite_ablaze(){
 
 void peasant::update(){
     entity::update();
+
     
+    if(!_freeze_timer){
+        if(_time_waiting == _waittime){
+            _speed=-_speed;
+            _currentdist+=_speed;
+            _returning = true;
 
-    if(_time_waiting == _waittime){
-        _speed=-_speed;
-        _currentdist+=_speed;
-        _returning = true;
+            //reset time waiting, probably should refactor this out later but w/e
+            _time_waiting = 0;
+        }
 
-        //reset time waiting, probably should refactor this out later but w/e
-        _time_waiting = 0;
-    }
+        if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
 
-    if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
+            _pos+=_direction.multiplication(_speed);
 
-        _pos+=_direction.multiplication(_speed);
-
-        _currentdist+=_speed;
-        _walkcycle.update();
-    }else if(_time_dead > 0){
-        _time_dead++;
-        
-    }else if(!_returning){
-        _time_waiting++;
-    }
+            _currentdist+=_speed;
+            _walkcycle.update();
+        }else if(_time_dead > 0){
+            _time_dead++;
+            
+        }else if(!_returning){
+            _time_waiting++;
+        }
+    }else update_freeze();
 }
 
 void peasant::squish(){
@@ -108,7 +111,7 @@ void peasant::squish(){
         _sprite.set_item(bn::sprite_items::peasantdead);
         _sprite.set_y(_sprite.y() + 3);
         _pos.set_y(_pos.y() + 3);
-
+        _freeze_timer = 0;
     }
 }
 

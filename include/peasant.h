@@ -31,7 +31,7 @@ namespace trog {
 
         public:
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, cottage &home);
-            virtual void update() final;
+            virtual void update() override final;
 
             void squish();
             void burninate();
@@ -43,7 +43,7 @@ namespace trog {
             void set_frame(short frame_number){_sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), frame_number);}
             cottage &get_home() {return _home;}
 
-            virtual void freeze() override final {_freeze_timer = TROG_PEASANT_FREEZE_TIME;}
+            virtual void freeze() override final {if(_time_dead == 0) _freeze_timer = TROG_PEASANT_FREEZE_TIME;}
             virtual void alert() override final {run_to_house();}
     };
 }

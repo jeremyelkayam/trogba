@@ -7,15 +7,15 @@
 #include <bn_sprite_animate_actions.h>
 #include <bn_random.h>
 #include "bn_sprite_items_knight.h"
-#include "entity.h"
+#include "freezable.h"
 
 #include "constants.h"
 
 namespace trog {
-    class knight : public entity { 
+    class knight : public freezable { 
         protected:
             
-		    uint8_t _walkcycle_timer, _freeze_timer;
+		    uint8_t _walkcycle_timer;
 			unsigned short _rotation;
             bn::fixed _speed;
 
@@ -28,10 +28,11 @@ namespace trog {
             
         public:
             knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random);
-			virtual void update();
+			virtual void update() override;
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
             void update_anim() override final;
             virtual void freeze() {_freeze_timer = TROG_KNIGHT_FREEZE_TIME;}
+            virtual void alert() override final {}
     };
 }
