@@ -257,10 +257,14 @@ bn::optional<scene_type> play_scene::update(){
                     // we're only doing it on these 2 knights so it's prob fine 
                     if(_common_stuff.euclidean_dist(player->foot_pos(), k.get_pos()) < TROG_SUCK_STOMP_RADIUS){
                         k.freeze();
+                    }else{
+                        //alert
                     }
                 }
                 if(_troghammer && _common_stuff.euclidean_dist(player->foot_pos(), _troghammer->get_pos()) < TROG_SUCK_STOMP_RADIUS){
-                    // _troghammer->freeze();
+                    _troghammer->freeze();
+                }else{
+                    //alert
                 }
             }
             if(player->stomp_timer() == 25){

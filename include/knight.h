@@ -32,6 +32,6 @@ namespace trog {
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
             void update_anim() override final;
-            void freeze() {_freeze_timer = 1;}
+            virtual void freeze() {_freeze_timer = TROG_KNIGHT_FREEZE_TIME;}
     };
 }

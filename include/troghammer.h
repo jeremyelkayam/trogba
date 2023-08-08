@@ -54,6 +54,8 @@ namespace trog {
             bool coming_alert(){return _new_state && _current_state == troghammer_state::COMING;}
             bool inside_void_tower(){return _current_state == troghammer_state::ALERT;}
 
+            void freeze() override final {_freeze_timer = TROG_HAMMER_FREEZE_TIME;}
+
             troghammer_status get_status();
     };
 }
