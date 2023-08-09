@@ -96,6 +96,9 @@ namespace trog{
 
         void respawn(const bool &iframes, const uint8_t &init_trogmeter=0);
         bn::vector<freezable *, 23> all_freezables();
+        bn::vector<entity *, 33> all_entities();
+
+        void move_screen(bn::fixed yoffset);
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);

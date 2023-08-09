@@ -27,12 +27,12 @@ void sucks::update(){
         ++_stomp_timer;
         if(dead()) _stomp_timer = 0; // this prevents us from stomping after we die
         
-        if(_stomp_timer == 20){
+        if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
         }
-        if(_stomp_timer >= 20 && !_shockwave_anim.done()){
+        if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave_anim.done()){
             _shockwave_anim.update();
         }
         if(_shockwave_anim.done()){
@@ -40,7 +40,7 @@ void sucks::update(){
         }
 
         //This ensures you can't stomp again until after the knights unfreeze.
-        if(_stomp_timer >= 20 + TROG_KNIGHT_FREEZE_TIME){
+        if(_stomp_timer >= TROG_PEASANT_FREEZE_TIME * 1.1){
             _stomp_timer = 0;
         }
     }

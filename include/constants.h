@@ -52,6 +52,8 @@
 
 //the radius of the S is for sucks dragon's stomp's area of effect in pixels 
 #define TROG_SUCK_STOMP_RADIUS 70
+//the animation frame after which the sucky dragon's foot stomps down
+#define TROG_SUCK_STOMP_FRAME 30
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (6 SECONDS)

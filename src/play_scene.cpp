@@ -250,8 +250,8 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
-            if(player->stomp_timer() == 20){
-                _countryside.set_y(_countryside.y() + 5);
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
+                move_screen(5);
 
                 //stomp c
                 for(freezable *f : all_freezables()){
@@ -264,8 +264,8 @@ bn::optional<scene_type> play_scene::update(){
                     }
                 }
             }
-            if(player->stomp_timer() == 25){
-                _countryside.set_y(_countryside.y() - 5);
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 5){
+                move_screen(-5);
             }
         }       
         
@@ -846,6 +846,31 @@ bn::vector<freezable *, 23> play_scene::all_freezables(){
         result.emplace_back(&p);
     }
     return result;
+}
+
+bn::vector<entity *, 33> play_scene::all_entities(){
+    bn::vector<entity *, 33> result;
+    for(entity *e : all_freezables()){
+        result.emplace_back(e);
+    }
+    for(archer &a : _archers){
+        result.emplace_back(&a);
+    }
+    for(cottage &c : _cottages){
+        result.emplace_back(&c);
+    }
+    
+    return result;
+}
+
+void play_scene::move_screen(bn::fixed yoffset){
+    _countryside.set_y(_countryside.y() + yoffset);
+    for(entity *e : all_entities()){
+        e->set_y(e->get_y() + yoffset);
+    }
+    if(_void_tower){
+        _void_tower->set_y(_void_tower->y() + yoffset);
+    }
 }
 
 }
