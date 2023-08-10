@@ -8,10 +8,10 @@
 #include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
+player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+        entity(xcor, ycor, width, height, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
-        _speed(TROG_PLAYER_SPEED),
+        _speed(speed),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _trogmeter(initial_trogmeter),
         _burninate_time(0),
