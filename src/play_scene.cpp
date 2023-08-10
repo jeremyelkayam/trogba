@@ -251,7 +251,6 @@ bn::optional<scene_type> play_scene::update(){
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
-                move_screen(5);
 
                 //stomp c
                 for(freezable *f : all_freezables()){
@@ -264,8 +263,15 @@ bn::optional<scene_type> play_scene::update(){
                     }
                 }
             }
-            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 5){
-                move_screen(-5);
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 2 
+               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 6
+               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 10){
+                move_screen(-4);
+            }
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME 
+              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 4
+              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 8){
+                move_screen(4);
             }
         }       
         
