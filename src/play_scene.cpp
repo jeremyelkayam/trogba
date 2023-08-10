@@ -235,7 +235,6 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_sesh.get_level() == 0) update_tutorial();
 
-
         if(!_player->dead() && _autosave_visibility_time == 0){
             _common_stuff.set_autosave_text_visible(false);
         }
@@ -262,7 +261,11 @@ bn::optional<scene_type> play_scene::update(){
                         f->alert();
                     }
                 }
+                for(archer &arch : _archers){
+                    arch.stomp_on(player->foot_pos(), TROG_SUCK_STOMP_RADIUS);
+                }
             }
+            //todo: maybe add screen shake function
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 2 
                || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 6
                || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 10){

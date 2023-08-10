@@ -81,4 +81,14 @@ void archer::set_visible(bool visible){
     }
 }
 
+void archer::stomp_on(bn::fixed_point foot_pos, bn::fixed stomp_radius){
+    if(_arrow){
+        if(_common_stuff.euclidean_dist(foot_pos, _arrow->get_pos()) <= stomp_radius){
+            _arrow->plink();
+        }
+    }else{
+
+    }
+}
+
 }
