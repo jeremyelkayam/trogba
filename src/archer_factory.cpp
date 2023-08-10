@@ -31,7 +31,6 @@ namespace trog
             // so this generates 0 or 1
             // 1 = left, 0 = right
             bool direction = _random.get_int(0, 2);
-            BN_LOG("archer direction: ", direction);
 
             bn::fixed spawn_ycor = _random.get_int(TROG_ARCHER_MIN_SPAWN_HEIGHT, TROG_ARCHER_MAX_SPAWN_HEIGHT);
 

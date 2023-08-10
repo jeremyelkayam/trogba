@@ -77,7 +77,6 @@ void peasant::set_sprite_ablaze(){
 void peasant::update(){
     entity::update();
 
-    
     if(!_freeze_timer){
         if(_time_waiting == _waittime){
             _speed=-_speed;
@@ -100,7 +99,12 @@ void peasant::update(){
         }else if(!_returning){
             _time_waiting++;
         }
-    }else update_freeze();
+    }else{
+        update_freeze();
+
+        //this will trigger if the peasant just unfroze
+        if(_freeze_timer == 0) run_to_house();
+    }
 }
 
 void peasant::squish(){

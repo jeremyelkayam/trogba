@@ -165,15 +165,11 @@ void player::free_from_collisionbox(const bn::fixed_rect &box){
 
     bn::fixed downdist,updist,leftdist,rightdist,min_dist;
     downdist = bn::abs(box.bottom() - _hitbox.top());
-    BN_LOG("down distance ", downdist);
     updist = bn::abs(box.top() - _hitbox.bottom());
-    BN_LOG("up distance ", updist);
 
 
     leftdist = bn::abs(box.left() - _hitbox.right());
-    BN_LOG("left distance ", leftdist);
     rightdist = bn::abs(box.right() - _hitbox.left());
-    BN_LOG("right distance ", rightdist);
 
     // ah yes, 3 nested mins, very good coding jeremy
     min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
