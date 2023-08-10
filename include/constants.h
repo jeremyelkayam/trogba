@@ -45,10 +45,22 @@
 
 #define TROG_PLAYER_SPAWN_X 40
 #define TROG_PLAYER_SPAWN_Y 0
-#define TROG_PLAYER_WIDTH 24
-#define TROG_PLAYER_HEIGHT 34
 
-#define TROG_PLAYER_SPEED bn::fixed(0.87)
+
+#define TROG_TROGDOR_WIDTH  24
+#define TROG_TROGDOR_HEIGHT 34
+#define TROG_TROGDOR_SPEED bn::fixed(0.87)
+
+//todo: edit this
+#define TROG_SUCKS_WIDTH  28
+#define TROG_SUCKS_HEIGHT 40
+#define TROG_SUCKS_SPEED bn::fixed(0.7)
+
+
+//the radius of the S is for sucks dragon's stomp's area of effect in pixels 
+#define TROG_SUCK_STOMP_RADIUS 70
+//the animation frame after which the sucky dragon's foot stomps down
+#define TROG_SUCK_STOMP_FRAME 30
 
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (6 SECONDS)
@@ -96,8 +108,9 @@
 
 
 #define TROG_PEASANT_MIN_WALK_DISTANCE 6
-#define TROG_PEASANT_SPEED TROG_PLAYER_SPEED*bn::fixed(0.5)
+#define TROG_PEASANT_SPEED TROG_TROGDOR_SPEED*bn::fixed(0.5)
 #define TROG_PEASANT_STOMP_SCORE 2
+#define TROG_PEASANT_FREEZE_TIME 5 SECONDS
 
 #define TROG_KNIGHT_WIDTH 9
 #define TROG_KNIGHT_HEIGHT 18
@@ -106,12 +119,14 @@
 #define TROG_BLUE_KNIGHT_SPAWN_X 33
 #define TROG_BLUE_KNIGHT_SPAWN_Y -50
 
-#define TROG_KNIGHT_SPEED TROG_PLAYER_SPEED*bn::fixed(0.6)
+#define TROG_KNIGHT_SPEED TROG_TROGDOR_SPEED*bn::fixed(0.6)
 #define TROG_KNIGHT_MOVE_CYCLE_TIME 180
+#define TROG_KNIGHT_FREEZE_TIME TROG_PEASANT_FREEZE_TIME / 2
 
 #define TROG_HAMMER_SPEEDUP_FACTOR bn::fixed(1.4)
 #define TROG_HAMMER_WIDTH 16
 #define TROG_HAMMER_HEIGHT 18
+#define TROG_HAMMER_FREEZE_TIME TROG_PEASANT_FREEZE_TIME / 4
 
 #define TROG_VOIDTOWER_POS_DAY bn::fixed_point(-16, -61)
 #define TROG_VOIDTOWER_POS_DUSK bn::fixed_point(10, -61)
@@ -127,10 +142,10 @@
 #define TROG_ARCHER_MAX_SPAWN_HEIGHT 70
 
 // TODO tune this a bit finer
-#define TROG_ARCHER_MIN_SPAWN_INTERVAL (30 SECONDS)
-#define TROG_ARCHER_MAX_SPAWN_INTERVAL (120 SECONDS)
+#define TROG_ARCHER_MIN_SPAWN_INTERVAL (30 SECONDS) //(5 SECONDS) 
+#define TROG_ARCHER_MAX_SPAWN_INTERVAL (120 SECONDS) //(10 SECONDS) 
 
-#define TROG_ARROW_SPEED TROG_PLAYER_SPEED*bn::fixed(1.75)
+#define TROG_ARROW_SPEED TROG_TROGDOR_SPEED*bn::fixed(1.75)
 #define TROG_ARROW_WIDTH 10
 #define TROG_ARROW_HEIGHT 3
 

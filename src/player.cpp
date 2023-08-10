@@ -8,10 +8,10 @@
 #include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-        entity(xcor, ycor, TROG_PLAYER_WIDTH, TROG_PLAYER_HEIGHT, spritem.create_sprite(xcor, ycor)),
+player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+        entity(xcor, ycor, width, height, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
-        _speed(TROG_PLAYER_SPEED),
+        _speed(speed),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _trogmeter(initial_trogmeter),
         _burninate_time(0),
@@ -74,9 +74,6 @@ void player::update(){
     if(!dead()){
         update_pos();
         entity::update();
-        // if(any_dpad_input()){
-        //     _walkcycle.update();
-        // }
 
         if(_burninate_time > 0) { 
             _burninate_time--;
@@ -106,7 +103,9 @@ void player::update(){
             _sprite.set_visible(true);
             _iframes = 0;
         }
-        update_next_pos();
+        if(can_move()){
+            update_next_pos();
+        }
         update_firebreath();
 
         #ifdef DEBUG
@@ -166,15 +165,11 @@ void player::free_from_collisionbox(const bn::fixed_rect &box){
 
     bn::fixed downdist,updist,leftdist,rightdist,min_dist;
     downdist = bn::abs(box.bottom() - _hitbox.top());
-    BN_LOG("down distance ", downdist);
     updist = bn::abs(box.top() - _hitbox.bottom());
-    BN_LOG("up distance ", updist);
 
 
     leftdist = bn::abs(box.left() - _hitbox.right());
-    BN_LOG("left distance ", leftdist);
     rightdist = bn::abs(box.right() - _hitbox.left());
-    BN_LOG("right distance ", rightdist);
 
     // ah yes, 3 nested mins, very good coding jeremy
     min_dist = bn::min(bn::min(updist,downdist),bn::min(leftdist,rightdist));
@@ -236,7 +231,7 @@ void player::handle_peasant_collision(peasant &peasant){
     if(burninating()){
         _breath.handle_peasant_collision(peasant);
     }else if(!dead() && collides_with(peasant) && !peasant.dead()){
-        peasant.stomp();
+        peasant.squish();
 
         bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
         _common_stuff.commentary.stomp_peasant();

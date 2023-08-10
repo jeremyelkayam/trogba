@@ -10,7 +10,7 @@
 namespace trog {
 
 peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, cottage &home) : 
-        entity(xcor, ycor, TROG_PEASANT_WIDTH, TROG_PEASANT_HEIGHT, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
+        freezable(xcor, ycor, TROG_PEASANT_WIDTH, TROG_PEASANT_HEIGHT, bn::sprite_items::peasant.create_sprite(xcor, ycor)),
         _home(home),
         _maxdist(maxdist),
         _currentdist(bn::fixed(0)), 
@@ -51,7 +51,14 @@ void peasant::burninate(){
 
     // set on fire
     _onfire = true;
-    
+    _freeze_timer = 0;
+    run_to_house();
+
+    // change animation to flaming
+    set_sprite_ablaze();
+}
+
+void peasant::run_to_house(){
     // run fast the other way 
     if(_returning){
         _speed = _speed*2;
@@ -59,9 +66,6 @@ void peasant::burninate(){
         _speed = _speed*-2;
     }
     _currentdist+=_speed;
-
-    // change animation to flaming
-    set_sprite_ablaze();
 }
 
 void peasant::set_sprite_ablaze(){
@@ -72,41 +76,46 @@ void peasant::set_sprite_ablaze(){
 
 void peasant::update(){
     entity::update();
-    
 
-    if(_time_waiting == _waittime){
-        _speed=-_speed;
-        _currentdist+=_speed;
-        _returning = true;
+    if(!_freeze_timer){
+        if(_time_waiting == _waittime){
+            _speed=-_speed;
+            _currentdist+=_speed;
+            _returning = true;
 
-        //reset time waiting, probably should refactor this out later but w/e
-        _time_waiting = 0;
-    }
+            //reset time waiting, probably should refactor this out later but w/e
+            _time_waiting = 0;
+        }
 
-    if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
+        if(_time_dead == 0 && _currentdist < _maxdist && _time_waiting < _waittime){
 
-        _pos+=_direction.multiplication(_speed);
+            _pos+=_direction.multiplication(_speed);
 
-        _currentdist+=_speed;
-        _walkcycle.update();
-    }else if(_time_dead > 0){
-        _time_dead++;
-        
-    }else {
-        // BN_LOG("waiting", _time_waiting, " of ", _waittime);
-        _time_waiting++;
+            _currentdist+=_speed;
+            _walkcycle.update();
+        }else if(_time_dead > 0){
+            _time_dead++;
+            
+        }else if(!_returning){
+            _time_waiting++;
+        }
+    }else{
+        update_freeze();
+
+        //this will trigger if the peasant just unfroze
+        if(_freeze_timer == 0) run_to_house();
     }
 }
 
-void peasant::stomp(){
-    //cannot stomp a peasant that is already stomped.
+void peasant::squish(){
+    //cannot squish a peasant that is already stomped.
     if(_time_dead == 0){
         _speed = bn::fixed(0);
         _time_dead=1;
         _sprite.set_item(bn::sprite_items::peasantdead);
         _sprite.set_y(_sprite.y() + 3);
         _pos.set_y(_pos.y() + 3);
-
+        _freeze_timer = 0;
     }
 }
 

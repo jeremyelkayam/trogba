@@ -22,8 +22,14 @@ arrow::arrow(bn::fixed_point pos, bool facing_left) :
 }
 
 void arrow::update(){
-    entity::update();
-    _pos.set_x(_pos.x() + _speed);
+    if(_plink_timer){
+        update_anim();
+        _pos = _sprite.position();
+        _hitbox.set_position(_pos);
+    }else{
+        entity::update();
+        _pos.set_x(_pos.x() + _speed);
+    }
 }
 void arrow::update_anim(){
     entity::update_anim();
@@ -31,12 +37,14 @@ void arrow::update_anim(){
         ++_plink_timer;
     }
     if(_plink_timer == 10){
-        move_to(20, 0, 90);        
+        int8_t sign = _sprite.horizontal_flip() ? 1 : -1;
+        move_to(30, _sprite.x() + (40 * sign), _sprite.y() + 160);  
     }
 
-    BN_LOG("update arrow anim");
+    // BN_LOG("update arrow anim");
     if(_rotating){
-        short new_angle = _sprite.rotation_angle().integer() - 10;
+        int8_t sign = _sprite.horizontal_flip() ? 1 : -1;
+        short new_angle = _sprite.rotation_angle().integer() - (10 * sign);
         new_angle %= 360;
         if(new_angle < 0) new_angle += 360;
         _sprite.set_rotation_angle(new_angle);
@@ -46,7 +54,10 @@ void arrow::update_anim(){
 void arrow::plink(){
     _plink_timer = 1;
     rotate();
-    move_to(10, -40, -15);
+
+    int8_t sign = _sprite.horizontal_flip() ? 1 : -1;
+    move_to(10, _sprite.x() + (40 * sign) , _sprite.y() - 10);
+
 }
 
 }

@@ -9,7 +9,6 @@ namespace trog
         _cottages(cottages),
         _peasants(peasants)
     {
-        BN_LOG("new peasant factory");
     }
 
     void peasant_factory::spawn()

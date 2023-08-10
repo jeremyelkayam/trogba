@@ -1,4 +1,5 @@
 #include <bn_blending.h>
+#include <bn_math.h>
 #include "common_stuff.h"
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
@@ -168,12 +169,18 @@ void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
 }
 
 //todo: maybe binary search would be better for this lol
-bn::string<32> common_stuff::cutscene_name_for_level(const uint8_t &level){
+bn::string<32> common_stuff::cutscene_name_for_level(const uint8_t &level) const{
     for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {
         if(entry.first == level) return entry.second;
     }
     BN_ERROR("invalid level passed into common_stuff.cutscene_name_for_level");
     return bn::string<32>();
+}
+
+bn::fixed common_stuff::euclidean_dist(const bn::fixed_point &a, const bn::fixed_point &b) const {
+    bn::fixed xdist = a.x() - b.x();
+    bn::fixed ydist = a.y() - b.y();
+    return bn::sqrt(xdist * xdist + ydist * ydist);
 }
 
 const char* common_stuff::scene_type_to_string(const scene_type &type) const{

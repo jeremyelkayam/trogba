@@ -44,10 +44,12 @@ namespace trog {
             virtual bn::fixed_rect get_hitbox() const final;
 
             /**
-             * 
+             * Destroy the arrow owned by this archer if it exists.
             */
             void destroy_arrow();
             void set_bow_drawn(bool drawn);
             void set_visible(bool visible);
+
+            void stomp_on(bn::fixed_point foot_pos, uint8_t stomp_radius);
     };
 }

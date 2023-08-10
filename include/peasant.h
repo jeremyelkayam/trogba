@@ -1,14 +1,14 @@
 #pragma once
 #include <bn_sprite_actions.h>
 #include <bn_sprite_animate_actions.h>
-#include "entity.h"
+#include "freezable.h"
 #include "cottage.h"
 #include "session_info.h"
 #include "constants.h"
 #include "bn_sprite_items_peasant.h"
 
 namespace trog {
-    class peasant : public entity { 
+    class peasant : public freezable { 
         private:
             cottage &_home;
             const bn::fixed _maxdist;
@@ -26,12 +26,14 @@ namespace trog {
             bool _returning;
  
             bn::sprite_animate_action<2> _walkcycle;
-            
+
+            void run_to_house();
+
         public:
             peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxdist, cottage &home);
-            virtual void update() final;
+            virtual void update() override final;
 
-            void stomp();
+            void squish();
             void burninate();
             bool dead(){return _time_dead > 0;}
             bool remove_from_map();
@@ -40,5 +42,8 @@ namespace trog {
             void set_sprite_ablaze();
             void set_frame(short frame_number){_sprite.set_tiles(bn::sprite_items::peasant.tiles_item(), frame_number);}
             cottage &get_home() {return _home;}
+
+            virtual void freeze() override final {if(_time_dead == 0) _freeze_timer = TROG_PEASANT_FREEZE_TIME;}
+            virtual void alert() override final {run_to_house();}
     };
 }

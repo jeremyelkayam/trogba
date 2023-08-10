@@ -112,13 +112,8 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                 if(saved_sesh.exists && !saved_sesh.can_visit_treasure_hut){
                     treasurehut = false;
                 }
-                // BN_LOG("treasure hut? ", treasurehut);            
-                // BN_LOG("cottage #", i + 1);
-                // BN_LOG("direction: ", levels[level_index][j]);
                 bn::fixed xcor = (240 * (((bn::fixed)levels[level_index][j + 1] + 2466) / 5000.0)) + 8 - 120;
-                // BN_LOG("xcor ", xcor);
                 bn::fixed ycor = (160 * (((bn::fixed)levels[level_index][j + 2] + 2183) / 3600.0)) - 11 - 80;
-                // BN_LOG("ycor ", ycor);
 
                 direction enumdir;
                 switch(levels[level_index][j]){
@@ -240,7 +235,6 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_sesh.get_level() == 0) update_tutorial();
 
-
         if(!_player->dead() && _autosave_visibility_time == 0){
             _common_stuff.set_autosave_text_visible(false);
         }
@@ -251,7 +245,38 @@ bn::optional<scene_type> play_scene::update(){
 
         bool was_burninating = _player->burninating();
 
-        _player->update();        
+        _player->update(); 
+
+        if(_sesh.get_dragon() == dragon::SUCKS){
+            sucks *player = (sucks *) _player.get();
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
+
+                //stomp clause
+                for(freezable *f : all_freezables()){
+                    //yes, euclidean distance is an expensive operation here. However, 
+                    // we're only doing it on a max of 20 actors so hopefully it's ok
+                    if(_common_stuff.euclidean_dist(player->foot_pos(), f->get_pos()) < TROG_SUCK_STOMP_RADIUS){
+                        f->freeze();
+                    }else{
+                        f->alert();
+                    }
+                }
+                for(archer &arch : _archers){
+                    arch.stomp_on(player->foot_pos(), TROG_SUCK_STOMP_RADIUS);
+                }
+            }
+            //todo: maybe add screen shake function
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 2 
+               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 6
+               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 10){
+                move_screen(-4);
+            }
+            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME 
+              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 4
+              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 8){
+                move_screen(4);
+            }
+        }       
         
 
 
@@ -815,6 +840,46 @@ void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
         break;
     }
 
+}
+
+bn::vector<freezable *, 23> play_scene::all_freezables(){
+    bn::vector<freezable *, 23> result;
+
+    if(_troghammer){
+        result.emplace_back(_troghammer.get());
+    }
+    for(knight &k : _knights){
+        result.emplace_back(&k);
+    }
+    for(peasant &p : _peasants){
+        result.emplace_back(&p);
+    }
+    return result;
+}
+
+bn::vector<entity *, 33> play_scene::all_entities(){
+    bn::vector<entity *, 33> result;
+    for(entity *e : all_freezables()){
+        result.emplace_back(e);
+    }
+    for(archer &a : _archers){
+        result.emplace_back(&a);
+    }
+    for(cottage &c : _cottages){
+        result.emplace_back(&c);
+    }
+    
+    return result;
+}
+
+void play_scene::move_screen(bn::fixed yoffset){
+    _countryside.set_y(_countryside.y() + yoffset);
+    for(entity *e : all_entities()){
+        e->set_y(e->get_y() + yoffset);
+    }
+    if(_void_tower){
+        _void_tower->set_y(_void_tower->y() + yoffset);
+    }
 }
 
 }

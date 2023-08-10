@@ -47,7 +47,6 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
     saved_session &loaded_sesh = common_stuff.savefile.session;
 
     if(loaded_sesh.exists){
-        BN_LOG("SESSION EXISTS! Loading in the datum");
         bn::string<64> session_summary;
         bn::ostringstream summary_stream(session_summary);
         summary_stream << "score: " << loaded_sesh.score << "  ";       
@@ -105,7 +104,6 @@ bn::optional<scene_type> menu_scene::update(){
         if(_selected_option_index == 0){
             if(_common_stuff.savefile.session.exists){
                 _sesh.import_save();
-                BN_LOG("loaded the file");
                 select();
             }else{
                 _selection_anim_timer = 0;

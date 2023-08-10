@@ -179,7 +179,7 @@ bn::optional<scene_type> movie_scene::update(){
         if(_timer == _cutscene_length / 2){
             //stompin good
             ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
-            ((peasant *) _cutscene_objects.at(3).get())->stomp();        
+            ((peasant *) _cutscene_objects.at(3).get())->squish();        
         }if(_cutscene_objects.at(0)->sprite_x() > 120){
             ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
         }
@@ -215,7 +215,7 @@ bn::optional<scene_type> movie_scene::update(){
         }
         for(int z = 0; z < 8; ++z){
             if(_timer == 70 + 5*z){
-                if(z != 0) ((peasant *) _cutscene_objects.at(z).get())->stomp();
+                if(z != 0) ((peasant *) _cutscene_objects.at(z).get())->squish();
                 if(z != 7) ((peasant *) _cutscene_objects.at(z+1).get())->set_sprite_ablaze();                
             }
         }
