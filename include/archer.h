@@ -50,6 +50,6 @@ namespace trog {
             void set_bow_drawn(bool drawn);
             void set_visible(bool visible);
 
-            void stomp_on(bn::fixed_point foot_pos, bn::fixed stomp_radius);
+            void stomp_on(bn::fixed_point foot_pos, uint8_t stomp_radius);
     };
 }

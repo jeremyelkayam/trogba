@@ -251,7 +251,7 @@ bn::optional<scene_type> play_scene::update(){
             sucks *player = (sucks *) _player.get();
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
 
-                //stomp c
+                //stomp clause
                 for(freezable *f : all_freezables()){
                     //yes, euclidean distance is an expensive operation here. However, 
                     // we're only doing it on a max of 20 actors so hopefully it's ok

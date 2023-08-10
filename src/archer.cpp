@@ -81,13 +81,16 @@ void archer::set_visible(bool visible){
     }
 }
 
-void archer::stomp_on(bn::fixed_point foot_pos, bn::fixed stomp_radius){
+void archer::stomp_on(bn::fixed_point foot_pos, uint8_t stomp_radius){
     if(_arrow){
         if(_common_stuff.euclidean_dist(foot_pos, _arrow->get_pos()) <= stomp_radius){
             _arrow->plink();
         }
     }else{
-
+        if(_common_stuff.euclidean_dist(foot_pos, get_pos()) <= stomp_radius){
+            //for now they can just leave
+            _time_since_spawn = TROG_ARCHER_DISAPPEAR_WAITTIME;
+        }        
     }
 }
 
