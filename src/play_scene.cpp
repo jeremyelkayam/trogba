@@ -265,16 +265,16 @@ bn::optional<scene_type> play_scene::update(){
                     arch.stomp_on(player->foot_pos(), TROG_SUCK_STOMP_RADIUS);
                 }
             }
-            //todo: maybe add screen shake function
+            //screen shake commented out right now because it seems to cause crashes.
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 2 
                || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 6
                || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 10){
-                move_screen(-4);
+                // move_screen(-4);
             }
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME 
               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 4
               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 8){
-                move_screen(4);
+                // move_screen(4);
             }
         }       
         

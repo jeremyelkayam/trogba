@@ -6,6 +6,7 @@
 #include "entity.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_peasantdead.h"
+#include "bn_sprite_items_alert_icon.h"
 
 namespace trog {
 
@@ -22,8 +23,11 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _onfire(false),
         _returning(false),
         _walkcycle(bn::create_sprite_animate_action_forever(
-                    _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)){
+                    _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)),
+        _alert_icon(bn::sprite_items::alert_icon.create_sprite(0,0)){
     _sprite.set_z_order(MID_ZORDER);
+    _alert_icon.set_z_order(MID_ZORDER);
+    _alert_icon.set_visible(false);
 
     switch(home.get_direction()) {
         case direction::UP:
@@ -59,7 +63,7 @@ void peasant::burninate(){
 }
 
 void peasant::run_to_house(){
-    // run fast the other way 
+    // run fast. and flip your direction if you weren't already returning
     if(_returning){
         _speed = _speed*2;
     }else{
@@ -76,6 +80,8 @@ void peasant::set_sprite_ablaze(){
 
 void peasant::update(){
     entity::update();
+    _alert_icon.set_x(_pos.x() + 1);
+    _alert_icon.set_y(_pos.y() - 16);
 
     if(!_freeze_timer){
         if(_time_waiting == _waittime){
@@ -103,7 +109,7 @@ void peasant::update(){
         update_freeze();
 
         //this will trigger if the peasant just unfroze
-        if(_freeze_timer == 0) run_to_house();
+        if(_freeze_timer == 0) alert();
     }
 }
 
@@ -116,6 +122,7 @@ void peasant::squish(){
         _sprite.set_y(_sprite.y() + 3);
         _pos.set_y(_pos.y() + 3);
         _freeze_timer = 0;
+        _alert_icon.set_visible(false);
     }
 }
 

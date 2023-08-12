@@ -26,6 +26,7 @@ namespace trog {
             bool _returning;
  
             bn::sprite_animate_action<2> _walkcycle;
+            bn::sprite_ptr _alert_icon;
 
             void run_to_house();
 
@@ -44,6 +45,6 @@ namespace trog {
             cottage &get_home() {return _home;}
 
             virtual void freeze() override final {if(_time_dead == 0) _freeze_timer = TROG_PEASANT_FREEZE_TIME;}
-            virtual void alert() override final {run_to_house();}
+            virtual void alert() override final {run_to_house(); _alert_icon.set_visible(true);}
     };
 }
