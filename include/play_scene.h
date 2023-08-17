@@ -44,9 +44,9 @@ namespace trog{
         archer_factory _afact;
 
 
-        unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time;
+        unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time, _shake_timer;
         bool _player_paused;
-        uint8_t _timer, _tutorial_cutscene_timer;
+        uint8_t _timer, _tutorial_cutscene_timer, _shake_interval;
         int8_t _pause_menu_index;
 
         bn::regular_bg_ptr _countryside;
@@ -68,7 +68,7 @@ namespace trog{
         bn::unique_ptr<tutorial_arrow> _tutorial_arrow;
 
         bn::unique_ptr<text_box> _text_box;
-        bn::fixed _voices_volume;
+        bn::fixed _voices_volume, _shake_y_offset;
 
         bool level_complete();
 
@@ -98,7 +98,7 @@ namespace trog{
         bn::vector<freezable *, 23> all_freezables();
         bn::vector<entity *, 33> all_entities();
 
-        void move_screen(bn::fixed yoffset);
+        void shake_screen(bn::fixed yoffset, uint8_t interval, uint8_t num_shakes);
 
     public:
         play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff);

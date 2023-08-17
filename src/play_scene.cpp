@@ -232,6 +232,24 @@ bn::optional<scene_type> play_scene::update(){
 
 
     }else{
+        //screen shake loop
+        if(_shake_timer){
+            if(_shake_timer % _shake_interval == 0){
+                bool even_interval = _shake_timer % (_shake_interval * 2) == 0;
+                bn::fixed yoffset = even_interval ? _shake_y_offset : 0;
+
+                int8_t factor = even_interval ? 1 : -1;
+                _countryside.set_y(_countryside.y() + factor * _shake_y_offset);
+                for(entity *e : all_entities()){
+                    e->set_y_offset(yoffset);
+                }
+                if(_void_tower){
+                    _void_tower->set_y(_void_tower->y() + factor * _shake_y_offset);
+                }
+            }
+            --_shake_timer;
+
+        }
 
         if(_sesh.get_level() == 0) update_tutorial();
 
@@ -250,7 +268,6 @@ bn::optional<scene_type> play_scene::update(){
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
-
                 //stomp clause
                 for(freezable *f : all_freezables()){
                     //yes, euclidean distance is an expensive operation here. However, 
@@ -264,17 +281,8 @@ bn::optional<scene_type> play_scene::update(){
                 for(archer &arch : _archers){
                     arch.stomp_on(player->foot_pos(), TROG_SUCK_STOMP_RADIUS);
                 }
-            }
-            //screen shake commented out right now because it seems to cause crashes.
-            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 2 
-               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 6
-               || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 10){
-                // move_screen(-4);
-            }
-            if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME 
-              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 4
-              || player->stomp_timer() == TROG_SUCK_STOMP_FRAME + 8){
-                // move_screen(4);
+                shake_screen(4, 4, 4);
+                bn::sound_items::heavy_crash.play(_common_stuff.savefile.options.sound_vol);
             }
         }       
         
@@ -872,14 +880,10 @@ bn::vector<entity *, 33> play_scene::all_entities(){
     return result;
 }
 
-void play_scene::move_screen(bn::fixed yoffset){
-    _countryside.set_y(_countryside.y() + yoffset);
-    for(entity *e : all_entities()){
-        e->set_y(e->get_y() + yoffset);
-    }
-    if(_void_tower){
-        _void_tower->set_y(_void_tower->y() + yoffset);
-    }
+void play_scene::shake_screen(bn::fixed yoffset, uint8_t interval, uint8_t num_shakes){
+    _shake_timer = interval * num_shakes;
+    _shake_interval = interval;
+    _shake_y_offset = yoffset;
 }
 
 }

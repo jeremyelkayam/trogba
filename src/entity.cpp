@@ -39,7 +39,7 @@ void entity::move_to_and_back(const short &time, const bn::fixed &x, const bn::f
 
 void entity::update(){
     _hitbox.set_position(_pos);
-    _sprite.set_position(_pos);
+    _sprite.set_position(_pos + _offset);
 }
 
 void entity::update_anim(){

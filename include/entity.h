@@ -26,17 +26,16 @@ namespace trog{
         bn::fixed sprite_y() { return _sprite.y();}
         void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}
         void set_y(const bn::fixed &y) { _pos.set_y(y); _sprite.set_y(y);}
+        void set_y_offset(const bn::fixed &y) {_offset.set_y(y); _sprite.set_y(_pos.y() + y);}
         bool out_of_bounds();
         void set_rotation_angle(const short &angle){_sprite.set_rotation_angle(angle);}
 
         void set_visible(const bool &visible) {_sprite.set_visible(visible);}
 
-
         //sprite stuff
         void set_horizontal_flip(const bool &flip) { _sprite.set_horizontal_flip(flip);}
         virtual void update_anim();
         void flip_every(const uint8_t &frames);
-
 
         void move_to(const short &time, const bn::fixed &x, const bn::fixed &y);
         void move_from(const short &time, const bn::fixed &x, const bn::fixed &y);        
@@ -77,7 +76,7 @@ namespace trog{
         bn::fixed_point unit_vector(bn::fixed angle)
             {return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
 
-        bn::fixed_point _pos, _starting_pos;
+        bn::fixed_point _pos, _starting_pos, _offset;
         bn::fixed_rect _hitbox;
 
 
