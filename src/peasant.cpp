@@ -80,7 +80,7 @@ void peasant::set_sprite_ablaze(){
 
 void peasant::update(){
     entity::update();
-    _alert_icon.set_x(_pos.x() + 1);
+    _alert_icon.set_x(_pos.x() + 2);
     _alert_icon.set_y(_pos.y() - 16);
 
     if(!_freeze_timer){
