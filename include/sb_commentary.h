@@ -5,6 +5,7 @@
 #include <bn_sound_items.h>
 #include <bn_random.h>
 
+#include "enums.h"
 #include "constants.h"
 
 namespace trog {
@@ -17,7 +18,7 @@ namespace trog {
 
         public:
             sb_commentary(const bn::fixed &volume, bn::random &rand);
-            bool gameover(const unsigned int &score); // called by gameover_scene
+            bool gameover(const unsigned int &score, const dragon &dragon); // called by gameover_scene
             void gameover_arch()  // called by movie_scene
                 {bn::sound_items::sb_archer_gameover.play(_volume);}
             void im_in_this_game()  // called by movie_scene
@@ -26,8 +27,8 @@ namespace trog {
                 {bn::sound_items::sb_isoundrealistic.play(_volume);}
             void roast_kerrek() // called by movie_scene
                 {bn::sound_items::sb_roastkerrek.play(_volume);}
-            void arrowed(); // called by play_scene
-            void sworded(); // called by play_scene
+            void arrowed(const dragon &dragon); // called by play_scene
+            void sworded(const dragon &dragon); // called by play_scene
             void burninate(); // called by play_scene
             void level_win_pause(); // called by play_scene
             void level_win_scene(); // called by level_win_scene

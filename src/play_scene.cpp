@@ -329,7 +329,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_player->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
-                _common_stuff.commentary.arrowed();
+                _common_stuff.commentary.arrowed(_sesh.get_dragon());
             }
             _sesh.set_killed_by_archer(true);
             _overlay_text.reset(new bloody_text(true, 0, 0, "ARROWED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
@@ -345,7 +345,7 @@ bn::optional<scene_type> play_scene::update(){
         
         if(_player->dead() && !was_dead) {
             if(_sesh.get_mans() != 0){
-                _common_stuff.commentary.sworded();
+                _common_stuff.commentary.sworded(_sesh.get_dragon());
             }
             bn::string<13> str = "SWORDED!";
             //2% chance to get it wrong

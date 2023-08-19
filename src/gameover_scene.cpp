@@ -53,7 +53,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     if(_sesh.last_killed_by_archer()){
         _common_stuff.commentary.gameover_arch();
         bn::sound_items::gameover.play(common_stuff.savefile.options.sound_vol * bn::fixed(0.2));
-    }else if(_common_stuff.commentary.gameover(_sesh.get_score()))
+    }else if(_common_stuff.commentary.gameover(_sesh.get_score(), sesh.get_dragon()))
     {
         bn::sound_items::gameover.play(common_stuff.savefile.options.sound_vol * bn::fixed(0.2));
     }else{
