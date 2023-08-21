@@ -14,7 +14,7 @@ bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
     }else if(score >= TROG_GAMEOVER_BEAT_THAT_SCORE){
         bn::sound_items::sb_beatthatscore.play(_volume);
         return true;
-    }else if(_rand.get_int(2) == 0){
+    }else if(percent_chance(50)){
         //todo: probably would be cleaner if we used a lookup table
         if(dragon == dragon::TROGDOR){
             bn::sound_items::sb_pineforyou.play(_volume);
@@ -27,19 +27,16 @@ bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
 }
 
 void sb_commentary::arrowed(const dragon &dragon){
-    if(_rand.get_int(3) == 0 && _timer == 0){
-        _timer = 1;
-
+    if(percent_chance(33.33333)){
         if(dragon == dragon::TROGDOR){
-            bn::sound_items::sb_stupid_archdeluxe.play(_volume);
+            play_random_sound({bn::sound_items::sb_stupid_archdeluxe});
         }else if(dragon == dragon::SUCKS){
-            bn::sound_items::sb_arrowed.play(_volume);
+            play_random_sound({bn::sound_items::sb_arrowed});
         }
-
     }
 }
 
-//todo: maybe use inheritance for this? Idk there's def a better way 
+//todo: maybe use inheritance for this?  
 void sb_commentary::sworded(const dragon &dragon){
     if(percent_chance(33.33333)){
         if(dragon == dragon::TROGDOR){
@@ -119,7 +116,7 @@ void sb_commentary::play_random_sound(std::initializer_list<bn::sound_item> soun
 bool sb_commentary::percent_chance(const bn::fixed &pct){
     BN_ASSERT(pct >= 0, "percent must be between 0 and 100");
     BN_ASSERT(pct < 100, "percent must be between 0 and 100");
-    return pct > rand.get_fixed(100);
+    return pct > _rand.get_fixed(100);
 } 
 
 }
