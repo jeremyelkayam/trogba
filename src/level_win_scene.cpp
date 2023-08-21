@@ -59,7 +59,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     
 
 
-    common_stuff.commentary.level_win_scene();
+    if(common_stuff.rand.get_int(5) == 0) common_stuff.commentary.level_win_scene();
 
     bn::fixed nicework_x = 73, nicework_y = 5;
 

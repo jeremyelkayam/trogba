@@ -64,7 +64,7 @@ void sb_commentary::sworded(const dragon &dragon){
     }
 }
 
-void sb_commentary::burninate(){
+void sb_commentary::burninate(const dragon &dragon){
     if(_timer == 0){
         unsigned short rand_num = _rand.get_int(4);
         if(rand_num == 0){
@@ -87,44 +87,20 @@ void sb_commentary::level_win_pause(){
 }
 void sb_commentary::level_win_scene(){
     unsigned short rand_num = _rand.get_int(10);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_comesinthenight.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_bestgame.play(_volume);
-            _timer = 1;
-        }
-    }
+
+    play_random_sound({bn::sound_items::sb_comesinthenight,
+            bn::sound_items::sb_bestgame});
 }
 
 void sb_commentary::stomp_peasant(){
-    unsigned short rand_num = _rand.get_int(60);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_asquisha.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_asquishasquisha.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 2){
-            bn::sound_items::sb_squishedyou.play(_volume);
-            _timer = 1;
-        }
-    }
+    play_random_sound({bn::sound_items::sb_asquisha, 
+            bn::sound_items::sb_asquishasquisha,
+            bn::sound_items::sb_squishedyou});
 }
 
 void sb_commentary::ignite_peasant(){
-    unsigned short rand_num = _rand.get_int(10);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_hesonfire.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_lookit_him_burning.play(_volume);
-            _timer = 1;
-        }
-    }    
+    play_random_sound({bn::sound_items::sb_hesonfire,
+            bn::sound_items::sb_lookit_him_burning});
 }
 
 void sb_commentary::ignite_cottage(){
@@ -137,7 +113,23 @@ void sb_commentary::ignite_cottage(){
 
 void sb_commentary::update(){
     if(_timer > 0){
-        ++_timer;
+        --_timer;
+    }
+}
+
+void sb_commentary::play_random_sound(std::initializer_list<bn::sound_item> sounds){    
+    if(_timer == 0){
+        uint8_t rand_num = _rand.get_int(sounds.size());
+        BN_LOG("random nunber", rand_num);   
+        uint8_t counter = 0;
+        for(bn::sound_item sound : sounds){
+            if(counter == rand_num){
+                sound.play(_volume);
+                break;
+            }
+            ++counter;
+        }
+        _timer = 255;
     }
 }
 

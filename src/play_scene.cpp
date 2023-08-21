@@ -312,7 +312,7 @@ bn::optional<scene_type> play_scene::update(){
         }
         if(_player->burninating() && !was_burninating){
             _burninate_pause_time = 1;
-            _common_stuff.commentary.burninate();
+            _common_stuff.commentary.burninate(_sesh.get_dragon());
             _overlay_text.reset(new burninate_text());
         }else if(!_player->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
