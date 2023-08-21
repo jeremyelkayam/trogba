@@ -47,6 +47,7 @@ void firebreath::handle_cottage_collision(cottage &cottage){
         bool burninate_success = cottage.burninate();
         if(burninate_success){
             _sesh.score(TROG_COTTAGE_BREATHBURN_SCORE);
+            _common_stuff.commentary.ignite_cottage();
         }
     }
 }
@@ -57,8 +58,7 @@ void firebreath::handle_peasant_collision(peasant &peasant){
     if(_hitbox.intersects(pbox) && !peasant.dead() && !peasant.onfire()){
         peasant.burninate();        
         bn::sound_items::peasantscream.play(_common_stuff.savefile.options.sound_vol);
-        if(_common_stuff.rand.get_int(5) == 0) 
-            _common_stuff.commentary.ignite_peasant();
+        _common_stuff.commentary.ignite_peasant();
     }
 }
 

@@ -220,11 +220,4 @@ const char* common_stuff::scene_type_to_string(const scene_type &type) const{
     }
 }
 
-bool common_stuff::percent_chance(const bn::fixed &pct){
-    BN_ASSERT(pct >= 0, "percent must be between 0 and 100");
-    BN_ASSERT(pct < 100, "percent must be between 0 and 100");
-    return pct > rand.get_fixed(100);
-} 
-
-
 }

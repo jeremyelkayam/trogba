@@ -39,5 +39,7 @@ namespace trog {
             void ignite_cottage(); // called by cottage
 
             void update();
+
+            bool percent_chance(const bn::fixed &pct);
     };
 }

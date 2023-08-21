@@ -99,7 +99,7 @@ namespace trog {
 
             bn::fixed euclidean_dist(const bn::fixed_point &a, const bn::fixed_point &b) const;
 
-            bool percent_chance(const bn::fixed &pct);
+            // bool percent_chance(const bn::fixed &pct) {return commentary.percent_chance(pct);}
 
         private:
 

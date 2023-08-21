@@ -234,9 +234,8 @@ void player::handle_peasant_collision(peasant &peasant){
         peasant.squish();
 
         bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
-        if(_common_stuff.rand.get_int(20) == 0){
-            _common_stuff.commentary.stomp_peasant();
-        }
+        _common_stuff.commentary.stomp_peasant();
+        
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
         ++_trogmeter;
