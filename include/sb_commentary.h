@@ -17,6 +17,14 @@ namespace trog {
             bn::random &_rand;
             uint8_t _timer;
             void play_random_sound(std::initializer_list<bn::sound_item> item);
+            // void play_clip(uint8_t index) {voice_clips[index].play(_volume);}
+
+            //Lookup table for voice clips(?)
+            //Organized by 
+            // bn::sound_item voice_clips[2] = {
+            //     bn::sound_items::sb_pineforyou,
+            //     bn::sound_items::sb_itsover
+            // };
 
         public:
             sb_commentary(const bn::fixed &volume, bn::random &rand);
