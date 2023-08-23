@@ -297,7 +297,7 @@ void player::set_visible(const bool &visible){
     }
 }
 
-void player::set_horizontal_flip(bool flip){
+void player::set_horizontal_flip(const bool &flip){
     entity::set_horizontal_flip(flip);
     _breath.set_horizontal_flip(flip);
 }

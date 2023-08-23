@@ -33,7 +33,7 @@ namespace trog{
         virtual void set_visible(const bool &visible) {_sprite.set_visible(visible);}
 
         //sprite stuff
-        void set_horizontal_flip(const bool &flip) { _sprite.set_horizontal_flip(flip);}
+        virtual void set_horizontal_flip(const bool &flip) { _sprite.set_horizontal_flip(flip);}
         virtual void update_anim();
         void flip_every(const uint8_t &frames);
 

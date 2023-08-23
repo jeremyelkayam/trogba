@@ -82,7 +82,7 @@ namespace trog {
             virtual void set_visible(const bool &visible) override;
             void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
             void disable_breath(){_breath.disable();}
-            void set_horizontal_flip(bool horizontal_flip);
+            virtual void set_horizontal_flip(const bool &horizontal_flip);
 
             void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}
 
