@@ -7,7 +7,7 @@ namespace trog {
         private:
             bn::sprite_animate_action<6> _walkcycle;
             unsigned short _stomp_timer;
-            bn::sprite_ptr _shockwave;
+            bn::sprite_ptr _shockwave, _arms;
             bn::sprite_animate_action<16> _shockwave_anim;
 
         public: 
@@ -23,6 +23,8 @@ namespace trog {
             virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 60;}
 
             bn::fixed_point foot_pos();
+
+            virtual void set_visible(const bool &visible) override {entity::set_visible(visible); _arms.set_visible(visible);}
 
     };
 }

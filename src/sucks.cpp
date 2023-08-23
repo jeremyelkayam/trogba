@@ -1,5 +1,6 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
+#include "bn_sprite_items_sucks_arms.h"
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
 
@@ -11,6 +12,7 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
             bn::sprite_items::sucks.tiles_item(), 0, 1, 2, 3, 2, 1)),
     _stomp_timer(0),
     _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,0)),
+    _arms(bn::sprite_items::sucks_arms.create_sprite(xcor,ycor)),
     _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)) {
     _shockwave.set_visible(false);
@@ -22,6 +24,9 @@ void sucks::update(){
     if(!dead() && any_dpad_input() && can_move()){
         _walkcycle.update();
     }
+
+    _arms.set_x(_sprite.x());
+    _arms.set_y(_sprite.y());
 
     if(_stomp_timer){
         ++_stomp_timer;

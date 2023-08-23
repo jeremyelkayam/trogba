@@ -24,6 +24,6 @@ namespace trog {
             direction get_direction() {return _direction;}
             bool has_treasure();
             void visit() {BN_ASSERT(_has_treasure); _has_treasure = false;}
-            void set_visible(bool visible);
+            virtual void set_visible(const bool &visible) override;
     };
 }

@@ -48,7 +48,7 @@ namespace trog {
             */
             void destroy_arrow();
             void set_bow_drawn(bool drawn);
-            void set_visible(bool visible);
+            virtual void set_visible(const bool &visible) override final;
 
             void stomp_on(bn::fixed_point foot_pos, uint8_t stomp_radius);
     };
