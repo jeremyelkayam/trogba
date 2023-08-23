@@ -25,6 +25,7 @@ namespace trog {
             bn::fixed_point foot_pos();
 
             virtual void set_visible(const bool &visible) override {entity::set_visible(visible); _arms.set_visible(visible);}
+            virtual void set_horizontal_flip(const bool &flip) override {entity::set_horizontal_flip(flip); _arms.set_horizontal_flip(flip);}
 
     };
 }

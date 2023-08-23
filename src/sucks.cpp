@@ -3,6 +3,7 @@
 #include "bn_sprite_items_sucks_arms.h"
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
+#include <bn_log.h>
 
 namespace trog { 
 
@@ -17,16 +18,19 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)) {
     _shockwave.set_visible(false);
     _shockwave.set_scale(2);
+    _arms.set_item(bn::sprite_items::sucks_arms, 1);
 }
 
 void sucks::update(){
     player::update();
     if(!dead() && any_dpad_input() && can_move()){
         _walkcycle.update();
+        uint16_t yoffset = 6 + _walkcycle.graphics_indexes().at(_walkcycle.current_index());
+        _arms.set_y(_sprite.y() - yoffset);
+        BN_LOG("yoffset: ", yoffset);
     }
 
     _arms.set_x(_sprite.x());
-    _arms.set_y(_sprite.y());
 
     if(_stomp_timer){
         ++_stomp_timer;
