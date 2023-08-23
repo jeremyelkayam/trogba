@@ -4,6 +4,8 @@
 #pragma once
 #include <bn_sound_items.h>
 #include <bn_random.h>
+#include <bn_vector.h>
+#include <initializer_list>
 
 #include "enums.h"
 #include "constants.h"
@@ -14,7 +16,15 @@ namespace trog {
             const bn::fixed &_volume;
             bn::random &_rand;
             uint8_t _timer;
-            
+            void play_random_sound(std::initializer_list<bn::sound_item> item);
+            // void play_clip(uint8_t index) {voice_clips[index].play(_volume);}
+
+            //Lookup table for voice clips(?)
+            //Organized by 
+            // bn::sound_item voice_clips[2] = {
+            //     bn::sound_items::sb_pineforyou,
+            //     bn::sound_items::sb_itsover
+            // };
 
         public:
             sb_commentary(const bn::fixed &volume, bn::random &rand);
@@ -29,7 +39,7 @@ namespace trog {
                 {bn::sound_items::sb_roastkerrek.play(_volume);}
             void arrowed(const dragon &dragon); // called by play_scene
             void sworded(const dragon &dragon); // called by play_scene
-            void burninate(); // called by play_scene
+            void burninate(const dragon &dragon); // called by play_scene
             void level_win_pause(); // called by play_scene
             void level_win_scene(); // called by level_win_scene
             void stomp_peasant(); // called by peasant
@@ -37,5 +47,7 @@ namespace trog {
             void ignite_cottage(); // called by cottage
 
             void update();
+
+            bool percent_chance(const bn::fixed &pct);
     };
 }

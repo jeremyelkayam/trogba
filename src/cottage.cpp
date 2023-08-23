@@ -67,10 +67,8 @@ bool cottage::burninate(){
         _flames = bn::sprite_items::cottagefire.create_sprite_optional(_pos.x(), _pos.y() + TROG_COTTAGEFIRE_YOFFSET);
         _burningflames = bn::create_sprite_animate_action_forever(
                     _flames.value(), 10, bn::sprite_items::cottagefire.tiles_item(), 0, 1, 2, 3);
-
         _time_burning=1;
         _flames->set_z_order(MID_ZORDER);
-        _common_stuff.commentary.ignite_cottage();
         bn::sound_items::burningcottage.play(_common_stuff.savefile.options.sound_vol);
         return true;
     }

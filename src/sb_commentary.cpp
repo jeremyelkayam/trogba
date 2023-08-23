@@ -14,7 +14,7 @@ bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
     }else if(score >= TROG_GAMEOVER_BEAT_THAT_SCORE){
         bn::sound_items::sb_beatthatscore.play(_volume);
         return true;
-    }else if(_rand.get_int(2) == 0){
+    }else if(percent_chance(50)){
         //todo: probably would be cleaner if we used a lookup table
         if(dragon == dragon::TROGDOR){
             bn::sound_items::sb_pineforyou.play(_volume);
@@ -27,119 +27,97 @@ bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
 }
 
 void sb_commentary::arrowed(const dragon &dragon){
-    if(_rand.get_int(3) == 0 && _timer == 0){
-        _timer = 1;
-
+    if(percent_chance(33.33333)){
         if(dragon == dragon::TROGDOR){
-            bn::sound_items::sb_stupid_archdeluxe.play(_volume);
+            play_random_sound({bn::sound_items::sb_stupid_archdeluxe});
         }else if(dragon == dragon::SUCKS){
-            bn::sound_items::sb_arrowed.play(_volume);
+            play_random_sound({bn::sound_items::sb_arrowed});
         }
-
     }
 }
 
+//todo: maybe use inheritance for this?  
 void sb_commentary::sworded(const dragon &dragon){
-    if(_timer == 0){
-        unsigned short rand_num = _rand.get_int(5);
-        BN_LOG("number: ", rand_num);
-        if(rand_num == 0){
-
-            if(dragon == dragon::TROGDOR){
-                bn::sound_items::sb_stupidknight.play(_volume);
-            }else if(dragon == dragon::SUCKS){
-                bn::sound_items::sb_sordid_affair.play(_volume);
-                BN_LOG("a sordid affair");
-            }
-            _timer = 1;
-        }else if(rand_num == 1){
-            if(dragon == dragon::TROGDOR){
-                bn::sound_items::sb_worstgame.play(_volume);
-            }else if(dragon == dragon::SUCKS){
-                bn::sound_items::sb_ihateu.play(_volume);
-            }
-
-            _timer = 1;
+    if(percent_chance(33.33333)){
+        if(dragon == dragon::TROGDOR){
+            play_random_sound({bn::sound_items::sb_stupidknight,
+                    bn::sound_items::sb_worstgame});
+        }else if(dragon == dragon::SUCKS){
+            play_random_sound({bn::sound_items::sb_ihateu,
+                    bn::sound_items::sb_sordid_affair});
         }
     }
 }
 
-void sb_commentary::burninate(){
-    if(_timer == 0){
-        unsigned short rand_num = _rand.get_int(4);
-        if(rand_num == 0){
-            bn::sound_items::sb_tablesturn.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_advantage.play(_volume);
-            _timer = 1;
+void sb_commentary::burninate(const dragon &dragon){
+    if(percent_chance(50)){
+        if(dragon == dragon::TROGDOR){
+            play_random_sound({bn::sound_items::sb_tablesturn,
+                    bn::sound_items::sb_advantage});
+        }else if(dragon == dragon::SUCKS){
+            play_random_sound({bn::sound_items::sb_rampage});
         }
+
     }
 }
 
 void sb_commentary::level_win_pause(){
-    unsigned short rand_num = _rand.get_int(5);
-    if(_timer == 0 && rand_num == 0){
-        bn::sound_items::sb_ohyeah.play(_volume);
-        _timer = 1;
-
-    }
+    if(percent_chance(20))
+        play_random_sound({bn::sound_items::sb_ohyeah});
 }
+
 void sb_commentary::level_win_scene(){
-    unsigned short rand_num = _rand.get_int(10);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_comesinthenight.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_bestgame.play(_volume);
-            _timer = 1;
-        }
-    }
+    if(percent_chance(20))
+        play_random_sound({bn::sound_items::sb_comesinthenight,
+                bn::sound_items::sb_bestgame});
 }
 
 void sb_commentary::stomp_peasant(){
-    unsigned short rand_num = _rand.get_int(60);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_asquisha.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_asquishasquisha.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 2){
-            bn::sound_items::sb_squishedyou.play(_volume);
-            _timer = 1;
-        }
-    }
+    if(percent_chance(5))
+        play_random_sound({bn::sound_items::sb_asquisha, 
+                bn::sound_items::sb_asquishasquisha,
+                bn::sound_items::sb_squishedyou});
 }
 
 void sb_commentary::ignite_peasant(){
-    unsigned short rand_num = _rand.get_int(10);
-    if(_timer == 0){
-        if(rand_num == 0){
-            bn::sound_items::sb_hesonfire.play(_volume);
-            _timer = 1;
-        }else if(rand_num == 1){
-            bn::sound_items::sb_lookit_him_burning.play(_volume);
-            _timer = 1;
-        }
-    }    
+    if(percent_chance(20))
+        play_random_sound({bn::sound_items::sb_hesonfire,
+                bn::sound_items::sb_lookit_him_burning});
 }
 
 void sb_commentary::ignite_cottage(){
-    unsigned short rand_num = _rand.get_int(5);
-    if(rand_num == 0 && _timer == 0){
-        bn::sound_items::sb_dooj.play(_volume);
-        _timer = 1;
-    }
+    if(percent_chance(20))
+        play_random_sound({bn::sound_items::sb_dooj});
 }
 
 void sb_commentary::update(){
     if(_timer > 0){
-        ++_timer;
+        --_timer;
     }
 }
+
+void sb_commentary::play_random_sound(std::initializer_list<bn::sound_item> sounds){    
+    if(_timer == 0){
+        uint8_t rand_num = _rand.get_int(sounds.size());
+        BN_LOG("random nunber", rand_num);   
+        uint8_t counter = 0;
+        for(bn::sound_item sound : sounds){
+            if(counter == rand_num){
+                sound.play(_volume);
+                break;
+            }
+            ++counter;
+        }
+        _timer = 255;
+    }
+}
+
+
+bool sb_commentary::percent_chance(const bn::fixed &pct){
+    BN_ASSERT(pct >= 0, "percent must be between 0 and 100");
+    BN_ASSERT(pct < 100, "percent must be between 0 and 100");
+    return pct > _rand.get_fixed(100);
+} 
 
 }
 
