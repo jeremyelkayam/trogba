@@ -13,12 +13,10 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
             bn::sprite_items::sucks.tiles_item(), 0, 1, 2, 3, 2, 1)),
     _stomp_timer(0),
     _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,0)),
-    _arms(bn::sprite_items::sucks_arms.create_sprite(xcor,ycor)),
     _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)) {
     _shockwave.set_visible(false);
     _shockwave.set_scale(2);
-    _arms.set_item(bn::sprite_items::sucks_arms, 1);
 }
 
 void sucks::update(){
@@ -26,11 +24,8 @@ void sucks::update(){
     if(!dead() && any_dpad_input() && can_move()){
         _walkcycle.update();
         uint16_t yoffset = 6 + _walkcycle.graphics_indexes().at(_walkcycle.current_index());
-        _arms.set_y(_sprite.y() - yoffset);
         BN_LOG("yoffset: ", yoffset);
     }
-
-    _arms.set_x(_sprite.x());
 
     if(_stomp_timer){
         ++_stomp_timer;
