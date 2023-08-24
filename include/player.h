@@ -48,7 +48,8 @@ namespace trog {
             void update_next_pos();
             void update_pos() {_pos = _next_pos;}
 
-            void start_burninating();
+            virtual void start_burninating();
+            virtual void stop_burninating();
             void update_firebreath();
 
             bn::fixed_point _next_pos;

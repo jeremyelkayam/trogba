@@ -5,12 +5,14 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
 
+#define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 0, 1, 2, 3, 2, 1)
+#define FLMTHW_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 9, 10, 11, 12, 11, 10)
+
 namespace trog { 
 
 sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
     player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
-    _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 5, 
-            bn::sprite_items::sucks.tiles_item(), 0, 1, 2, 3, 2, 1)),
+    _walkcycle(NORM_WLKCL),
     _stomp_timer(0),
     _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,0)),
     _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
@@ -23,8 +25,6 @@ void sucks::update(){
     player::update();
     if(!dead() && any_dpad_input() && can_move()){
         _walkcycle.update();
-        uint16_t yoffset = 6 + _walkcycle.graphics_indexes().at(_walkcycle.current_index());
-        BN_LOG("yoffset: ", yoffset);
     }
 
     if(_stomp_timer){
@@ -89,6 +89,16 @@ void sucks::stomp(){
     _stomp_timer = 1;
     _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 7);
     _shockwave_anim.reset();
+}
+
+void sucks::start_burninating(){
+    player::start_burninating();
+    _walkcycle = FLMTHW_WLKCL;
+}
+
+void sucks::stop_burninating(){
+    player::stop_burninating();
+    _walkcycle = NORM_WLKCL;
 }
 
 }

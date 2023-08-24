@@ -80,8 +80,7 @@ void player::update(){
         }else if(_breath.enabled()){
             // if the breath is enabled AND our burninate timer has expired,
             // we need to end burnination
-            _trogmeter = 0;
-            _breath.disable();
+            stop_burninating();
         }
 
         //update trogdor to show iframes
@@ -248,9 +247,13 @@ void player::handle_peasant_collision(peasant &peasant){
 
 void player::start_burninating(){
     _burninate_time = _burninate_length;
-    _breath.enable();
-
+    enable_breath();
     bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
+}
+
+void player::stop_burninating(){
+    _trogmeter = 0;
+    disable_breath();
 }
 
 void player::handle_knight_collision(knight &knight){
