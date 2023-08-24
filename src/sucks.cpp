@@ -11,10 +11,12 @@
 namespace trog { 
 
 sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-    player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
+    player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, 
+        bn::fixed_point(42, 1),
+        sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
     _walkcycle(NORM_WLKCL),
     _stomp_timer(0),
-    _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,0)),
+    _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,-1)),
     _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
     0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)) {
     _shockwave.set_visible(false);
@@ -23,9 +25,16 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
 
 void sucks::update(){
     player::update();
-    if(!dead() && any_dpad_input() && can_move()){
-        _walkcycle.update();
+
+
+    if(burninating()){
+        bn::fixed yoffset = abs(_walkcycle.current_index() - (_walkcycle.graphics_indexes().size() + 1) / 2);
+        BN_LOG("yoffset: ", yoffset);
+        BN_LOG("walkcycle index: ", _walkcycle.current_index());
+        _breath_offset.set_y(yoffset);
     }
+    
+    BN_LOG("graphics index: ", _walkcycle.graphics_indexes().at(_walkcycle.current_index()));
 
     if(_stomp_timer){
         ++_stomp_timer;
@@ -49,6 +58,10 @@ void sucks::update(){
         }
     }
 
+
+    if(!dead() && any_dpad_input() && can_move()){
+        _walkcycle.update();
+    }
 
     if(bn::keypad::a_pressed() && can_stomp()){
         stomp();
@@ -93,12 +106,22 @@ void sucks::stomp(){
 
 void sucks::start_burninating(){
     player::start_burninating();
-    _walkcycle = FLMTHW_WLKCL;
+    change_walkcycle(FLMTHW_WLKCL);
 }
 
 void sucks::stop_burninating(){
     player::stop_burninating();
-    _walkcycle = NORM_WLKCL;
+    change_walkcycle(NORM_WLKCL);
+}
+
+void sucks::change_walkcycle(const bn::isprite_animate_action &walkcycle){
+    int dex = _walkcycle.current_index();
+    _walkcycle = walkcycle;
+    do{
+        //we need to update the walkcycle at least once 
+        //otherwise if you don't move, he will stay on a non-burninating frame
+        _walkcycle.update();
+    }while(_walkcycle.current_index() != dex);
 }
 
 }
