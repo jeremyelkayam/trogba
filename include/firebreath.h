@@ -26,8 +26,5 @@ namespace trog {
             void enable();
             void disable();
             bool enabled();
-
-            void set_horizontal_flip(bool flip) { _sprite.set_horizontal_flip(flip);}
-
     };
 }

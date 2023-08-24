@@ -79,7 +79,7 @@ bool cottage::has_treasure(){
     return _has_treasure && _time_burning==0;
 }
 
-void cottage::set_visible(bool visible){
+void cottage::set_visible(const bool &visible){
     entity::set_visible(visible);
     if(_flames) { //if the cottage is on fire
         _flames->set_visible(visible);

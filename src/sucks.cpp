@@ -1,7 +1,9 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
+#include "bn_sprite_items_sucks_arms.h"
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
+#include <bn_log.h>
 
 namespace trog { 
 
@@ -21,6 +23,8 @@ void sucks::update(){
     player::update();
     if(!dead() && any_dpad_input() && can_move()){
         _walkcycle.update();
+        uint16_t yoffset = 6 + _walkcycle.graphics_indexes().at(_walkcycle.current_index());
+        BN_LOG("yoffset: ", yoffset);
     }
 
     if(_stomp_timer){

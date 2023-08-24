@@ -74,7 +74,7 @@ void archer::destroy_arrow() {
     _arrow.reset();
 }
 
-void archer::set_visible(bool visible){
+void archer::set_visible(const bool &visible){
     entity::set_visible(visible);
     if(_arrow){
         _arrow->set_visible(visible);

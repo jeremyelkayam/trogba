@@ -23,6 +23,5 @@ namespace trog {
             virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 60;}
 
             bn::fixed_point foot_pos();
-
     };
 }

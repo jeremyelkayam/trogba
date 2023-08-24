@@ -290,14 +290,14 @@ void player::update_firebreath(){
     _breath.update();
 }
 
-void player::set_visible(bool visible){
+void player::set_visible(const bool &visible){
     entity::set_visible(visible);
     if(_breath.enabled()){
         _breath.set_visible(visible);
     }
 }
 
-void player::set_horizontal_flip(bool flip){
+void player::set_horizontal_flip(const bool &flip){
     entity::set_horizontal_flip(flip);
     _breath.set_horizontal_flip(flip);
 }
