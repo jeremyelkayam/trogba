@@ -69,7 +69,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
             // if(_index == 0)
             //     _index = _selectable_dragons.size() - 1;
             // else _index--;
-        }if(bn::keypad::right_pressed()){
+        }else if(bn::keypad::right_pressed()){
             if(_index != _selectable_dragons.size() - 1) _index++;
 
             //looping code
