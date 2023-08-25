@@ -171,7 +171,7 @@ bn::optional<scene_type> gameover_scene::update(){
             switch(_menu_option){
                 case 0:
                     _sesh.reset();
-                    result = scene_type::PLAY;
+                    result = scene_type::DRAGON_SELECT;
                     break;
                 case 1:
                     result = scene_type::HISCORES;

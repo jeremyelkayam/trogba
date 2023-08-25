@@ -5,8 +5,8 @@
 #include <bn_keypad.h>
 #include <bn_log.h>
 
-#define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 0, 1, 2, 3, 2, 1)
-#define FLMTHW_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 9, 10, 11, 12, 11, 10)
+#define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 1, 2, 3, 2, 1, 0)
+#define FLMTHW_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 10, 11, 12, 11, 10, 9)
 
 namespace trog { 
 
@@ -26,16 +26,15 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
 void sucks::update(){
     player::update();
 
+    if(!dead() && any_dpad_input() && can_move()){
+        _walkcycle.update();
+    }
 
     if(burninating()){
-        bn::fixed yoffset = abs(_walkcycle.current_index() - (_walkcycle.graphics_indexes().size() + 1) / 2);
-        BN_LOG("yoffset: ", yoffset);
-        BN_LOG("walkcycle index: ", _walkcycle.current_index());
+        bn::fixed yoffset = abs(_walkcycle.current_index() - (_walkcycle.graphics_indexes().size()) / 2) - 2;
         _breath_offset.set_y(yoffset);
     }
     
-    BN_LOG("graphics index: ", _walkcycle.graphics_indexes().at(_walkcycle.current_index()));
-
     if(_stomp_timer){
         ++_stomp_timer;
         if(dead()) _stomp_timer = 0; // this prevents us from stomping after we die
@@ -56,11 +55,6 @@ void sucks::update(){
         if(_stomp_timer >= TROG_PEASANT_FREEZE_TIME * 1.1){
             _stomp_timer = 0;
         }
-    }
-
-
-    if(!dead() && any_dpad_input() && can_move()){
-        _walkcycle.update();
     }
 
     if(bn::keypad::a_pressed() && can_stomp()){
@@ -122,6 +116,11 @@ void sucks::change_walkcycle(const bn::isprite_animate_action &walkcycle){
         //otherwise if you don't move, he will stay on a non-burninating frame
         _walkcycle.update();
     }while(_walkcycle.current_index() != dex);
+}
+
+void sucks::update_win_anim(){
+    player::update_win_anim();
+    change_walkcycle(NORM_WLKCL);
 }
 
 }
