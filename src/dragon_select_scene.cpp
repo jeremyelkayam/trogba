@@ -105,7 +105,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
                 break;
                 case dragon::SUCKS:
                     ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
-                    //play sucks jingle
+                    bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol);
                 break;
                 default:
                 break;
