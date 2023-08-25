@@ -66,6 +66,8 @@ namespace trog {
 
         saved_session session;
 
+        dragon last_dragon_used;
+
         bool cheat_unlocked; 
 
         bn::array<bool, 13> unlocked_cutscenes;

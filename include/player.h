@@ -88,7 +88,7 @@ namespace trog {
 
             void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}
 
-            void update_win_anim();
+            virtual void update_win_anim();
 
 
     };
