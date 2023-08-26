@@ -4,6 +4,7 @@
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
+#include <bn_colors.h>
 
 #define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 1, 2, 3, 2, 1, 0)
 #define FLMTHW_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 10, 11, 12, 11, 10, 9)
@@ -38,8 +39,14 @@ void sucks::update(){
     if(_stomp_timer){
         ++_stomp_timer;
         if(dead()) _stomp_timer = 0; // this prevents us from stomping after we die
-        
+
+
+        bn::sprite_palette_ptr my_palette = _sprite.palette();
         if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
+
+            my_palette.set_fade(bn::colors::red, 0.6);
+            _fade_action.emplace(my_palette, 20, 0.3);
+
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
@@ -51,14 +58,23 @@ void sucks::update(){
             _shockwave.set_visible(false);
         }
 
-        //This ensures you can't stomp again until after the knights unfreeze.
-        if(_stomp_timer >= TROG_PEASANT_FREEZE_TIME * 1.1){
+        //this is when you regain control of the suck dragon
+
+        
+        //This ensures you can't stomp again until after the peasants unfreeze.
+        if(_stomp_timer >= TROG_SUCK_STOMP_RECHARGE_TIME){
+            _fade_action.reset();
             _stomp_timer = 0;
+            my_palette.set_fade_intensity(0);
         }
     }
 
     if(bn::keypad::a_pressed() && can_stomp()){
         stomp();
+    }
+
+    if(_fade_action ){
+        _fade_action->update();
     }
 
 }

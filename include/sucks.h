@@ -9,6 +9,7 @@ namespace trog {
             unsigned short _stomp_timer;
             bn::sprite_ptr _shockwave;
             bn::sprite_animate_action<16> _shockwave_anim;
+            bn::optional<bn::sprite_palette_fade_loop_action> _fade_action;
             uint8_t _prev_index;
 
 
