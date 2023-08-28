@@ -62,6 +62,8 @@
 //the animation frame after which the sucky dragon's foot stomps down
 #define TROG_SUCK_STOMP_FRAME 30
 
+#define TROG_SUCK_STOMP_RECHARGE_TIME TROG_PEASANT_FREEZE_TIME * 1.1
+
 // The length of burnination in frames.
 #define TROG_BURNINATE_TIME (6 SECONDS)
 #define TROG_BURNINATE_PAUSETIME (1 SECONDS)

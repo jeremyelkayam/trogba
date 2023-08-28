@@ -57,8 +57,11 @@ common_stuff::common_stuff() :
         savefile.session.troghammer = old_save.session.troghammer;
         savefile.session.can_lose_trogmeter = old_save.session.can_lose_trogmeter;
         savefile.session.cottage_burnination_status = old_save.session.cottage_burnination_status;
-        //new session parameter
+        //new session parameters
         savefile.session.current_dragon = dragon::TROGDOR;
+
+        //new elements of saved_data
+        savefile.last_dragon_used = dragon::TROGDOR;
 
         savefile.unlocked_cutscenes = base_unlocked_cutscenes;
 

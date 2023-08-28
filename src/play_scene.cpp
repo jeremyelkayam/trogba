@@ -771,8 +771,6 @@ void play_scene::update_tutorial(){
 }
 
 void play_scene::setup_pause_menu(){
-
-
     _pause_menu = bn::regular_bg_items::pause_menu.create_bg_optional(0, 0);
     _gray_bg = bn::regular_bg_items::gray.create_bg_optional(0, 0);
     _gray_bg->set_blending_enabled(true);

@@ -8,10 +8,11 @@
 #include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, bn::fixed_point breath_offset, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
         entity(xcor, ycor, width, height, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
         _speed(speed),
+        _breath_offset(breath_offset),
         _majesty(bn::sprite_items::majesty.create_sprite(0,0)),
         _trogmeter(initial_trogmeter),
         _burninate_time(0),
@@ -80,8 +81,7 @@ void player::update(){
         }else if(_breath.enabled()){
             // if the breath is enabled AND our burninate timer has expired,
             // we need to end burnination
-            _trogmeter = 0;
-            _breath.disable();
+            stop_burninating();
         }
 
         //update trogdor to show iframes
@@ -248,9 +248,13 @@ void player::handle_peasant_collision(peasant &peasant){
 
 void player::start_burninating(){
     _burninate_time = _burninate_length;
-    _breath.enable();
-
+    enable_breath();
     bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
+}
+
+void player::stop_burninating(){
+    _trogmeter = 0;
+    disable_breath();
 }
 
 void player::handle_knight_collision(knight &knight){
@@ -281,12 +285,12 @@ void player::die(uint8_t death_index){
 
 
 void player::update_firebreath(){
-    short xoffset = TROG_FIREBREATH_XOFFSET;
+    bn::fixed xoffset = _breath_offset.x();
     if(_sprite.horizontal_flip()){
         xoffset=-xoffset;
     }
     _breath.set_x(_sprite.position().x() + xoffset);
-    _breath.set_y(_sprite.position().y() + TROG_FIREBREATH_YOFFSET);        
+    _breath.set_y(_sprite.position().y() + _breath_offset.y());        
     _breath.update();
 }
 

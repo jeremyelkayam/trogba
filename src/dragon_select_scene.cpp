@@ -6,6 +6,8 @@
 #include "trogdor.h"
 
 #include <bn_keypad.h>
+#include <bn_log.h>
+
 #define SPACING 70
 #define MSATIME 10 //move selection animation time 
 #define SELY 20
@@ -22,12 +24,23 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
         _common_stuff(common_stuff) {
     _selectable_dragons.emplace_back(dragon::TROGDOR, "TROGDOR", bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)));
     _selectable_dragons.emplace_back(dragon::SUCKS, "S IS FOR SUCKS", bn::unique_ptr<player>(new sucks(SPACING,0,_sesh, false, _common_stuff, 0)));
-    update_text();
 
-    for(auto &opt : _selectable_dragons){
+    for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
+        dragon_option &opt = _selectable_dragons.at(i);
         opt.player_entity->update_anim_action_when_not_moving(true);
         opt.player_entity->set_grayscale(1);
+
+        if(opt.dragon_type == common_stuff.savefile.last_dragon_used){
+            _index = i;
+            BN_LOG("index: ", _index);
+        }
     }
+    for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
+        dragon_option &opt = _selectable_dragons.at(i);
+        opt.player_entity->set_x((i - _index) * SPACING);
+    }
+
+    update_text();
 
     _selectable_dragons.at(_index).player_entity->set_grayscale(0);
     _selectable_dragons.at(_index).player_entity->set_scale(2);
@@ -36,6 +49,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
 
 void dragon_select_scene::update_text(){
     _selected_text.clear();
+    _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
     _common_stuff.text_generator.generate(0, -40, _selectable_dragons.at(_index).name, _selected_text);
 }
@@ -55,7 +69,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
             // if(_index == 0)
             //     _index = _selectable_dragons.size() - 1;
             // else _index--;
-        }if(bn::keypad::right_pressed()){
+        }else if(bn::keypad::right_pressed()){
             if(_index != _selectable_dragons.size() - 1) _index++;
 
             //looping code
@@ -82,22 +96,23 @@ bn::optional<scene_type> dragon_select_scene::update(){
         if(bn::keypad::a_pressed()){
             dragon dtype = _selectable_dragons.at(_index).dragon_type;
             _sesh.set_dragon(dtype);
+            _common_stuff.savefile.last_dragon_used = dtype;
             _selectable_dragons.at(_index).player_entity.get()->update_anim_action_when_not_moving(false);
             switch(dtype){
                 case dragon::TROGDOR:
                     ((trogdor *) _selectable_dragons.at(_index).player_entity.get())->flex();
-                    //play trogdor jingle
+                    bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
                 break;
                 case dragon::SUCKS:
                     ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
-                    //play sucks jingle
+                    bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol);
                 break;
                 default:
                 break;
             }
             _selection_timer = 1;
         }
-    }else if(_selection_timer == 240){
+    }else if(_selection_timer == 120){
         result = scene_type::PLAY;
     }
 
