@@ -7,20 +7,36 @@ sb_commentary::sb_commentary(const bn::fixed &volume, bn::random &rand) :
     _volume(volume), _rand(rand), _timer(0) {
 }
 
+const voice_clips &get_clips(const dragon &dragon){
+    switch(dragon){
+        case dragon::TROGDOR:
+            return all_clips[0];
+        case dragon::SUCKS:
+            return all_clips[1];
+        case dragon::CHIAROSCURO:
+            return all_clips[2];
+        default:
+            BN_ERROR("Invalid dragon passed into sb_commentary");
+            return all_clips[0];
+    }
+}
+
+void sb_commentary::play_sound(const bn::sound_item &item){
+    if(_timer == 0 && item != bn::sound_items::dummy){
+        item.play(_volume);
+        _timer = 255;
+    }
+}
+
 bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
     if(score >= TROG_GAMEOVER_SECRET_SCORE) {
-        bn::sound_items::sb_secretthing.play(_volume);        
+        play_sound(get_clips(dragon).secretscore);
         return true;
     }else if(score >= TROG_GAMEOVER_BEAT_THAT_SCORE){
-        bn::sound_items::sb_beatthatscore.play(_volume);
+        play_sound(get_clips(dragon).highscore);
         return true;
     }else if(percent_chance(50)){
-        //todo: probably would be cleaner if we used a lookup table
-        if(dragon == dragon::TROGDOR){
-            bn::sound_items::sb_pineforyou.play(_volume);
-        }else if(dragon == dragon::SUCKS){
-            bn::sound_items::sb_itsover.play(_volume);
-        }
+        play_sound(get_clips(dragon).gameover);
         return true;
     }
     return false;
@@ -28,66 +44,45 @@ bool sb_commentary::gameover(const unsigned int &score, const dragon &dragon){
 
 void sb_commentary::arrowed(const dragon &dragon){
     if(percent_chance(33.33333)){
-        if(dragon == dragon::TROGDOR){
-            play_random_sound({bn::sound_items::sb_stupid_archdeluxe});
-        }else if(dragon == dragon::SUCKS){
-            play_random_sound({bn::sound_items::sb_arrowed});
-        }
+        play_sound(get_clips(dragon).arrowed);
     }
 }
 
-//todo: maybe use inheritance for this?  
 void sb_commentary::sworded(const dragon &dragon){
     if(percent_chance(33.33333)){
-        if(dragon == dragon::TROGDOR){
-            play_random_sound({bn::sound_items::sb_stupidknight,
-                    bn::sound_items::sb_worstgame});
-        }else if(dragon == dragon::SUCKS){
-            play_random_sound({bn::sound_items::sb_ihateu,
-                    bn::sound_items::sb_sordid_affair});
-        }
+        play_random_sound(get_clips(dragon).sworded, 2);
     }
 }
 
 void sb_commentary::burninate(const dragon &dragon){
     if(percent_chance(50)){
-        if(dragon == dragon::TROGDOR){
-            play_random_sound({bn::sound_items::sb_tablesturn,
-                    bn::sound_items::sb_advantage});
-        }else if(dragon == dragon::SUCKS){
-            play_random_sound({bn::sound_items::sb_rampage});
-        }
-
+        play_random_sound(get_clips(dragon).burninate, 2);
     }
 }
 
-void sb_commentary::level_win_pause(){
+void sb_commentary::level_win_pause(const dragon &dragon){
     if(percent_chance(20))
-        play_random_sound({bn::sound_items::sb_ohyeah});
+        play_sound(get_clips(dragon).majesty);
 }
 
-void sb_commentary::level_win_scene(){
+void sb_commentary::level_win_scene(const dragon &dragon){
     if(percent_chance(20))
-        play_random_sound({bn::sound_items::sb_comesinthenight,
-                bn::sound_items::sb_bestgame});
+        play_random_sound(get_clips(dragon).levelbeat, 2);
 }
 
-void sb_commentary::stomp_peasant(){
+void sb_commentary::stomp_peasant(const dragon &dragon){
     if(percent_chance(5))
-        play_random_sound({bn::sound_items::sb_asquisha, 
-                bn::sound_items::sb_asquishasquisha,
-                bn::sound_items::sb_squishedyou});
+        play_random_sound(get_clips(dragon).stomp, 3);
 }
 
-void sb_commentary::ignite_peasant(){
+void sb_commentary::ignite_peasant(const dragon &dragon){
     if(percent_chance(20))
-        play_random_sound({bn::sound_items::sb_hesonfire,
-                bn::sound_items::sb_lookit_him_burning});
+        play_random_sound(get_clips(dragon).ignitepeasant, 3);
 }
 
-void sb_commentary::ignite_cottage(){
+void sb_commentary::ignite_cottage(const dragon &dragon){
     if(percent_chance(20))
-        play_random_sound({bn::sound_items::sb_dooj});
+        play_sound(get_clips(dragon).ignitecottage);
 }
 
 void sb_commentary::update(){
@@ -96,20 +91,9 @@ void sb_commentary::update(){
     }
 }
 
-void sb_commentary::play_random_sound(std::initializer_list<bn::sound_item> sounds){    
-    if(_timer == 0){
-        uint8_t rand_num = _rand.get_int(sounds.size());
-        BN_LOG("random nunber", rand_num);   
-        uint8_t counter = 0;
-        for(bn::sound_item sound : sounds){
-            if(counter == rand_num){
-                sound.play(_volume);
-                break;
-            }
-            ++counter;
-        }
-        _timer = 255;
-    }
+void sb_commentary::play_random_sound(const bn::sound_item *item, const uint8_t &count){    
+    uint8_t rand_num = _rand.get_int(count);
+    play_sound(item[rand_num]);
 }
 
 

@@ -1,6 +1,5 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
-#include "bn_sprite_items_sucks_arms.h"
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
