@@ -278,7 +278,7 @@ bn::optional<scene_type> play_scene::update(){
                     if(_common_stuff.euclidean_dist(player->foot_pos(), f->get_pos()) < TROG_SUCK_STOMP_RADIUS){
                         f->freeze();
                     }else{
-                        f->alert();
+                        f->alert(player->get_pos());
                     }
                 }
                 for(archer &arch : _archers){
@@ -343,6 +343,7 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _player->dead();  
         for(knight &k : _knights){
+            if(k.alerted()) k.update_alert_direction(_player->get_pos());
             k.update();
             _player->handle_knight_collision(k);
         }
@@ -367,6 +368,7 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_troghammer){
+            if(_troghammer->alerted()) _troghammer->update_alert_direction(_player->get_pos());
             was_dead = _player->dead();  
             _troghammer->update();
 

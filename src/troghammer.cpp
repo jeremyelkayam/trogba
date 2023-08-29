@@ -7,7 +7,9 @@
 namespace trog { 
 
 troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, bn::random &rand) :
-    knight(pos.x(), pos.y(), facingRight, rand),
+    knight(pos.x(), pos.y(), facingRight, rand,
+        TROG_KNIGHT_SPEED * TROG_HAMMER_SPEEDUP_FACTOR,
+        (bn::fixed(TROG_KNIGHT_MOVE_CYCLE_TIME) / TROG_HAMMER_SPEEDUP_FACTOR).round_integer()),
     _total_wait_time(120 SECONDS)
 {
     _sprite = bn::sprite_items::troghammer.create_sprite(_pos.x(), _pos.y());
@@ -20,10 +22,6 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, 
 
     _walkcycle = bn::create_sprite_animate_action_forever(
                     _sprite, (20 / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer(), bn::sprite_items::troghammer.tiles_item(), 1, 3, 4, 3);
-
-    // speed the troghammer up a bit
-    _speed *= TROG_HAMMER_SPEEDUP_FACTOR;
-    _cycletime = (bn::fixed(TROG_KNIGHT_MOVE_CYCLE_TIME) / TROG_HAMMER_SPEEDUP_FACTOR).floor_integer();
 
     //hitboxes are bigger to make it harder
     _hitbox.set_width(TROG_HAMMER_WIDTH);
