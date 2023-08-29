@@ -43,6 +43,7 @@ namespace trog {
             void stomp_peasant(const dragon &dragon); // called by peasant
             void ignite_peasant(const dragon &dragon); // called by peasant
             void ignite_cottage(const dragon &dragon); // called by cottage
+            bool select_character(const dragon &dragon);
 
 
             void update();

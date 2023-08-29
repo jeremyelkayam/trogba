@@ -5,7 +5,7 @@ namespace trog {
 
 struct voice_clips{
     bn::sound_item gameover, archergameover, highscore, secretscore, arrowed, 
-        majesty, ignitecottage, sworded[2], burninate[2], 
+        majesty, ignitecottage, selection, sworded[2], burninate[2], 
         levelbeat[2], ignitepeasant[2], stomp[3];
 };
 
@@ -21,6 +21,7 @@ const voice_clips all_clips[3] {
         bn::sound_items::sb_stupid_archdeluxe, //arrowed
         bn::sound_items::sb_ohyeah, //majesty
         bn::sound_items::sb_dooj, //ignite cottage
+        bn::sound_items::sb_strikesagain, // selection
         //sworded
         {bn::sound_items::sb_worstgame, bn::sound_items::sb_stupidknight},
         //burninate
@@ -41,6 +42,7 @@ const voice_clips all_clips[3] {
         bn::sound_items::sb_arrowed, //arrowed
         bn::sound_items::dummy, //majesty
         bn::sound_items::sb_burncottage, //ignite cottage
+        bn::sound_items::sb_unnatural, // selection
         //sworded
         {bn::sound_items::sb_sordid_affair, bn::sound_items::sb_knight_looking},
         //burninate
@@ -61,6 +63,7 @@ const voice_clips all_clips[3] {
         bn::sound_items::dummy, //arrowed
         bn::sound_items::dummy, //majesty
         bn::sound_items::dummy, //ignite cottage
+        bn::sound_items::dummy, //selection
         //sworded
         {bn::sound_items::dummy, bn::sound_items::dummy},
         //burninate
