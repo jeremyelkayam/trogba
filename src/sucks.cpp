@@ -18,7 +18,10 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     _stomp_timer(0),
     _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,-1)),
     _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
-    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)) {
+    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)),
+    _hi(0.6),
+    _lo(0.3),
+    _oscillate_time(1) {
     _shockwave.set_visible(false);
     _shockwave.set_scale(2);
 }
@@ -41,14 +44,24 @@ void sucks::update(){
 
 
         if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
-
-            get_palette().set_fade(bn::colors::red, 0.6);
-            _fade_action.emplace(get_palette(), 20, 0.3);
+            get_palette().set_fade(bn::colors::red, _hi);
+            _oscillate_time = 10;
+            _fade_action.emplace(get_palette(), _oscillate_time, _lo);
 
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
         }
+
+        if(_fade_action && _fade_action->done()){
+            bn::fixed target = _fade_action->final_intensity() == _hi ? _lo : _hi;
+            _oscillate_time = (bn::fixed(_oscillate_time) * bn::fixed(1.1)).round_integer();
+            _fade_action.emplace(get_palette(), _oscillate_time, target);
+            BN_LOG("oscillate time: ", _oscillate_time);
+            BN_LOG("high: ", _hi);
+            BN_LOG("low: ", _lo);
+        }
+
         if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave_anim.done()){
             _shockwave_anim.update();
         }
@@ -69,8 +82,13 @@ void sucks::update(){
         stomp();
     }
 
-    if(_fade_action ){
-        _fade_action->update();
+
+    if(_fade_action){
+        if(_fade_action->done()){
+            _fade_action.reset();
+        }else{
+            _fade_action->update();
+        }
     }
 
 }
@@ -143,8 +161,7 @@ void sucks::die(const uint8_t &death_index){
 }
 
 void sucks::reset_fade(){
-    _fade_action.reset();
-    get_palette().set_fade_intensity(0);
+    _fade_action.emplace(get_palette(), 20, 0);
 }
 
 }

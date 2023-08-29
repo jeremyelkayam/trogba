@@ -9,8 +9,9 @@ namespace trog {
             unsigned short _stomp_timer;
             bn::sprite_ptr _shockwave;
             bn::sprite_animate_action<16> _shockwave_anim;
-            bn::optional<bn::sprite_palette_fade_loop_action> _fade_action;
-            uint8_t _prev_index;
+            bn::optional<bn::sprite_palette_fade_to_action> _fade_action;
+            const bn::fixed _hi,_lo;
+            uint8_t _oscillate_time;
 
 
             virtual void start_burninating();

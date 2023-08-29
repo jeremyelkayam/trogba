@@ -236,18 +236,18 @@ bn::optional<scene_type> play_scene::update(){
         //screen shake loop
         if(_shake_timer && _shake_interval && _shake_y_offset){
             uint8_t &interval =  *_shake_interval.get();
-            bn::fixed &yoffset = *_shake_y_offset.get(); 
+            bn::fixed &shake_y_offset = *_shake_y_offset.get(); 
             if(_shake_timer % interval == 0){
                 bool even_interval = _shake_timer % (interval * 2) == 0;
-                bn::fixed yoffset = even_interval ? yoffset : 0;
+                bn::fixed yoffset = even_interval ? shake_y_offset : 0;
 
                 int8_t factor = even_interval ? 1 : -1;
-                _countryside.set_y(_countryside.y() + factor * yoffset);
+                _countryside.set_y(_countryside.y() + factor * shake_y_offset);
                 for(entity *e : all_entities()){
                     e->set_y_offset(yoffset);
                 }
                 if(_void_tower){
-                    _void_tower->set_y(_void_tower->y() + factor * yoffset);
+                    _void_tower->set_y(_void_tower->y() + factor * shake_y_offset);
                 }
             }
             --_shake_timer;
@@ -626,10 +626,6 @@ void play_scene::set_visible(bool visible){
     _countryside.set_visible(visible);
 
     if(_player_paused){
-        // for(bn::sprite_ptr &sprite : _paused_selected_option) {
-        //     sprite.set_visible(visible);
-        //     sprite.put_above();
-        // }
 
         _common_stuff.set_sprite_arr_visible(_paused_selected_option, visible);
         _common_stuff.set_sprite_arr_visible(_paused_label, visible);
