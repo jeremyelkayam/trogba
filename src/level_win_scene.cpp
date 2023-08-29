@@ -42,22 +42,14 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     _flames.set_scale(0.7);
     _a_button.set_visible(false);
 
-    bn::sound_items::burninate.play(common_stuff.savefile.options.sound_vol);
-
     common_stuff.text_generator.set_center_alignment();
     common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
     bn::string<7> line3 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(common_stuff.rand.get_int(33) == 0){
+    if(common_stuff.percent_chance(3) == 0){
         line3 = "BEATED!";
     }
-
-    for(uint8_t i = 0; i < common_stuff.savefile.unlocked_cutscenes.size(); i++){
-        BN_LOG("cutscene ", i, "unlocked? ", common_stuff.savefile.unlocked_cutscenes[i]);
-    }
-    
-
 
     common_stuff.commentary.level_win_scene(_sesh.get_dragon());
 
@@ -69,12 +61,15 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
             _happy_dragon.set_item(bn::regular_bg_items::trogsmile);
+            bn::sound_items::burninate.play(common_stuff.savefile.options.sound_vol);
+
         break;
         case dragon::SUCKS:
             _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
             _nose_smoke.set_position(30, 30);
             nicework_y = -8;
             nicework_x = 78;
+            bn::sound_items::sucks_jingle.play(common_stuff.savefile.options.sound_vol);
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");
