@@ -34,23 +34,23 @@ const voice_clips all_clips[3] {
     },
     //sucks
     {
-        bn::sound_items::dummy, //game over
-        bn::sound_items::dummy, //archer game over
-        bn::sound_items::dummy, //high score
-        bn::sound_items::dummy, // secret score
-        bn::sound_items::dummy, //arrowed
+        bn::sound_items::sb_itsover, //game over
+        bn::sound_items::sb_boo, //archer game over
+        bn::sound_items::sb_impressive, //high score
+        bn::sound_items::sb_highscore, // secret score
+        bn::sound_items::sb_arrowed, //arrowed
         bn::sound_items::dummy, //majesty
-        bn::sound_items::dummy, //ignite cottage
+        bn::sound_items::sb_burncottage, //ignite cottage
         //sworded
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::sb_sordid_affair, bn::sound_items::sb_knight_looking},
         //burninate
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::sb_getburning, bn::sound_items::sb_style},
         //level beat
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::sb_sucks_clap, bn::sound_items::sb_sisforsucks},
         //ignite peasant
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::sb_burninate, bn::sound_items::sb_fiyah},
         //stomp
-        {bn::sound_items::dummy, bn::sound_items::dummy, bn::sound_items::dummy}
+        {bn::sound_items::sb_rampage, bn::sound_items::sb_stomp, bn::sound_items::sb_herepeasant}
     },
     //chiaroscuro
     {
