@@ -76,6 +76,8 @@ namespace trog{
         bn::fixed_point unit_vector(bn::fixed angle)
             {return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
 
+        bn::sprite_palette_ptr get_palette() {return _sprite.palette();}
+
         bn::fixed_point _pos, _starting_pos, _offset;
         bn::fixed_rect _hitbox;
 

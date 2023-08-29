@@ -196,7 +196,6 @@ bn::optional<scene_type> movie_scene::update(){
                 ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
             }
             if(_timer == _cutscene_length / 4 + 10 + 30*z){
-                BN_LOG("array length: ", _cutscene_objects.size());
                 ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
                 peasant *p = (peasant *) _cutscene_objects.at(1 + z).get();
                 p->set_sprite_ablaze();
@@ -412,7 +411,7 @@ bn::optional<scene_type> movie_scene::update(){
     }
 
     if(cutscene_over()) {
-        BN_LOG("last scene: ", _common_stuff.scene_type_to_string(_last_scene));
+        // BN_LOG("last scene: ", _common_stuff.scene_type_to_string(_last_scene));
         if(_last_scene == scene_type::CUTSCENE_VIEWER){
             result = scene_type::CUTSCENE_VIEWER;
         }else if(_sesh.get_level() == 101){

@@ -275,7 +275,7 @@ void player::handle_arrow_collision(archer &archer){
     }
 }
 
-void player::die(uint8_t death_index){
+void player::die(const uint8_t &death_index){
     bn::sound_items::death.play(_common_stuff.savefile.options.sound_vol);
     _time_dead = 1;
     _breath.disable();
