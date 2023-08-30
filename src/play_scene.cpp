@@ -184,7 +184,7 @@ bn::optional<scene_type> play_scene::update(){
     if(_overlay_text) _overlay_text->update();
 
     if(_win_pause_time == 1){
-        _common_stuff.commentary.level_win_pause();
+        _common_stuff.commentary.level_win_pause(_sesh.get_dragon());
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
@@ -495,7 +495,6 @@ void play_scene::autosave(bool just_died){
     if(_sesh.get_level() != 0){
         if(_sesh.get_mans() == 0){
             saved_sesh.exists = false;
-            BN_LOG("erasing the save.");
         }else{
             if(_sesh.troghammer_enabled()){
                 if(_troghammer){

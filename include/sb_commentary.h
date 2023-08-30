@@ -2,7 +2,6 @@
 // Purpose: Static functions for calling Strong Bad's commentary
 
 #pragma once
-#include <bn_sound_items.h>
 #include <bn_random.h>
 #include <bn_vector.h>
 #include <bn_string.h>
@@ -10,24 +9,20 @@
 
 #include "enums.h"
 #include "constants.h"
+#include "voice_clips.h"
 
 namespace trog {
+
     class sb_commentary { 
         protected:
             const bn::fixed &_volume;
             bn::random &_rand;
             uint8_t _timer;
-            void play_random_sound(std::initializer_list<bn::sound_item> item);
-            // void play_clip(uint8_t index) {voice_clips[index].play(_volume);}
+            // const voice_clips &get_clips(const dragon &dragon) ;
+            void play_random_sound(const bn::sound_item *item, const uint8_t &count);
+            void play_sound(const bn::sound_item &item);
 
-            // Lookup table for voice clips
-            // Organized by dragon, then purpose
-            // bn::unordered_map<bn::string<12>, bn::sound_item, 32> voice_clips {
-            //     {bn::string<12>("blah"), bn::sound_items::sb_stupid_archdeluxe},
-            //     {bn::string<12>("blahblah"), bn::sound_items::sb_stupid_archdeluxe}
-            // };
 
-            bn::unordered_map<int,int,2> my_map {{1,2}, {2,2}, {3,2}};
 
         public:
             sb_commentary(const bn::fixed &volume, bn::random &rand);
@@ -43,11 +38,12 @@ namespace trog {
             void arrowed(const dragon &dragon); // called by play_scene
             void sworded(const dragon &dragon); // called by play_scene
             void burninate(const dragon &dragon); // called by play_scene
-            void level_win_pause(); // called by play_scene
-            void level_win_scene(); // called by level_win_scene
-            void stomp_peasant(); // called by peasant
-            void ignite_peasant(); // called by peasant
-            void ignite_cottage(); // called by cottage
+            void level_win_pause(const dragon &dragon); // called by play_scene
+            void level_win_scene(const dragon &dragon); // called by level_win_scene
+            void stomp_peasant(const dragon &dragon); // called by peasant
+            void ignite_peasant(const dragon &dragon); // called by peasant
+            void ignite_cottage(const dragon &dragon); // called by cottage
+
 
             void update();
 

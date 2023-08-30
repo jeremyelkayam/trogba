@@ -1,6 +1,5 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
-#include "bn_sprite_items_sucks_arms.h"
 #include "bn_sprite_items_expanding_circle.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -41,11 +40,10 @@ void sucks::update(){
         if(dead()) _stomp_timer = 0; // this prevents us from stomping after we die
 
 
-        bn::sprite_palette_ptr my_palette = _sprite.palette();
         if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
 
-            my_palette.set_fade(bn::colors::red, 0.6);
-            _fade_action.emplace(my_palette, 20, 0.3);
+            get_palette().set_fade(bn::colors::red, 0.6);
+            _fade_action.emplace(get_palette(), 20, 0.3);
 
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
@@ -57,15 +55,13 @@ void sucks::update(){
         if(_shockwave_anim.done()){
             _shockwave.set_visible(false);
         }
-
         //this is when you regain control of the suck dragon
 
         
         //This ensures you can't stomp again until after the peasants unfreeze.
         if(_stomp_timer >= TROG_SUCK_STOMP_RECHARGE_TIME){
-            _fade_action.reset();
             _stomp_timer = 0;
-            my_palette.set_fade_intensity(0);
+            reset_fade();
         }
     }
 
@@ -93,6 +89,7 @@ void sucks::update_anim(){
         }else if(_stomp_timer == 50){
             _stomp_timer = 0;
         }else if(_stomp_timer >= 20){
+            BN_LOG("dividing stomp timer...");
             if(_stomp_timer % 6 == 0){
                 _sprite.set_y(_sprite.y() - 1);
             }else if(_stomp_timer % 6 == 3){
@@ -137,6 +134,17 @@ void sucks::change_walkcycle(const bn::isprite_animate_action &walkcycle){
 void sucks::update_win_anim(){
     player::update_win_anim();
     change_walkcycle(NORM_WLKCL);
+    reset_fade();
+}
+
+void sucks::die(const uint8_t &death_index){
+    player::die(death_index);
+    reset_fade();
+}
+
+void sucks::reset_fade(){
+    _fade_action.reset();
+    get_palette().set_fade_intensity(0);
 }
 
 }

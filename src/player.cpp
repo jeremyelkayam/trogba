@@ -99,7 +99,6 @@ void player::update(){
 
         //once the iframes are over, return the sprite to normal
         if(_iframes > TROG_RESPAWN_INV_TIME) {
-            BN_LOG("end invincibility");
             _sprite.set_visible(true);
             _iframes = 0;
         }
@@ -234,7 +233,7 @@ void player::handle_peasant_collision(peasant &peasant){
         peasant.squish();
 
         bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
-        _common_stuff.commentary.stomp_peasant();
+        _common_stuff.commentary.stomp_peasant(_sesh.get_dragon());
         
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
         
@@ -276,7 +275,7 @@ void player::handle_arrow_collision(archer &archer){
     }
 }
 
-void player::die(uint8_t death_index){
+void player::die(const uint8_t &death_index){
     bn::sound_items::death.play(_common_stuff.savefile.options.sound_vol);
     _time_dead = 1;
     _breath.disable();

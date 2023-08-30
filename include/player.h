@@ -39,7 +39,7 @@ namespace trog {
             void check_boundary_collision();
 
             bool invincible();
-            virtual void die(uint8_t death_index);
+            virtual void die(const uint8_t &death_index);
 
             //todo: this doesn't need to be in this class
             bool any_dpad_input();
