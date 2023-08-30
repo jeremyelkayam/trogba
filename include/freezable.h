@@ -35,5 +35,6 @@ namespace trog {
             virtual void freeze()=0;
             virtual void alert(bn::fixed_point stomp_pos) {_alert_icon.set_visible(true); _alert_icon.set_position(_pos.x() + 2, _pos.y() - 16); BN_LOG("stomp pos x", stomp_pos.x(), "stomp pos y", stomp_pos.y());};
             bool alerted() {return _alert_icon.visible();}
+            bool frozen() {return _freeze_timer;}
     };
 }

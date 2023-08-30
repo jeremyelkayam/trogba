@@ -257,13 +257,13 @@ void player::stop_burninating(){
 }
 
 void player::handle_knight_collision(knight &knight){
-    if(collides_with(knight) && !invincible()) { 
+    if(!knight.frozen() && collides_with(knight) && !invincible()) { 
         die(2);
     }
 }
 
 void player::handle_troghammer_collision(troghammer &troghammer){
-    if(collides_with(troghammer) && !invincible()) { 
+    if(!troghammer.frozen() && collides_with(troghammer) && !invincible()) { 
         die(1);
     }
 }
