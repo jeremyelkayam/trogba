@@ -18,6 +18,7 @@ burninate_text::burninate_text(bn::sprite_text_generator &generator) :
     _fire.set_scale(0.01);
     _fire.put_above();
     _fire_scale = bn::sprite_scale_loop_action(_fire, 30, 2);
+    _fire.set_z_order(0);
     for(bn::sprite_ptr &sprite : _text_sprites) {
         sprite.put_above();
     }
