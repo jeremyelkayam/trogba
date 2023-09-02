@@ -198,6 +198,9 @@ int main()
         common_stuff.rand.update();
         common_stuff.commentary.update();
 
+        //increment our total play time by 1 frame... 
+        common_stuff.savefile.stats.play_time++;
+
         bn::core::update();
     }
 }
