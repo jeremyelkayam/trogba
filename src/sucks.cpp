@@ -1,6 +1,6 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
-#include "bn_sprite_items_expanding_circle.h"
+#include "bn_sprite_items_shockwave.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
 #include <bn_colors.h>
@@ -16,14 +16,11 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
     _walkcycle(NORM_WLKCL),
     _stomp_timer(0),
-    _shockwave(bn::sprite_items::expanding_circle.create_sprite(0,-1)),
-    _shockwave_anim(bn::create_sprite_animate_action_once(_shockwave, 1, bn::sprite_items::expanding_circle.tiles_item(),
-    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,  30)),
+    _shockwave(0,0),
     _hi(0.6),
     _lo(0.3),
     _oscillate_time(1) {
     _shockwave.set_visible(false);
-    _shockwave.set_scale(2);
 }
 
 void sucks::update(){
@@ -44,14 +41,24 @@ void sucks::update(){
 
 
         if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
-            get_palette().set_fade(bn::colors::red, _hi);
-            _oscillate_time = 10;
-            _fade_action.emplace(get_palette(), _oscillate_time, _lo);
-
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
         }
+        if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave.done()){
+            _shockwave.update();
+        }
+        if(_shockwave.done()){
+            if(_shockwave.visible()){
+                _shockwave.set_visible(false);
+
+                get_palette().set_fade(bn::colors::red, _hi);
+                _oscillate_time = 10;
+                _fade_action.emplace(get_palette(), _oscillate_time, _lo);
+            }
+        }
+        //this is when you regain control of the suck dragon
+
 
         if(_fade_action && _fade_action->done()){
             bn::fixed target = _fade_action->final_intensity() == _hi ? _lo : _hi;
@@ -62,13 +69,6 @@ void sucks::update(){
             BN_LOG("low: ", _lo);
         }
 
-        if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave_anim.done()){
-            _shockwave_anim.update();
-        }
-        if(_shockwave_anim.done()){
-            _shockwave.set_visible(false);
-        }
-        //this is when you regain control of the suck dragon
 
         
         //This ensures you can't stomp again until after the peasants unfreeze.
@@ -126,7 +126,7 @@ void sucks::update_anim(){
 void sucks::stomp(){
     _stomp_timer = 1;
     _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 7);
-    _shockwave_anim.reset();
+    _shockwave.reset();
 }
 
 void sucks::start_burninating(){
@@ -162,6 +162,48 @@ void sucks::die(const uint8_t &death_index){
 
 void sucks::reset_fade(){
     _fade_action.emplace(get_palette(), 20, 0);
+}
+
+shockwave::shockwave(const bn::fixed &x, const bn::fixed &y) {
+    for(bn::fixed angle = 0; angle < 360;  angle += 90){
+        bn::sprite_ptr sprite = bn::sprite_items::shockwave.create_sprite(0,0);
+        sprite.set_rotation_angle(angle);
+        _sprites.emplace_back(sprite);
+    }
+    set_position(bn::fixed_point(x, y));
+    
+    for(bn::sprite_ptr &sprite : _sprites) {
+        _anims.emplace_back(bn::create_sprite_animate_action_once(sprite, 1, bn::sprite_items::shockwave.tiles_item(),
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
+    }
+}
+
+void shockwave::update(){
+    for(auto &anim : _anims) {
+        anim.update();
+    }
+}
+
+void shockwave::set_visible(const bool &visible) {
+    for(auto &sprite : _sprites) { 
+        sprite.set_visible(visible);
+    }
+}
+void shockwave::reset() {
+    for(auto &anim : _anims) {
+        anim.reset();
+    }
+}
+
+void shockwave::set_position(const bn::fixed_point &pos){
+    // angle 0: 1, -1
+    // angle 90: 1, 1
+    // 180: -1, -1
+    // 270: -1, 1
+    _sprites.at(0).set_position(pos.x() + 32, pos.y() - 32);
+    _sprites.at(1).set_position(pos.x() - 32, pos.y() - 32);
+    _sprites.at(2).set_position(pos.x() - 32, pos.y() + 32);
+    _sprites.at(3).set_position(pos.x() + 32, pos.y() + 32);
 }
 
 }
