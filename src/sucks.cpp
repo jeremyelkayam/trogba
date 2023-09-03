@@ -44,6 +44,10 @@ void sucks::update(){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
+
+
+            get_palette().set_fade(bn::colors::red, 0);
+            _fade_action.emplace(get_palette(), 17, _hi);
         }
         if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave.done()){
             _shockwave.update();
