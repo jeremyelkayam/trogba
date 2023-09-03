@@ -68,9 +68,6 @@ void sucks::update(){
             bn::fixed target = _fade_action->final_intensity() == _hi ? _lo : _hi;
             _oscillate_time = (bn::fixed(_oscillate_time) * bn::fixed(1.1)).round_integer();
             _fade_action.emplace(get_palette(), _oscillate_time, target);
-            BN_LOG("oscillate time: ", _oscillate_time);
-            BN_LOG("high: ", _hi);
-            BN_LOG("low: ", _lo);
         }
 
 

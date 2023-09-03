@@ -35,14 +35,6 @@ void knight::update(){
         ++_walkcycle_timer;
         _walkcycle.update();
 
-        if(_walkcycle_timer == _cycletime) {
-            _walkcycle_timer = 0;
-            if(alerted()){
-                _alert_icon.set_visible(false);
-                _alert_dist.reset();
-            }
-        }
-
         bn::fixed xdist = 0;
         bn::fixed ydist = 0;
 
@@ -50,7 +42,15 @@ void knight::update(){
             update_alert();
             xdist = _alert_dist->x();
             ydist = _alert_dist->y();
+            if(_walkcycle_timer == _cycletime / 2) {
+                _walkcycle_timer = 0;
+                _alert_icon.set_visible(false);
+                _alert_dist.reset();
+            }
         }else{
+            if(_walkcycle_timer == _cycletime) {
+                _walkcycle_timer = 0;
+            }
             //todo i hate these 'while true' / 'break' loops
             // change this one
             while(true){
