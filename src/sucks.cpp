@@ -17,7 +17,7 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
     _sweat(bn::sprite_items::sucksweat.create_sprite(0,0)),
     _walkcycle(NORM_WLKCL),
-    _sweat_anim(bn::create_sprite_animate_action_forever(_sweat, 3, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3)),
+    _sweat_anim(bn::create_sprite_animate_action_forever(_sweat, 4, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3, 0, 0)),
     _stomp_timer(0),
     _shockwave(0,0),
     _hi(0.6),
@@ -48,6 +48,7 @@ void sucks::update(){
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
 
+            update_sweat_pos(-12);
 
             get_palette().set_fade(bn::colors::red, 0);
             _fade_action.emplace(get_palette(), 17, _hi);
@@ -89,9 +90,9 @@ void sucks::update(){
     }
 
     if(_sweat.visible()){
-        _sweat.set_horizontal_flip(_sprite.horizontal_flip());
-        _sweat.set_x(_sprite.x() + (_sweat.horizontal_flip() ? -1 : 1) * 6);
-        _sweat.set_y(_sprite.y() + attachments_y_offset() - 11);
+        if(any_dpad_input()){
+            update_sweat_pos(attachments_y_offset() - 13);
+        }
         _sweat_anim.update();
     }
 
@@ -144,6 +145,8 @@ void sucks::stomp(){
 void sucks::start_burninating(){
     player::start_burninating();
     change_walkcycle(FLMTHW_WLKCL);
+    _stomp_timer = 0;
+    reset_fade();
 }
 
 void sucks::stop_burninating(){
@@ -175,6 +178,13 @@ void sucks::die(const uint8_t &death_index){
 void sucks::reset_fade(){
     _fade_action.emplace(get_palette(), 20, 0);
     _sweat.set_visible(false);
+}
+
+
+void sucks::update_sweat_pos(bn::fixed yoffset){
+    _sweat.set_x(_sprite.x() + (_sprite.horizontal_flip() ? -1 : 1) * 6.25);
+    _sweat.set_y(_sprite.y() + yoffset);
+    _sweat.set_horizontal_flip(_sprite.horizontal_flip());    
 }
 
 shockwave::shockwave(const bn::fixed &x, const bn::fixed &y) {
