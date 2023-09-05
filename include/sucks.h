@@ -21,7 +21,8 @@ namespace trog {
 
     class sucks : public player { 
         private:
-            bn::sprite_animate_action<6> _walkcycle;
+            bn::sprite_ptr _sweat;
+            bn::sprite_animate_action<6> _walkcycle, _sweat_anim;
             unsigned short _stomp_timer;
             shockwave _shockwave;
             bn::optional<bn::sprite_palette_fade_to_action> _fade_action;
@@ -37,6 +38,8 @@ namespace trog {
             virtual void die(const uint8_t &death_index);
 
             void reset_fade();
+
+            bn::fixed attachments_y_offset() {return abs(_walkcycle.current_index() - (_walkcycle.graphics_indexes().size()) / 2) - 2;}
 
         public: 
             sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter=0);

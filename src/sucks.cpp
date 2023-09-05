@@ -1,5 +1,6 @@
 #include "sucks.h"
 #include "bn_sprite_items_sucks.h"
+#include "bn_sprite_items_sucksweat.h"
 #include "bn_sprite_items_shockwave.h"
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -14,13 +15,16 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, 
         bn::fixed_point(42, 1),
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
+    _sweat(bn::sprite_items::sucksweat.create_sprite(0,0)),
     _walkcycle(NORM_WLKCL),
+    _sweat_anim(bn::create_sprite_animate_action_forever(_sweat, 3, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3)),
     _stomp_timer(0),
     _shockwave(0,0),
     _hi(0.6),
     _lo(0.3),
     _oscillate_time(1) {
     _shockwave.set_visible(false);
+    _sweat.set_visible(false);
 }
 
 void sucks::update(){
@@ -31,8 +35,7 @@ void sucks::update(){
     }
 
     if(burninating()){
-        bn::fixed yoffset = abs(_walkcycle.current_index() - (_walkcycle.graphics_indexes().size()) / 2) - 2;
-        _breath_offset.set_y(yoffset);
+        _breath_offset.set_y(attachments_y_offset());
     }
     
     if(_stomp_timer){
@@ -59,6 +62,8 @@ void sucks::update(){
                 get_palette().set_fade(bn::colors::red, _hi);
                 _oscillate_time = 10;
                 _fade_action.emplace(get_palette(), _oscillate_time, _lo);
+                _sweat.set_visible(true);
+                _sweat_anim.reset();
             }
         }
         //this is when you regain control of the suck dragon
@@ -72,7 +77,7 @@ void sucks::update(){
 
 
         
-        //This ensures you can't stomp again until after the peasants unfreeze.
+        //This ensures you can't stomp again until you're recharged.
         if(_stomp_timer >= TROG_SUCK_STOMP_RECHARGE_TIME){
             _stomp_timer = 0;
             reset_fade();
@@ -81,6 +86,13 @@ void sucks::update(){
 
     if(bn::keypad::a_pressed() && can_stomp()){
         stomp();
+    }
+
+    if(_sweat.visible()){
+        _sweat.set_horizontal_flip(_sprite.horizontal_flip());
+        _sweat.set_x(_sprite.x() + (_sweat.horizontal_flip() ? -1 : 1) * 6);
+        _sweat.set_y(_sprite.y() + attachments_y_offset() - 11);
+        _sweat_anim.update();
     }
 
 
@@ -108,7 +120,6 @@ void sucks::update_anim(){
         }else if(_stomp_timer == 50){
             _stomp_timer = 0;
         }else if(_stomp_timer >= 20){
-            BN_LOG("dividing stomp timer...");
             if(_stomp_timer % 6 == 0){
                 _sprite.set_y(_sprite.y() - 1);
             }else if(_stomp_timer % 6 == 3){
@@ -163,6 +174,7 @@ void sucks::die(const uint8_t &death_index){
 
 void sucks::reset_fade(){
     _fade_action.emplace(get_palette(), 20, 0);
+    _sweat.set_visible(false);
 }
 
 shockwave::shockwave(const bn::fixed &x, const bn::fixed &y) {
