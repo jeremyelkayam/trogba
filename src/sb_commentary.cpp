@@ -91,6 +91,14 @@ void sb_commentary::update(){
     }
 }
 
+bool sb_commentary::select_character(const dragon &dragon){
+    if(percent_chance(25)){
+        play_sound(get_clips(dragon).selection);
+        return true;
+    }
+    return false;
+}
+
 void sb_commentary::play_random_sound(const bn::sound_item *item, const uint8_t &count){    
     uint8_t rand_num = _rand.get_int(count);
     play_sound(item[rand_num]);

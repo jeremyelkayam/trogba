@@ -49,7 +49,10 @@ void credits_scene::setup_credits(){
         "Thanks to",
         "Mips96 and Trogdor Reburninated",
         "for inspiration/code reference",
-        "github.com/Mips96/Trogdor-Reburninated"
+        "github.com/Mips96/Trogdor-Reburninated",
+        // "",
+        // "Michael Elkayam",
+        // "for design input and bug testing"
     };
 
     ycor += 25;

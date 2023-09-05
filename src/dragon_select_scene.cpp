@@ -19,6 +19,7 @@ namespace trog {
 dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &common_stuff) : 
         _index(0),
         _selection_timer(0),
+        _selection_wait_time(120),
         _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
@@ -97,22 +98,27 @@ bn::optional<scene_type> dragon_select_scene::update(){
             dragon dtype = _selectable_dragons.at(_index).dragon_type;
             _sesh.set_dragon(dtype);
             _common_stuff.savefile.last_dragon_used = dtype;
+            bn::fixed vol_modifier = 1;
+            if(_common_stuff.commentary.select_character(dtype)){
+                vol_modifier = 0.2;
+                _selection_wait_time = 150;
+            }
             _selectable_dragons.at(_index).player_entity.get()->update_anim_action_when_not_moving(false);
             switch(dtype){
                 case dragon::TROGDOR:
                     ((trogdor *) _selectable_dragons.at(_index).player_entity.get())->flex();
-                    bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
+                    bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
                 break;
                 case dragon::SUCKS:
                     ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
-                    bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol);
+                    bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
                 break;
                 default:
                 break;
             }
             _selection_timer = 1;
         }
-    }else if(_selection_timer == 120){
+    }else if(_selection_timer == _selection_wait_time){
         result = scene_type::PLAY;
     }
 

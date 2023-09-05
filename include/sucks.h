@@ -3,14 +3,30 @@
 #include "player.h"
 
 namespace trog {
+
+    class shockwave {
+        private:
+            bn::vector<bn::sprite_ptr, 4> _sprites;
+            bn::vector<bn::sprite_animate_action<17>, 4> _anims;
+
+        public:
+            shockwave(const bn::fixed &x, const bn::fixed &y);
+            void update();
+            void set_visible(const bool &visible);
+            void set_position(const bn::fixed_point &pos);
+            bool done() const {return _anims.at(0).done();}
+            bool visible() const {return _sprites.at(0).visible();}
+            void reset();
+    };
+
     class sucks : public player { 
         private:
             bn::sprite_animate_action<6> _walkcycle;
             unsigned short _stomp_timer;
-            bn::sprite_ptr _shockwave;
-            bn::sprite_animate_action<16> _shockwave_anim;
-            bn::optional<bn::sprite_palette_fade_loop_action> _fade_action;
-            uint8_t _prev_index;
+            shockwave _shockwave;
+            bn::optional<bn::sprite_palette_fade_to_action> _fade_action;
+            const bn::fixed _hi,_lo;
+            uint8_t _oscillate_time;
 
 
             virtual void start_burninating();

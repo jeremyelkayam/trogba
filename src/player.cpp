@@ -257,13 +257,13 @@ void player::stop_burninating(){
 }
 
 void player::handle_knight_collision(knight &knight){
-    if(collides_with(knight) && !invincible()) { 
+    if(!knight.frozen() && collides_with(knight) && !invincible()) { 
         die(2);
     }
 }
 
 void player::handle_troghammer_collision(troghammer &troghammer){
-    if(collides_with(troghammer) && !invincible()) { 
+    if(!troghammer.frozen() && collides_with(troghammer) && !invincible()) { 
         die(1);
     }
 }
@@ -323,7 +323,9 @@ void player::update_win_anim(){
     _sprite.set_horizontal_flip(false);
     _sprite.set_position(0, 0);
     _sprite.set_scale(2);
-    // _sprite.set_item(bn::sprite_items::player);
+    bn::sprite_palette_ptr pal = _sprite.palette();
+    pal.set_fade_intensity(0);
+
     _sprite.put_above();
     _majesty.put_above();
     

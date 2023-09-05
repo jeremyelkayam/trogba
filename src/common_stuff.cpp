@@ -1,5 +1,6 @@
 #include <bn_blending.h>
 #include <bn_math.h>
+#include <bn_log.h>
 #include "common_stuff.h"
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
@@ -10,7 +11,7 @@ common_stuff::common_stuff() :
     text_generator(variable_8x16_sprite_font),
     big_generator(variable_32x64_sprite_font),
     small_generator(variable_8x8_sprite_font),
-    commentary(savefile.options.voice_vol, rand) { 
+    commentary(savefile.options.voice_vol, rand){ 
 
     cutscene_levels.emplace_back(5, "stompin' good");
     cutscene_levels.emplace_back(9, "fry 'em up dan.");
@@ -31,19 +32,20 @@ common_stuff::common_stuff() :
     for(bool &unlocked : base_unlocked_cutscenes){
         unlocked = false;
     }
+    base_unlocked_cutscenes.fill(false);
 
     //DEFAULT format tag
-    bn::array<char, 8> default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
+    default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
 
     //2.0 format tag
 
     bn::sram::read(savefile);
     //if the format tag is invalid, then we have to set it up.
     if(savefile.format_tag == str_to_format_tag("trog2.0")){
+        format_save();
         //CONVERT TO 3.0 SAVE FORMAT.
         saved_data_v20 old_save;
         bn::sram::read(old_save);
-        savefile.format_tag = default_format_tag;
         savefile.options = old_save.options;
         savefile.high_scores_table = old_save.high_scores_table;
         savefile.cheat_unlocked = old_save.cheat_unlocked;
@@ -57,6 +59,7 @@ common_stuff::common_stuff() :
         savefile.session.troghammer = old_save.session.troghammer;
         savefile.session.can_lose_trogmeter = old_save.session.can_lose_trogmeter;
         savefile.session.cottage_burnination_status = old_save.session.cottage_burnination_status;
+        savefile.session.thinfo = old_save.session.thinfo;
         //new session parameters
         savefile.session.current_dragon = dragon::TROGDOR;
 
@@ -75,29 +78,13 @@ common_stuff::common_stuff() :
             savefile.unlocked_cutscenes[i] = max_level_reached > cutscene_levels.at(i).first;
         }
 
+        savefile.stats.play_time = 0;
+
         bn::sram::write(savefile);
 
         
     }else if(savefile.format_tag != default_format_tag){
-        savefile.format_tag = default_format_tag;
-
-        //as long as this flag is set to false,
-        //the rest of the saved session can be garbage data
-        savefile.session.exists = false;
-
-        //default settings!
-        savefile.options.sound_vol = 0.75;
-        savefile.options.music_vol = 0.75;
-        savefile.options.voice_vol = 0.75;
-        savefile.options.troghammer = true;
-        savefile.options.decrement_trogmeter = true;
-        savefile.options.starting_lives = 3;
-
-        savefile.high_scores_table.fill(high_score_entry("", 0, 0));
-
-        savefile.cheat_unlocked = false;
-
-        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+        format_save();
     }
 
     small_generator.set_left_alignment();
@@ -186,6 +173,24 @@ bn::fixed common_stuff::euclidean_dist(const bn::fixed_point &a, const bn::fixed
     return bn::sqrt(xdist * xdist + ydist * ydist);
 }
 
+bn::string<10> common_stuff::play_time(){
+    bn::string<10> result;
+    bn::ostringstream play_time_stream(result);
+    uint32_t seconds = (savefile.stats.play_time / 60);
+    uint32_t minutes = (seconds / 60);
+    uint16_t hours = (minutes / 60);
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+
+    if(hours > 999) hours = 999;
+    play_time_stream << hours << ":";
+    if(minutes < 10) play_time_stream << 0;
+    play_time_stream << minutes;
+    if(seconds < 10) play_time_stream << 0;
+    play_time_stream << ":" << seconds;
+    return result;
+}
+
 const char* common_stuff::scene_type_to_string(const scene_type &type) const{
     switch(type){
         case scene_type::BONUS:
@@ -221,6 +226,42 @@ const char* common_stuff::scene_type_to_string(const scene_type &type) const{
         default:
             return "unknown scene";
     }
+}
+
+void common_stuff::format_save(){
+        savefile.format_tag = default_format_tag;
+
+        //default settings!
+        savefile.options.sound_vol = 0.75;
+        savefile.options.music_vol = 0.75;
+        savefile.options.voice_vol = 0.75;
+        savefile.options.troghammer = true;
+        savefile.options.decrement_trogmeter = true;
+        savefile.options.starting_lives = 3;
+
+        savefile.high_scores_table.fill(high_score_entry("", 0, 0));
+
+        savefile.session.exists = false;
+
+        savefile.session.mans = 3;
+        savefile.session.level = 1;
+        savefile.session.score = 0;
+        savefile.session.can_visit_treasure_hut = false;
+        savefile.session.troghammer = false;
+        savefile.session.can_lose_trogmeter = false;
+        savefile.session.cottage_burnination_status.fill(false);
+        savefile.session.thinfo.current_state = trog::troghammer_state::UNALERTED;
+        savefile.session.thinfo.timer = 1800;
+        savefile.session.thinfo.pos = TROG_VOIDTOWER_POS_DAY;
+
+        savefile.session.current_dragon = dragon::TROGDOR;
+        savefile.last_dragon_used = dragon::TROGDOR;
+
+        savefile.cheat_unlocked = false;
+
+        savefile.unlocked_cutscenes.fill(false);
+
+        savefile.stats.play_time = 0;
 }
 
 }

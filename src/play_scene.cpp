@@ -45,12 +45,13 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _afact(_archers, sesh.get_level(), common_stuff),
         _burninate_pause_time(0),
         _win_pause_time(0),
+        _autosave_visibility_time(0),
+        _shake_timer(0),
         _player_paused(false),
         _timer(0),
         _tutorial_cutscene_timer(0),
         _pause_menu_index(0),
-        _countryside(bn::regular_bg_items::day.create_bg(0, 58)),
-        _voices_volume(0)
+        _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
 
     respawn(false);
@@ -233,18 +234,20 @@ bn::optional<scene_type> play_scene::update(){
 
     }else{
         //screen shake loop
-        if(_shake_timer){
-            if(_shake_timer % _shake_interval == 0){
-                bool even_interval = _shake_timer % (_shake_interval * 2) == 0;
-                bn::fixed yoffset = even_interval ? _shake_y_offset : 0;
+        if(_shake_timer && _shake_interval && _shake_y_offset){
+            uint8_t &interval =  *_shake_interval.get();
+            bn::fixed &shake_y_offset = *_shake_y_offset.get(); 
+            if(_shake_timer % interval == 0){
+                bool even_interval = _shake_timer % (interval * 2) == 0;
+                bn::fixed yoffset = even_interval ? shake_y_offset : 0;
 
                 int8_t factor = even_interval ? 1 : -1;
-                _countryside.set_y(_countryside.y() + factor * _shake_y_offset);
+                _countryside.set_y(_countryside.y() + factor * shake_y_offset);
                 for(entity *e : all_entities()){
                     e->set_y_offset(yoffset);
                 }
                 if(_void_tower){
-                    _void_tower->set_y(_void_tower->y() + factor * _shake_y_offset);
+                    _void_tower->set_y(_void_tower->y() + factor * shake_y_offset);
                 }
             }
             --_shake_timer;
@@ -275,7 +278,7 @@ bn::optional<scene_type> play_scene::update(){
                     if(_common_stuff.euclidean_dist(player->foot_pos(), f->get_pos()) < TROG_SUCK_STOMP_RADIUS){
                         f->freeze();
                     }else{
-                        f->alert();
+                        f->alert(player->get_pos());
                     }
                 }
                 for(archer &arch : _archers){
@@ -340,6 +343,7 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _player->dead();  
         for(knight &k : _knights){
+            if(k.alerted()) k.update_alert_direction(_player->get_pos());
             k.update();
             _player->handle_knight_collision(k);
         }
@@ -364,6 +368,7 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_troghammer){
+            if(_troghammer->alerted()) _troghammer->update_alert_direction(_player->get_pos());
             was_dead = _player->dead();  
             _troghammer->update();
 
@@ -480,7 +485,7 @@ bn::optional<scene_type> play_scene::update(){
     if(result && result != scene_type::BONUS){
         _hud.clear_scrolling_text();
         if(bn::music::playing()) bn::music::stop();
-        if(_voices_volume != 0) _common_stuff.savefile.options.voice_vol = _voices_volume;
+        if(_voices_volume) _common_stuff.savefile.options.voice_vol = *_voices_volume.get();
     }
 
     return result;
@@ -623,10 +628,6 @@ void play_scene::set_visible(bool visible){
     _countryside.set_visible(visible);
 
     if(_player_paused){
-        // for(bn::sprite_ptr &sprite : _paused_selected_option) {
-        //     sprite.set_visible(visible);
-        //     sprite.put_above();
-        // }
 
         _common_stuff.set_sprite_arr_visible(_paused_selected_option, visible);
         _common_stuff.set_sprite_arr_visible(_paused_label, visible);

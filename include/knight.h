@@ -14,25 +14,33 @@
 namespace trog {
     class knight : public freezable { 
         protected:
+
+            knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random, bn::fixed speed, uint8_t cycletime);
+
             
 		    uint8_t _walkcycle_timer;
 			unsigned short _rotation;
-            bn::fixed _speed;
-
-            uint8_t _cycletime;
+            
+            const bn::fixed _speed;
+            const uint8_t _cycletime;
 
         	bn::random &_random; 
             bn::sprite_animate_action<4> _walkcycle;
+            bn::optional<bn::fixed_point> _alert_dist;
 
 			void change_direction();
             
         public:
-            knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random);
+            knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random) : 
+                knight(xcor, ycor, facingRight, random, 
+                TROG_KNIGHT_SPEED, TROG_KNIGHT_MOVE_CYCLE_TIME) {}
+            
 			virtual void update() override;
             void animate_faster() {_walkcycle.set_wait_updates(_walkcycle.wait_updates() / 2);}
 			// void update_home(short knight_increment);
             void update_anim() override final;
-            virtual void freeze() {_freeze_timer = TROG_KNIGHT_FREEZE_TIME;}
-            virtual void alert() override final {}
+            virtual void freeze() override {_freeze_timer = _cycletime;}
+            virtual void alert(bn::fixed_point stomp_pos) override;
+            void update_alert_direction(bn::fixed_point pos);
     };
 }

@@ -46,8 +46,10 @@ namespace trog{
 
         unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time, _shake_timer;
         bool _player_paused;
-        uint8_t _timer, _tutorial_cutscene_timer, _shake_interval;
+        uint8_t _timer, _tutorial_cutscene_timer;
         int8_t _pause_menu_index;
+
+        bn::optional<uint8_t> _shake_interval;
 
         bn::regular_bg_ptr _countryside;
         bn::optional<bn::regular_bg_ptr>_pause_menu, _gray_bg;
@@ -68,7 +70,7 @@ namespace trog{
         bn::unique_ptr<tutorial_arrow> _tutorial_arrow;
 
         bn::unique_ptr<text_box> _text_box;
-        bn::fixed _voices_volume, _shake_y_offset;
+        bn::optional<bn::fixed> _voices_volume, _shake_y_offset;
 
         bool level_complete();
 

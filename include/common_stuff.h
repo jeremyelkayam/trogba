@@ -57,6 +57,10 @@ namespace trog {
         uint8_t starting_lives;        
     };
 
+    struct saved_stats {
+        uint32_t play_time;
+    };
+
     struct saved_data {
         bn::array<char, 8> format_tag;
         //options
@@ -71,6 +75,8 @@ namespace trog {
         bool cheat_unlocked; 
 
         bn::array<bool, 13> unlocked_cutscenes;
+
+        saved_stats stats;
     };
 
     class common_stuff { 
@@ -80,6 +86,7 @@ namespace trog {
             bn::sprite_text_generator small_generator;
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
+            bn::array<char, 8> default_format_tag;
 
             sb_commentary commentary;
 
@@ -103,10 +110,14 @@ namespace trog {
 
             bool percent_chance(const bn::fixed &pct) {return commentary.percent_chance(pct);}
 
+            bn::string<10> play_time();
+
         private:
 
             bn::vector<bn::sprite_ptr, 8> _autosave_text;
             bn::array<char, 8> str_to_format_tag(const char *str);
+
+            void format_save();
 
     };
 
