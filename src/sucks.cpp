@@ -48,7 +48,6 @@ void sucks::update(){
             _shockwave.set_position(foot_pos());
             _shockwave.set_visible(true);
 
-            update_sweat_pos(-12);
 
             get_palette().set_fade(bn::colors::red, 0);
             _fade_action.emplace(get_palette(), 30, _hi);
@@ -63,11 +62,18 @@ void sucks::update(){
                 get_palette().set_fade(bn::colors::red, _hi);
                 _oscillate_time = 10;
                 _fade_action.emplace(get_palette(), _oscillate_time, _lo);
-                _sweat.set_visible(true);
+                if(!_iframes) _sweat.set_visible(true);
+                update_sweat_pos(-12);
                 _sweat_anim.reset();
             }
         }
-        //this is when you regain control of the suck dragon
+
+        // if we are here, we have control of the suck dragon again
+
+
+        if(_iframes == 1){
+            _sweat.set_visible(true);
+        }
 
 
         if(_fade_action && _fade_action->done()){
@@ -89,14 +95,6 @@ void sucks::update(){
         stomp();
     }
 
-    if(_sweat.visible()){
-        if(any_dpad_input()){
-            update_sweat_pos(attachments_y_offset() - 13);
-        }
-        _sweat_anim.update();
-    }
-
-
     if(_fade_action){
         if(_fade_action->done()){
             _fade_action.reset();
@@ -104,7 +102,12 @@ void sucks::update(){
             _fade_action->update();
         }
     }
-
+    if(_sweat.visible()){
+        if(any_dpad_input()){
+            update_sweat_pos(attachments_y_offset() - 13);
+        }
+        _sweat_anim.update();
+    }
 }
 
 bn::fixed_point sucks::foot_pos(){
@@ -182,8 +185,8 @@ void sucks::reset_fade(){
 
 
 void sucks::update_sweat_pos(bn::fixed yoffset){
-    _sweat.set_x(_sprite.x() + (_sprite.horizontal_flip() ? -1 : 1) * 6.25);
-    _sweat.set_y(_sprite.y() + yoffset);
+    _sweat.set_x(_pos.x() + (_sprite.horizontal_flip() ? -1 : 1) * 6);
+    _sweat.set_y(_pos.y() + yoffset);
     _sweat.set_horizontal_flip(_sprite.horizontal_flip());    
 }
 
