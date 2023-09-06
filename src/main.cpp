@@ -39,7 +39,6 @@ int main()
     bn::core::init();
     bn::timer kicktimer;
     bool kicked=false;
-    // bn::timer looptimer;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
@@ -161,7 +160,7 @@ int main()
                     hud.hide();
                     scene.reset(new trog::dragon_select_scene(sesh, common_stuff));
                     break;
-                }                
+                }
                 case trog::scene_type::CUTSCENE_VIEWER: {
                     hud.hide();
                     scene.reset(new trog::cutsceneviewer_scene(sesh, common_stuff));

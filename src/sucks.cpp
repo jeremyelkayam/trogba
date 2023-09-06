@@ -51,7 +51,7 @@ void sucks::update(){
             update_sweat_pos(-12);
 
             get_palette().set_fade(bn::colors::red, 0);
-            _fade_action.emplace(get_palette(), 17, _hi);
+            _fade_action.emplace(get_palette(), 30, _hi);
         }
         if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave.done()){
             _shockwave.update();
@@ -196,13 +196,20 @@ shockwave::shockwave(const bn::fixed &x, const bn::fixed &y) {
     set_position(bn::fixed_point(x, y));
     
     for(bn::sprite_ptr &sprite : _sprites) {
-        _anims.emplace_back(bn::create_sprite_animate_action_once(sprite, 1, bn::sprite_items::shockwave.tiles_item(),
+        _anims.emplace_back(bn::create_sprite_animate_action_once(sprite, 0, bn::sprite_items::shockwave.tiles_item(),
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16));
     }
 }
 
 void shockwave::update(){
+
     for(auto &anim : _anims) {
+        if(anim.current_index() == 4){
+            anim.set_wait_updates(1);
+        }
+        else if(anim.current_index() == 14){
+            anim.set_wait_updates(2);
+        }
         anim.update();
     }
 }
@@ -215,6 +222,7 @@ void shockwave::set_visible(const bool &visible) {
 void shockwave::reset() {
     for(auto &anim : _anims) {
         anim.reset();
+        anim.set_wait_updates(0);
     }
 }
 
