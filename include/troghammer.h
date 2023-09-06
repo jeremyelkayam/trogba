@@ -55,7 +55,7 @@ namespace trog {
             bool inside_void_tower(){return _current_state == troghammer_state::ALERT;}
             virtual void alert(bn::fixed_point stomp_pos) override {if(in_play()) knight::alert(stomp_pos);}
 
-            // virtual void freeze() override final {_freeze_timer = TROG_HAMMER_FREEZE_TIME;}
+            virtual void freeze() override final {if(in_play()) knight::freeze();}
 
             troghammer_status get_status();
     };
