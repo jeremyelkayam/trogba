@@ -12,14 +12,15 @@
 namespace trog{
     struct dragon_option {
         dragon dragon_type;
-        bn::string<16> name;
+        bn::string<16> name, ability;
         bn::unique_ptr<player> player_entity;
+        uint8_t speed, size;
     };
 
     class dragon_select_scene : public scene{ 
     private:
         uint8_t _index, _selection_timer, _selection_wait_time;
-        bn::vector<dragon_option,2> _selectable_dragons;
+        bn::vector<dragon_option,4> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
 
         big_text _title;

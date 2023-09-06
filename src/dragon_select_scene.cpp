@@ -23,8 +23,20 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
         _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
-    _selectable_dragons.emplace_back(dragon::TROGDOR, "TROGDOR", bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)));
-    _selectable_dragons.emplace_back(dragon::SUCKS, "S IS FOR SUCKS", bn::unique_ptr<player>(new sucks(SPACING,0,_sesh, false, _common_stuff, 0)));
+    _selectable_dragons.emplace_back(
+        dragon::TROGDOR, "TROGDOR", "none",
+        bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)),
+        6, 6);
+    _selectable_dragons.emplace_back(
+        dragon::SUCKS, 
+        "S IS FOR SUCKS", "ground pound",
+        bn::unique_ptr<player>(new sucks(SPACING,0,_sesh, false, _common_stuff, 0)),
+        4, 8);
+    _selectable_dragons.emplace_back(
+        dragon::CHIAROSCURO, 
+        "CHIAROSCURO", "none",
+        bn::unique_ptr<player>(new trogdor(SPACING * 2,0,_sesh, false, _common_stuff, 0)),
+        10, 10);
 
     for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
         dragon_option &opt = _selectable_dragons.at(i);
