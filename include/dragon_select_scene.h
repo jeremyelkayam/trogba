@@ -22,6 +22,7 @@ namespace trog{
         uint8_t _index, _selection_timer, _selection_wait_time;
         bn::vector<dragon_option,4> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
+        bn::sprite_ptr _left_arrow, _right_arrow;
 
         big_text _title;
 
@@ -30,6 +31,8 @@ namespace trog{
         common_stuff &_common_stuff;
 
         void update_text();
+
+        bn::fixed dragon_xcor(uint8_t index);
 
     public:
         explicit dragon_select_scene(session_info &sesh, common_stuff &common_stuff);
