@@ -39,52 +39,48 @@ common_stuff::common_stuff() :
 
     //2.0 format tag
 
-    bn::sram::read(savefile);
     //if the format tag is invalid, then we have to set it up.
-    if(savefile.format_tag == str_to_format_tag("trog2.0")){
+    if(savefile.format_tag != default_format_tag){
         format_save();
-        //CONVERT TO 3.0 SAVE FORMAT.
-        saved_data_v20 old_save;
-        bn::sram::read(old_save);
-        savefile.options = old_save.options;
-        savefile.high_scores_table = old_save.high_scores_table;
-        savefile.cheat_unlocked = old_save.cheat_unlocked;
 
-        //session variables
-        savefile.session.exists = old_save.session.exists;
-        savefile.session.mans = old_save.session.mans;
-        savefile.session.level = old_save.session.level;
-        savefile.session.score = old_save.session.score;
-        savefile.session.can_visit_treasure_hut = old_save.session.can_visit_treasure_hut;
-        savefile.session.troghammer = old_save.session.troghammer;
-        savefile.session.can_lose_trogmeter = old_save.session.can_lose_trogmeter;
-        savefile.session.cottage_burnination_status = old_save.session.cottage_burnination_status;
-        savefile.session.thinfo = old_save.session.thinfo;
-        //new session parameters
-        savefile.session.current_dragon = dragon::TROGDOR;
+        //CONVERT TO 3.0 SAVE FORMAT IF THERE IS NO SAVE.
+        if(savefile.format_tag == str_to_format_tag("trog2.0")){
+            saved_data_v20 old_save;
+            bn::sram::read(old_save);
+            savefile.options = old_save.options;
+            savefile.high_scores_table = old_save.high_scores_table;
+            savefile.cheat_unlocked = old_save.cheat_unlocked;
 
-        //new elements of saved_data
-        savefile.last_dragon_used = dragon::TROGDOR;
+            //session variables
+            savefile.session.exists = old_save.session.exists;
+            savefile.session.mans = old_save.session.mans;
+            savefile.session.level = old_save.session.level;
+            savefile.session.score = old_save.session.score;
+            savefile.session.can_visit_treasure_hut = old_save.session.can_visit_treasure_hut;
+            savefile.session.troghammer = old_save.session.troghammer;
+            savefile.session.can_lose_trogmeter = old_save.session.can_lose_trogmeter;
+            savefile.session.cottage_burnination_status = old_save.session.cottage_burnination_status;
+            savefile.session.thinfo = old_save.session.thinfo;
+            //new session parameters
+            savefile.session.current_dragon = dragon::TROGDOR;
 
-        savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+            //new elements of saved_data
+            savefile.last_dragon_used = dragon::TROGDOR;
 
-        uint8_t max_level_reached = savefile.session.level;
-        for(const high_score_entry &entry : savefile.high_scores_table) {
-            if(entry.get_level() > max_level_reached) 
-                max_level_reached = entry.get_level();
+            savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+
+            uint8_t max_level_reached = savefile.session.level;
+            for(const high_score_entry &entry : savefile.high_scores_table) {
+                if(entry.get_level() > max_level_reached) 
+                    max_level_reached = entry.get_level();
+            }
+            for(uint8_t i = 0; i < savefile.unlocked_cutscenes.size(); i++){
+                //if we have reached a level higher than this cutscene level, we should unlock it
+                savefile.unlocked_cutscenes[i] = max_level_reached > cutscene_levels.at(i).first;
+            }        
         }
-        for(uint8_t i = 0; i < savefile.unlocked_cutscenes.size(); i++){
-            //if we have reached a level higher than this cutscene level, we should unlock it
-            savefile.unlocked_cutscenes[i] = max_level_reached > cutscene_levels.at(i).first;
-        }
-
-        savefile.stats.play_time = 0;
 
         bn::sram::write(savefile);
-
-        
-    }else if(savefile.format_tag != default_format_tag){
-        format_save();
     }
 
     small_generator.set_left_alignment();
@@ -262,6 +258,18 @@ void common_stuff::format_save(){
         savefile.unlocked_cutscenes.fill(false);
 
         savefile.stats.play_time = 0;
+        savefile.stats.points_earned = 0;
+        savefile.stats.peasants_stomped = 0;
+        savefile.stats.cottages_entered = 0;
+        savefile.stats.treasure_collected = 0;
+        savefile.stats.times_sworded = 0;
+        savefile.stats.times_arrowed = 0;
+        savefile.stats.times_hammered = 0;
+        savefile.stats.games_played = 0;
+        savefile.stats.peasants_burned = 0;
+        savefile.stats.cottages_burned = 0;
+        savefile.stats.fastest_level = -1;
+        savefile.stats.highest_level = 1;
 }
 
 }
