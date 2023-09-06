@@ -18,6 +18,8 @@ namespace trog{
         bn::forward_list<moneybag, 10> _money;
         bn::forward_list<bn::fixed_rect, 5> _wall_hitboxes;
 
+        common_stuff &_common_stuff;
+
 
         static bool moneybag_deletable(moneybag &m) {return m.collected;}
         session_info &_sesh;

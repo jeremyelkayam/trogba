@@ -12,6 +12,7 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
         _exit(110,0,20,20),
         _player(new trogdor(80,10, sesh, false, common_stuff)),
+        _common_stuff(common_stuff),
         _sesh(sesh) {
 
     switch(_sesh.get_dragon()){
@@ -39,6 +40,13 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
 
     _wall_hitboxes.emplace_front(0,-50,240,60);
     _wall_hitboxes.emplace_front(-110,-10,20,40);
+
+    //todo: refactor this into commentary maybe
+    if(common_stuff.percent_chance(30) && 
+        ((_sesh.get_dragon() == dragon::TROGDOR) || 
+         (_sesh.get_dragon() == dragon::SUCKS) )){
+        bn::sound_items::sb_roomierinside.play(common_stuff.savefile.options.voice_vol);
+    }
 }
 
 
@@ -58,6 +66,7 @@ bn::optional<scene_type> bonus_scene::update(){
             _sesh.score(TROG_MONEYBAG_POINTS);
             bn::sound_items::goldget.play(1);
             bag.collect();
+            _common_stuff.savefile.stats.treasure_collected++;
         }
     }
     for(bn::fixed_rect &wall : _wall_hitboxes) {

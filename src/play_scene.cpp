@@ -477,6 +477,7 @@ bn::optional<scene_type> play_scene::update(){
             result = scene_type::BONUS;
             //this marks the cottage as visited so that we can no longer return
             c.visit();
+            _common_stuff.savefile.stats.cottages_entered++;
 
             set_visible(false);
         }

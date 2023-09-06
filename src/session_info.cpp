@@ -10,6 +10,9 @@ session_info::session_info(common_stuff &common_stuff) :
 }
 
 void session_info::score(const unsigned int &num_points){
+    _common_stuff.savefile.stats.points_earned += num_points;
+
+
     //once we cross 300 points, you get a 1up
     //we can see what multiple of 300 you're on with division
     int old_multiple = _score/TROG_POINTS_FOR_1UP;
