@@ -17,6 +17,10 @@ player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _trogmeter(initial_trogmeter),
         _burninate_time(0),
         _time_dead(0),
+
+        //todo maybe condense all the timers into one?
+        // since they won't all be used at the same time        
+        _iframes(iframes ? TROG_RESPAWN_INV_TIME : 0),
         _majesty_flash_timer(0),
         _walk_cycle_frames(walk_cycle_frames),
         _breath(sesh, common_stuff),
@@ -50,16 +54,6 @@ player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
 	} else {
 		_burninate_length /= 0.7;
 	}
-    // BN_LOG("burninate length for this level: ", _burninate_length);
-
-
-    //todo maybe condense all the timers into one?
-    // since they won't all be used at the same time
-    if(iframes) {
-        _iframes = 1;
-    }else{
-        _iframes = 0;
-    }
 }
 
 bool player::burninating(){
@@ -89,18 +83,8 @@ void player::update(){
             //if we're on an odd iframe, hide the sprite.
             //this creates a flicker effect
             bool odd = _iframes % 2;
-            if(odd){
-                _sprite.set_visible(false);
-            }else{
-                _sprite.set_visible(true);
-            }
-            ++_iframes;
-        }
-
-        //once the iframes are over, return the sprite to normal
-        if(_iframes > TROG_RESPAWN_INV_TIME) {
-            _sprite.set_visible(true);
-            _iframes = 0;
+            _sprite.set_visible(odd);
+            --_iframes;
         }
         if(can_move()){
             update_next_pos();
