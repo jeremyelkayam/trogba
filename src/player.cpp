@@ -72,9 +72,9 @@ void player::update(){
 
         if(_burninate_time > 0) { 
             _burninate_time--;
-        }else if(_breath.enabled()){
-            // if the breath is enabled AND our burninate timer has expired,
-            // we need to end burnination
+        }
+        if(_burninate_time == 0 && _breath.enabled()){
+            //after the timer runs out, we must stop burninating
             stop_burninating();
         }
 

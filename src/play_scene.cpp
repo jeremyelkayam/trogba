@@ -70,7 +70,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
 
     //Level loading logic cribbed from Trogdor Reburninated by Mips96.
-    int level_index;
+    uint8_t level_index;
     if (_sesh.get_level() <= 1) {
 		level_index = 0;
 	} else {
@@ -101,10 +101,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
     if(_sesh.get_level() != 0){
         // 6 = max cottages
-        for (int i = 0; i < _cottages.max_size(); i++) {
+        for (uint8_t i = 0; i < _cottages.max_size(); i++) {
 
 
-            int j = (i * 3) + 2;
+            uint8_t j = (i * 3) + 2;
 
             if (levels[level_index][j] > 0) {
                 //Index 1 in level data refers to the number of the treasure hut from 1-6
@@ -185,7 +185,9 @@ bn::optional<scene_type> play_scene::update(){
     if(_overlay_text) _overlay_text->update();
 
     if(_win_pause_time == 1){
-        _common_stuff.commentary.level_win_pause(_sesh.get_dragon());
+        bool troghammer_arrived = _troghammer && _troghammer->in_play();
+
+        _common_stuff.commentary.level_win_pause(_sesh.get_dragon(), troghammer_arrived);
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
