@@ -273,11 +273,13 @@ bn::optional<scene_type> play_scene::update(){
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
             if(player->stomp_timer() == TROG_SUCK_STOMP_FRAME){
-                //stomp clause
+                //stomp clause                
                 for(freezable *f : all_freezables()){
                     //yes, euclidean distance is an expensive operation here. However, 
                     // we're only doing it on a max of 20 actors so hopefully it's ok
-                    if(_common_stuff.euclidean_dist(player->foot_pos(), f->get_pos()) < TROG_SUCK_STOMP_RADIUS){
+                    bn::fixed_point center(player->get_pos().x(), player->foot_pos().y());
+                    bn::fixed dist = _common_stuff.euclidean_dist(center, f->get_pos());
+                    if(dist < TROG_SUCK_STOMP_RADIUS){
                         f->freeze();
                     }else{
                         f->alert(player->get_pos());
@@ -286,6 +288,8 @@ bn::optional<scene_type> play_scene::update(){
                 for(archer &arch : _archers){
                     arch.stomp_on(player->foot_pos(), TROG_SUCK_STOMP_RADIUS);
                 }
+
+                
                 shake_screen(4, 4, 4);
                 bn::sound_items::heavy_crash.play(_common_stuff.savefile.options.sound_vol);
             }
