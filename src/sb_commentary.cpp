@@ -7,7 +7,7 @@ sb_commentary::sb_commentary(const bn::fixed &volume, bn::random &rand) :
     _volume(volume), _rand(rand), _timer(0) {
 }
 
-const voice_clips &get_clips(const dragon &dragon){
+const voice_clips &sb_commentary::get_clips(const dragon &dragon){
     switch(dragon){
         case dragon::TROGDOR:
             return all_clips[0];
@@ -25,6 +25,9 @@ void sb_commentary::play_sound(const bn::sound_item &item){
     if(_timer == 0 && item != bn::sound_items::dummy){
         item.play(_volume);
         _timer = 255;
+        // BN_LOG("played id: ", item.id());
+    }else{
+        BN_LOG("did not play id: ", item.id(), _timer ? "due to timer" : "due to dummy sound");
     }
 }
 
@@ -56,12 +59,16 @@ void sb_commentary::sworded(const dragon &dragon){
 
 void sb_commentary::burninate(const dragon &dragon){
     if(percent_chance(50)){
-        play_random_sound(get_clips(dragon).burninate, 2);
+        play_random_sound(get_clips(dragon).burninate, 3);
     }
 }
 
-void sb_commentary::level_win_pause(const dragon &dragon){
-    if(percent_chance(20))
+void sb_commentary::level_win_pause(const dragon &dragon, const bool &troghammer_arrived){
+    BN_LOG("troghammer in play? ", troghammer_arrived);
+    if(troghammer_arrived) {
+        // bn::sound_items::sb_closeone.play(_volume);
+        play_sound(get_clips(dragon).majesty_troghammer);
+    }else if(percent_chance(20))
         play_sound(get_clips(dragon).majesty);
 }
 
@@ -77,7 +84,7 @@ void sb_commentary::stomp_peasant(const dragon &dragon){
 
 void sb_commentary::ignite_peasant(const dragon &dragon){
     if(percent_chance(20))
-        play_random_sound(get_clips(dragon).ignitepeasant, 3);
+        play_random_sound(get_clips(dragon).ignitepeasant, 2);
 }
 
 void sb_commentary::ignite_cottage(const dragon &dragon){

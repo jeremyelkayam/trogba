@@ -18,7 +18,7 @@ namespace trog {
             const bn::fixed &_volume;
             bn::random &_rand;
             uint8_t _timer;
-            // const voice_clips &get_clips(const dragon &dragon) ;
+            const voice_clips &get_clips(const dragon &dragon) ;
             void play_random_sound(const bn::sound_item *item, const uint8_t &count);
             void play_sound(const bn::sound_item &item);
 
@@ -38,7 +38,7 @@ namespace trog {
             void arrowed(const dragon &dragon); // called by play_scene
             void sworded(const dragon &dragon); // called by play_scene
             void burninate(const dragon &dragon); // called by play_scene
-            void level_win_pause(const dragon &dragon); // called by play_scene
+            void level_win_pause(const dragon &dragon, const bool &troghammer_arrived); // called by play_scene
             void level_win_scene(const dragon &dragon); // called by level_win_scene
             void stomp_peasant(const dragon &dragon); // called by peasant
             void ignite_peasant(const dragon &dragon); // called by peasant
