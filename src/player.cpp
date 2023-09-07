@@ -217,7 +217,6 @@ void player::handle_peasant_collision(peasant &peasant){
         peasant.squish();
 
         bn::sound_items::stomp.play(_common_stuff.savefile.options.sound_vol);
-        _common_stuff.commentary.stomp_peasant(_sesh.get_dragon());
         _common_stuff.savefile.stats.peasants_stomped++;
         
         _sesh.score(TROG_PEASANT_STOMP_SCORE);
@@ -225,6 +224,9 @@ void player::handle_peasant_collision(peasant &peasant){
         ++_trogmeter;
         if(_trogmeter == _trogmeter_max){
             start_burninating();
+        }else{
+            //only say a stomp quote if you didn't just start burning
+            _common_stuff.commentary.stomp_peasant(_sesh.get_dragon());
         }
     }
 
