@@ -36,6 +36,7 @@ common_stuff::common_stuff() :
 
     //DEFAULT format tag
     default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
+    bn::sram::read(savefile);
 
     //2.0 format tag
 
