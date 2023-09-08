@@ -11,6 +11,7 @@
 
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_regular_bg_items_sucksmile.h"
+#include "bn_regular_bg_items_chiarosmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
@@ -70,6 +71,10 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
             nicework_y = -8;
             nicework_x = 78;
             bn::sound_items::sucks_jingle.play(common_stuff.savefile.options.sound_vol);
+        break;
+        case dragon::CHIAROSCURO:
+            _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);
+            bn::sound_items::burninate.play(common_stuff.savefile.options.sound_vol);
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");
