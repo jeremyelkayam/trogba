@@ -40,7 +40,7 @@ const voice_clips all_clips[3] {
         bn::sound_items::sb_impressive, //high score
         bn::sound_items::sb_highscore, // secret score
         bn::sound_items::sb_arrowed, //arrowed
-        bn::sound_items::dummy, //majesty
+        bn::sound_items::sb_thread_needle, //majesty
         bn::sound_items::sb_burncottage, //ignite cottage
         bn::sound_items::sb_unnatural, // selection
         //sworded

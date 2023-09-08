@@ -58,7 +58,17 @@ namespace trog {
     };
 
     struct saved_stats {
-        uint32_t play_time;
+        uint32_t play_time, points_earned, peasants_stomped;
+        uint16_t cottages_entered,
+            treasure_collected,
+            times_sworded,
+            times_arrowed,
+            times_hammered,
+            games_played,
+            peasants_burned,
+            cottages_burned,
+            fastest_level;
+        uint8_t highest_level;
     };
 
     struct saved_data {
