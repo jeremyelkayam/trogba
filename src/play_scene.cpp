@@ -283,7 +283,7 @@ bn::optional<scene_type> play_scene::update(){
                     if(dist < TROG_SUCK_STOMP_RADIUS){
                         f->freeze();
                     }else{
-                        f->alert(player->get_pos());
+                        // f->alert(player->get_pos());
                     }
                 }
                 for(archer &arch : _archers){

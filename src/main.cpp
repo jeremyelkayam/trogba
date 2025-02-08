@@ -31,9 +31,6 @@
 #include "dragon_select_scene.h"
 #include "cutsceneviewer_scene.h"
 
-//debug settings for emulator
-#define BN_LOG_BACKEND_MGBA true
-
 int main()
 {
     bn::core::init();
