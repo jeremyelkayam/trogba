@@ -34,6 +34,7 @@
 #include "sb_commentary.h"
 #include "sucks.h"
 #include "chiaroscuro.h"
+#include "wormdingler.h"
 
 
 namespace trog {
@@ -841,6 +842,8 @@ void play_scene::redraw_pause_menu_option(){
 void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
     switch(_sesh.get_dragon()){
         //gotta be a better way to do this 
+        //todo, get rid of all this copy pasted garbage !! 
+        //perhaps we need a dragon factory class. or function. or something
         case dragon::TROGDOR:
             _player.reset(new trogdor(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
             (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
@@ -853,6 +856,11 @@ void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
         break;
         case dragon::CHIAROSCURO:
             _player.reset(new chiaroscuro(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
+            (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
+            _sesh, iframes, _common_stuff, init_trogmeter));
+        break;
+        case dragon::WORMDINGLER:
+            _player.reset(new wormdingler(TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
             (_sesh.get_level() == 27 || _sesh.get_level() == 59 || _sesh.get_level() == 91) ? 10 : 0, 
             _sesh, iframes, _common_stuff, init_trogmeter));
         break;

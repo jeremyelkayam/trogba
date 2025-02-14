@@ -44,6 +44,7 @@ USERLIBDIRS :=
 USERLIBS    :=  
 USERBUILD   :=  
 EXTTOOL     :=  
+STACKTRACE  :=  true
 
 #---------------------------------------------------------------------------------------------------------------------
 # Export absolute butano path:

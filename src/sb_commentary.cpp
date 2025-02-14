@@ -15,6 +15,8 @@ const voice_clips &sb_commentary::get_clips(const dragon &dragon){
             return all_clips[1];
         case dragon::CHIAROSCURO:
             return all_clips[2];
+        case dragon::WORMDINGLER:
+            return all_clips[3];
         default:
             BN_ERROR("Invalid dragon passed into sb_commentary");
             return all_clips[0];

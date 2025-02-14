@@ -11,7 +11,7 @@ struct voice_clips{
 
 // Lookup table for voice clips
 // Organized by dragon, then purpose
-const voice_clips all_clips[3] { 
+const voice_clips all_clips[4] { 
     //trogdor
     {
         bn::sound_items::sb_pineforyou, //game over
@@ -57,6 +57,28 @@ const voice_clips all_clips[3] {
         {bn::sound_items::sb_rampage, bn::sound_items::sb_stomp, bn::sound_items::sb_herepeasant}
     },
     //chiaroscuro
+    {
+        bn::sound_items::dummy, //game over
+        bn::sound_items::dummy, //archer game over
+        bn::sound_items::dummy, //high score
+        bn::sound_items::dummy, // secret score
+        bn::sound_items::dummy, //arrowed
+        bn::sound_items::dummy, //majesty
+        bn::sound_items::dummy, //majesty troghammer
+        bn::sound_items::dummy, //ignite cottage
+        bn::sound_items::dummy, //selection
+        //sworded
+        {bn::sound_items::dummy, bn::sound_items::dummy},
+        //burninate
+        {bn::sound_items::dummy, bn::sound_items::dummy, bn::sound_items::dummy},
+        //level beat
+        {bn::sound_items::dummy, bn::sound_items::dummy},
+        //ignite peasant
+        {bn::sound_items::dummy, bn::sound_items::dummy},
+        //stomp
+        {bn::sound_items::dummy, bn::sound_items::dummy, bn::sound_items::dummy}
+    },
+    //wormdingler
     {
         bn::sound_items::dummy, //game over
         bn::sound_items::dummy, //archer game over

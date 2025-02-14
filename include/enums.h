@@ -37,6 +37,7 @@ namespace trog {
     {
         TROGDOR,
         SUCKS,
-        CHIAROSCURO
+        CHIAROSCURO,
+        WORMDINGLER
     };
 }

@@ -6,6 +6,7 @@
 #include "sucks.h"
 #include "trogdor.h"
 #include "chiaroscuro.h"
+#include "wormdingler.h"
 
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -41,6 +42,11 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
         dragon::CHIAROSCURO, 
         "CHIAROSCURO", "none",
         bn::unique_ptr<player>(new chiaroscuro(0,0,_sesh, false, _common_stuff, 0)),
+        10, 10);
+    _selectable_dragons.emplace_back(
+        dragon::WORMDINGLER, 
+        "WORMDINGLER", "none",
+        bn::unique_ptr<player>(new wormdingler(0,0,_sesh, false, _common_stuff, 0)),
         10, 10);
 
     for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
