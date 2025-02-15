@@ -27,6 +27,18 @@ void trogdor::flex(){
 }
 
 
+void trogdor::die(const unsigned int &death_index){
+    if(death_index == 1 && _common_stuff.rand.get_int(5) == 0)
+    {
+        player::die(9);
+    }
+    else
+    {
+        player::die(death_index);
+    }
+}
+
+
 void trogdor::update_anim(){
     entity::update_anim();
     if((_move_action && !_move_action->done()) || _move_by_action || _update_anim_when_not_moving){
