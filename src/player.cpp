@@ -8,7 +8,7 @@
 #include "sb_commentary.h"
 
 namespace trog {
-player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, bn::fixed_point breath_offset, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+player::player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, bn::fixed_point breath_offset, session_info &sesh, bool iframes, bn::sprite_item spritem, unsigned int  walk_cycle_frames, common_stuff &common_stuff, unsigned int  initial_trogmeter) : 
         entity(xcor, ycor, width, height, spritem.create_sprite(xcor, ycor)),
         _spritem(spritem),
         _speed(speed),
@@ -262,7 +262,7 @@ void player::handle_arrow_collision(archer &archer){
     }
 }
 
-void player::die(const uint8_t &death_index){
+void player::die(const unsigned int &death_index){
     bn::sound_items::death.play(_common_stuff.savefile.options.sound_vol);
     _time_dead = 1;
     _breath.disable();

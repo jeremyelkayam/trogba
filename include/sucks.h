@@ -24,11 +24,11 @@ namespace trog {
             bn::sprite_ptr _sweat;
             bn::sprite_animate_action<6> _walkcycle;
             bn::sprite_animate_action<8> _sweat_anim;
-            unsigned short _stomp_timer;
+            unsigned int _stomp_timer;
             shockwave _shockwave;
             bn::optional<bn::sprite_palette_fade_to_action> _fade_action;
             const bn::fixed _hi,_lo;
-            uint8_t _oscillate_time;
+            unsigned int _oscillate_time;
 
 
             virtual void start_burninating();
@@ -36,7 +36,7 @@ namespace trog {
 
             void change_walkcycle(const bn::isprite_animate_action &walkcycle);
 
-            virtual void die(const uint8_t &death_index);
+            virtual void die(const unsigned int &death_index);
 
             void reset_fade();
 
@@ -45,14 +45,14 @@ namespace trog {
             void update_sweat_pos(bn::fixed yoffset);
 
         public: 
-            sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
+            sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, unsigned int initial_trogmeter=0);
 
             virtual void update() final;
             virtual void update_anim() final;
             void stomp();
 
             bool can_stomp() {return _stomp_timer == 0 && !burninating() && !dead();}
-            unsigned short stomp_timer() {return _stomp_timer;}
+            unsigned int stomp_timer() {return _stomp_timer;}
 
             virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 60;}
 

@@ -23,14 +23,14 @@ namespace trog {
 
             bn::fixed_point _direction;
  
-            uint8_t _trogmeter;
-            unsigned short _burninate_time;
-            const uint8_t _trogmeter_max = TROG_TROGMETER_MAX;
-            unsigned short _burninate_length; 
-            uint8_t _time_dead;
-            uint8_t _iframes;
-            uint8_t _majesty_flash_timer;
-            const uint8_t _walk_cycle_frames;
+            unsigned int _trogmeter;
+            unsigned int _burninate_time;
+            const unsigned int _trogmeter_max = TROG_TROGMETER_MAX;
+            unsigned int _burninate_length; 
+            unsigned int _time_dead;
+            unsigned int _iframes;
+            unsigned int _majesty_flash_timer;
+            const unsigned int _walk_cycle_frames;
 
             firebreath _breath;
             session_info &_sesh;
@@ -39,7 +39,7 @@ namespace trog {
             void check_boundary_collision();
 
             bool invincible();
-            virtual void die(const uint8_t &death_index);
+            virtual void die(const unsigned int &death_index);
 
             //todo: this doesn't need to be in this class
             bool any_dpad_input();
@@ -62,8 +62,8 @@ namespace trog {
                 bn::fixed height, bn::fixed speed, 
                 bn::fixed_point breath_offset, session_info &sesh, 
                 bool iframes, bn::sprite_item spritem, 
-                uint8_t walk_cycle_frames, common_stuff &common_stuff, 
-                uint8_t initial_trogmeter=0);
+                unsigned int walk_cycle_frames, common_stuff &common_stuff, 
+                unsigned int initial_trogmeter=0);
             virtual void update();
 
             bool burninating();
@@ -83,9 +83,9 @@ namespace trog {
             bool dead() {return _time_dead;}
             bool ready_to_respawn() {return _time_dead == TROG_RESPAWN_TIME;}
 
-            unsigned short get_trogmeter(){return _trogmeter;}
-            unsigned short get_burninating_time(){return _burninate_time;}
-            unsigned short get_burninating_length(){return _burninate_length;}
+            unsigned int get_trogmeter(){return _trogmeter;}
+            unsigned int get_burninating_time(){return _burninate_time;}
+            unsigned int get_burninating_length(){return _burninate_length;}
             virtual void set_visible(const bool &visible) override;
             void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
             void disable_breath(){_breath.disable();}

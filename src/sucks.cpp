@@ -11,7 +11,7 @@
 
 namespace trog { 
 
-sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, unsigned int  initial_trogmeter) : 
     player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, 
         bn::fixed_point(42, 1),
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
@@ -173,7 +173,7 @@ void sucks::update_win_anim(){
     reset_fade();
 }
 
-void sucks::die(const uint8_t &death_index){
+void sucks::die(const unsigned int &death_index){
     player::die(death_index);
     reset_fade();
 }
