@@ -58,7 +58,12 @@ namespace trog {
             virtual bool can_move() {return true;}
             
         public:
-            player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::fixed speed, bn::fixed_point breath_offset, session_info &sesh, bool iframes, bn::sprite_item spritem, uint8_t walk_cycle_frames, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
+            player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, 
+                bn::fixed height, bn::fixed speed, 
+                bn::fixed_point breath_offset, session_info &sesh, 
+                bool iframes, bn::sprite_item spritem, 
+                uint8_t walk_cycle_frames, common_stuff &common_stuff, 
+                uint8_t initial_trogmeter=0);
             virtual void update();
 
             bool burninating();

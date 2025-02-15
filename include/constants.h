@@ -56,8 +56,8 @@
 #define TROG_SUCKS_HEIGHT 40
 #define TROG_SUCKS_SPEED bn::fixed(0.7)
 
-#define TROG_WORM_WIDTH  24
-#define TROG_WORM_HEIGHT 34
+#define TROG_WORM_WIDTH  42
+#define TROG_WORM_HEIGHT 16
 #define TROG_WORM_SPEED bn::fixed(0.87)
 
 #define TROG_CHIARO_WIDTH  24
