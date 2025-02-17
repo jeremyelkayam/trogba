@@ -80,7 +80,7 @@ const voice_clips all_clips[4] {
     },
     //wormdingler
     {
-        bn::sound_items::dummy, //game over
+        bn::sound_items::cz_bride, //game over
         bn::sound_items::dummy, //archer game over
         bn::sound_items::dummy, //high score
         bn::sound_items::dummy, // secret score
@@ -88,7 +88,7 @@ const voice_clips all_clips[4] {
         bn::sound_items::dummy, //majesty
         bn::sound_items::dummy, //majesty troghammer
         bn::sound_items::dummy, //ignite cottage
-        bn::sound_items::dummy, //selection
+        bn::sound_items::cz_shout_wormdingler, //selection
         //sworded
         {bn::sound_items::dummy, bn::sound_items::dummy},
         //burninate
