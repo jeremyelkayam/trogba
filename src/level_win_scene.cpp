@@ -12,6 +12,7 @@
 #include "bn_regular_bg_items_trogsmile.h"
 #include "bn_regular_bg_items_sucksmile.h"
 #include "bn_regular_bg_items_chiarosmile.h"
+#include "bn_regular_bg_items_wormsmile.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
@@ -59,27 +60,33 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
     }
+    bn::sound_item jingle = bn::sound_items::burninate;
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
             _happy_dragon.set_item(bn::regular_bg_items::trogsmile);
-            bn::sound_items::burninate.play(common_stuff.savefile.options.sound_vol);
-
+            
         break;
         case dragon::SUCKS:
             _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
             _nose_smoke.set_position(30, 30);
             nicework_y = -8;
             nicework_x = 78;
-            bn::sound_items::sucks_jingle.play(common_stuff.savefile.options.sound_vol);
+            jingle = bn::sound_items::sucks_jingle;
         break;
         case dragon::CHIAROSCURO:
             _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);
-            bn::sound_items::burninate.play(common_stuff.savefile.options.sound_vol);
+        break;
+        case dragon::WORMDINGLER:
+            _happy_dragon.set_item(bn::regular_bg_items::wormsmile);
+            _nose_smoke.set_position(30, -40);
+            nicework_y = -30;
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");
         break;
     }
+
+    jingle.play(common_stuff.savefile.options.sound_vol);
 
     common_stuff.text_generator.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
     common_stuff.text_generator.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);
