@@ -59,7 +59,9 @@ namespace trog{
         void set_scale(const bn::fixed &scale) {_sprite.set_scale(scale);}
 
     protected:
-        explicit entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height, bn::sprite_ptr sprite);
+        explicit entity(bn::fixed xcor, bn::fixed ycor, 
+            bn::fixed width, bn::fixed height, 
+            bn::sprite_ptr sprite);
         
 
         bool going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox);   

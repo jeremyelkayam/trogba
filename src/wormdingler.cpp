@@ -1,5 +1,7 @@
 #include "wormdingler.h"
 #include "bn_sprite_items_wormdingler.h"
+#include "bn_sprite_items_wormdingler_tongue.h"
+#include <bn_math.h>
 
 namespace trog { 
 
@@ -28,6 +30,33 @@ void wormdingler::update(){
     if(!dead() && any_dpad_input()){
         _walkcycle.update();
     }
+}
+
+tongue::tongue(bn::fixed_point pos, bool facing_left) : 
+    entity(pos.x(), 
+        pos.y(), 
+        13, 
+        3, 
+        bn::sprite_items::wormdingler_tongue.create_sprite(0, 0)),
+    _retracting(false)
+{
+    _sprite.set_horizontal_flip(facing_left);
+}
+
+void tongue::update(){
+    bn::fixed end = _sprite.x() + 4;
+    bn::fixed begin = _pos.x();
+
+    bn::fixed width = bn::abs(end - begin);
+    bn::fixed xcor = (end + begin) * bn::fixed(0.5);
+
+    _hitbox.set_width(width);
+    _hitbox.set_x(xcor);
+}
+
+void tongue::retract()
+{
+    _retracting = true;
 }
 
 }
