@@ -10,10 +10,12 @@ namespace trog {
 
 wormdingler::wormdingler(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
     player(xcor, ycor, TROG_WORM_WIDTH, TROG_WORM_HEIGHT, TROG_WORM_SPEED, 
-        bn::fixed_point(TROG_FIREBREATH_XOFFSET, TROG_FIREBREATH_YOFFSET), sesh, 
+        bn::fixed_point(31, 0), sesh, 
         iframes, bn::sprite_items::wormdingler, 5, common_stuff, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 3, 
-            bn::sprite_items::wormdingler.tiles_item(), 0, 1, 2, 3, 4, 3, 2, 1)) {
+            bn::sprite_items::wormdingler.tiles_item(), 1, 2, 3, 4, 3, 2, 1, 0)) {
+
+    start_burninating();
 }
 
 
@@ -27,9 +29,20 @@ void wormdingler::update_anim(){
 
 void wormdingler::update(){
     player::update();
+
     if(!dead() && any_dpad_input()){
         _walkcycle.update();
     }
+    
+    if(burninating()){
+        _breath_offset.set_x(32 - 2 * 
+            abs(_walkcycle.current_index() - 
+                (_walkcycle.graphics_indexes().size()) / 2) - 2);
+
+        BN_LOG(_walkcycle.current_index());
+    }
+
+    // if(!_tongue && bn)
 }
 
 tongue::tongue(bn::fixed_point pos, bool facing_left) : 
@@ -44,6 +57,12 @@ tongue::tongue(bn::fixed_point pos, bool facing_left) :
 }
 
 void tongue::update(){
+
+    bn::fixed dx = 1;
+    if(_sprite.horizontal_flip()) dx *= -1;
+
+    _sprite.set_x(_sprite.x() + dx);
+
     bn::fixed end = _sprite.x() + 4;
     bn::fixed begin = _pos.x();
 
