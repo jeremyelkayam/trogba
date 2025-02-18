@@ -7,7 +7,7 @@ namespace trog {
 
 class tongue : public entity {
     private:
-        bn::deque<bn::sprite_ptr, 16> _tongue_sprites;
+        bn::vector<bn::sprite_ptr, 20> _tongue_sprites;
 
         bool _retracting;
         
@@ -17,12 +17,13 @@ class tongue : public entity {
         virtual void update() final;
 
         void retract();
+        bool done();
     };
 
     class wormdingler : public player { 
         private:
-            // bn::optional<bn::sprite_animate_action<7>> _flex;
             bn::sprite_animate_action<9> _walkcycle;
+            bn::optional<tongue> _tongue;
 
         public: 
             wormdingler(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
