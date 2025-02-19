@@ -6,8 +6,6 @@
 
 namespace trog { 
 
-    //word mingler
-    // haha get it
 
 wormdingler::wormdingler(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
     player(xcor, ycor, TROG_WORM_WIDTH, TROG_WORM_HEIGHT, TROG_WORM_SPEED, 
@@ -46,7 +44,7 @@ void wormdingler::update(){
         BN_LOG(_walkcycle.current_index());
     }
 
-    if(!_tongue && !dead() && bn::keypad::a_pressed())
+    if(!_iframes && !_tongue && !dead() && bn::keypad::a_pressed())
     {
         _tongue.emplace(_pos, _sprite.horizontal_flip());
 
@@ -73,14 +71,21 @@ void wormdingler::update(){
     }
 }
 
+bool wormdingler::collides_with(const entity &e){
+    return _hitbox.intersects(e.get_hitbox()) || 
+        (_tongue && _tongue->get_hitbox().intersects(e.get_hitbox()));
+}
+
 tongue::tongue(bn::fixed_point pos, bool facing_left) : 
     entity(pos.x() + (facing_left ? -30 : 30), 
         pos.y() + 1, 
         13, 
         3, 
         bn::sprite_items::wormdingler_tongue.create_sprite(0, 0)),
-    _retracting(false)
+    _retracting(false),
+    _speed(1)
 {
+    if(facing_left) _speed *= -1;
     _sprite.set_horizontal_flip(facing_left);
     _sprite.set_y(_pos.y());
     _sprite.set_x(_pos.x());
@@ -88,12 +93,21 @@ tongue::tongue(bn::fixed_point pos, bool facing_left) :
 
 void tongue::update(){
 
-    bn::fixed dx = 1;
+    bn::fixed dx = 0.25;
     if(_sprite.horizontal_flip()) dx *= -1;
 
     if(_retracting) dx *= -1;
 
-    _sprite.set_x(_sprite.x() + dx);
+    _speed += dx;
+
+    // if(!_retracting)
+    // {
+        //bound our speed;
+        if(_speed < -5) _speed = -5;
+        else if(_speed > 5) _speed = 5;
+    // }
+
+    _sprite.set_x(_sprite.x() + _speed);
 
     bn::fixed end = _sprite.x() + 4;
     bn::fixed begin = _pos.x();
@@ -104,12 +118,22 @@ void tongue::update(){
     _hitbox.set_width(width);
     _hitbox.set_x(xcor);
 
-    if(_hitbox.width() / 8 > (_tongue_sprites.size() - 2))
+    int width_rounded = (_hitbox.width() / 8).floor_integer();
+    if(_sprite.horizontal_flip())
+        width_rounded = (_hitbox.width() / 8).ceil_integer();
+
+    if(width_rounded > (_tongue_sprites.size() - 2))
     {
-        _tongue_sprites.emplace_back(
-            bn::sprite_items::wormdingler_tongue.create_sprite(0, _pos.y(), 1));
+        if(_tongue_sprites.size() > 12)
+            retract();
+
+        if(!_tongue_sprites.full())
+            _tongue_sprites.emplace_back(
+                bn::sprite_items::wormdingler_tongue.create_sprite(0, _pos.y(), 1));
+        
     }
-    else if(_retracting && _hitbox.width() / 8 < (_tongue_sprites.size() - 2))
+    else if(_retracting && width_rounded < 
+        (_tongue_sprites.size() - 2))
     {
         _tongue_sprites.pop_back();
     }

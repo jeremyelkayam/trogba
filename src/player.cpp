@@ -229,7 +229,6 @@ void player::handle_peasant_collision(peasant &peasant){
             _common_stuff.commentary.stomp_peasant(_sesh.get_dragon());
         }
     }
-
 }
 
 void player::start_burninating(){

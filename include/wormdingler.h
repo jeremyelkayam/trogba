@@ -10,6 +10,8 @@ class tongue : public entity {
         bn::vector<bn::sprite_ptr, 20> _tongue_sprites;
 
         bool _retracting;
+
+        bn::fixed _speed;
         
     public:
         tongue(bn::fixed_point pos, bool facing_left);
@@ -27,9 +29,12 @@ class tongue : public entity {
 
         public: 
             wormdingler(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter=0);
-            virtual void update() final;
+            virtual void update() override final;
 
-            virtual void update_anim() final;
+            virtual void update_anim() override final;
+
+            virtual bool collides_with(const entity &e)
+                override final;
 
     };
 
