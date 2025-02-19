@@ -24,15 +24,22 @@ const voice_clips all_clips[4] {
         bn::sound_items::sb_dooj, //ignite cottage
         bn::sound_items::sb_strikesagain, // selection
         //sworded
-        {bn::sound_items::sb_worstgame, bn::sound_items::sb_stupidknight},
+        {bn::sound_items::sb_worstgame, 
+            bn::sound_items::sb_stupidknight},
         //burninate
-        {bn::sound_items::sb_tablesturn, bn::sound_items::sb_advantage, bn::sound_items::sb_lowres},
+        {bn::sound_items::sb_tablesturn, 
+            bn::sound_items::sb_advantage, 
+            bn::sound_items::sb_lowres},
         //level beat
-        {bn::sound_items::sb_comesinthenight, bn::sound_items::sb_bestgame},
+        {bn::sound_items::sb_comesinthenight, 
+            bn::sound_items::sb_bestgame},
         //ignite peasant
-        {bn::sound_items::sb_hesonfire, bn::sound_items::sb_lookit_him_burning},
+        {bn::sound_items::sb_hesonfire, 
+            bn::sound_items::sb_lookit_him_burning},
         //stomp
-        {bn::sound_items::sb_asquisha, bn::sound_items::sb_asquishasquisha, bn::sound_items::sb_squishedyou}
+        {bn::sound_items::sb_asquisha, 
+            bn::sound_items::sb_asquishasquisha, 
+            bn::sound_items::sb_squishedyou}
     },
     //sucks
     {
@@ -46,15 +53,22 @@ const voice_clips all_clips[4] {
         bn::sound_items::sb_burncottage, //ignite cottage
         bn::sound_items::sb_unnatural, // selection
         //sworded
-        {bn::sound_items::sb_sordid_affair, bn::sound_items::sb_knight_looking},
+        {bn::sound_items::sb_sordid_affair, 
+            bn::sound_items::sb_knight_looking},
         //burninate
-        {bn::sound_items::sb_getburning, bn::sound_items::sb_style, bn::sound_items::sb_snakefire},
+        {bn::sound_items::sb_getburning, 
+            bn::sound_items::sb_style, 
+            bn::sound_items::sb_snakefire},
         //level beat
-        {bn::sound_items::sb_sucks_clap, bn::sound_items::sb_sisforsucks},
+        {bn::sound_items::sb_sucks_clap, 
+            bn::sound_items::sb_sisforsucks},
         //ignite peasant
-        {bn::sound_items::sb_burninate, bn::sound_items::sb_fiyah},
+        {bn::sound_items::sb_burninate, 
+            bn::sound_items::sb_fiyah},
         //stomp
-        {bn::sound_items::sb_rampage, bn::sound_items::sb_stomp, bn::sound_items::sb_herepeasant}
+        {bn::sound_items::sb_rampage, 
+            bn::sound_items::sb_stomp, 
+            bn::sound_items::sb_herepeasant}
     },
     //chiaroscuro
     {
