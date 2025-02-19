@@ -81,24 +81,31 @@ const voice_clips all_clips[4] {
     //wormdingler
     {
         bn::sound_items::cz_bride, //game over
-        bn::sound_items::dummy, //archer game over
-        bn::sound_items::dummy, //high score
-        bn::sound_items::dummy, // secret score
-        bn::sound_items::dummy, //arrowed
-        bn::sound_items::dummy, //majesty
-        bn::sound_items::dummy, //majesty troghammer
-        bn::sound_items::dummy, //ignite cottage
+        bn::sound_items::cz_insulted_minutes, //archer game over
+        bn::sound_items::cz_most_fun, //high score
+        bn::sound_items::cz_what_i_doing, // secret score
+        bn::sound_items::cz_rack_battom, //arrowed
+        bn::sound_items::cz_flightrisk, //majesty
+        bn::sound_items::cz_regret_everything, //majesty troghammer
+        bn::sound_items::cz_dazzlemaze, //ignite cottage
         bn::sound_items::cz_shout_wormdingler, //selection
         //sworded
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::cz_mean, 
+            bn::sound_items::cz_crinkles},
         //burninate
-        {bn::sound_items::dummy, bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::cz_pyrotechnical, 
+            bn::sound_items::cz_whoa_mama, 
+            bn::sound_items::cz_chorge},
         //level beat
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::cz_goodtime, 
+            bn::sound_items::cz_yay},
         //ignite peasant
-        {bn::sound_items::dummy, bn::sound_items::dummy},
+        {bn::sound_items::cz_dang_z, 
+            bn::sound_items::cz_burnimup},
         //stomp
-        {bn::sound_items::dummy, bn::sound_items::dummy, bn::sound_items::dummy}
+        {bn::sound_items::cz_whee, 
+            bn::sound_items::cz_kick_teeth, 
+            bn::sound_items::cz_dont_look_good}
     }
 };
 
