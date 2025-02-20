@@ -94,6 +94,7 @@ namespace trog {
             void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}
 
             virtual void update_win_anim();
+            virtual void demo_anim() {}
 
 
     };

@@ -32,6 +32,9 @@ class tongue : public entity {
             bn::sprite_animate_action<9> _walkcycle;
             bn::optional<tongue> _tongue;
 
+            
+            bn::optional<bn::sprite_animate_action<18>> _extendo;
+
         public: 
             wormdingler(bn::fixed xcor, bn::fixed ycor, 
                 session_info &sesh, bool iframes, 
@@ -45,6 +48,9 @@ class tongue : public entity {
                 override final;
 
             virtual bool can_move() override final {return !_tongue;}
+
+            
+            virtual void demo_anim() override final;
 
 
     };

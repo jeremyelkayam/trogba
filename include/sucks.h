@@ -56,6 +56,8 @@ namespace trog {
 
             virtual bool can_move() override final {return _stomp_timer == 0 || _stomp_timer > 60;}
 
+            virtual void demo_anim() override final {stomp();} 
+
             virtual void update_win_anim();
             bn::fixed_point foot_pos();
     };

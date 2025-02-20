@@ -131,18 +131,18 @@ bn::optional<scene_type> dragon_select_scene::update(){
                 _selection_wait_time = 150;
             }
             _selectable_dragons.at(_index).player_entity.get()->update_anim_action_when_not_moving(false);
+
+            _selectable_dragons.at(_index).player_entity.get()->demo_anim();
+
             switch(dtype){
                 case dragon::TROGDOR:
-                    ((trogdor *) _selectable_dragons.at(_index).player_entity.get())->flex();
                     bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
                 break;
                 case dragon::SUCKS:
-                    ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
                     bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
                 break;
                 case dragon::WORMDINGLER:
-                    // ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
-                    // bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+
                 break;
                 default:
                 break;

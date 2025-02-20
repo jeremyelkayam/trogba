@@ -20,5 +20,9 @@ namespace trog {
 
             virtual void update_anim() final;
 
+            
+            virtual void demo_anim() override final 
+                {flex();} 
+
     };
 }

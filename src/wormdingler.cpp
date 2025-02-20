@@ -23,6 +23,11 @@ void wormdingler::update_anim(){
         _walkcycle.update();
     }
     update_firebreath();
+
+    
+    if(_extendo){
+        _extendo->update();
+    }
 }
 
 void wormdingler::update(){
@@ -73,6 +78,13 @@ void wormdingler::update(){
             }
         }
     }
+}
+
+void wormdingler::demo_anim()
+{
+    _extendo = bn::create_sprite_animate_action_forever(
+        _sprite, 2, bn::sprite_items::wormdingler.tiles_item(), 
+        8, 13, 14, 15, 0, 16, 17, 18, 19, 18, 17, 16, 0, 15, 14, 13);
 }
 
 bool wormdingler::collides_with(const entity &e){
