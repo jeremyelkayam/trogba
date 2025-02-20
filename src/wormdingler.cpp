@@ -42,7 +42,8 @@ void wormdingler::update(){
         BN_LOG(_walkcycle.current_index());
     }else if(!_tongue && !dead() && bn::keypad::a_pressed())
     {
-        _tongue.emplace(_pos, _sprite.horizontal_flip());
+        _tongue.emplace(_pos, _sprite.horizontal_flip(), 
+            _common_stuff.savefile.options.sound_vol);
 
         _sprite.set_tiles(bn::sprite_items::wormdingler.tiles_item(),
             _walkcycle.graphics_indexes().at(_walkcycle.current_index()) + 8);
@@ -79,19 +80,22 @@ bool wormdingler::collides_with(const entity &e){
         (_tongue && _tongue->get_hitbox().intersects(e.get_hitbox()));
 }
 
-tongue::tongue(bn::fixed_point pos, bool facing_left) : 
+tongue::tongue(bn::fixed_point pos, bool facing_left, const bn::fixed & volume) : 
     entity(pos.x() + (facing_left ? -30 : 30), 
         pos.y() + 1, 
         13, 
         3, 
         bn::sprite_items::wormdingler_tongue.create_sprite(0, 0)),
     _retracting(false),
-    _speed(1)
+    _speed(1),
+    _vol(volume)
 {
     if(facing_left) _speed *= -1;
     _sprite.set_horizontal_flip(facing_left);
     _sprite.set_y(_pos.y());
     _sprite.set_x(_pos.x());
+
+    _handle = bn::sound_items::hiss.play(_vol, 2, 0);
 }
 
 void tongue::update(){
@@ -103,12 +107,17 @@ void tongue::update(){
 
     _speed += dx;
 
-    // if(!_retracting)
-    // {
-        //bound our speed;
-        if(_speed < -5) _speed = -5;
-        else if(_speed > 5) _speed = 5;
-    // }
+    if(_retracting && _handle && 
+        ((_sprite.horizontal_flip() && _speed > 0) || 
+        (!_sprite.horizontal_flip() && _speed < 0)))
+    {
+        _handle->stop();
+        _handle.reset();
+        bn::sound_items::hiss_rev.play(_vol, 2, 0);
+    }
+
+    if(_speed < -5) _speed = -5;
+    else if(_speed > 5) _speed = 5;
 
     _sprite.set_x(_sprite.x() + _speed);
 
