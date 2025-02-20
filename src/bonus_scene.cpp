@@ -63,7 +63,7 @@ bn::optional<scene_type> bonus_scene::update(){
         if(_player->get_hitbox().intersects(bag.get_hitbox())){
             //todo refactor this into trogdor
             _sesh.score(TROG_MONEYBAG_POINTS);
-            bn::sound_items::goldget.play(1);
+            bn::sound_items::goldget.play(_common_stuff.savefile.options.sound_vol);
             bag.collect();
             _common_stuff.savefile.stats.treasure_collected++;
         }

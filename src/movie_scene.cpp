@@ -22,7 +22,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 {
     BN_LOG("last scene: ", common_stuff.scene_type_to_string(_last_scene));
     if(_sesh.get_level() != 101) {
-        bn::sound_items::intermish.play();
+        bn::sound_items::intermish.play(_common_stuff.savefile.options.music_vol);
         write_text(_common_stuff.cutscene_name_for_level(_sesh.get_level()));
     }
 

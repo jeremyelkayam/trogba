@@ -27,7 +27,6 @@ void sb_commentary::play_sound(const bn::sound_item &item){
     if(_timer == 0 && item != bn::sound_items::dummy){
         item.play(_volume);
         _timer = 255;
-        // BN_LOG("played id: ", item.id());
     }else{
         BN_LOG("did not play id: ", item.id(), _timer ? "due to timer" : "due to dummy sound");
     }
@@ -68,7 +67,6 @@ void sb_commentary::burninate(const dragon &dragon){
 void sb_commentary::level_win_pause(const dragon &dragon, const bool &troghammer_arrived){
     BN_LOG("troghammer in play? ", troghammer_arrived);
     if(troghammer_arrived) {
-        // bn::sound_items::sb_closeone.play(_volume);
         play_sound(get_clips(dragon).majesty_troghammer);
     }else if(percent_chance(20))
         play_sound(get_clips(dragon).majesty);
