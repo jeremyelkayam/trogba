@@ -45,7 +45,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
         10, 10);
     _selectable_dragons.emplace_back(
         dragon::WORMDINGLER, 
-        "WORMDINGLER", "none",
+        "WORMDINGLER", "extendo tongue",
         bn::unique_ptr<player>(new wormdingler(0,0,_sesh, false, _common_stuff, 0)),
         10, 10);
 
@@ -139,6 +139,10 @@ bn::optional<scene_type> dragon_select_scene::update(){
                 case dragon::SUCKS:
                     ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
                     bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+                break;
+                case dragon::WORMDINGLER:
+                    // ((sucks *) _selectable_dragons.at(_index).player_entity.get())->stomp();
+                    // bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
                 break;
                 default:
                 break;

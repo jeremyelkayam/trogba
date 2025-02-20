@@ -16,10 +16,11 @@ class tongue : public entity {
     public:
         tongue(bn::fixed_point pos, bool facing_left);
 
-        virtual void update() final;
+        virtual void update() override final;
 
         void retract();
         bool done();
+        virtual void set_visible(const bool &visible) override final;
     };
 
     class wormdingler : public player { 
@@ -35,6 +36,9 @@ class tongue : public entity {
 
             virtual bool collides_with(const entity &e)
                 override final;
+
+            virtual bool can_move() override final {return !_tongue;}
+
 
     };
 

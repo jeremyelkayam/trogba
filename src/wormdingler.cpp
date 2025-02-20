@@ -27,24 +27,20 @@ void wormdingler::update_anim(){
 
 void wormdingler::update(){
 
-    if(!_tongue)
-    {
-        player::update();
-    }
+    player::update();
 
     if(!_tongue && !dead() && any_dpad_input()){
         _walkcycle.update();
     }
     
     if(burninating()){
+        _tongue.reset();
         _breath_offset.set_x(32 - 2 * 
             abs(_walkcycle.current_index() - 
                 (_walkcycle.graphics_indexes().size()) / 2) - 2);
 
         BN_LOG(_walkcycle.current_index());
-    }
-
-    if(!_iframes && !_tongue && !dead() && bn::keypad::a_pressed())
+    }else if(!_tongue && !dead() && bn::keypad::a_pressed())
     {
         _tongue.emplace(_pos, _sprite.horizontal_flip());
 
@@ -53,11 +49,18 @@ void wormdingler::update(){
     }
     if(_tongue)
     {
+
         _tongue->update();
         if(bn::keypad::a_released())
         {
             _tongue->retract();
         }
+
+        if(_iframes)
+        {
+            _tongue->set_visible(_sprite.visible());
+        }
+
         if(_tongue->done() || dead())
         {
             _tongue.reset();
@@ -157,6 +160,15 @@ bool tongue::done()
     return _retracting && (_sprite.horizontal_flip() ?
         _sprite.x() > _pos.x() :
         _sprite.x() < _pos.x());
+}
+
+void tongue::set_visible(const bool &visible)
+{
+    entity::set_visible(visible);
+    for(bn::sprite_ptr &sprite : _tongue_sprites)
+    {
+        sprite.set_visible(visible);
+    }
 }
 
 }
