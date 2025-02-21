@@ -12,14 +12,6 @@ namespace trog {
             bn::regular_bg_ptr _box;
             bn::fixed _speed;
 
-            /*
-             * Formats a longer string into up to 3 separate strings, separated
-             * automatically based on width.
-             * 
-             * Throws an error if the string is too big to fit into 3 lines (1 text box).
-             */
-            bn::vector<bn::string<64>, 3> split_into_lines(const char *text);
-
         public:
             text_box(bn::sprite_text_generator &text_generator, const char *text);
             text_box();

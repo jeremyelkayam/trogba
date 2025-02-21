@@ -22,12 +22,12 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
-        _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(45,-60)),
-        _trogmeter_degrade_icon(bn::sprite_items::trogmeter_degrade_icon.create_sprite(55,-60)),
+        _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(55,-50)),
+        _trogmeter_degrade_icon(bn::sprite_items::trogmeter_degrade_icon.create_sprite(65,-50)),
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
-        _bg(bn::regular_bg_items::main_menu.create_bg(0, 45)),
+        _bg(bn::regular_bg_items::main_menu.create_bg(0, 0)),
         _selected_option_index(0),
         _selection_anim_timer(0),
         _sesh(sesh),
@@ -40,7 +40,7 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
     _flames.set_visible(false);
     _flames.set_scale(0.01);
     common_stuff.text_generator.set_center_alignment();
-    _menu_options.emplace_back(5, -62, "CONTINUE", common_stuff.text_generator);
+    _menu_options.emplace_back(0, -52, "CONTINUE", common_stuff.text_generator);
 
     common_stuff.small_generator.set_center_alignment();
 
@@ -54,23 +54,24 @@ menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) :
         summary_stream << "level: " << loaded_sesh.level;       
 
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        common_stuff.small_generator.generate(5, -46, session_summary, _menu_text_sprites);
+        common_stuff.small_generator.generate(0, -36, session_summary, _menu_text_sprites);
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
 
         _troghammer_icon.set_visible(loaded_sesh.troghammer);
         _trogmeter_degrade_icon.set_visible(loaded_sesh.can_lose_trogmeter);
     }else{
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        common_stuff.small_generator.generate(5, -46, "no data saved.", _menu_text_sprites);
+        common_stuff.small_generator.generate(0, -26, "no data saved.", _menu_text_sprites);
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
-    _menu_options.emplace_back(5, -15, "NEW GAME", common_stuff.text_generator);
-    _menu_options.emplace_back(5, 17, "HOW TO PLAY", common_stuff.text_generator);
-    _menu_options.emplace_back(5, 47, "OPTIONS", common_stuff.text_generator);
-    _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
-    _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
-    _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
+    _menu_options.emplace_back(-72, 32, "NEW\nGAME", common_stuff.text_generator);
+    // _menu_options.emplace_back( "HOW TO PLAY", common_stuff.text_generator);
+    _menu_options.emplace_back(1, 32, "OPTIONS", common_stuff.text_generator);
+    _menu_options.emplace_back(72, 32, "EXTRAS", common_stuff.text_generator);
+    // _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
+    // _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
+    // _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
 }
 
 bn::optional<scene_type> menu_scene::update(){
@@ -181,16 +182,38 @@ void menu_scene::select(){
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& text_generator){
+
+    //split into lines doesn't *quite* apply here b/c it's based on the 8x8 font 
+    //but for our purposes it's fine
+    bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(text);
+
+    BN_LOG("lines size: ", lines.size());
+    
     text_generator.set_center_alignment();
 
-    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-    text_generator.generate(x - 1, y + 1, text, _drop_shadow_sprites);    
+    bn::fixed spacing = 12;
+    bn::fixed starting_y = y - spacing * (lines.size() - 1) / 2;
 
-    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    text_generator.generate(x, y, text, _text_sprites);    
+    for(int line_num = 0; line_num < lines.size(); ++line_num)
+    {
+        
 
-    text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-    text_generator.generate(x, y, text, _red_text_sprites);   
+        text_generator.set_palette_item(
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+        text_generator.generate(x - 1, starting_y + spacing*line_num + 1, 
+            lines.at(line_num), _drop_shadow_sprites);    
+    
+        text_generator.set_palette_item(
+            bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        text_generator.generate(x, starting_y + spacing*line_num, 
+            lines.at(line_num), _text_sprites);    
+    
+        text_generator.set_palette_item(
+            bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
+        text_generator.generate(x, starting_y + spacing*line_num, 
+            lines.at(line_num), _red_text_sprites);       
+    }
+
     turn_white();
 }
 

@@ -120,7 +120,15 @@ namespace trog {
 
             bool percent_chance(const bn::fixed &pct) {return commentary.percent_chance(pct);}
 
-            bn::string<10> play_time();
+            bn::string<10> play_time();            /*
+
+            * Formats a longer string into up to 3 separate strings, separated
+            * automatically based on width.
+            * 
+            * Throws an error if the string is too big to fit into 3 lines (1 text box).
+            */
+           static bn::vector<bn::string<64>, 3> split_into_lines(const char *text);
+
 
         private:
 
