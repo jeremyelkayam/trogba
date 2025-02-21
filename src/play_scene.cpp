@@ -169,7 +169,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
 
     if(_sesh.get_level() == 0){
         //Initialize tutorial
-        _text_box.reset(new text_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!"));
+        _tutorial_box.reset(new tutorial_box(common_stuff.small_generator, "You are TROGDOR, the BURNiNATOR.\nUse the SQUISHY PLUS SIGN (+) to move!!"));
         bn::music_items::skoa.play(common_stuff.savefile.options.music_vol);
         _voices_volume = common_stuff.savefile.options.voice_vol;
 
@@ -193,7 +193,7 @@ bn::optional<scene_type> play_scene::update(){
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
-            _text_box.reset(new text_box(_common_stuff.small_generator, "Congrats! You finished the tutorial."));
+            _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Congrats! You finished the tutorial."));
         }
     }
     if(_autosave_visibility_time != 0){
@@ -711,7 +711,7 @@ void play_scene::update_tutorial(){
         if(_timer == 240){
             _cottages.emplace_back(65, 5, direction::LEFT, false, false, _common_stuff);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);
-            _text_box.reset(new text_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it."));
+            _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it."));
             _timer = 0;
             _tutorial_cutscene_timer = 1;
 
@@ -737,7 +737,7 @@ void play_scene::update_tutorial(){
         //this direction clause is just to make sure this only runs once
                 _tutorial_arrow->get_direction() != direction::UP){
             
-            _text_box.reset(new text_box(_common_stuff.small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!"));
+            _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!"));
             _tutorial_arrow.reset(new tutorial_arrow(-60, -62, direction::UP));
         }
 
@@ -749,7 +749,7 @@ void play_scene::update_tutorial(){
             _archers.emplace_front(-50, true, _common_stuff);
             _archers.front().move_from(60, 135, -50);
 
-            _text_box.reset(new text_box(_common_stuff.small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords."));
+            _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords."));
 
             _tutorial_cutscene_timer = 1;
 
@@ -758,12 +758,12 @@ void play_scene::update_tutorial(){
         _tutorial_arrow.reset();
         //burnination / level winning tutorial
         if(_player->get_burninating_time() == _player->get_burninating_length()){
-            _text_box.reset();
-            _text_box.reset(new text_box(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility."));
+            _tutorial_box.reset();
+            _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Filling the Trog-Meter grants you BURNINATION. In this state, you gain fire-breathing and invicibility."));
         }
-        if(_player->get_burninating_time() == 1) _text_box.reset();
-    }else if(!_text_box){
-        _text_box.reset(new text_box(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level."));
+        if(_player->get_burninating_time() == 1) _tutorial_box.reset();
+    }else if(!_tutorial_box){
+        _tutorial_box.reset(new tutorial_box(_common_stuff.small_generator, "Fill the Trog-Meter and burninate all cottages to win the level."));
     }
 
     if(_tutorial_arrow){

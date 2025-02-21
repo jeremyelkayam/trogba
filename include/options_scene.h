@@ -6,7 +6,7 @@
 
 #include "scene.h"
 #include "session_info.h"
-#include "text_box.h"
+#include "tutorial_box.h"
 
 namespace trog{
 
@@ -69,7 +69,7 @@ namespace trog{
     private:
         common_stuff &_common_stuff;
         const scene_type _last_scene;
-        bn::optional<text_box> _description_box;
+        bn::optional<tutorial_box> _description_box;
         
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
         bn::vector<bn::sprite_ptr, 64> _notice_sprites;        

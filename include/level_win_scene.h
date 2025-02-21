@@ -4,7 +4,7 @@
 #include <bn_sprite_animate_actions.h>
 #include "scene.h"
 #include "session_info.h"
-#include "text_box.h"
+#include "tutorial_box.h"
 
 
 namespace trog{
@@ -19,7 +19,7 @@ namespace trog{
         bn::sprite_animate_action<4> _burningflames;
         bn::sprite_animate_action<2> _a_button_anim;
 
-        bn::optional<text_box> _text_box;
+        bn::optional<tutorial_box> _tutorial_box;
         
         session_info &_sesh;
         common_stuff &_common_stuff;

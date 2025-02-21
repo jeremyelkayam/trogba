@@ -5,7 +5,7 @@
 #include <bn_sprite_palette_actions.h>
 #include "scene.h"
 #include "session_info.h"
-#include "text_box.h"
+#include "tutorial_box.h"
 #include "player.h"
 #include "big_text.h"
 

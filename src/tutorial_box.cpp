@@ -1,4 +1,4 @@
-#include "text_box.h"
+#include "tutorial_box.h"
 #include "constants.h"
 #include "common_stuff.h"
 #include "trogdor_variable_8x8_sprite_font.h"
@@ -8,18 +8,18 @@
 
 namespace trog { 
 
-text_box::text_box(bn::sprite_text_generator &text_generator, const char *text) : 
+tutorial_box::tutorial_box(bn::sprite_text_generator &text_generator, const char *text) : 
     _box(bn::regular_bg_items::textbox.create_bg(0, 67)) {
     _box.set_priority(2);
     set_text(text_generator, text);
 }
 
-text_box::text_box() : 
+tutorial_box::tutorial_box() : 
     _box(bn::regular_bg_items::textbox.create_bg(0, 103)) {
     _box.set_priority(2);
 }
 
-void text_box::set_text(bn::sprite_text_generator &text_generator, const char *text){
+void tutorial_box::set_text(bn::sprite_text_generator &text_generator, const char *text){
     _text_sprites.clear();
     bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(text);
     text_generator.set_bg_priority(0);
@@ -30,7 +30,7 @@ void text_box::set_text(bn::sprite_text_generator &text_generator, const char *t
     }
 }
 
-void text_box::update(){
+void tutorial_box::update(){
     _box.set_y(_box.y() + _speed);
     for(bn::sprite_ptr &text_sprite : _text_sprites) {
         text_sprite.set_y(text_sprite.y() + _speed);

@@ -15,7 +15,7 @@
 #include "knight.h"
 #include "troghammer.h"
 #include "big_text.h"
-#include "text_box.h"
+#include "tutorial_box.h"
 #include "tutorial_arrow.h"
 #include "common_stuff.h"
 
@@ -69,7 +69,7 @@ namespace trog{
         bn::optional<bn::sprite_ptr> _void_tower;
         bn::unique_ptr<tutorial_arrow> _tutorial_arrow;
 
-        bn::unique_ptr<text_box> _text_box;
+        bn::unique_ptr<tutorial_box> _tutorial_box;
         bn::optional<bn::fixed> _voices_volume, _shake_y_offset;
 
         bool level_complete();
