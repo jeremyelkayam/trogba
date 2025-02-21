@@ -1,6 +1,8 @@
 #include "bonus_scene.h"
 #include "bn_regular_bg_items_cottageinterior.h"
 #include "sucks.h"
+#include "wormdingler.h"
+#include "chiaroscuro.h"
 
 #include <bn_log.h>
 #include <bn_sound_items.h>
@@ -14,12 +16,19 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
         _common_stuff(common_stuff),
         _sesh(sesh) {
 
+            //TODO this sucks make it better
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
             _player.reset(new trogdor(80,10, sesh, false, common_stuff));
         break;
         case dragon::SUCKS:
             _player.reset(new sucks(80,10, sesh, false, common_stuff));
+        break;
+        case dragon::WORMDINGLER:
+            _player.reset(new wormdingler(80,10, sesh, false, common_stuff));
+        break;
+        case dragon::CHIAROSCURO:
+            _player.reset(new chiaroscuro(80,10, sesh, false, common_stuff));
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");

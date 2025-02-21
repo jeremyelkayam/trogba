@@ -30,6 +30,9 @@
 #include "options_scene.h"
 #include "dragon_select_scene.h"
 #include "cutsceneviewer_scene.h"
+#include "achievement_popup.h"
+
+#include "bn_sprite_items_achievement_jhonka.h"
 
 int main()
 {
@@ -40,10 +43,15 @@ int main()
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     bn::optional<trog::scene_type> last_scene;
+
+    bn::optional<trog::achievement_popup> popup;
+
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
     trog::common_stuff common_stuff;
+
+    
     trog::session_info sesh(common_stuff);
 
 
@@ -57,6 +65,14 @@ int main()
 
     while(true)
     {
+        if(popup)
+        {
+            popup->update();
+            if(popup->done())
+            {
+                popup.reset();
+            }
+        }
         if(scene){
             next_scene = scene->update();
             hud.update();
@@ -100,6 +116,13 @@ int main()
                     // hud.show();
                     //this is the treasure hut scene
                     // we need to store the play scene so that we may return to it later.
+                    if(!popup)
+                    {
+                        popup.emplace(common_stuff,
+                            "Jhonka's Riches",
+                            bn::sprite_items::achievement_jhonka);
+                    }
+                    
                     previous_play_scene = bn::move(scene);
 
                     scene.reset(new trog::bonus_scene(sesh, common_stuff));

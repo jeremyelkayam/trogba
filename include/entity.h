@@ -6,10 +6,10 @@
 #include <bn_sprite_palette_actions.h>
 #include <bn_sprite_animate_actions.h>
 #include <bn_unique_ptr.h>
-#define FRONT_ZORDER 0
-#define MID_ZORDER 1
-#define BACK_ZORDER 2
-#define FURTHEST_BACK_ZORDER 3
+#define FRONT_ZORDER 1
+#define MID_ZORDER 2
+#define BACK_ZORDER 3
+#define FURTHEST_BACK_ZORDER 4
 
 namespace trog{
 
