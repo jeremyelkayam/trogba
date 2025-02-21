@@ -13,9 +13,12 @@ namespace trog{
             bn::vector<bn::sprite_ptr, 4> _text_sprites;
             bn::vector<bn::sprite_ptr, 4> _drop_shadow_sprites;
             bn::vector<bn::sprite_ptr, 4> _red_text_sprites;
+            bn::fixed _x, _y, _width;
         public:
             menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator);
-            bn::fixed y() const {return _text_sprites.at(0).y();}
+            bn::fixed y() const {return _y;}
+            bn::fixed x() const {return _x;}
+            bn::fixed width() const {return _width;}
             void turn_red();
             void turn_white();
             void set_y(const bn::fixed &y);
@@ -26,6 +29,8 @@ namespace trog{
         bn::vector<menu_option, 7> _menu_options;
 
         common_stuff & _common_stuff;
+
+        unsigned int _last_line2_option;
 
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
         bn::sprite_ptr _cursor, _flames, _troghammer_icon, _trogmeter_degrade_icon;

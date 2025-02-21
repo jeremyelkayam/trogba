@@ -24,7 +24,8 @@ namespace trog {
         CREDITS,
         OPTIONS,
         DRAGON_SELECT,
-        CUTSCENE_VIEWER
+        CUTSCENE_VIEWER,
+        EXTRAS
     };
     enum class direction
     {

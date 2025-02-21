@@ -19,6 +19,7 @@ namespace trog {
 
 menu_scene::menu_scene(session_info &sesh, common_stuff &common_stuff) : 
         _common_stuff(common_stuff),
+        _last_line2_option(2),
         // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
@@ -84,18 +85,15 @@ bn::optional<scene_type> menu_scene::update(){
         _flames_scale.update();
         _flames_translate->update();
         if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
-            if(_selected_option_index == 1){
-                result = scene_type::DRAGON_SELECT;
-            }else if(_selected_option_index == 3){
-                result = scene_type::OPTIONS;
-            }else if(_selected_option_index == 4){
-                result = scene_type::HISCORES;
-            }else if(_selected_option_index == 5){
-                result = scene_type::CREDITS;
-            }else if(_selected_option_index == 6){
-                result = scene_type::CUTSCENE_VIEWER;
-            }else{
+            //todo: move this into the menu option class i think 
+            if(_selected_option_index == 0){
                 result = scene_type::PLAY;
+            }else if(_selected_option_index == 1){
+                result = scene_type::DRAGON_SELECT;
+            }else if(_selected_option_index == 2){
+                result = scene_type::OPTIONS;
+            }else if(_selected_option_index == 3){
+                result = scene_type::EXTRAS;
             }
         } 
     }
@@ -110,14 +108,10 @@ bn::optional<scene_type> menu_scene::update(){
                 _selection_anim_timer = 0;
                 bn::sound_items::deleted.play(_common_stuff.savefile.options.sound_vol);
             }
-        }else if(_selected_option_index == 1 || _selected_option_index == 2){
+        }else if(_selected_option_index == 1){
             //Erase the existing session if you're starting a new game
             _common_stuff.savefile.session.exists = false;
             _sesh.reset();
-        }
-        
-        if(_selected_option_index == 2){
-            _sesh.set_level(0);
         }
 
         if(_selected_option_index != 0){
@@ -125,22 +119,33 @@ bn::optional<scene_type> menu_scene::update(){
         }
 
 
-    }else if(bn::keypad::up_pressed() && !_selection_anim_timer){
+    }else if((bn::keypad::up_pressed() || bn::keypad::down_pressed()) && !_selection_anim_timer){
         if(_selected_option_index == 0){
-            _selected_option_index = _menu_options.size() - 1;
+            _selected_option_index = _last_line2_option;
         }else{
+            _selected_option_index = 0;
+        }
+    }else if((bn::keypad::left_pressed()) && !_selection_anim_timer){
+        if(_selected_option_index > 1){
             --_selected_option_index;
         }
-    }else if(bn::keypad::down_pressed() && !_selection_anim_timer){
-        if(_selected_option_index == _menu_options.size() - 1){
-            _selected_option_index = 0;
-        }else{
+    }else if((bn::keypad::right_pressed()) && !_selection_anim_timer){
+        if(_selected_option_index != 0 && _selected_option_index < 3){
             ++_selected_option_index;
         }
     }
 
-    _cursor.set_y(_menu_options.at(_selected_option_index).y());
+    if(bn::keypad::any_pressed() && _selected_option_index != 0)
+    {
+        _last_line2_option = _selected_option_index;
+    }
 
+    menu_option &current_option = _menu_options.at(_selected_option_index);
+
+    _cursor.set_y(current_option.y());
+    _cursor.set_x(current_option.x() - (current_option.width()/2 + 5));
+
+    //old scrolling code
     if(_cursor.y() < -62 || _cursor.y() > 50){
 
         bn::fixed offset = _cursor.y() < -62 ? _scroll_speed : -_scroll_speed;
@@ -181,7 +186,11 @@ void menu_scene::select(){
     bn::sound_items::burningcottage.play(_common_stuff.savefile.options.sound_vol);
 }
 
-menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& text_generator){
+menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, 
+    bn::sprite_text_generator& text_generator) :
+    _x(x),
+    _y(y),
+    _width(0) {
 
     //split into lines doesn't *quite* apply here b/c it's based on the 8x8 font 
     //but for our purposes it's fine
@@ -196,22 +205,25 @@ menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *tex
 
     for(int line_num = 0; line_num < lines.size(); ++line_num)
     {
-        
+        bn::string<64> &current_line = lines.at(line_num);
+
+        bn::fixed line_width = 9 * current_line.size();
+        if(line_width > _width) _width = line_width;
 
         text_generator.set_palette_item(
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
         text_generator.generate(x - 1, starting_y + spacing*line_num + 1, 
-            lines.at(line_num), _drop_shadow_sprites);    
+            current_line, _drop_shadow_sprites);    
     
         text_generator.set_palette_item(
             bn::sprite_items::trogdor_variable_8x16_font.palette_item());
         text_generator.generate(x, starting_y + spacing*line_num, 
-            lines.at(line_num), _text_sprites);    
+            current_line, _text_sprites);    
     
         text_generator.set_palette_item(
             bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
         text_generator.generate(x, starting_y + spacing*line_num, 
-            lines.at(line_num), _red_text_sprites);       
+            current_line, _red_text_sprites);       
     }
 
     turn_white();
