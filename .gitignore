@@ -16,3 +16,4 @@ build/
 *.config
 *.cflags
 *.cxxflags
+*.png
