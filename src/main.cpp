@@ -116,12 +116,6 @@ int main()
                     // hud.show();
                     //this is the treasure hut scene
                     // we need to store the play scene so that we may return to it later.
-                    if(!popup)
-                    {
-                        popup.emplace(common_stuff,
-                            "Jhonka's Riches",
-                            bn::sprite_items::achievement_jhonka);
-                    }
                     
                     previous_play_scene = bn::move(scene);
 
