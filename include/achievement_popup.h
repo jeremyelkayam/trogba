@@ -3,7 +3,6 @@
 #include <bn_vector.h>
 #include <bn_sprite_ptr.h>
 #include <bn_string.h>
-#include "common_stuff.h"
 
 namespace trog { 
     class achievement_popup {
@@ -28,8 +27,8 @@ namespace trog {
                 const bn::fixed_point &relative_pos);
 
         public:
-            achievement_popup(
-                common_stuff &cstuff,
+            achievement_popup(bn::sprite_text_generator &generator,
+                const bn::fixed &sound_vol,
                 const bn::string<16> &achievement_name,
                 const bn::sprite_item &achievement_icon);
 

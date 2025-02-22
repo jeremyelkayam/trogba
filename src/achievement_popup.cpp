@@ -8,7 +8,8 @@
 
 namespace trog { 
 
-achievement_popup::achievement_popup(common_stuff &cstuff,
+achievement_popup::achievement_popup(bn::sprite_text_generator &generator,
+    const bn::fixed &sound_vol,
     const bn::string<16> &achievement_name,
     const bn::sprite_item &achievement_icon) : 
         _speed(0),
@@ -16,7 +17,7 @@ achievement_popup::achievement_popup(common_stuff &cstuff,
         _timer(0),
         _icon_sprite(achievement_icon.create_sprite(_pos.x() - 58, _pos.y()))
 {
-    bn::sound_items::bubble.play(1);
+    bn::sound_items::bubble.play(sound_vol);
     for(int z = 0; z < _box_sprites.max_size(); ++z)
     {
         bn::fixed xoffset = 64 * (z - (_box_sprites.max_size() - 1) / 2);
@@ -27,12 +28,12 @@ achievement_popup::achievement_popup(common_stuff &cstuff,
     
     _icon_sprite.put_above();
 
-    cstuff.small_generator.set_center_alignment();
-    cstuff.small_generator.set_palette_item(bn::sprite_palette_items::font_yellow);
-    cstuff.small_generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked!",
+    generator.set_center_alignment();
+    generator.set_palette_item(bn::sprite_palette_items::font_yellow);
+    generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked!",
         _text_sprites);
-    cstuff.small_generator.set_palette_item(WHITE_PALETTE);
-    cstuff.small_generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
+    generator.set_palette_item(WHITE_PALETTE);
+    generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
         _text_sprites);
     
     _speed = -bn::fixed(HEIGHT) / MOVE_TIME;

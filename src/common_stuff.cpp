@@ -11,6 +11,7 @@ common_stuff::common_stuff() :
     text_generator(variable_8x16_sprite_font),
     big_generator(variable_32x64_sprite_font),
     small_generator(variable_8x8_sprite_font),
+    acm(savefile.achievements, small_generator, savefile.options.sound_vol),
     commentary(savefile.options.voice_vol, rand){ 
 
     cutscene_levels.emplace_back(5, "stompin' good");
@@ -50,6 +51,9 @@ common_stuff::common_stuff() :
             bn::sram::read(old_save);
             savefile.options = old_save.options;
             savefile.high_scores_table = old_save.high_scores_table;
+
+            
+            savefile.achievements.fill(0);
 
             // TODO - Move to achievements
             // savefile.cheat_unlocked = old_save.cheat_unlocked;
@@ -256,6 +260,7 @@ void common_stuff::format_save(){
         savefile.session.current_dragon = dragon::TROGDOR;
         savefile.last_dragon_used = dragon::TROGDOR;
 
+        savefile.achievements.fill(0);
         //TODO - Make this an achievement
         // savefile.cheat_unlocked = false;
 

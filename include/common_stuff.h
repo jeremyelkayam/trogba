@@ -7,9 +7,11 @@
 #include <bn_vector.h>
 #include <bn_string.h>
 #include <bn_unordered_map.h>
+#include <bn_optional.h>
 #include "constants.h"
 #include "sb_commentary.h"
 #include "enums.h"
+#include "achievements.h"
 
 namespace trog {
 
@@ -26,20 +28,6 @@ namespace trog {
         troghammer_state current_state;
         unsigned short timer;
         bn::fixed_point pos;
-    };
-
-    struct achievement_data
-    {
-        //Value can represent either a 64-bit integer 
-        // or a sequence of 64 boolean values. If number is true 
-        // it's an int, if false it's bools
-
-        // If value represents 64 bools they MUST be right-to-left
-        // And threshold MUST be a power of two corresponding
-        // to the number of bools, e.g. 8 = four bools (2^4),
-        // or in binary 1111
-        long value, threshold;
-        bool number;
     };
 
     class high_score_entry {
@@ -96,7 +84,7 @@ namespace trog {
 
         dragon last_dragon_used;
 
-        bn::array<achievement_data, 64> achievements;
+        bn::array<long, 64> achievements;
 
         bn::array<bool, 13> unlocked_cutscenes;
 
@@ -111,6 +99,8 @@ namespace trog {
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
             bn::array<char, 8> default_format_tag;
+
+            achievements_mgr acm;
 
             sb_commentary commentary;
 
@@ -134,7 +124,9 @@ namespace trog {
 
             bool percent_chance(const bn::fixed &pct) {return commentary.percent_chance(pct);}
 
-            bn::string<10> play_time();            /*
+            bn::string<10> play_time();            
+            
+            /*
 
             * Formats a longer string into up to 3 separate strings, separated
             * automatically based on width.
