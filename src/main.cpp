@@ -30,9 +30,6 @@
 #include "options_scene.h"
 #include "dragon_select_scene.h"
 #include "cutsceneviewer_scene.h"
-#include "achievement_popup.h"
-
-#include "bn_sprite_items_achievement_jhonka.h"
 
 int main()
 {
@@ -44,35 +41,26 @@ int main()
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     bn::optional<trog::scene_type> last_scene;
 
-    bn::optional<trog::achievement_popup> popup;
-
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
-    trog::common_stuff common_stuff;
+    bn::unique_ptr<trog::common_stuff> common_stuff(
+        new trog::common_stuff());
 
     
-    trog::session_info sesh(common_stuff);
+    trog::session_info sesh(*common_stuff);
 
 
-    common_stuff.text_generator.set_center_alignment();
+    common_stuff->text_generator.set_center_alignment();
 
     bool logo_scene = true;
 
-    trog::hud hud(sesh, common_stuff, TROG_TROGMETER_MAX);
+    trog::hud hud(sesh, *common_stuff, TROG_TROGMETER_MAX);
     hud.hide();
 
 
     while(true)
     {
-        if(popup)
-        {
-            popup->update();
-            if(popup->done())
-            {
-                popup.reset();
-            }
-        }
         if(scene){
             next_scene = scene->update();
             hud.update();
@@ -88,17 +76,17 @@ int main()
                 }
                 case trog::scene_type::LOGO: { 
                     hud.hide();
-                    scene.reset(new trog::logo_scene(sesh, common_stuff));
+                    scene.reset(new trog::logo_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::TITLE: { 
                     hud.hide();
-                    scene.reset(new trog::title_scene(common_stuff));
+                    scene.reset(new trog::title_scene(*common_stuff));
                     break;
                 }
                 case trog::scene_type::MENU: { 
                     hud.hide();
-                    scene.reset(new trog::menu_scene(sesh, common_stuff));
+                    scene.reset(new trog::menu_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::PLAY: { 
@@ -108,7 +96,7 @@ int main()
                         //so we should go back to the play scene from before 
                         scene = bn::move(previous_play_scene);
                     }else{
-                        scene.reset(new trog::play_scene(sesh, hud, common_stuff));
+                        scene.reset(new trog::play_scene(sesh, hud, *common_stuff));
                     }
                     break;
                 }
@@ -119,18 +107,18 @@ int main()
                     
                     previous_play_scene = bn::move(scene);
 
-                    scene.reset(new trog::bonus_scene(sesh, common_stuff));
+                    scene.reset(new trog::bonus_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::LOSE: { 
                     hud.show();
                     scene.reset();
-                    scene.reset(new trog::gameover_scene(sesh, common_stuff));
+                    scene.reset(new trog::gameover_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::LEVELBEAT: {
                     hud.show();
-                    scene.reset(new trog::level_win_scene(sesh, common_stuff));
+                    scene.reset(new trog::level_win_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::MOVIE: {
@@ -139,7 +127,7 @@ int main()
                     }else{
                         hud.hide();
                     }
-                    scene.reset(new trog::movie_scene(sesh, common_stuff, *last_scene));
+                    scene.reset(new trog::movie_scene(sesh, *common_stuff, *last_scene));
                     break;
                 }
                 case trog::scene_type::HISCORES: {
@@ -147,12 +135,12 @@ int main()
                     if(last_scene == trog::scene_type::PLAY){
                         previous_play_scene = bn::move(scene);
                     }                    
-                    scene.reset(new trog::hiscores_scene(sesh, common_stuff, *last_scene));
+                    scene.reset(new trog::hiscores_scene(sesh, *common_stuff, *last_scene));
                     break;
                 }                
                 case trog::scene_type::CREDITS: {
                     hud.hide();
-                    scene.reset(new trog::credits_scene(common_stuff));
+                    scene.reset(new trog::credits_scene(*common_stuff));
                     break;
                 }                
                 case trog::scene_type::FIREYRAGE: {
@@ -167,17 +155,17 @@ int main()
                         previous_play_scene = bn::move(scene);
                     }
 
-                    scene.reset(new trog::options_scene(common_stuff, *last_scene));
+                    scene.reset(new trog::options_scene(*common_stuff, *last_scene));
                     break;
                 }                
                 case trog::scene_type::DRAGON_SELECT: {
                     hud.hide();
-                    scene.reset(new trog::dragon_select_scene(sesh, common_stuff));
+                    scene.reset(new trog::dragon_select_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::CUTSCENE_VIEWER: {
                     hud.hide();
-                    scene.reset(new trog::cutsceneviewer_scene(sesh, common_stuff));
+                    scene.reset(new trog::cutsceneviewer_scene(sesh, *common_stuff));
                     break;
                 }
                 default: { 
@@ -190,12 +178,12 @@ int main()
 
         if(!kicked && bn::keypad::select_pressed()){
             BN_LOG("kick. TROGADOR");
-            bn::sound_items::kick.play(common_stuff.savefile.options.sound_vol);
+            bn::sound_items::kick.play(common_stuff->savefile.options.sound_vol);
             kicktimer.restart();
             kicked=true;
         }
         if(kicked && kicktimer.elapsed_ticks() > 120000) { 
-            bn::sound_items::trogador.play(common_stuff.savefile.options.sound_vol);
+            bn::sound_items::trogador.play(common_stuff->savefile.options.sound_vol);
             kicked=false;
         }
 
@@ -208,11 +196,12 @@ int main()
 
         // Burn a random number every frame.
         // This makes it less likely to get the same random numbers every time you play
-        common_stuff.rand.update();
-        common_stuff.commentary.update();
+        common_stuff->rand.update();
+        common_stuff->commentary.update();
+        common_stuff->acm.update();
 
         //increment our total play time by 1 frame... 
-        common_stuff.savefile.stats.play_time++;
+        common_stuff->savefile.stats.play_time++;
 
         bn::core::update();
     }
