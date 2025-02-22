@@ -55,6 +55,8 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
          (_sesh.get_dragon() == dragon::SUCKS) )){
         bn::sound_items::sb_roomierinside.play(common_stuff.savefile.options.voice_vol);
     }
+
+    common_stuff.acm.update_achievement("onehut", 1);
 }
 
 

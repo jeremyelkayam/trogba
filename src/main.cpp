@@ -44,9 +44,10 @@ int main()
     
     bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 
+    //doesn't *NEED* to be a unique ptr as far as code architecture goes,
+    // but it's going on the heap because it takes up a lot of stack memory
     bn::unique_ptr<trog::common_stuff> common_stuff(
         new trog::common_stuff());
-
     
     trog::session_info sesh(*common_stuff);
 
