@@ -35,8 +35,10 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
     lives_options.emplace_back(0);
     lives_options.emplace_back(3);
     lives_options.emplace_back(5);
-    if(_common_stuff.savefile.cheat_unlocked)
-        lives_options.emplace_back(30);
+
+    // TODO Check konami code achievement
+    // if(_common_stuff.savefile.cheat_unlocked)
+        // lives_options.emplace_back(30);
 
     _options_vec.emplace_back(new selector_option("Starting Lives", "Controls the number of lives Trogdor starts out with.", txtgen, ycor(2), _common_stuff.savefile.options.starting_lives, lives_options));
     _options_vec.emplace_back(new percent_option("Music Volume", "Controls the volume of any music playing.", txtgen, ycor(3), _common_stuff.savefile.options.music_vol));

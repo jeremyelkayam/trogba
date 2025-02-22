@@ -50,7 +50,9 @@ common_stuff::common_stuff() :
             bn::sram::read(old_save);
             savefile.options = old_save.options;
             savefile.high_scores_table = old_save.high_scores_table;
-            savefile.cheat_unlocked = old_save.cheat_unlocked;
+
+            // TODO - Move to achievements
+            // savefile.cheat_unlocked = old_save.cheat_unlocked;
 
             //session variables
             savefile.session.exists = old_save.session.exists;
@@ -254,7 +256,8 @@ void common_stuff::format_save(){
         savefile.session.current_dragon = dragon::TROGDOR;
         savefile.last_dragon_used = dragon::TROGDOR;
 
-        savefile.cheat_unlocked = false;
+        //TODO - Make this an achievement
+        // savefile.cheat_unlocked = false;
 
         savefile.unlocked_cutscenes.fill(false);
 

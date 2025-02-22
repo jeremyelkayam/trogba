@@ -48,7 +48,8 @@ bn::optional<scene_type> title_scene::update(){
     if(_frame_counter > 440 || bn::keypad::start_pressed() || bn::keypad::a_pressed()){
         result = scene_type::MENU;
         if(_secret_code_index == _secret_code.size()){
-            _common_stuff.savefile.cheat_unlocked = true;
+            //TODO Change to achievement
+            // _common_stuff.savefile.cheat_unlocked = true;
             _common_stuff.savefile.options.starting_lives = 30;
             _common_stuff.save();
         }
