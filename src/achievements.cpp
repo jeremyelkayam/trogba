@@ -1,11 +1,12 @@
 #include "achievements.h"
 #include <bn_math.h>
+#include <bn_sram.h>
 #include "bn_sprite_items_achievement_goldpile.h"
 
 namespace trog
 {
 
-achievements_mgr::achievements_mgr(bn::array<long, 64> &sram_data,
+achievements_mgr::achievements_mgr(saved_data &sram_data,
     bn::sprite_text_generator &generator,
     const bn::fixed &sound_vol) : 
     _generator(generator),
@@ -45,27 +46,23 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
 
     if(data.is_number)
     {
-        _sram_data[data.sram_index] = new_value;
+        _sram_data.achievements[data.sram_index] = new_value;
     }
     else
     {
         //it's a boolean so new_value is actually a digit
         BN_ASSERT(new_value < max_index(data.threshold), 
             "Boolean position is out of range");
-        _sram_data[data.sram_index] = 
-            _sram_data[data.sram_index] | (1 << new_value);
+        _sram_data.achievements[data.sram_index] = 
+            _sram_data.achievements[data.sram_index] | (1 << new_value);
     }
 
 
     if(!was_achieved && is_achieved(tag))
     {
         show_popup(tag);
+        bn::sram::write(_sram_data);
     }
-
-    //TODO Save the progress after updating...
-    // This will require moving SRAM Data into a new file
-    // Common stuff will pass down the full sram data 
-    // into this class which will reference it
 }
 
 void achievements_mgr::update()
@@ -82,7 +79,7 @@ void achievements_mgr::update()
 
 bool achievements_mgr::is_achieved(bn::string<8> tag)
 {
-    return _sram_data[_achievements.at(tag).sram_index] 
+    return _sram_data.achievements[_achievements.at(tag).sram_index] 
         >= _achievements.at(tag).threshold;
 }
 

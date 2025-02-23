@@ -11,7 +11,7 @@ common_stuff::common_stuff() :
     text_generator(variable_8x16_sprite_font),
     big_generator(variable_32x64_sprite_font),
     small_generator(variable_8x8_sprite_font),
-    acm(savefile.achievements, small_generator, savefile.options.sound_vol),
+    acm(savefile, small_generator, savefile.options.sound_vol),
     commentary(savefile.options.voice_vol, rand){ 
 
     cutscene_levels.emplace_back(5, "stompin' good");

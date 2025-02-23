@@ -6,7 +6,7 @@
 #include "bn_sprite_items_achievement_jhonka.h"
 
 #include "achievement_popup.h"
-
+#include "sram_data.h"
 
 namespace trog {
 
@@ -32,7 +32,7 @@ namespace trog {
             
             bn::optional<achievement_popup> _popup;
 
-            bn::array<long, 64> &_sram_data;
+            saved_data &_sram_data;
 
             void show_popup(bn::string<8> tag);
 
@@ -41,7 +41,7 @@ namespace trog {
             static constexpr const char *string_test = "TEST!";
 
         public:
-            achievements_mgr(bn::array<long, 64> &sram_data,
+            achievements_mgr(saved_data &sram_data,
                 bn::sprite_text_generator &generator,
                 const bn::fixed &sound_vol);
 
