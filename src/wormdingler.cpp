@@ -7,19 +7,25 @@
 namespace trog { 
 
 
-wormdingler::wormdingler(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
+wormdingler::wormdingler(bn::fixed xcor, bn::fixed ycor, 
+    session_info &sesh, bool iframes, common_stuff &common_stuff, 
+    uint8_t initial_trogmeter) : 
     player(xcor, ycor, TROG_WORM_WIDTH, TROG_WORM_HEIGHT, TROG_WORM_SPEED, 
         bn::fixed_point(31, 0), sesh, 
-        iframes, bn::sprite_items::wormdingler, 5, common_stuff, initial_trogmeter), 
+        iframes, bn::sprite_items::wormdingler, 5, common_stuff, 
+        initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 3, 
-            bn::sprite_items::wormdingler.tiles_item(), 1, 2, 3, 4, 3, 2, 1, 0)) {
+            bn::sprite_items::wormdingler.tiles_item(), 1, 2, 3, 4, 3, 2, 
+            1, 0)) 
+{
 
 }
 
 
 void wormdingler::update_anim(){
     entity::update_anim();
-    if((_move_action && !_move_action->done()) || _move_by_action || _update_anim_when_not_moving){
+    if((_move_action && !_move_action->done()) || _move_by_action || 
+        _update_anim_when_not_moving){
         _walkcycle.update();
     }
     update_firebreath();
@@ -45,13 +51,16 @@ void wormdingler::update(){
                 (_walkcycle.graphics_indexes().size()) / 2) - 2);
 
         BN_LOG(_walkcycle.current_index());
-    }else if(!_tongue && !dead() && bn::keypad::a_pressed())
+
+    }
+    else if(!_tongue && !dead() && bn::keypad::a_pressed())
     {
         _tongue.emplace(_pos, _sprite.horizontal_flip(), 
             _common_stuff.savefile.options.sound_vol);
 
         _sprite.set_tiles(bn::sprite_items::wormdingler.tiles_item(),
-            _walkcycle.graphics_indexes().at(_walkcycle.current_index()) + 8);
+            _walkcycle.graphics_indexes().at(
+                _walkcycle.current_index()) + 8);
     }
     if(_tongue)
     {
@@ -73,8 +82,10 @@ void wormdingler::update(){
             
             if(!dead())
             {
-                _sprite.set_tiles(bn::sprite_items::wormdingler.tiles_item(),
-                    _walkcycle.graphics_indexes().at(_walkcycle.current_index()));
+                _sprite.set_tiles(
+                    bn::sprite_items::wormdingler.tiles_item(),
+                    _walkcycle.graphics_indexes().at(
+                        _walkcycle.current_index()));
             }
         }
     }
@@ -92,7 +103,8 @@ bool wormdingler::collides_with(const entity &e){
         (_tongue && _tongue->get_hitbox().intersects(e.get_hitbox()));
 }
 
-tongue::tongue(bn::fixed_point pos, bool facing_left, const bn::fixed & volume) : 
+tongue::tongue(bn::fixed_point pos, bool facing_left, 
+    const bn::fixed & volume) : 
     entity(pos.x() + (facing_left ? -30 : 30), 
         pos.y() + 1, 
         13, 
@@ -106,6 +118,8 @@ tongue::tongue(bn::fixed_point pos, bool facing_left, const bn::fixed & volume) 
     _sprite.set_horizontal_flip(facing_left);
     _sprite.set_y(_pos.y());
     _sprite.set_x(_pos.x());
+    _sprite.set_z_order(1);
+    _sprite.put_below();
 
     _handle = bn::sound_items::hiss.play(_vol, 2, 0);
 }
@@ -152,8 +166,14 @@ void tongue::update(){
             retract();
 
         if(!_tongue_sprites.full())
-            _tongue_sprites.emplace_back(
-                bn::sprite_items::wormdingler_tongue.create_sprite(0, _pos.y(), 1));
+        {
+            bn::sprite_ptr new_sprite = 
+                bn::sprite_items::wormdingler_tongue.create_sprite(0, 
+                    _pos.y(), 1);
+            new_sprite.set_z_order(1);
+            new_sprite.put_below();
+            _tongue_sprites.emplace_back(new_sprite); 
+        }
         
     }
     else if(_retracting && width_rounded < 

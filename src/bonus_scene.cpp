@@ -53,7 +53,8 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
     if(common_stuff.percent_chance(30) && 
         ((_sesh.get_dragon() == dragon::TROGDOR) || 
          (_sesh.get_dragon() == dragon::SUCKS) )){
-        bn::sound_items::sb_roomierinside.play(common_stuff.savefile.options.voice_vol);
+        bn::sound_items::sb_roomierinside.play(
+            common_stuff.savefile.options.voice_vol);
     }
 
     // common_stuff.savefile.session.can_visit_treasure_hut = false;

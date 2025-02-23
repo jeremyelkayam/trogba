@@ -50,7 +50,8 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
     else
     {
         //it's a boolean so new_value is actually a digit
-        BN_ASSERT(new_value <= max_index(data.threshold));
+        BN_ASSERT(new_value < max_index(data.threshold), 
+            "Boolean position is out of range");
         _sram_data[data.sram_index] = 
             _sram_data[data.sram_index] | (1 << new_value);
     }
