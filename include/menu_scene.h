@@ -1,6 +1,7 @@
 #pragma once
 #include <bn_sprite_text_generator.h>
 #include <bn_sprite_ptr.h>
+#include <bn_regular_bg_item.h>
 #include "scene.h"
 #include "session_info.h"
 #include "common_stuff.h"
@@ -24,32 +25,24 @@ namespace trog{
             void set_y(const bn::fixed &y);
     };
     class menu_scene : public scene{ 
-    private:
+    protected:
 
         bn::vector<menu_option, 7> _menu_options;
 
         common_stuff & _common_stuff;
 
-        unsigned int _last_line2_option;
-
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
-        bn::sprite_ptr _cursor, _flames, _troghammer_icon, _trogmeter_degrade_icon;
-        bn::sprite_animate_action<4> _flames_anim;
-        bn::sprite_scale_to_action _flames_scale;
+
         bn::regular_bg_ptr _bg;
-        bn::optional<bn::sprite_move_to_action> _flames_translate;
+
         
-        uint8_t _selected_option_index, _selection_anim_timer;
+        unsigned int _selected_option_index;
 
-        session_info &_sesh;
-
-        bn::fixed _scroll_speed;
-
-        void select();
 
     public:
-        explicit menu_scene(session_info &sesh, common_stuff &common_stuff);
-        [[nodiscard]] virtual bn::optional<scene_type> update() final;
+        explicit menu_scene(common_stuff &common_stuff, 
+            const bn::regular_bg_item &bgitem);
+        [[nodiscard]] virtual bn::optional<scene_type> update()=0;
     };
 
 

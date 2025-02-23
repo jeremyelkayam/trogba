@@ -22,7 +22,7 @@
 #include "bonus_scene.h"
 #include "movie_scene.h"
 #include "logo_scene.h"
-#include "menu_scene.h"
+#include "main_menu_scene.h"
 #include "hiscores_scene.h"
 #include "credits_scene.h"
 #include "devs_scene.h"
@@ -87,7 +87,7 @@ int main()
                 }
                 case trog::scene_type::MENU: { 
                     hud.hide();
-                    scene.reset(new trog::menu_scene(sesh, *common_stuff));
+                    scene.reset(new trog::main_menu_scene(sesh, *common_stuff));
                     break;
                 }
                 case trog::scene_type::PLAY: { 

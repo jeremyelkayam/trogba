@@ -24,6 +24,7 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
             acd.desc,
             acd.is_number,
             acd.threshold,
+            //TODO all achievement sprites should be under 1 sprite item
             bn::sprite_items::achievement_jhonka
         ));
         ++z;
