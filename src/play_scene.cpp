@@ -385,7 +385,7 @@ bn::optional<scene_type> play_scene::update(){
             }
 
             if(_player->dead() && !was_dead){
-                //todo: add a secret animation where he's passed out drunk
+                _sesh.set_killed_by_archer(false);
                 _overlay_text.reset(new bloody_text(true, 0, 0, "HAMMERED!", bn::sprite_items::trogdor_variable_8x16_font_black.palette_item(), _common_stuff.rand));
                 autosave(true);
             }
@@ -453,8 +453,10 @@ bn::optional<scene_type> play_scene::update(){
     }
 
     #ifdef DEBUG 
-        //Instantly win level by pressing A
-        if(bn::keypad::a_pressed()) result = scene_type::LEVELBEAT;
+        //Instantly win level by pressing L or R
+        if(bn::keypad::l_pressed() || 
+            bn::keypad::r_pressed()) result = 
+            scene_type::LEVELBEAT;
     #endif
 
 
@@ -533,6 +535,8 @@ void play_scene::autosave(bool just_died){
             if(!just_died){
                 _autosave_visibility_time = 1;
             }
+
+            
         }
         _common_stuff.save();
     }

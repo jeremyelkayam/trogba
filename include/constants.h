@@ -2,7 +2,7 @@
 
 #define SECONDS * 60
 
-// #define DEBUG
+#define DEBUG
 
 #define TROG_TITLE_TEXT_X -85
 #define TROG_TITLE_TEXT_Y -62

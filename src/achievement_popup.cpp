@@ -30,7 +30,7 @@ achievement_popup::achievement_popup(bn::sprite_text_generator &generator,
 
     generator.set_center_alignment();
     generator.set_palette_item(bn::sprite_palette_items::font_yellow);
-    generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked!",
+    generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked",
         _text_sprites);
     generator.set_palette_item(WHITE_PALETTE);
     generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,

@@ -11,12 +11,23 @@ achievements_mgr::achievements_mgr(bn::array<long, 64> &sram_data,
     _sound_vol(sound_vol),
     _sram_data(sram_data)
 {
+    //For some reason this doesnt work at index 0 
+    // which it should
     _achievements.insert("onehut", achievement_rom_data(
-        1,
+        0,
         "Jhonka's Riches",
         "Find a treasure hut",
         false,
+        0b1,
+        bn::sprite_items::achievement_jhonka
+    ));
+    
+    _achievements.insert("allhut", achievement_rom_data(
         1,
+        "Aztec Gold",
+        "Find the treasure huts on all level layouts",
+        false,
+        0b111,
         bn::sprite_items::achievement_jhonka
     ));
 }

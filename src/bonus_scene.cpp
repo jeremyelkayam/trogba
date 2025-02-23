@@ -56,7 +56,10 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
         bn::sound_items::sb_roomierinside.play(common_stuff.savefile.options.voice_vol);
     }
 
-    common_stuff.acm.update_achievement("onehut", 1);
+    // common_stuff.savefile.session.can_visit_treasure_hut = false;
+    common_stuff.acm.update_achievement("onehut", 0);
+
+
 }
 
 

@@ -96,6 +96,8 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
 void level_win_scene::save(){
     _common_stuff.savefile.session = _sesh.export_save();
+    
+    _common_stuff.savefile.session.can_visit_treasure_hut = true;
 
     // the level doesn't technically advance until later in the animation
     //  so we should increment it here if it hasn't happened yet

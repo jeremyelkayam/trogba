@@ -15,11 +15,9 @@ knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &ran
                     _sprite, 20, bn::sprite_items::knight.tiles_item(), 0, 3, 2, 3))
 {
     _sprite.set_horizontal_flip(facingRight);
+    _sprite.set_z_order(FRONT_ZORDER);
+    _sprite.put_below();
 }
-
-// knight::knight(bn::fixed xcor, bn::fixed ycor, bool facingRight, bn::random &random) {
-// //  
-// }
 
 void knight::update_anim(){
     entity::update_anim();

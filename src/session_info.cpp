@@ -58,7 +58,7 @@ saved_session session_info::export_save(){
     result.current_dragon = _dragon;
     result.cottage_burnination_status = {false, false, false, 
                                          false, false, false};
-    result.can_visit_treasure_hut = true;
+    result.can_visit_treasure_hut = false;
     result.thinfo = {troghammer_state::UNALERTED, 0, bn::fixed_point(0, 0)};
     return result;
 }
