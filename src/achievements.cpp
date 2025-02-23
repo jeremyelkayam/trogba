@@ -1,5 +1,6 @@
 #include "achievements.h"
 #include <bn_math.h>
+#include "bn_sprite_items_achievement_goldpile.h"
 
 namespace trog
 {
@@ -11,8 +12,8 @@ achievements_mgr::achievements_mgr(bn::array<long, 64> &sram_data,
     _sound_vol(sound_vol),
     _sram_data(sram_data)
 {
-    //For some reason this doesnt work at index 0 
-    // which it should
+    //Todo - we should list achievements in a header file
+    // and import them into here
     _achievements.insert("onehut", achievement_rom_data(
         0,
         "Jhonka's Riches",
@@ -22,13 +23,13 @@ achievements_mgr::achievements_mgr(bn::array<long, 64> &sram_data,
         bn::sprite_items::achievement_jhonka
     ));
     
-    _achievements.insert("allhut", achievement_rom_data(
+    _achievements.insert("allhuts", achievement_rom_data(
         1,
         "Aztec Gold",
         "Find the treasure huts on all level layouts",
         false,
         0b111,
-        bn::sprite_items::achievement_jhonka
+        bn::sprite_items::achievement_goldpile
     ));
 }
 

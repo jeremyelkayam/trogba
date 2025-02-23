@@ -38,6 +38,8 @@ namespace trog {
 
             int max_index(long threshold);
 
+            static constexpr const char *string_test = "TEST!";
+
         public:
             achievements_mgr(bn::array<long, 64> &sram_data,
                 bn::sprite_text_generator &generator,
