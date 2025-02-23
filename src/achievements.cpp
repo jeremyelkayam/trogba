@@ -13,25 +13,21 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
     _sound_vol(sound_vol),
     _sram_data(sram_data)
 {
-    //Todo - we should list achievements in a header file
-    // and import them into here
-    _achievements.insert("onehut", achievement_rom_data(
-        0,
-        "Jhonka's Riches",
-        "Find a treasure hut",
-        false,
-        0b1,
-        bn::sprite_items::achievement_jhonka
-    ));
     
-    _achievements.insert("allhuts", achievement_rom_data(
-        1,
-        "Aztec Gold",
-        "Find the treasure huts on all level layouts",
-        false,
-        0b111,
-        bn::sprite_items::achievement_goldpile
-    ));
+
+    int z = 0;
+    for(const achievement_rom_data &acd : acdata)
+    {
+        _achievements.insert(acd.tag,achievement(
+            z,
+            acd.name,
+            acd.desc,
+            acd.is_number,
+            acd.threshold,
+            bn::sprite_items::achievement_jhonka
+        ));
+        ++z;
+    }
 }
 
 void achievements_mgr::update_achievement(bn::string<8> tag, 
@@ -40,7 +36,7 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
     BN_ASSERT(_achievements.contains(tag), 
         "Invalid tag passed to update_achievement");
 
-    const achievement_rom_data &data = _achievements.at(tag);
+    const achievement &data = _achievements.at(tag);
 
     bool was_achieved = is_achieved(tag);
 
@@ -85,7 +81,7 @@ bool achievements_mgr::is_achieved(bn::string<8> tag)
 
 void achievements_mgr::show_popup(bn::string<8> tag)
 {
-    const achievement_rom_data &data = _achievements.at(tag);
+    const achievement &data = _achievements.at(tag);
 
     _popup.emplace(_generator, _sound_vol, data.name, data.icon);
 

@@ -10,7 +10,7 @@
 
 namespace trog {
 
-    struct achievement_rom_data
+    struct achievement
     {
         unsigned int sram_index;
         bn::string<32> name;
@@ -20,11 +20,40 @@ namespace trog {
         bn::sprite_item icon;
     };
 
+    struct achievement_rom_data
+    {
+        const char *tag;
+        const char *name;
+        const char *desc;
+        bool is_number;
+        long threshold;
+        // const bn::sprite_item &icon;
+    };// for some reason cant do a sprite item for the icons FUCK THAT NOISE!
+
     class achievements_mgr
     {
         private:
+
+            static constexpr const achievement_rom_data acdata[2] =
+            {
+                {
+                    "onehut", 
+                    "Jhonka's Riches",
+                    "Find a treasure hut", 
+                    false, 
+                    0b1
+                },
+                {
+                    "allhuts", 
+                    "Aztec Gold",
+                    "Find the treasure huts on all level layouts", 
+                    false, 
+                    0b111
+                },
+            };
+
             bn::unordered_map<bn::string<8>, 
-                const achievement_rom_data, 64> _achievements;
+                const achievement, 64> _achievements;
 
             bn::sprite_text_generator &_generator;
             const bn::fixed &_sound_vol;
