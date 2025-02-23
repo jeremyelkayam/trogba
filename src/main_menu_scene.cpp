@@ -38,7 +38,8 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
     _flames.set_visible(false);
     _flames.set_scale(0.01);
     common_stuff.text_generator.set_center_alignment();
-    _menu_options.emplace_back(0, -52, "CONTINUE", common_stuff.text_generator);
+    _menu_options.emplace_back(0, -52, "CONTINUE", 
+        common_stuff.text_generator, scene_type::PLAY);
 
     common_stuff.small_generator.set_center_alignment();
 
@@ -63,10 +64,13 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
         common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
     }
 
-    _menu_options.emplace_back(-72, 32, "NEW\nGAME", common_stuff.text_generator);
+    _menu_options.emplace_back(-72, 32, "NEW\nGAME", 
+        common_stuff.text_generator, scene_type::DRAGON_SELECT);
     // _menu_options.emplace_back( "HOW TO PLAY", common_stuff.text_generator);
-    _menu_options.emplace_back(1, 32, "OPTIONS", common_stuff.text_generator);
-    _menu_options.emplace_back(72, 32, "EXTRAS", common_stuff.text_generator);
+    _menu_options.emplace_back(1, 32, "OPTIONS", 
+        common_stuff.text_generator, scene_type::OPTIONS);
+    _menu_options.emplace_back(72, 32, "EXTRAS", 
+        common_stuff.text_generator, scene_type::EXTRAS);
     // _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
     // _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
     // _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
@@ -74,7 +78,9 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
 
 bn::optional<scene_type> main_menu_scene::update(){
 
-    bn::optional<scene_type> result;
+    bn::optional<scene_type> result = menu_scene::update();
+    
+    menu_option &current_option = _menu_options.at(_selected_option_index);
 
     if(_selection_anim_timer > 0){
         ++_selection_anim_timer;
@@ -82,16 +88,8 @@ bn::optional<scene_type> main_menu_scene::update(){
         _flames_scale.update();
         _flames_translate->update();
         if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
-            //todo: move this into the menu option class i think 
-            if(_selected_option_index == 0){
-                result = scene_type::PLAY;
-            }else if(_selected_option_index == 1){
-                result = scene_type::DRAGON_SELECT;
-            }else if(_selected_option_index == 2){
-                result = scene_type::OPTIONS;
-            }else if(_selected_option_index == 3){
-                result = scene_type::EXTRAS;
-            }
+            result = current_option.next_scene();
+
         } 
     }
 
@@ -137,7 +135,6 @@ bn::optional<scene_type> main_menu_scene::update(){
         _last_line2_option = _selected_option_index;
     }
 
-    menu_option &current_option = _menu_options.at(_selected_option_index);
 
     _cursor.set_y(current_option.y());
     _cursor.set_x(current_option.x() - (current_option.width()/2 + 5));

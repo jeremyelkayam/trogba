@@ -3,7 +3,6 @@
 #include <bn_sprite_ptr.h>
 #include "menu_scene.h"
 #include "session_info.h"
-#include "common_stuff.h"
 
 
 namespace trog{

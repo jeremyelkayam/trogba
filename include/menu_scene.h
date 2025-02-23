@@ -15,14 +15,19 @@ namespace trog{
             bn::vector<bn::sprite_ptr, 4> _drop_shadow_sprites;
             bn::vector<bn::sprite_ptr, 4> _red_text_sprites;
             bn::fixed _x, _y, _width;
+            scene_type _scene_type; 
         public:
-            menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, bn::sprite_text_generator& _text_generator);
+            menu_option(const bn::fixed &x, 
+                const bn::fixed &y, const char *text, 
+                bn::sprite_text_generator& _text_generator,
+                const scene_type &scene_type);
             bn::fixed y() const {return _y;}
             bn::fixed x() const {return _x;}
             bn::fixed width() const {return _width;}
             void turn_red();
             void turn_white();
             void set_y(const bn::fixed &y);
+            const scene_type &next_scene() {return _scene_type;}
     };
     class menu_scene : public scene{ 
     protected:
@@ -42,7 +47,7 @@ namespace trog{
     public:
         explicit menu_scene(common_stuff &common_stuff, 
             const bn::regular_bg_item &bgitem);
-        [[nodiscard]] virtual bn::optional<scene_type> update()=0;
+        [[nodiscard]] virtual bn::optional<scene_type> update();
     };
 
 

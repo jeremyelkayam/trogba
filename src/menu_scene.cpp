@@ -19,11 +19,28 @@ menu_scene::menu_scene(common_stuff &common_stuff,
 
 }
 
-menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, const char *text, 
-    bn::sprite_text_generator& text_generator) :
+bn::optional<scene_type> menu_scene::update(){
+    
+    bn::optional<scene_type> result;
+
+    for(uint8_t i = 0; i < _menu_options.size(); i++){
+        if(i == _selected_option_index) {
+            _menu_options.at(i).turn_red();
+        } else {
+            _menu_options.at(i).turn_white();
+        }
+    }
+
+    return result;    
+}
+
+menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, 
+    const char *text, bn::sprite_text_generator& text_generator, 
+    const scene_type &scene_type) :
     _x(x),
     _y(y),
-    _width(0) {
+    _width(0),
+    _scene_type(scene_type) {
 
     //split into lines doesn't *quite* apply here b/c it's based on the 8x8 font 
     //but for our purposes it's fine
