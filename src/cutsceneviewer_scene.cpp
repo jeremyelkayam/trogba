@@ -99,11 +99,16 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
 
     if(bn::keypad::a_pressed()){
         if(_index == _options_vec.size() - 1){
-            result = scene_type::MENU;
+            result = scene_type::EXTRAS;
         }else{
             result = scene_type::MOVIE;
             _sesh.set_level(_options_vec.at(_index).level);
         }
+    }
+
+    if(bn::keypad::b_pressed())
+    {
+        result = scene_type::EXTRAS;
     }
         
     return result;

@@ -10,7 +10,8 @@
 
 namespace trog {
 
-credits_scene::credits_scene(common_stuff &common_stuff) : 
+credits_scene::credits_scene(common_stuff &common_stuff, const scene_type &last_scene) : 
+    _last_scene(last_scene),
     _common_stuff(common_stuff) {
     setup_credits();
 
@@ -32,9 +33,11 @@ void credits_scene::setup_credits(){
     bn::string<64> credits[] = {
         "The GBA Game",
         bn::string<64>("version ") + TROG_SEMANTIC_VERSION_NUMBER,
+        "created by Arkbuilder Interactive",
         "",
         "programmed by Jeremy Elkayam",
         "New graphics & sound by Jeremy Elkayam",
+        "",
         "",
         "",
         "Dust effects by WeenterMakesGames",
@@ -50,9 +53,9 @@ void credits_scene::setup_credits(){
         "Mips96 and Trogdor Reburninated",
         "for inspiration/code reference",
         "github.com/Mips96/Trogdor-Reburninated",
-        // "",
-        // "Michael Elkayam",
-        // "for design input and bug testing"
+        "",
+        "Michael Elkayam",
+        "for design input and bug testing"
     };
 
     ycor += 25;
@@ -145,9 +148,20 @@ bn::optional<scene_type> credits_scene::update(){
 
     }
 
-    if(_credits.back().ycor < -90 || bn::keypad::start_pressed()){
+    if(_credits.back().ycor < -90){
+        
         _credits.clear();
-        result = scene_type::TITLE;
+        _titlegraphic.reset();
+
+
+        if(_last_scene == scene_type::EXTRAS)
+        {
+            result = scene_type::EXTRAS;
+        }
+        else
+        {
+            result = scene_type::TITLE;
+        }
     }
 
     return result;

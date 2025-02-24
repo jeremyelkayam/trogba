@@ -19,6 +19,8 @@ namespace trog{
     class credits_scene : public scene{ 
     private:
 
+        const scene_type _last_scene;
+
         bn::vector<credit_line, 64> _credits;
         bn::optional<bn::regular_bg_ptr> _titlegraphic;
 
@@ -27,7 +29,8 @@ namespace trog{
         common_stuff &_common_stuff;
 
     public:
-        explicit credits_scene(common_stuff &common_stuff);
+        explicit credits_scene(common_stuff &common_stuff, 
+            const scene_type &last_scene);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

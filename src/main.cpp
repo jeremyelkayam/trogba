@@ -30,6 +30,7 @@
 #include "options_scene.h"
 #include "dragon_select_scene.h"
 #include "cutsceneviewer_scene.h"
+#include "extras_scene.h"
 
 int main()
 {
@@ -38,7 +39,7 @@ int main()
     bool kicked=false;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::EXTRAS;
     bn::optional<trog::scene_type> last_scene;
 
     
@@ -93,8 +94,6 @@ int main()
                 case trog::scene_type::PLAY: { 
                     hud.show();
                     if(previous_play_scene){
-                        //this means we are returning from an interruption
-                        //so we should go back to the play scene from before 
                         scene = bn::move(previous_play_scene);
                     }else{
                         scene.reset(new trog::play_scene(sesh, hud, *common_stuff));
@@ -102,10 +101,7 @@ int main()
                     break;
                 }
                 case trog::scene_type::BONUS: {
-                    // hud.show();
-                    //this is the treasure hut scene
-                    // we need to store the play scene so that we may return to it later.
-                    
+
                     previous_play_scene = bn::move(scene);
 
                     scene.reset(new trog::bonus_scene(sesh, *common_stuff));
@@ -141,7 +137,7 @@ int main()
                 }                
                 case trog::scene_type::CREDITS: {
                     hud.hide();
-                    scene.reset(new trog::credits_scene(*common_stuff));
+                    scene.reset(new trog::credits_scene(*common_stuff, *last_scene));
                     break;
                 }                
                 case trog::scene_type::FIREYRAGE: {
@@ -167,6 +163,11 @@ int main()
                 case trog::scene_type::CUTSCENE_VIEWER: {
                     hud.hide();
                     scene.reset(new trog::cutsceneviewer_scene(sesh, *common_stuff));
+                    break;
+                }
+                case trog::scene_type::EXTRAS: {
+                    hud.hide();
+                    scene.reset(new trog::extras_scene(*common_stuff));
                     break;
                 }
                 default: { 

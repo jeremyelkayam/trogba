@@ -13,46 +13,50 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
-#include "bn_regular_bg_items_main_menu.h"
+#include "bn_regular_bg_items_extras_menu_bg.h"
 
 #define SELECTION_ANIM_LENGTH 30
 
 namespace trog {
 
-extras_scene::extras_scene(session_info &sesh, common_stuff &common_stuff) : 
-        menu_scene(common_stuff, bn::regular_bg_items::main_menu) {
+extras_scene::extras_scene(common_stuff &common_stuff) : 
+        menu_scene(common_stuff, bn::regular_bg_items::extras_menu_bg) {
 
     common_stuff.text_generator.set_center_alignment();
 
-    // _menu_options.emplace_back( "HOW TO PLAY", common_stuff.text_generator);
+    _menu_options.emplace_back(-56, -40, "ACHIEVE-\nMENTS", 
+        common_stuff.text_generator, scene_type::ACHIEVEMENTS);
 
-    // _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
-    // _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
-    // _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
+    _menu_options.emplace_back(56, -40, "HI-SCORES", 
+        common_stuff.text_generator, scene_type::HISCORES);
+    _menu_options.emplace_back(-56, 35, "CREDITS", 
+        common_stuff.text_generator, scene_type::CREDITS);
+    _menu_options.emplace_back(56, 35, "CUTSCENE\nVIEWER", 
+        common_stuff.text_generator, scene_type::CUTSCENE_VIEWER);
 }
 
 bn::optional<scene_type> extras_scene::update(){
 
     bn::optional<scene_type> result = menu_scene::update();
 
+    menu_option &current_option = _menu_options.at(_selected_option_index);
+
     if(bn::keypad::a_pressed()){
+        result = current_option.next_scene();
 
-        result = scene_type::PLAY;
-
-
-    }else if((bn::keypad::up_pressed() || bn::keypad::down_pressed())){
-
-
-    }else if((bn::keypad::left_pressed())){
-        if(_selected_option_index > 1){
-            --_selected_option_index;
-        }
-    }else if((bn::keypad::right_pressed())){
-        if(_selected_option_index != 0 && _selected_option_index < 3){
-            ++_selected_option_index;
-        }
+    }else if(bn::keypad::up_pressed()){
+        _selected_option_index -= 2;
+        if(_selected_option_index < 0) _selected_option_index +=2;
+    }else if(bn::keypad::down_pressed()){
+        _selected_option_index += 2;
+        if(_selected_option_index > 3) _selected_option_index -=2;
+    }else if(bn::keypad::left_pressed() && _selected_option_index != 2){
+        _selected_option_index -= 1;
+        if(_selected_option_index < 0) _selected_option_index +=1;
+    }else if(bn::keypad::right_pressed() && _selected_option_index != 1){
+        _selected_option_index += 1;
+        if(_selected_option_index > 3) _selected_option_index -=1;
     }
-
     return result;
 }
 

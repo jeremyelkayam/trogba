@@ -10,7 +10,7 @@ namespace trog{
     private:
 
     public:
-        explicit extras_scene(session_info &sesh, common_stuff &common_stuff);
+        explicit extras_scene(common_stuff &common_stuff);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

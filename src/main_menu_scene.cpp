@@ -20,7 +20,6 @@ namespace trog {
 main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff) : 
         menu_scene(common_stuff, bn::regular_bg_items::main_menu),
         _last_line2_option(2),
-        // _small_text_generator(variable_8x8_sprite_font),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
         _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(55,-50)),
@@ -28,6 +27,7 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
+        _selection_anim_timer(0),
         _sesh(sesh),
         _scroll_speed(4) {
     bn::sound_items::trogador.play(_common_stuff.savefile.options.sound_vol);
@@ -89,7 +89,6 @@ bn::optional<scene_type> main_menu_scene::update(){
         _flames_translate->update();
         if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
             result = current_option.next_scene();
-
         } 
     }
 

@@ -41,7 +41,7 @@ namespace trog{
         bn::regular_bg_ptr _bg;
 
         
-        unsigned int _selected_option_index;
+        int _selected_option_index;
 
 
     public:
