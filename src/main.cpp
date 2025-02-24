@@ -39,7 +39,7 @@ int main()
     bool kicked=false;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::EXTRAS;
+    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     bn::optional<trog::scene_type> last_scene;
 
     

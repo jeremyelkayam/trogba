@@ -57,6 +57,13 @@ bn::optional<scene_type> extras_scene::update(){
         _selected_option_index += 1;
         if(_selected_option_index > 3) _selected_option_index -=1;
     }
+
+    if(bn::keypad::b_pressed())
+    {
+        result = scene_type::MENU;
+    }
+
+
     return result;
 }
 
