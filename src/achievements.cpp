@@ -1,7 +1,6 @@
 #include "achievements.h"
 #include <bn_math.h>
 #include <bn_sram.h>
-#include "bn_sprite_items_achievement_goldpile.h"
 
 namespace trog
 {
@@ -23,9 +22,7 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
             acd.name,
             acd.desc,
             acd.is_number,
-            acd.threshold,
-            //TODO all achievement sprites should be under 1 sprite item
-            bn::sprite_items::achievement_jhonka
+            acd.threshold
         ));
         ++z;
     }
@@ -84,7 +81,7 @@ void achievements_mgr::show_popup(bn::string<8> tag)
 {
     const achievement &data = _achievements.at(tag);
 
-    _popup.emplace(_generator, _sound_vol, data.name, data.icon);
+    _popup.emplace(_generator, _sound_vol, data.name, data.sram_index);
 
 }
 

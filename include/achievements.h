@@ -3,7 +3,6 @@
 #include <bn_string.h>
 #include <bn_sprite_item.h>
 #include <bn_unordered_map.h>
-#include "bn_sprite_items_achievement_jhonka.h"
 
 #include "achievement_popup.h"
 #include "sram_data.h"
@@ -17,7 +16,6 @@ namespace trog {
         bn::string<128> desc;
         bool is_number;
         long threshold;
-        bn::sprite_item icon;
     };
 
     struct achievement_rom_data
@@ -27,8 +25,7 @@ namespace trog {
         const char *desc;
         bool is_number;
         long threshold;
-        // const bn::sprite_item &icon;
-    };// for some reason cant do a sprite item for the icons FUCK THAT NOISE!
+    };
 
     class achievements_mgr
     {

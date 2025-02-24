@@ -11,11 +11,12 @@ namespace trog {
 achievement_popup::achievement_popup(bn::sprite_text_generator &generator,
     const bn::fixed &sound_vol,
     const bn::string<16> &achievement_name,
-    const bn::sprite_item &achievement_icon) : 
+    const int &index) : 
         _speed(0),
         _pos(40,101),
         _timer(0),
-        _icon_sprite(achievement_icon.create_sprite(_pos.x() - 58, _pos.y()))
+        _icon_sprite(bn::sprite_items::achievements.create_sprite(
+            _pos.x() - 58, _pos.y(), index))
 {
     bn::sound_items::bubble.play(sound_vol);
     for(int z = 0; z < _box_sprites.max_size(); ++z)
