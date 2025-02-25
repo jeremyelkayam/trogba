@@ -20,7 +20,6 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
         _achievements.insert(acd.tag,achievement(
             z,
             acd.name,
-            acd.desc,
             acd.is_number,
             acd.threshold
         ));

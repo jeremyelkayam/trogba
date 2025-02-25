@@ -283,8 +283,8 @@ void common_stuff::format_save(){
 
 
 
-bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text){
-    const uint8_t max_line_width = 220;
+bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text,
+    const uint8_t max_line_width){
     bn::vector<bn::string<64>, 3>result;
     
     uint8_t line_width = 0;

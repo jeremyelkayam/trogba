@@ -8,6 +8,7 @@
 #include <bn_string.h>
 #include <bn_unordered_map.h>
 #include <bn_optional.h>
+#include <bn_keypad.h>
 #include "constants.h"
 #include "sb_commentary.h"
 #include "achievements.h"
@@ -49,7 +50,7 @@ namespace trog {
             bool percent_chance(const bn::fixed &pct) {return commentary.percent_chance(pct);}
 
             bn::string<10> play_time();            
-            
+
             /*
 
             * Formats a longer string into up to 3 separate strings, separated
@@ -57,7 +58,16 @@ namespace trog {
             * 
             * Throws an error if the string is too big to fit into 3 lines (1 text box).
             */
-           static bn::vector<bn::string<64>, 3> split_into_lines(const char *text);
+            static bn::vector<bn::string<64>, 3> split_into_lines(
+                const char *text, const uint8_t max_line_width = 220
+            );
+
+            static bool any_dpad_input() {
+                return bn::keypad::right_pressed() ||
+                    bn::keypad::left_pressed() ||
+                    bn::keypad::up_pressed() ||
+                    bn::keypad::down_pressed();
+            }
 
 
         private:

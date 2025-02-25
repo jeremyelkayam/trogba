@@ -13,7 +13,6 @@ namespace trog {
     {
         unsigned int sram_index;
         bn::string<32> name;
-        bn::string<128> desc;
         bool is_number;
         long threshold;
     };
@@ -27,27 +26,28 @@ namespace trog {
         long threshold;
     };
 
+    constexpr const int num_achievements = 2;
+    constexpr const achievement_rom_data acdata[2] =
+    {
+        {
+            "onehut", 
+            "Jhonka's Riches",
+            "Find a treasure hut", 
+            false, 
+            0b1
+        },
+        {
+            "allhuts", 
+            "Aztec Gold",
+            "Find the treasure huts on all level layouts", 
+            false, 
+            0b111
+        },
+    };
+
     class achievements_mgr
     {
         private:
-
-            static constexpr const achievement_rom_data acdata[2] =
-            {
-                {
-                    "onehut", 
-                    "Jhonka's Riches",
-                    "Find a treasure hut", 
-                    false, 
-                    0b1
-                },
-                {
-                    "allhuts", 
-                    "Aztec Gold",
-                    "Find the treasure huts on all level layouts", 
-                    false, 
-                    0b111
-                },
-            };
 
             bn::unordered_map<bn::string<8>, 
                 const achievement, 64> _achievements;
