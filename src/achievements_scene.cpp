@@ -5,9 +5,13 @@
 #include "bn_sprite_items_selector.h"
 #include "bn_regular_bg_items_achievements_menu_bg.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_palette_items_font_yellow.h"
 
 namespace trog {
+
+// TODO, this crashes when you exit a game then return to it. WHY?
+// I HAVE NO FUCKIN IDEA!!! 
 
 achievements_scene::achievements_scene(common_stuff &common_stuff) : 
     _selected_icon(bn::sprite_items::lock_icon.create_sprite(-98,-59)),
@@ -23,17 +27,33 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
     int z = 0;
     for(const achievement_rom_data &acd : acdata)
     {
+
         bn::sprite_ptr icon = 
-            bn::sprite_items::achievements.create_sprite(
+            bn::sprite_items::lock_icon.create_sprite(
             menu_top_left.x() + spacing * (z % items_per_line),
-            menu_top_left.y() + spacing * (z / items_per_line),
-            z
+            menu_top_left.y() + spacing * (z / items_per_line)
         );
-        icon.set_scale(0.5);
+
+        if(_common_stuff.acm.is_achieved(acd.tag))
+        {
+            icon.set_item(bn::sprite_items::achievements, z);
+            icon.set_scale(0.5);    
+        }
 
         _opts.emplace_back(acd, icon, z);
         ++z;
     }
+
+    bn::sprite_ptr icon = 
+        bn::sprite_items::achievements.create_sprite(
+        menu_top_left.x() + spacing * (z % items_per_line),
+        menu_top_left.y() + spacing * (z / items_per_line),
+        11
+    );
+    icon.set_scale(0.5);
+    _opts.emplace_back(acdata[0], icon, 11);
+
+
 
     update_info_box();
 
@@ -80,7 +100,9 @@ bn::optional<scene_type> achievements_scene::update()
 
 
 
-    if(bn::keypad::b_pressed())
+    if(bn::keypad::b_pressed() || 
+        (bn::keypad::a_pressed() &&
+        _selected == _opts.size() - 1))
     {
         return scene_type::EXTRAS;
     }
@@ -100,12 +122,13 @@ bn::optional<scene_type> achievements_scene::update()
 void achievements_scene::update_info_box()
 {
     
-    _selected = _selected % num_achievements;
+    _selected = _selected % _opts.size();
 
     ac_option & selected_option = _opts.at(_selected);
 
     //todo: bespoke logic for the back button
     bn::string<32> name(selected_option.data.name);
+    bn::string<192> desc(selected_option.data.desc);
 
     _selector_move.emplace(_selector, 5, selected_option.icon.x(), 
         selected_option.icon.y());
@@ -113,14 +136,38 @@ void achievements_scene::update_info_box()
     _text_sprites.clear();
 
     _common_stuff.small_generator.set_center_alignment();
-    _common_stuff.small_generator.set_palette_item(
-        bn::sprite_palette_items::font_yellow);
+
+    if(_selected == _opts.size() - 1)
+    {
+        //back button
+        name = "Back";
+        desc = "Press A to return to the extras menu.";
+    }
+
+    if(_selected == _opts.size() - 1 || 
+        _common_stuff.acm.is_achieved(selected_option.data.tag))
+    {    
+        _common_stuff.small_generator.set_palette_item(
+            bn::sprite_palette_items::font_yellow);
+
+        _selected_icon.set_item(bn::sprite_items::achievements,
+            selected_option.index);
+    }
+    else
+    {
+        _common_stuff.small_generator.set_palette_item(
+            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+        name = "Locked";
+
+        _selected_icon.set_item(bn::sprite_items::lock_icon);
+    }
+
     _common_stuff.small_generator.generate(0, -72, 
         name, _text_sprites);
 
     bn::fixed yoffset = 0;
     for(const bn::string<64> &line : _common_stuff.split_into_lines(
-        selected_option.data.desc, 185))
+        desc.c_str(), 185))
     {
         _common_stuff.small_generator.set_left_alignment();
         _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
@@ -130,8 +177,6 @@ void achievements_scene::update_info_box()
     }
 
 
-    _selected_icon.set_item(bn::sprite_items::achievements,
-        selected_option.index);
 
 }
 
