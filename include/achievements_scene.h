@@ -34,11 +34,14 @@ namespace trog{
 
         static constexpr const bn::fixed_point menu_top_left = 
             bn::fixed_point(-78, -21);
-        static constexpr const int items_per_line = 6;
+        static constexpr const int items_per_line = 7;
         static constexpr const bn::fixed spacing = 
-            (-menu_top_left.x() * 2) / items_per_line; 
+            (-menu_top_left.x() * 2) / (items_per_line - 1); 
+
+        
 
         void update_info_box();
+        bool on_last_line();
 
     public:
         explicit achievements_scene(common_stuff &common_stuff);

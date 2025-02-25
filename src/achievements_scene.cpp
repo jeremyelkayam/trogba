@@ -69,27 +69,68 @@ bn::optional<scene_type> achievements_scene::update()
 
     if(bn::keypad::up_pressed())
     {
+        bool go_to_last_line = _selected < _opts.size() % items_per_line;
         _selected -= items_per_line;
         if(_selected < 0)
         {
-            _selected += _opts.size();
+            _selected += (_opts.size() / items_per_line) * items_per_line;
+
+            if(go_to_last_line)
+            {
+                _selected += items_per_line;
+            }
         }
     }
     else if(bn::keypad::down_pressed())
     {
-        _selected += items_per_line;
-    }
-    else if(bn::keypad::left_pressed())
-    {
-        --_selected;
-        if(_selected < 0)
+        if(_selected >= _opts.size() - items_per_line)
+        {
+            int move_backward_by = 
+                (_opts.size() / items_per_line) * items_per_line;
+            if(!on_last_line())
+            {
+                move_backward_by -= items_per_line;
+            }
+            _selected -= move_backward_by;
+        }
+        else
         {
             _selected += items_per_line;
         }
     }
+    else if(bn::keypad::left_pressed())
+    {
+        if(_selected % items_per_line == 0)
+        {
+            if(on_last_line())
+            {
+                _selected = (_opts.size() - 1);
+            }
+            else
+            {
+                _selected += (items_per_line - 1);
+            }
+        }
+        else
+        {
+            --_selected;
+        }
+    }
     else if(bn::keypad::right_pressed())
     {
-        ++_selected;
+        if(_selected % items_per_line == items_per_line - 1)
+        {
+            _selected -= (items_per_line - 1);
+        }
+        else if(on_last_line() && 
+            _selected % items_per_line == (_opts.size() % items_per_line) - 1)
+        {
+            _selected -= ((_opts.size() % items_per_line) - 1);
+        }
+        else
+        {
+            ++_selected;
+        }
     }
 
     if(_common_stuff.any_dpad_input())
@@ -117,6 +158,12 @@ bn::optional<scene_type> achievements_scene::update()
     }
 
     return result;
+}
+
+bool achievements_scene::on_last_line()
+{
+    int full_lines = _opts.size() / items_per_line;
+    return _selected >= (full_lines * items_per_line);
 }
 
 void achievements_scene::update_info_box()
@@ -171,7 +218,7 @@ void achievements_scene::update_info_box()
     {
         _common_stuff.small_generator.set_left_alignment();
         _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
-        _common_stuff.small_generator.generate(-77, -60 + yoffset,
+        _common_stuff.small_generator.generate(-77, -63 + yoffset,
             line, _text_sprites);
         yoffset += 9;
     }
