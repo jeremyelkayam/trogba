@@ -5,6 +5,7 @@
 #include <bn_sprite_actions.h>
 #include "scene.h"
 #include "common_stuff.h"
+#include "achievement_rom_data.h"
 
 
 
@@ -12,7 +13,7 @@ namespace trog{
 
     struct ac_option
     {
-        const achievement_rom_data &data;
+        const ext::achievement_rom_data &data;
         bn::sprite_ptr icon;
         int index;
     };

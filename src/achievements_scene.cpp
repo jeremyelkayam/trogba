@@ -25,7 +25,7 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
 {
     
     int z = 0;
-    for(const achievement_rom_data &acd : acdata)
+    for(const ext::achievement_rom_data &acd : ext::acdata)
     {
 
         bn::sprite_ptr icon = 
@@ -51,7 +51,7 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         11
     );
     icon.set_scale(0.5);
-    _opts.emplace_back(acdata[0], icon, 11);
+    _opts.emplace_back(ext::acdata[0], icon, 11);
 
 
 

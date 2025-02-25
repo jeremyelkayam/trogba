@@ -17,34 +17,6 @@ namespace trog {
         long threshold;
     };
 
-    struct achievement_rom_data
-    {
-        const char *tag;
-        const char *name;
-        const char *desc;
-        bool is_number;
-        long threshold;
-    };
-
-    constexpr const int num_achievements = 2;
-    constexpr const achievement_rom_data acdata[2] =
-    {
-        {
-            "onehut", 
-            "Jhonka's Riches",
-            "Find a treasure hut", 
-            false, 
-            0b1
-        },
-        {
-            "allhuts", 
-            "Aztec Gold",
-            "Find the treasure huts on all level layouts", 
-            false, 
-            0b111
-        },
-    };
-
     class achievements_mgr
     {
         private:

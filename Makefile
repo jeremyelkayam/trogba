@@ -29,21 +29,21 @@ TARGET      :=  $(notdir $(CURDIR))
 BUILD       :=  build
 LIBBUTANO   :=  ../butano/butano
 PYTHON      :=  python
-SOURCES     :=  src
-INCLUDES    :=  include
+SOURCES     :=  src external/src
+INCLUDES    :=  include external/include
 DATA        :=
 GRAPHICS    :=  graphics graphics/achievements
 AUDIO       :=  audio audio/commentary
 DMGAUDIO    :=  dmg_audio
-ROMTITLE    :=  ROM TITLE
-ROMCODE     :=  SBTP
+ROMTITLE    :=  TROGDOR
+ROMCODE     :=  TROG
 USERFLAGS   :=  
 USERASFLAGS :=  
 USERLDFLAGS :=  
 USERLIBDIRS :=  
 USERLIBS    :=  
-USERBUILD   :=  
-EXTTOOL     :=  
+USERBUILD   :=  external
+EXTTOOL     :=  @$(PYTHON) -B build_scripts/driver.py --build=$(USERBUILD)
 STACKTRACE  :=  true
 
 #---------------------------------------------------------------------------------------------------------------------

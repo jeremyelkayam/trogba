@@ -1,6 +1,7 @@
 #include "achievements.h"
 #include <bn_math.h>
 #include <bn_sram.h>
+#include "achievement_rom_data.h"
 
 namespace trog
 {
@@ -15,7 +16,7 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
     
 
     int z = 0;
-    for(const achievement_rom_data &acd : acdata)
+    for(const ext::achievement_rom_data &acd : ext::acdata)
     {
         _achievements.insert(acd.tag,achievement(
             z,

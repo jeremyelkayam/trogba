@@ -17,3 +17,4 @@ build/
 *.cflags
 *.cxxflags
 *.png
+external/
