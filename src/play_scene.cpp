@@ -264,6 +264,11 @@ bn::optional<scene_type> play_scene::update(){
             _common_stuff.set_autosave_text_visible(false);
         }
 
+        if(_player->dead() && bn::keypad::select_pressed())
+        {
+            _common_stuff.acm.update_achievement("crap", 0);
+        }
+
         //first update HUD info with trogdor's info from the last frame
         _hud.update_burninatemeter(_player->get_burninating_time(), _player->get_burninating_length());
         _hud.update_trogmeter(_player->get_trogmeter());

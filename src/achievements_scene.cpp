@@ -28,19 +28,35 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
     for(const ext::achievement_rom_data &acd : ext::acdata)
     {
 
-        bn::sprite_ptr icon = 
-            bn::sprite_items::lock_icon.create_sprite(
-            menu_top_left.x() + spacing * (z % items_per_line),
-            menu_top_left.y() + spacing * (z / items_per_line)
-        );
-
         if(_common_stuff.acm.is_achieved(acd.tag))
         {
-            icon.set_item(bn::sprite_items::achievements, z);
+            bn::sprite_ptr icon = 
+                bn::sprite_items::achievements.create_sprite(
+                menu_top_left.x() + spacing * (z % items_per_line),
+                menu_top_left.y() + spacing * (z / items_per_line),
+                z
+            );
             icon.set_scale(0.5);    
+            _opts.emplace_back(acd, icon, z);
         }
+        ++z;
+    }
 
-        _opts.emplace_back(acd, icon, z);
+    z = 0;
+    //go through the list again, for the locked achievements
+    // this is so that all unlocked achievements appear BEFORE all locked ones
+    for(const ext::achievement_rom_data &acd : ext::acdata)
+    {
+
+        if(!_common_stuff.acm.is_achieved(acd.tag))
+        {
+            bn::sprite_ptr icon = 
+                bn::sprite_items::lock_icon.create_sprite(
+                menu_top_left.x() + spacing * (z % items_per_line),
+                menu_top_left.y() + spacing * (z / items_per_line)
+            );
+            _opts.emplace_back(acd, icon, z);
+        }
         ++z;
     }
 
