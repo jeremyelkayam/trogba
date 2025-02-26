@@ -3,9 +3,9 @@
 #include <bn_log.h>
 #include "common_stuff.h"
 #include "small_fonts.h"
+#include "trogdor_variable_8x8_sprite_font.h"
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
-#include "trogdor_variable_8x8_sprite_font.h"
 namespace trog { 
 
 common_stuff::common_stuff() : 
@@ -91,9 +91,13 @@ common_stuff::common_stuff() :
         bn::sram::write(savefile);
     }
 
-    small_generator.set_left_alignment();
-    small_generator.set_palette_item(WHITE_PALETTE);        
-    small_generator.generate(-120, 77, "autosaved.", _autosave_text);
+    bn::sprite_text_generator autosave_gen(small_font_white);       
+    autosave_gen.generate(-120, 77, "autosaved.", _autosave_text);
+
+    //todo: if more transparency alpha becomes a thing (e.g. menu
+    // transitions) then we will need to move this
+    // into its own function where the text gets constructed
+    // and destructed when needed
     bn::blending::set_transparency_alpha(0.5);
     for(bn::sprite_ptr &sprite : _autosave_text) { 
         sprite.set_blending_enabled(true);
@@ -294,7 +298,7 @@ bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text,
     uint16_t line_end = 0;
     for(uint16_t pos = 0; text[pos] != '\0'; ++pos){
         char c = text[pos];
-        line_width += variable_8x8_sprite_font_character_widths[c - ' '];
+        line_width += small_font_character_widths[c - ' '];
         if(line_width > max_line_width){
             uint16_t last_space = pos;
             while(text[last_space] != ' '){

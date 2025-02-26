@@ -7,11 +7,13 @@
 #include "credits_scene.h"
 #include "bn_regular_bg_items_titlegraphic.h"
 #include "constants.h"
+#include "small_fonts.h"
 
 namespace trog {
 
 credits_scene::credits_scene(common_stuff &common_stuff, const scene_type &last_scene) : 
     _last_scene(last_scene),
+    _small_white_gen(small_font_white),
     _common_stuff(common_stuff) {
     setup_credits();
 
@@ -104,6 +106,8 @@ void credits_scene::setup_credits(){
         ycor += 14;
     }
 
+    _small_white_gen.set_center_alignment();
+
     bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
 }
 
@@ -137,9 +141,7 @@ bn::optional<scene_type> credits_scene::update(){
         if(line.ycor < -100 && !line.sprites.empty()){
             line.sprites.clear();
         }else if(line.ycor > 90 && line.sprites.empty()){
-            _common_stuff.small_generator.set_center_alignment();
-            _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
-            _common_stuff.small_generator.generate(0, line.ycor,line.str, line.sprites);
+            _small_white_gen.generate(0, line.ycor,line.str, line.sprites);
         }
         //todo refactor this into a method of the class
         for(bn::sprite_ptr &sprite : line.sprites) {

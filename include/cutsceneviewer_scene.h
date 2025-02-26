@@ -24,10 +24,12 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 8> _header_sprites;
         bn::vector<cvoption, 14> _options_vec;
         bn::regular_bg_ptr _scroll;
+        bn::sprite_text_generator _black_generator, _red_generator;
 
         uint8_t _index;
 
         void update_selection();
+        void create_line(bn::sprite_text_generator &gen, int index);
 
     public:
         explicit cutsceneviewer_scene(session_info &sesh, common_stuff &common_stuff);

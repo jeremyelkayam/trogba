@@ -14,6 +14,8 @@ namespace trog {
 // TODO, this crashes when you exit a game then return to it. WHY?
 // I HAVE NO FUCKIN IDEA!!! 
 
+//PERHAPS, consolidating text palettes will help. 
+
 achievements_scene::achievements_scene(common_stuff &common_stuff) : 
     _selected_icon(bn::sprite_items::lock_icon.create_sprite(-98,-59)),
     _selector(bn::sprite_items::selector.create_sprite(menu_top_left)),
@@ -208,8 +210,6 @@ void achievements_scene::update_info_box()
 
     _text_sprites.clear();
 
-    _common_stuff.small_generator.set_center_alignment();
-
     if(_selected == _opts.size() - 1)
     {
         //back button
@@ -220,8 +220,6 @@ void achievements_scene::update_info_box()
     if(_selected == _opts.size() - 1 || 
         _common_stuff.acm.is_achieved(selected_option.data.tag))
     {    
-        _common_stuff.small_generator.set_palette_item(
-            bn::sprite_palette_items::font_yellow);
 
         int dex = selected_option.index;
         if(_selected == _opts.size() - 1)

@@ -4,7 +4,6 @@
 #include "scene.h"
 #include "common_stuff.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 
 
 
@@ -23,6 +22,7 @@ namespace trog{
 
         bn::vector<credit_line, 64> _credits;
         bn::optional<bn::regular_bg_ptr> _titlegraphic;
+        bn::sprite_text_generator _small_white_gen;
 
         void setup_credits();
 

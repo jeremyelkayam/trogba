@@ -8,6 +8,7 @@
 #include "bn_sprite_items_small_font_brown.h"
 #include "bn_sprite_items_small_font_lightgray.h"
 #include "bn_sprite_items_small_font_darkgray.h"
+#include "bn_sprite_items_small_font_black.h"
 
 namespace trog
 {
@@ -159,6 +160,10 @@ constexpr bn::sprite_font small_font_lightgray(
     
 constexpr bn::sprite_font small_font_darkgray(
     bn::sprite_items::small_font_darkgray, small_font_utf8_characters_map.reference(),
+    small_font_character_widths);
+    
+constexpr bn::sprite_font small_font_black(
+    bn::sprite_items::small_font_black, small_font_utf8_characters_map.reference(),
     small_font_character_widths);
 
 }

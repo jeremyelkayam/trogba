@@ -13,6 +13,7 @@
 #include "bn_sprite_items_checkbox.h"
 #include "bn_sprite_items_slider_bar.h"
 #include "bn_sprite_items_volume_graph.h"
+#include "small_fonts.h"
 
 namespace trog {
 
@@ -20,7 +21,10 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
         _sesh(sesh),
         _common_stuff(common_stuff),
         _scroll(bn::regular_bg_items::hi_scores_bg.create_bg(8, 64)),
-        _index(0) {
+        _black_generator(small_font_black),
+        _red_generator(small_font_red),
+        _index(0) 
+{
     _common_stuff.text_generator.set_center_alignment();
     _common_stuff.text_generator.set_palette_item(RED_PALETTE);
     _common_stuff.text_generator.generate(0, -72, "YE OLDE CUTSCENE VIEWER", _header_sprites);
@@ -36,19 +40,19 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
     _options_vec.emplace_back(bn::vector<bn::sprite_ptr, 2>(), bn::vector<bn::sprite_ptr, 6>(), bn::string<32>("back"), 0);
 
 
+    _black_generator.set_left_alignment();
+    _red_generator.set_left_alignment();
 
 }
 
 void cutsceneviewer_scene::update_selection(){
     for(uint8_t z = 0; z < _options_vec.size(); z++){
-        for(bn::sprite_ptr &sprite : _options_vec.at(z).lv_text_sprites){
-            if(z == _index) sprite.set_palette(RED_PALETTE);
-            else sprite.set_palette(BLACK_PALETTE);
-        }
-        for(bn::sprite_ptr &sprite : _options_vec.at(z).title_text_sprites){
-            if(z == _index) sprite.set_palette(RED_PALETTE);
-            else sprite.set_palette(BLACK_PALETTE);
-        }
+
+        _options_vec.at(z).lv_text_sprites.clear();
+        _options_vec.at(z).title_text_sprites.clear();
+
+        if(z == _index) create_line(_red_generator, z);
+        else create_line(_black_generator, z);
     }
 }
 
@@ -56,26 +60,8 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
     bn::optional<scene_type> result;
 
     if(_options_vec.at(0).lv_text_sprites.empty()){
-        bn::sprite_text_generator &txtgen = _common_stuff.small_generator;
-        txtgen.set_left_alignment();
-        txtgen.set_palette_item(BLACK_PALETTE);
-        txtgen.set_one_sprite_per_character(false);
 
-        for(uint8_t z = 0; z < _options_vec.size(); z++){
-            if(z == _options_vec.size() - 1){
-                txtgen.generate(-90, -52 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).lv_text_sprites);
-            }else{
-                bn::string<32> opt_str;
-                bn::ostringstream opt_string_stream(opt_str);
-
-                opt_string_stream << "Lv" << _options_vec.at(z).level << ".";
-                
-
-                txtgen.generate(-90, -52 + 9 * z, opt_str, _options_vec.at(z).lv_text_sprites);
-                txtgen.generate(-55, -52 + 9 * z, _options_vec.at(z).title, _options_vec.at(z).title_text_sprites);
-            }
-
-
+        for(int z = 0; z < _options_vec.size(); z++){
             //trick to set our index to the last selected option when returning from this menu
             if(_sesh.get_level() == _options_vec.at(z).level){
                 _index = z;
@@ -112,6 +98,22 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
     }
         
     return result;
+}
+
+void cutsceneviewer_scene::create_line(bn::sprite_text_generator &gen, int index)
+{
+    if(index == _options_vec.size() - 1){
+        gen.generate(-90, -52 + 9 * index, _options_vec.at(index).title, _options_vec.at(index).lv_text_sprites);
+    }else{
+        bn::string<32> opt_str;
+        bn::ostringstream opt_string_stream(opt_str);
+
+        opt_string_stream << "Lv" << _options_vec.at(index).level << ".";
+        
+
+        gen.generate(-90, -52 + 9 * index, opt_str, _options_vec.at(index).lv_text_sprites);
+        gen.generate(-55, -52 + 9 * index, _options_vec.at(index).title, _options_vec.at(index).title_text_sprites);
+    }
 }
 
 
