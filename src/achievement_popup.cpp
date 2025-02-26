@@ -1,15 +1,13 @@
 #include "achievement_popup.h"
 #include "constants.h"
 #include "bn_sprite_items_achievement_box_narrow.h"
-#include "bn_sprite_palette_items_font_yellow.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
+#include "small_fonts.h"
 #include <bn_log.h>
 #include <bn_sound_items.h>
 
 namespace trog { 
 
-achievement_popup::achievement_popup(bn::sprite_text_generator &generator,
-    const bn::fixed &sound_vol,
+achievement_popup::achievement_popup(const bn::fixed &sound_vol,
     const bn::string<16> &achievement_name,
     const int &index) : 
         _speed(0),
@@ -29,12 +27,18 @@ achievement_popup::achievement_popup(bn::sprite_text_generator &generator,
     
     _icon_sprite.put_above();
 
-    generator.set_center_alignment();
-    generator.set_palette_item(bn::sprite_palette_items::font_yellow);
-    generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked",
+    bn::sprite_text_generator yellow_generator = 
+        bn::sprite_text_generator(small_font_yellow);
+    yellow_generator.set_center_alignment();
+    yellow_generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked",
         _text_sprites);
-    generator.set_palette_item(WHITE_PALETTE);
-    generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
+        
+
+
+    bn::sprite_text_generator white_generator = 
+    bn::sprite_text_generator(small_font_white);
+    white_generator.set_center_alignment();
+    white_generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
         _text_sprites);
     
     _speed = -bn::fixed(HEIGHT) / MOVE_TIME;

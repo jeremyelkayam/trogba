@@ -7,6 +7,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_palette_items_font_yellow.h"
+#include "small_fonts.h"
 
 namespace trog {
 
@@ -20,8 +21,11 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         _selector, 10, bn::sprite_items::selector.tiles_item(), 
         1, 2, 2, 2, 1, 0, 0, 0)),
     _bg(bn::regular_bg_items::achievements_menu_bg.create_bg(0,0)),
+    _yellow_gen(small_font_yellow),
+    _white_gen(small_font_white),
+    _gray_gen(small_font_lightgray),
     _common_stuff(common_stuff),
-    _selected(0) 
+    _selected(0)
 {
     
     int z = 0;
@@ -31,12 +35,8 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         if(_common_stuff.acm.is_achieved(acd.tag))
         {
             bn::sprite_ptr icon = 
-                bn::sprite_items::achievements.create_sprite(
-                menu_top_left.x() + spacing * (z % items_per_line),
-                menu_top_left.y() + spacing * (z / items_per_line),
-                z
-            );
-            icon.set_scale(0.5);    
+                bn::sprite_items::achievements.create_sprite(0,0,z);
+            icon.set_scale(0.5);
             _opts.emplace_back(acd, icon, z);
         }
         ++z;
@@ -51,24 +51,34 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         if(!_common_stuff.acm.is_achieved(acd.tag))
         {
             bn::sprite_ptr icon = 
-                bn::sprite_items::lock_icon.create_sprite(
-                menu_top_left.x() + spacing * (z % items_per_line),
-                menu_top_left.y() + spacing * (z / items_per_line)
-            );
+                bn::sprite_items::lock_icon.create_sprite(0,0);
             _opts.emplace_back(acd, icon, z);
         }
         ++z;
     }
 
+    //todo: it may not be necessary to iterate through this 3 times
+    // but hey, it'll work so w/e
+    for(int g = 0; g < _opts.size(); ++g)
+    {
+        ac_option &current = _opts.at(g);
+        current.icon.set_position(
+            menu_top_left.x() + spacing * (g % items_per_line),
+            menu_top_left.y() + spacing * (g / items_per_line));
+    }
+
     bn::sprite_ptr icon = 
         bn::sprite_items::achievements.create_sprite(
-        menu_top_left.x() + spacing * (z % items_per_line),
-        menu_top_left.y() + spacing * (z / items_per_line),
-        11
+        menu_top_left.x() + spacing * (_opts.size() % items_per_line),
+        menu_top_left.y() + spacing * (_opts.size() / items_per_line),
+        63
     );
     icon.set_scale(0.5);
     _opts.emplace_back(ext::acdata[0], icon, 11);
 
+    _yellow_gen.set_center_alignment();
+    _gray_gen.set_center_alignment();
+    _white_gen.set_left_alignment();
 
 
     update_info_box();
@@ -213,28 +223,32 @@ void achievements_scene::update_info_box()
         _common_stuff.small_generator.set_palette_item(
             bn::sprite_palette_items::font_yellow);
 
+        int dex = selected_option.index;
+        if(_selected == _opts.size() - 1)
+        {
+            dex = 63;
+        }
         _selected_icon.set_item(bn::sprite_items::achievements,
-            selected_option.index);
+            dex);
+        
+        _yellow_gen.generate(0, -72, name, _text_sprites);
     }
     else
     {
-        _common_stuff.small_generator.set_palette_item(
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
+
         name = "Locked";
+        _gray_gen.generate(0, -72, name, _text_sprites);
 
         _selected_icon.set_item(bn::sprite_items::lock_icon);
     }
 
-    _common_stuff.small_generator.generate(0, -72, 
-        name, _text_sprites);
+
 
     bn::fixed yoffset = 0;
     for(const bn::string<64> &line : _common_stuff.split_into_lines(
         desc.c_str(), 185))
     {
-        _common_stuff.small_generator.set_left_alignment();
-        _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
-        _common_stuff.small_generator.generate(-77, -63 + yoffset,
+        _white_gen.generate(-77, -63 + yoffset,
             line, _text_sprites);
         yoffset += 9;
     }

@@ -7,9 +7,7 @@ namespace trog
 {
 
 achievements_mgr::achievements_mgr(saved_data &sram_data,
-    bn::sprite_text_generator &generator,
     const bn::fixed &sound_vol) : 
-    _generator(generator),
     _sound_vol(sound_vol),
     _sram_data(sram_data)
 {
@@ -81,7 +79,7 @@ void achievements_mgr::show_popup(bn::string<8> tag)
 {
     const achievement &data = _achievements.at(tag);
 
-    _popup.emplace(_generator, _sound_vol, data.name, data.sram_index);
+    _popup.emplace(_sound_vol, data.name, data.sram_index);
 
 }
 

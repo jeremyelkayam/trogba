@@ -24,7 +24,6 @@ namespace trog {
             bn::unordered_map<bn::string<8>, 
                 const achievement, 64> _achievements;
 
-            bn::sprite_text_generator &_generator;
             const bn::fixed &_sound_vol;
 
             
@@ -38,7 +37,6 @@ namespace trog {
 
         public:
             achievements_mgr(saved_data &sram_data,
-                bn::sprite_text_generator &generator,
                 const bn::fixed &sound_vol);
 
             void update_achievement(bn::string<8> tag, const long &new_value);

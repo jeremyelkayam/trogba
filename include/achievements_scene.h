@@ -27,6 +27,7 @@ namespace trog{
         bn::sprite_animate_action<8> _selector_anim;
         bn::optional<bn::sprite_move_to_action> _selector_move;
         bn::regular_bg_ptr _bg;
+        bn::sprite_text_generator _yellow_gen, _white_gen, _gray_gen;
 
         common_stuff &_common_stuff;
 
@@ -42,6 +43,7 @@ namespace trog{
 
         void update_info_box();
         bool on_last_line();
+
 
     public:
         explicit achievements_scene(common_stuff &common_stuff);

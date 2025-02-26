@@ -9,108 +9,109 @@
 #include "bn_sprite_items_small_font_lightgray.h"
 #include "bn_sprite_items_small_font_darkgray.h"
 
-namespace common
+namespace trog
 {
 
-constexpr bn::utf8_character variable_8x8_sprite_font_utf8_characters[] = {
+constexpr bn::utf8_character small_font_utf8_characters[] = {
     "Á", "É", "Í", "Ó", "Ú", "Ü", "Ñ", "á", "é", "í", "ó", "ú", "ü", "ñ", "¡", "¿"
 };
 
-constexpr int8_t variable_8x8_sprite_font_character_widths[] = {
+
+constexpr int8_t small_font_character_widths[] = {
     6,  // 32
-    3,  // 33 !
-    6,  // 34 "
-    7,  // 35 #
-    8,  // 36 $
-    8,  // 37 %
+    2,  // 33 !
+    4,  // 34 "
+    6,  // 35 #
+    6,  // 36 $
+    5,  // 37 %
     8,  // 38 &
-    3,  // 39 '
-    4,  // 40 (
-    4,  // 41 )
+    2,  // 39 '
+    3,  // 40 (
+    3,  // 41 )
     6,  // 42 *
-    7,  // 43 +
+    6,  // 43 +
     3,  // 44 ,
-    7,  // 45 -
-    3,  // 46 .
-    8,  // 47 /
-    7,  // 48 0
-    7,  // 49 1
-    7,  // 50 2
-    7,  // 51 3
-    7,  // 52 4
-    7,  // 53 5
-    7,  // 54 6
-    7,  // 55 7
-    7,  // 56 8
-    7,  // 57 9
-    3,  // 58 :
+    6,  // 45 -
+    2,  // 46 .
+    4,  // 47 /
+    6,  // 48 0
+    4,  // 49 1
+    6,  // 50 2
+    6,  // 51 3
+    6,  // 52 4
+    6,  // 53 5
+    6,  // 54 6
+    5,  // 55 7
+    6,  // 56 8
+    6,  // 57 9
+    2,  // 58 :
     3,  // 59 ;
-    7,  // 60 <
-    7,  // 61 =
-    7,  // 62 >
-    7,  // 63 ?
-    8,  // 64 @
-    7,  // 65 A
-    7,  // 66 B
-    7,  // 67 C
-    7,  // 68 D
-    7,  // 69 E
-    7,  // 70 F
-    7,  // 71 G
-    7,  // 72 H
-    7,  // 73 I
-    7,  // 74 J
+    5,  // 60 <
+    6,  // 61 =
+    5,  // 62 >
+    5,  // 63 ?
+    6,  // 64 @
+    6,  // 65 A
+    6,  // 66 B
+    6,  // 67 C
+    6,  // 68 D
+    6,  // 69 E
+    6,  // 70 F
+    6,  // 71 G
+    6,  // 72 H
+    3,  // 73 I
+    5,  // 74 J
     7,  // 75 K
-    7,  // 76 L
+    5,  // 76 L
     8,  // 77 M
     7,  // 78 N
     7,  // 79 O
-    7,  // 80 P
-    8,  // 81 Q
-    7,  // 82 R
-    7,  // 83 S
+    6,  // 80 P
+    7,  // 81 Q
+    6,  // 82 R
+    5,  // 83 S
     7,  // 84 T
-    7,  // 85 U
-    8,  // 86 V
+    6,  // 85 U
+    7,  // 86 V
     8,  // 87 W
     7,  // 88 X
     7,  // 89 Y
-    7,  // 90 Z
+    6,  // 90 Z
     4,  // 91 [
-    8,  // 92
+    4,  // 92 backslash
     4,  // 93 ]
     7,  // 94 ^
-    7,  // 95 _
-    3,  // 96 `
-    5,  // 97 a
-    5,  // 98 b
+    6,  // 95 _
+    4,  // 96 `
+    6,  // 97 a
+    6,  // 98 b
     5,  // 99 c
-    5,  // 100 d
-    5,  // 101 e
-    5,  // 102 f
-    5,  // 103 g
-    5,  // 104 h
-    5,  // 105 i
-    5,  // 106 j
-    5,  // 107 k
-    5,  // 108 l
-    6,  // 109 m
-    5,  // 110 n
-    5,  // 111 o
-    5,  // 112 p
-    5,  // 113 q
+    6,  // 100 d
+    6,  // 101 e
+    4,  // 102 f
+    6,  // 103 g
+    6,  // 104 h
+    3,  // 105 i
+    4,  // 106 j
+    6,  // 107 k
+    3,  // 108 l
+    8,  // 109 m
+    6,  // 110 n
+    6,  // 111 o
+    6,  // 112 p
+    6,  // 113 q
     5,  // 114 r
     5,  // 115 s
-    5,  // 116 t
+    4,  // 116 t
     6,  // 117 u
-    5,  // 118 v
-    6,  // 119 w
-    5,  // 120 x
-    5,  // 121 y
-    5,  // 122 z
-    5,  // 123 {
-    3,  // 124 |
-    5,  // 125 }
+    6,  // 118 v
+    8,  // 119 w
+    6,  // 120 x
+    6,  // 121 y
+    6,  // 122 z
+    6,  // 123 {
+    2,  // 124 |
+    6,  // 125 }
     8,  // 126 ~
     7,  // Á
     6,  // É
@@ -130,18 +131,34 @@ constexpr int8_t variable_8x8_sprite_font_character_widths[] = {
     7,  // ¿
 };
 
-constexpr bn::span<const bn::utf8_character> variable_8x8_sprite_font_utf8_characters_span(
-        variable_8x8_sprite_font_utf8_characters);
+constexpr bn::span<const bn::utf8_character> small_font_utf8_characters_span(
+        small_font_utf8_characters);
 
-constexpr auto variable_8x8_sprite_font_utf8_characters_map =
-        bn::utf8_characters_map<variable_8x8_sprite_font_utf8_characters_span>();
+constexpr auto small_font_utf8_characters_map =
+        bn::utf8_characters_map<small_font_utf8_characters_span>();
 
 constexpr bn::sprite_font small_font_white(
-        bn::sprite_items::small_font_white, variable_8x8_sprite_font_utf8_characters_map.reference(),
-        variable_8x8_sprite_font_character_widths);
+        bn::sprite_items::small_font_white, small_font_utf8_characters_map.reference(),
+        small_font_character_widths);
 
 constexpr bn::sprite_font small_font_yellow(
-        bn::sprite_items::small_font_yellow, variable_8x8_sprite_font_utf8_characters_map.reference(),
-        variable_8x8_sprite_font_character_widths);
+        bn::sprite_items::small_font_yellow, small_font_utf8_characters_map.reference(),
+        small_font_character_widths);
+
+constexpr bn::sprite_font small_font_red(
+        bn::sprite_items::small_font_red, small_font_utf8_characters_map.reference(),
+        small_font_character_widths);
+        
+constexpr bn::sprite_font small_font_brown(
+    bn::sprite_items::small_font_brown, small_font_utf8_characters_map.reference(),
+    small_font_character_widths);
+    
+constexpr bn::sprite_font small_font_lightgray(
+    bn::sprite_items::small_font_lightgray, small_font_utf8_characters_map.reference(),
+    small_font_character_widths);
+    
+constexpr bn::sprite_font small_font_darkgray(
+    bn::sprite_items::small_font_darkgray, small_font_utf8_characters_map.reference(),
+    small_font_character_widths);
 
 }

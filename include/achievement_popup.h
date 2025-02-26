@@ -28,8 +28,7 @@ namespace trog {
                 const bn::fixed_point &relative_pos);
 
         public:
-            achievement_popup(bn::sprite_text_generator &generator,
-                const bn::fixed &sound_vol,
+            achievement_popup(const bn::fixed &sound_vol,
                 const bn::string<16> &achievement_name,
                 const int &index);
 
