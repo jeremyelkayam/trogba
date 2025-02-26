@@ -2,6 +2,7 @@
 #include <bn_math.h>
 #include <bn_log.h>
 #include "common_stuff.h"
+#include "small_fonts.h"
 #include "trogdor_variable_8x16_sprite_font.h"
 #include "trogdor_variable_32x64_sprite_font.h"
 #include "trogdor_variable_8x8_sprite_font.h"
