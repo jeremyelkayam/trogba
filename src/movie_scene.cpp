@@ -62,6 +62,12 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }
     }else if(_sesh.get_level() == 17){
+        //dancin' time
+
+        //TODO - This crashes the game, need to consolidate
+        // other text palettes maybe.
+        _common_stuff.acm.update_achievement("twees", 0);
+
         for(int z=0; z < 10; z++){
             int xcor = 100 - (z/2)*13;
             int ycor = -12 + (z/2)*2;
@@ -407,6 +413,11 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_x(-35);
             mytrogdor->set_y(-5);
             mytrogdor->set_rotation_angle(30);
+
+
+            //TODO - This crashes the game, need to consolidate
+            // other text palettes maybe.
+            _common_stuff.acm.update_achievement("win", 0);
         }
     }
 

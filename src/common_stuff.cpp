@@ -57,7 +57,10 @@ common_stuff::common_stuff() :
             savefile.achievements.fill(0);
 
             // TODO - Move to achievements
-            // savefile.cheat_unlocked = old_save.cheat_unlocked;
+            if(old_save.cheat_unlocked)
+            {
+                acm.update_achievement("konami", 0);                
+            }
 
             //session variables
             savefile.session.exists = old_save.session.exists;
@@ -266,8 +269,6 @@ void common_stuff::format_save(){
         savefile.last_dragon_used = dragon::TROGDOR;
 
         savefile.achievements.fill(0);
-        //TODO - Make this an achievement
-        // savefile.cheat_unlocked = false;
 
         savefile.unlocked_cutscenes.fill(false);
 
