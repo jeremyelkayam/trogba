@@ -18,7 +18,7 @@ namespace trog {
             unsigned int HEIGHT = 42;
 
             bn::vector<bn::sprite_ptr, 32> _text_sprites;
-            bn::vector<bn::sprite_ptr, 3> _box_sprites;
+            bn::vector<bn::sprite_ptr, 5> _box_sprites;
             bn::sprite_ptr _icon_sprite;
 
 

@@ -53,7 +53,6 @@ namespace trog {
             bool arrived_alert() {return _new_state && _current_state == troghammer_state::ARRIVED;}
             bool coming_alert(){return _new_state && _current_state == troghammer_state::COMING;}
             bool inside_void_tower(){return _current_state == troghammer_state::ALERT;}
-            virtual void alert(bn::fixed_point stomp_pos) override {if(in_play()) knight::alert(stomp_pos);}
 
             virtual void freeze() override final {if(in_play()) knight::freeze();}
 

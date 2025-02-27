@@ -19,7 +19,7 @@ achievement_popup::achievement_popup(const bn::fixed &sound_vol,
     bn::sound_items::bubble.play(sound_vol);
     for(int z = 0; z < _box_sprites.max_size(); ++z)
     {
-        bn::fixed xoffset = 64 * (z - (_box_sprites.max_size() - 1) / 2);
+        bn::fixed xoffset = 32 * (z - (_box_sprites.max_size() - 1) / 2);
         _box_sprites.push_back(
             bn::sprite_items::achievement_box_narrow.create_sprite(
             _pos.x() + xoffset, _pos.y(), z));

@@ -25,8 +25,6 @@ peasant::peasant(bn::fixed xcor, bn::fixed ycor, bn::fixed speed, bn::fixed maxd
         _walkcycle(bn::create_sprite_animate_action_forever(
                     _sprite, 12, bn::sprite_items::peasant.tiles_item(), 0, 1)) {
     _sprite.set_z_order(MID_ZORDER);
-    _alert_icon.set_z_order(MID_ZORDER);
-    _alert_icon.set_visible(false);
 
     switch(home.get_direction()) {
         case direction::UP:
@@ -80,10 +78,6 @@ void peasant::set_sprite_ablaze(){
 void peasant::update(){
     entity::update();
 
-    if(_alert_icon.visible()){
-        update_alert();
-    }
-
     if(!_freeze_timer){
         if(_time_waiting == _waittime){
             _speed=-_speed;
@@ -108,9 +102,6 @@ void peasant::update(){
         }
     }else{
         update_freeze();
-
-        //this will trigger if the peasant just unfroze
-        if(_freeze_timer == 0) alert(bn::fixed_point(0,0));
     }
 }
 
@@ -123,7 +114,6 @@ void peasant::squish(){
         _sprite.set_y(_sprite.y() + 3);
         _pos.set_y(_pos.y() + 3);
         _freeze_timer = 0;
-        _alert_icon.set_visible(false);
     }
 }
 

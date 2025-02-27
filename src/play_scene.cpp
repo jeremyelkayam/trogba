@@ -196,6 +196,11 @@ bn::optional<scene_type> play_scene::update(){
     if(_win_pause_time == 1){
         bool troghammer_arrived = _troghammer && _troghammer->in_play();
 
+        if(_stand_still_time < 10)
+        {
+            _common_stuff.acm.update_achievement("loafing", 0);
+        }
+
         _common_stuff.commentary.level_win_pause(_sesh.get_dragon(), troghammer_arrived);
 
         //tutorial win level thing 
@@ -286,9 +291,15 @@ bn::optional<scene_type> play_scene::update(){
         
         ++_total_time;
 
-        BN_LOG("total time: ", _total_time);
         _common_stuff.acm.update_achievement("daisies", _total_time);
 
+        //todo: this can be abused by just running into a wall.
+        if(!_common_stuff.any_dpad_input())
+        {
+            ++_stand_still_time;
+        }
+
+        bool died_this_frame = !_player->dead();
 
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
@@ -369,7 +380,6 @@ bn::optional<scene_type> play_scene::update(){
 
         was_dead = _player->dead();  
         for(knight &k : _knights){
-            if(k.alerted()) k.update_alert_direction(_player->get_pos());
             k.update();
             _player->handle_knight_collision(k);
         }
@@ -394,7 +404,6 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_troghammer){
-            if(_troghammer->alerted()) _troghammer->update_alert_direction(_player->get_pos());
             was_dead = _player->dead();  
             _troghammer->update();
 
@@ -422,6 +431,17 @@ bn::optional<scene_type> play_scene::update(){
         if(_th_sound){
             _th_sound->update();
             if(_th_sound->done()) _th_sound.reset();
+        }
+
+        if(_player->dead() && died_this_frame && _sesh.get_dragon() == dragon::SUCKS)
+        {
+            sucks *player = (sucks *) _player.get();
+            
+            if(player->stomp_timer() > 0 
+                && player->stomp_timer() < TROG_SUCK_STOMP_FRAME)
+            {
+                _common_stuff.acm.update_achievement("denial", 0);
+            }
         }
 
 

@@ -40,7 +40,6 @@ namespace trog {
 			// void update_home(short knight_increment);
             void update_anim() override final;
             virtual void freeze() override {_freeze_timer = _cycletime;}
-            virtual void alert(bn::fixed_point stomp_pos) override;
             void update_alert_direction(bn::fixed_point pos);
     };
 }

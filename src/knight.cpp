@@ -36,57 +36,45 @@ void knight::update(){
         bn::fixed xdist = 0;
         bn::fixed ydist = 0;
 
-        if(alerted()){
-            update_alert();
-            xdist = _alert_dist->x();
-            ydist = _alert_dist->y();
-            if(_walkcycle_timer == _cycletime / 2) {
-                _walkcycle_timer = 0;
-                _alert_icon.set_visible(false);
-                _alert_dist.reset();
+        if(_walkcycle_timer == _cycletime) {
+            _walkcycle_timer = 0;
+        }
+        //todo i hate these 'while true' / 'break' loops
+        // change this one
+        while(true){
+            if(_walkcycle_timer < _cycletime / 2){
+                xdist = _speed;
+                ydist = -_speed;
+            }else{
+                xdist = -(_speed - bn::fixed(0.1));
             }
-        }else{
-            if(_walkcycle_timer == _cycletime) {
-                _walkcycle_timer = 0;
-            }
-            //todo i hate these 'while true' / 'break' loops
-            // change this one
-            while(true){
-                if(_walkcycle_timer < _cycletime / 2){
-                    xdist = _speed;
-                    ydist = -_speed;
-                }else{
-                    xdist = -(_speed - bn::fixed(0.1));
-                }
 
-                if(_sprite.horizontal_flip()){
+            if(_sprite.horizontal_flip()){
+                xdist = -xdist;
+            }
+
+            switch(_rotation){
+                case 1:
+                    ydist = -ydist;
+                    bn::swap(xdist, ydist);
+                    break;
+                case 2:
                     xdist = -xdist;
-                }
-
-                switch(_rotation){
-                    case 1:
-                        ydist = -ydist;
-                        bn::swap(xdist, ydist);
-                        break;
-                    case 2:
-                        xdist = -xdist;
-                        ydist = -ydist;
-                        break;
-                    case 3:
-                        xdist = -xdist;
-                        bn::swap(xdist, ydist);                
-                        break;
-                    default:
-                        break;
-                    }
-                if(going_to_go_offscreen_x(_pos.x() + xdist) || 
-                    going_to_go_offscreen_y(_pos.y() + ydist) ){
-                    change_direction();
-                }else{
+                    ydist = -ydist;
+                    break;
+                case 3:
+                    xdist = -xdist;
+                    bn::swap(xdist, ydist);                
+                    break;
+                default:
                     break;
                 }
+            if(going_to_go_offscreen_x(_pos.x() + xdist) || 
+                going_to_go_offscreen_y(_pos.y() + ydist) ){
+                change_direction();
+            }else{
+                break;
             }
-
         }
 
         _pos.set_x(_pos.x() + xdist);
@@ -96,12 +84,6 @@ void knight::update(){
 
 void knight::change_direction(){
     _rotation = _random.get_int(0,4);
-}
-
-void knight::alert(bn::fixed_point stomp_pos){
-    freezable::alert(stomp_pos);
-    _walkcycle_timer = 0;
-    update_alert_direction(stomp_pos);
 }
 
 void knight::update_alert_direction(bn::fixed_point pos){
