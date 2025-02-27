@@ -6,7 +6,6 @@
 #include "constants.h"
 
 #include "bn_regular_bg_items_hi_scores_bg.h"
-#include "bn_sprite_items_trogdor_variable_8x8_font.h"
 #include "bn_sprite_items_checkbox.h"
 #include "bn_sprite_items_slider_bar.h"
 #include "bn_sprite_items_volume_graph.h"

@@ -43,6 +43,8 @@ namespace trog{
         peasant_factory _pfact;
         archer_factory _afact;
 
+        unsigned long _total_time;
+
         bn::sprite_text_generator _serif_red_gen;
 
 

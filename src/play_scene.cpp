@@ -47,6 +47,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _hud(hud),
         _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
+        _total_time(0),
         _serif_red_gen(serif_font_red),
         _burninate_pause_time(0),
         _win_pause_time(0),
@@ -282,6 +283,12 @@ bn::optional<scene_type> play_scene::update(){
         bool was_burninating = _player->burninating();
 
         _player->update(); 
+        
+        ++_total_time;
+
+        BN_LOG("total time: ", _total_time);
+        _common_stuff.acm.update_achievement("daisies", _total_time);
+
 
         if(_sesh.get_dragon() == dragon::SUCKS){
             sucks *player = (sucks *) _player.get();
