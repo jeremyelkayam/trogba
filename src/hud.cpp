@@ -7,15 +7,18 @@
 #include "bn_regular_bg_items_burninometer.h"
 #include "bn_sprite_items_burninometer_inverted.h"
 #include "hud.h"
+#include "serif_fonts.h"
 
 
 namespace trog {
 
-hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmeter_max) : 
+hud::hud(session_info &sesh, common_stuff &common_stuff, 
+    unsigned short trogmeter_max) : 
         _sesh(sesh),
         _common_stuff(common_stuff),
         _burninatemeter(bn::regular_bg_items::burninometer.create_bg(TROG_HUD_BURNINATEMETER_CENTER, -75)),
         _burninatemeter_window(bn::rect_window::internal()),
+        _serif_red(serif_font_red),
         _enabled(true) {
     int trogmeter_start = TROG_HUD_TROGMETER_LEFTBOUND;
     for(int i = 0; i < trogmeter_max; i++){
@@ -48,6 +51,9 @@ hud::hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmete
         sprite.set_bg_priority(3);
     }
 
+
+    _serif_red.set_z_order(FURTHEST_BACK_ZORDER);
+    _serif_red.set_bg_priority(3);
 
     _common_stuff.set_sprite_arr_visible(_burninatemeter_invert, false);
 }
@@ -124,16 +130,12 @@ void hud::update() {
         _score_text_sprites.clear();
         _mans_lv_text_sprites.clear();
 
-        _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-        _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
-        _common_stuff.text_generator.set_bg_priority(3);
-
         bn::string<64> score_str, mans_lv_str;
         bn::ostringstream score_string_stream(score_str);
         score_string_stream << _sesh.get_score();
 
-        _common_stuff.text_generator.set_left_alignment();
-        _common_stuff.text_generator.generate(-120, -76, score_str, _score_text_sprites);   
+        _serif_red.set_left_alignment();
+        _serif_red.generate(-120, -76, score_str, _score_text_sprites);   
 
         //TODO: don't just right align this. The text should be right aligned and the numbers
         // should be left aligned
@@ -148,20 +150,16 @@ void hud::update() {
             mans_lv_string_stream << _sesh.get_level();
         }
 
-        _common_stuff.text_generator.set_right_alignment();
-        _common_stuff.text_generator.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
+        _serif_red.set_right_alignment();
+        _serif_red.generate(120, -76, mans_lv_str, _mans_lv_text_sprites);
     }
 }
 
 void hud::scroll_text(const char *text){
     set_all_visible(false);
 
-    _common_stuff.text_generator.set_left_alignment();
-    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    _common_stuff.text_generator.set_z_order(FURTHEST_BACK_ZORDER);
-    _common_stuff.text_generator.set_bg_priority(3);
-
-    _common_stuff.text_generator.generate(120, -76, text, _scrolling_text_sprites);
+    _serif_red.set_left_alignment();
+    _serif_red.generate(120, -76, text, _scrolling_text_sprites);
 }
 
 }

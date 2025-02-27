@@ -26,6 +26,7 @@ namespace trog {
             bn::regular_bg_ptr _burninatemeter;  
             bn::vector<bn::sprite_ptr, 3> _burninatemeter_invert;        
             bn::rect_window _burninatemeter_window;
+            bn::sprite_text_generator _serif_red;
             void set_all_visible(bool visible);
             
             //return true if we have scrolling text, false otherwise
@@ -35,9 +36,8 @@ namespace trog {
 
         public:
 
-            //todo this shouldn't be in hud; maybe throw it in a common functions class
-
-            hud(session_info &sesh, common_stuff &common_stuff, unsigned short trogmeter_max);
+            hud(session_info &sesh, common_stuff &common_stuff, 
+                unsigned short trogmeter_max);
             void update();
             void update_trogmeter(unsigned short trogmeter_value);
             void update_burninatemeter(unsigned int current_burninate_time, unsigned int total_burninate_time);
