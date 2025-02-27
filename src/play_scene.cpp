@@ -48,6 +48,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
         _total_time(0),
+        _died_on_this_level(false),
         _serif_red_gen(serif_font_red),
         _burninate_pause_time(0),
         _win_pause_time(0),
@@ -198,7 +199,12 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_stand_still_time < 10)
         {
-            _common_stuff.acm.update_achievement("loafing", 0);
+            _common_stuff.acm.update_achievement("loafing");
+        }
+
+        if(!_died_on_this_level && troghammer_arrived)
+        {
+            _common_stuff.acm.update_achievement("shave");
         }
 
         _common_stuff.commentary.level_win_pause(_sesh.get_dragon(), troghammer_arrived);
@@ -337,6 +343,7 @@ bn::optional<scene_type> play_scene::update(){
                     //check if it should burn any cottages
                     bool cottage_burninated = p.get_home().burninate();
                     if(cottage_burninated) {
+                        _common_stuff.acm.update_achievement("chain");
                         //bonus points if the peasant burns his house down
                         _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
                     }else{

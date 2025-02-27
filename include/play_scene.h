@@ -44,6 +44,7 @@ namespace trog{
         archer_factory _afact;
 
         unsigned long _total_time, _stand_still_time;
+        bool _died_on_this_level;
 
         bn::sprite_text_generator _serif_red_gen;
 

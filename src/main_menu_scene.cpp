@@ -84,6 +84,12 @@ bn::optional<scene_type> main_menu_scene::update(){
         if(_selection_anim_timer > SELECTION_ANIM_LENGTH ||  bn::keypad::a_pressed()){
             result = current_option.next_scene();
         } 
+        if((_selected_option_index == 0 || 
+            _selected_option_index == 1)
+             && bn::keypad::select_pressed())
+        {
+            _common_stuff.acm.update_achievement("dodongo", 0);
+        }
     }
 
     if(bn::keypad::a_pressed()){

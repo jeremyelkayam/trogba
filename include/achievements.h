@@ -39,7 +39,8 @@ namespace trog {
             achievements_mgr(saved_data &sram_data,
                 const bn::fixed &sound_vol);
 
-            void update_achievement(bn::string<8> tag, const long &new_value);
+            void update_achievement(bn::string<8> tag, 
+                const long &new_value=0);
 
             void update();
 
