@@ -6,14 +6,12 @@
 #include "constants.h"
 
 #include "bn_regular_bg_items_hi_scores_bg.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_brown.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_black.h"
 #include "bn_sprite_items_trogdor_variable_8x8_font.h"
 #include "bn_sprite_items_checkbox.h"
 #include "bn_sprite_items_slider_bar.h"
 #include "bn_sprite_items_volume_graph.h"
 #include "small_fonts.h"
+#include "serif_fonts.h"
 
 namespace trog {
 
@@ -25,9 +23,9 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
         _red_generator(small_font_red),
         _index(0),
         _old_save(common_stuff.savefile.options) {
-    _common_stuff.text_generator.set_center_alignment();
-    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    _common_stuff.text_generator.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
+    bn::sprite_text_generator serif_gen(serif_font_red); 
+    serif_gen.set_center_alignment();
+    serif_gen.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
 
     _options_vec.emplace_back(
         new bool_option("Troghammer", 
