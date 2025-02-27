@@ -36,6 +36,7 @@
 #include "chiaroscuro.h"
 #include "wormdingler.h"
 #include "small_fonts.h"
+#include "serif_fonts.h"
 
 
 namespace trog {
@@ -46,6 +47,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _hud(hud),
         _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
+        _serif_red_gen(serif_font_red),
         _burninate_pause_time(0),
         _win_pause_time(0),
         _autosave_visibility_time(0),
@@ -56,6 +58,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _pause_menu_index(0),
         _countryside(bn::regular_bg_items::day.create_bg(0, 58))
 {
+    
+    _serif_red_gen.set_center_alignment();
+    _serif_red_gen.set_bg_priority(0);
 
     respawn(false);
 
@@ -818,35 +823,25 @@ void play_scene::unpause(){
 
 void play_scene::redraw_pause_menu_option(){
     _paused_selected_option.clear();
-    _common_stuff.text_generator.set_center_alignment();
-
-    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    _common_stuff.text_generator.set_bg_priority(0);
-    bn::fixed_point pos;
-    bn::string<16> text;
 
     switch(_pause_menu_index){
         case 0:
-            _common_stuff.text_generator.generate(-49,-31, "OPTIONS", _paused_selected_option);
+            _serif_red_gen.generate(-49,-31, "OPTIONS", _paused_selected_option);
         break;
         case 1:
-            _common_stuff.text_generator.generate(50,-37, "VIEW", _paused_selected_option);
-            _common_stuff.text_generator.generate(50,-25, "HI-SCORES", _paused_selected_option);
+            _serif_red_gen.generate(50,-37, "VIEW", _paused_selected_option);
+            _serif_red_gen.generate(50,-25, "HI-SCORES", _paused_selected_option);
         break;
         case 2:
-            _common_stuff.text_generator.generate(-49,22, "QUIT", _paused_selected_option);
+            _serif_red_gen.generate(-49,22, "QUIT", _paused_selected_option);
         break;
         case 3:
-            _common_stuff.text_generator.generate(51,22, "RESUME", _paused_selected_option);
+            _serif_red_gen.generate(51,22, "RESUME", _paused_selected_option);
         break;
         default:
             BN_ERROR("invalid pause menu index");
         break;
     }
-
-    
-    _common_stuff.text_generator.generate(pos, text, _paused_selected_option);
-
 }
 
 void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){

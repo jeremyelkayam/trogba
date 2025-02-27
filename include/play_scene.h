@@ -43,6 +43,8 @@ namespace trog{
         peasant_factory _pfact;
         archer_factory _afact;
 
+        bn::sprite_text_generator _serif_red_gen;
+
 
         unsigned short _burninate_pause_time, _win_pause_time, _autosave_visibility_time, _shake_timer;
         bool _player_paused;
