@@ -12,6 +12,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_regular_bg_items_main_menu.h"
+#include "small_fonts.h"
 
 #define SELECTION_ANIM_LENGTH 30
 
@@ -41,7 +42,8 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
     _menu_options.emplace_back(0, -52, "CONTINUE", 
         common_stuff.text_generator, scene_type::PLAY);
 
-    common_stuff.small_generator.set_center_alignment();
+    bn::sprite_text_generator small_gen(small_font_darkgray);
+    small_gen.set_center_alignment();
 
     saved_session &loaded_sesh = common_stuff.savefile.session;
 
@@ -52,16 +54,12 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
         summary_stream << "mans: " << loaded_sesh.mans << "  ";       
         summary_stream << "level: " << loaded_sesh.level;       
 
-        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        common_stuff.small_generator.generate(0, -36, session_summary, _menu_text_sprites);
-        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        small_gen.generate(0, -36, session_summary, _menu_text_sprites);
 
         _troghammer_icon.set_visible(loaded_sesh.troghammer);
         _trogmeter_degrade_icon.set_visible(loaded_sesh.can_lose_trogmeter);
     }else{
-        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        common_stuff.small_generator.generate(0, -26, "no data saved.", _menu_text_sprites);
-        common_stuff.small_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+        small_gen.generate(0, -26, "no data saved.", _menu_text_sprites);
     }
 
     _menu_options.emplace_back(-72, 32, "NEW\nGAME", 
@@ -71,9 +69,6 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
         common_stuff.text_generator, scene_type::OPTIONS);
     _menu_options.emplace_back(72, 32, "EXTRAS", 
         common_stuff.text_generator, scene_type::EXTRAS);
-    // _menu_options.emplace_back(5, 77, "HI-SCORES", common_stuff.text_generator);
-    // _menu_options.emplace_back(5, 107, "CREDITS", common_stuff.text_generator);
-    // _menu_options.emplace_back(5, 137, "CUTSCENE VIEWER", common_stuff.text_generator);
 }
 
 bn::optional<scene_type> main_menu_scene::update(){

@@ -35,6 +35,7 @@
 #include "sucks.h"
 #include "chiaroscuro.h"
 #include "wormdingler.h"
+#include "small_fonts.h"
 
 
 namespace trog {
@@ -798,9 +799,9 @@ void play_scene::setup_pause_menu(){
     _pause_menu->set_z_order(0);
     redraw_pause_menu_option();
     _paused_label.clear();
-    _common_stuff.small_generator.set_center_alignment();
-    _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);    
-    _common_stuff.small_generator.generate(0,65, "paused.", _paused_label);
+    bn::sprite_text_generator paused_txtgen(small_font_white);
+    paused_txtgen.set_center_alignment();   
+    paused_txtgen.generate(0,65, "paused.", _paused_label);
     _timer = 0;
 }
 
