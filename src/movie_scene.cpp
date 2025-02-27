@@ -7,12 +7,14 @@
 #include "bn_sprite_items_strongbad.h"
 #include "bn_sprite_items_knight.h"
 #include "bn_sprite_items_firebreath.h"
+#include "serif_fonts.h"
 
 
 //this class is terrible! But it's the best I've got 
 namespace trog{
 
 movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
+    _serif_white(serif_font_white),
     _last_scene(last_scene),    
     _timer(0),
     _cutscene_length(270),
@@ -20,14 +22,12 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     _sesh(sesh),
     _dummy_cottage(-240, -240, direction::DOWN, false, false, common_stuff)
 {
+    _serif_white.set_center_alignment();
     BN_LOG("last scene: ", common_stuff.scene_type_to_string(_last_scene));
     if(_sesh.get_level() != 101) {
         bn::sound_items::intermish.play(_common_stuff.savefile.options.music_vol);
         write_text(_common_stuff.cutscene_name_for_level(_sesh.get_level()));
     }
-
-    _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-    _common_stuff.text_generator.set_center_alignment();
 
     if(_sesh.get_level() == 5){
         trogdor* mytrogdor = new trogdor(140,0,_sesh,false,_common_stuff);
@@ -169,9 +169,9 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 }
 
 void movie_scene::write_text(bn::string<32> str){
-    _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
-    _common_stuff.text_generator.set_center_alignment();
-    _common_stuff.text_generator.generate(0, -60, str, _text_sprites);
+    _text_sprites.clear();
+    
+    _serif_white.generate(0, -60, str, _text_sprites);
 }
 
 bn::optional<scene_type> movie_scene::update(){
@@ -320,8 +320,6 @@ bn::optional<scene_type> movie_scene::update(){
     }
 
     if(_sesh.get_level() == 101){
-        _common_stuff.text_generator.set_center_alignment();
-        _common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
         strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
         short credits_start_time = 560, credits_interval = 70;
         if(_timer == 120){
@@ -330,64 +328,57 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == 180){
             sbad->start_animating();
             bn::sound_items::cutscene_congrats.play(_common_stuff.savefile.options.sound_vol);
-            _common_stuff.text_generator.generate(0, -60, "congratulations.", _text_sprites);
+            write_text("congratulations.");
         }else if(_timer == 250){
             sbad->stop_animating();
         }else if(_timer == 280){
             sbad->start_animating();
-            _common_stuff.text_generator.generate(0, -48, "you got", _text_sprites);
+            _serif_white.generate(0, -48, "you got", _text_sprites);
         }else if(_timer == 320){
             sbad->stop_animating();
         }else if(_timer == 340){
             sbad->start_animating();
-            _common_stuff.text_generator.generate(0, -36, "good score", _text_sprites);
+            _serif_white.generate(0, -36, "good score", _text_sprites);
         }else if(_timer == 380){
             _common_stuff.commentary.i_sound_realistic();
         }else if(_timer == 390){
             sbad->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
-            _text_sprites.clear();
             bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
-            _common_stuff.text_generator.generate(0, -60, "cast", _text_sprites);
+            write_text("cast");
         }else if(_timer == credits_start_time + credits_interval){
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "trogdor", _text_sprites);
+            write_text("trogdor");
             _cutscene_objects.emplace_back(new trogdor(0, 0, _sesh, false,_common_stuff));
         }else if(_timer == credits_start_time + credits_interval*2){
             _cutscene_objects.at(1)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "perez", _text_sprites);
+            write_text("perez");
             _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, _dummy_cottage));
         }else if(_timer == credits_start_time + credits_interval*3){
             _cutscene_objects.at(2)->set_visible(false);
             _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "hackworth", _text_sprites);
+            write_text("hackworth");
             peasant *hackworth = new peasant(0, 0, 0, 0, _dummy_cottage);
             hackworth->set_frame(1);
             _cutscene_objects.emplace_back(hackworth);
         }else if(_timer == credits_start_time + credits_interval*4){
             _cutscene_objects.at(3)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "'the steve'", _text_sprites);
+            write_text("'the steve'");
             peasant *the_steve = new peasant(0, 0, 0, 0, _dummy_cottage);
             the_steve->set_sprite_ablaze();
             _cutscene_objects.emplace_back(the_steve);
         }else if(_timer == credits_start_time + credits_interval*5){
             _cutscene_objects.at(4)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "the blue knight", _text_sprites);
+            write_text("the blue knight");
             _cutscene_objects.emplace_back(new knight(0, 0, true, _common_stuff.rand));
         }else if(_timer == credits_start_time + credits_interval*6){
             _cutscene_objects.at(5)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "the red knight", _text_sprites);
+            write_text("the red knight");
             _cutscene_objects.emplace_back(new knight(0, 0, false, _common_stuff.rand));
         }else if(_timer == credits_start_time + credits_interval*7){
             _cutscene_objects.at(6)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "the conjoined", _text_sprites);
-            _common_stuff.text_generator.generate(0, -48, "archers", _text_sprites);
+            write_text("the conjoined");
+            _serif_white.generate(0, -48, "archers", _text_sprites);
             for(int i = 0; i < 2 ; ++i){
                 archer *arch = new archer(0, i, _common_stuff);
                 arch->set_x(10 - 20*i);
@@ -396,14 +387,12 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == credits_start_time + credits_interval*8){
             _cutscene_objects.at(7)->set_visible(false);
             _cutscene_objects.at(8)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "and WorldlyWise", _text_sprites);
-            _common_stuff.text_generator.generate(0, -48, "as The Kerrek", _text_sprites);
+            write_text("and WorldlyWise");
+            _serif_white.generate(0, -48, "as The Kerrek", _text_sprites);
             _cutscene_objects.emplace_back(new kerrek(0, 0));
         }else if(_timer == credits_start_time + credits_interval*9 + 25){
             _cutscene_objects.at(9)->set_visible(false);
-            _text_sprites.clear();
-            _common_stuff.text_generator.generate(0, -60, "keep playing!", _text_sprites);
+            write_text("keep playing!");
             sbad->set_visible(true);
             sbad->set_x(30);
             sbad->set_rotation_angle(330);
@@ -414,9 +403,6 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_y(-5);
             mytrogdor->set_rotation_angle(30);
 
-
-            //TODO - This crashes the game, need to consolidate
-            // other text palettes maybe.
             _common_stuff.acm.update_achievement("win", 0);
         }
     }

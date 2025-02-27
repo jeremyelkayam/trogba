@@ -8,6 +8,7 @@
 
 #include "constants.h"
 #include "session_info.h"
+
 namespace trog {
     class hud { 
         private:

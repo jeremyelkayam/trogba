@@ -24,6 +24,8 @@ namespace trog{
         bn::vector<bn::unique_ptr<entity>, 20> _cutscene_objects;
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
 
+        bn::sprite_text_generator _serif_white;
+
         
         const scene_type _last_scene;
         unsigned short _timer, _cutscene_length;

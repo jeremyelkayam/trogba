@@ -13,11 +13,10 @@
 #include "bn_regular_bg_items_sucksmile.h"
 #include "bn_regular_bg_items_chiarosmile.h"
 #include "bn_regular_bg_items_wormsmile.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
 #include "bn_sprite_items_a_button_prompt.h"
+#include "serif_fonts.h"
 
 
 namespace trog {
@@ -44,8 +43,9 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     _flames.set_scale(0.7);
     _a_button.set_visible(false);
 
-    common_stuff.text_generator.set_center_alignment();
-    common_stuff.text_generator.set_palette_item(bn::sprite_items::trogdor_variable_8x16_font.palette_item());
+    bn::sprite_text_generator serif_white(serif_font_white);
+
+    serif_white.set_center_alignment();
 
     bn::string<7> line3 = "BEATEN!";
     //3% chance that the game misspells it lol
@@ -88,9 +88,9 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
     jingle.play(common_stuff.savefile.options.sound_vol);
 
-    common_stuff.text_generator.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
-    common_stuff.text_generator.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);
-    common_stuff.text_generator.generate(nicework_x - 3, nicework_y + 35, line3, _levelbeated_text_sprites);
+    serif_white.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
+    serif_white.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);
+    serif_white.generate(nicework_x - 3, nicework_y + 35, line3, _levelbeated_text_sprites);
 
 }
 
