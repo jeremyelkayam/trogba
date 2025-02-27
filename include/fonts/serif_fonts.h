@@ -166,4 +166,8 @@ constexpr bn::sprite_font serif_font_black(
     bn::sprite_items::serif_font_black, serif_font_utf8_characters_map.reference(),
     serif_font_character_widths);
 
+constexpr bn::sprite_font serif_font_brown_fixed(
+        bn::sprite_items::serif_font_brown, 
+        serif_font_utf8_characters_map.reference());
+
 }
