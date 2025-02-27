@@ -20,7 +20,6 @@ namespace trog {
         public:
             bn::sprite_text_generator text_generator;
             bn::sprite_text_generator big_generator;
-            bn::sprite_text_generator small_generator;
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
             bn::array<char, 8> default_format_tag;
