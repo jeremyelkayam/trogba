@@ -29,7 +29,7 @@ namespace trog {
 
         public:
             achievement_popup(const bn::fixed &sound_vol,
-                const bn::string<16> &achievement_name,
+                const bn::string<32> &achievement_name,
                 const int &index);
 
             void update();

@@ -27,7 +27,7 @@ void session_info::score(const unsigned int &num_points){
 
 void session_info::reset(){
     _mans = _common_stuff.savefile.options.starting_lives;
-    _score = 0;
+    _score = 5000;
     _level = TROG_STARTING_LEVEL;
 
     _killed_by_archer = false;

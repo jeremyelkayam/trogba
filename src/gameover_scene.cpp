@@ -21,6 +21,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_jonathan_howe.h"
 #include "bn_sprite_items_jeremy_elkayam.h"
+#include "small_fonts.h"
 
 #define NEW_HISCORE_Y 18
 
@@ -28,6 +29,7 @@ namespace trog {
 
 gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) : 
         _dead_dragon(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
+        _small_red_gen(small_font_red),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
@@ -35,7 +37,12 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         _timer(0),
         _menu_option(0) {
 
+    _small_red_gen.set_one_sprite_per_character(true);
+    _small_red_gen.set_center_alignment();
+    _small_red_gen.set_bg_priority(1);
+
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
+
 
         bn::sprite_item item = _sesh.get_score() >= TROG_GAMEOVER_SUPER_SECRET_SCORE ? 
               bn::sprite_items::jeremy_elkayam
@@ -49,6 +56,21 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
             );
         }
     }
+
+    if(_sesh.get_score() >= TROG_GAMEOVER_SUPER_SECRET_SCORE)
+    {
+        common_stuff.acm.update_achievement("5kbonus",0);
+    }
+    else if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE)
+    {
+        common_stuff.acm.update_achievement("2kbonus",0);
+    }
+    if(_sesh.get_score() >= TROG_GAMEOVER_BEAT_THAT_SCORE)
+    {
+        common_stuff.acm.update_achievement("1kbonus",0);
+    }
+    //todo - add an achievement for dying with zero points
+
 
     //todo: refactor this
     if(_sesh.last_killed_by_archer()){
@@ -73,13 +95,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     if(_sesh.get_score() > common_stuff.savefile.high_scores_table[7].get_score()){
         ycor_top -=4;
         ycor_bottom -=4;
-        common_stuff.small_generator.set_one_sprite_per_character(true);
-        common_stuff.small_generator.set_center_alignment();
-        
-        common_stuff.small_generator.set_bg_priority(1);
-        common_stuff.small_generator.set_palette_item(RED_PALETTE);
-        common_stuff.small_generator.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
-        common_stuff.small_generator.set_one_sprite_per_character(false);
+        _small_red_gen.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
     }
     common_stuff.text_generator.generate(0, ycor_top, "VIEW", _hiscores_highlight_sprites);
     common_stuff.text_generator.generate(0, ycor_bottom, "HI-SCORES", _hiscores_highlight_sprites);

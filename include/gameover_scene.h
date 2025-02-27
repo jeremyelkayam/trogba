@@ -16,6 +16,7 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 16> _new_high_score_text_sprites;
         bn::vector<bn::sprite_ptr, 3> _secret_sprites;
         bn::vector<bn::sprite_animate_action<6>, 3> _secret_anims;
+        bn::sprite_text_generator _small_red_gen;
         
         session_info &_sesh;
         bloody_text _itsover_text;
