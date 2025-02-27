@@ -19,7 +19,9 @@ namespace trog{
         public:
             menu_option(const bn::fixed &x, 
                 const bn::fixed &y, const char *text, 
-                bn::sprite_text_generator& _text_generator,
+                bn::sprite_text_generator& red_generator,
+                bn::sprite_text_generator& gray_generator,
+                bn::sprite_text_generator& white_generator,
                 const scene_type &scene_type);
             bn::fixed y() const {return _y;}
             bn::fixed x() const {return _x;}
@@ -35,6 +37,8 @@ namespace trog{
         bn::vector<menu_option, 7> _menu_options;
 
         common_stuff & _common_stuff;
+
+        bn::sprite_text_generator _red_gen, _gray_gen, _white_gen;
 
         bn::vector<bn::sprite_ptr, 64> _menu_text_sprites;
 

@@ -18,7 +18,6 @@ namespace trog {
 
     class common_stuff { 
         public:
-            bn::sprite_text_generator text_generator;
             bn::sprite_text_generator big_generator;
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;

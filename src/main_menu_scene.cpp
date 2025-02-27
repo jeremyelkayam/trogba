@@ -38,9 +38,8 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
 
     _flames.set_visible(false);
     _flames.set_scale(0.01);
-    common_stuff.text_generator.set_center_alignment();
     _menu_options.emplace_back(0, -52, "CONTINUE", 
-        common_stuff.text_generator, scene_type::PLAY);
+        _red_gen, _gray_gen, _white_gen, scene_type::PLAY);
 
     bn::sprite_text_generator small_gen(small_font_darkgray);
     small_gen.set_center_alignment();
@@ -63,12 +62,12 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
     }
 
     _menu_options.emplace_back(-72, 32, "NEW\nGAME", 
-        common_stuff.text_generator, scene_type::DRAGON_SELECT);
-    // _menu_options.emplace_back( "HOW TO PLAY", common_stuff.text_generator);
+        _red_gen, _gray_gen, _white_gen, scene_type::DRAGON_SELECT);
+    // _menu_options.emplace_back( "HOW TO PLAY", _red_gen, _gray_gen, _white_gen);
     _menu_options.emplace_back(1, 32, "OPTIONS", 
-        common_stuff.text_generator, scene_type::OPTIONS);
+        _red_gen, _gray_gen, _white_gen, scene_type::OPTIONS);
     _menu_options.emplace_back(72, 32, "EXTRAS", 
-        common_stuff.text_generator, scene_type::EXTRAS);
+        _red_gen, _gray_gen, _white_gen, scene_type::EXTRAS);
 }
 
 bn::optional<scene_type> main_menu_scene::update(){

@@ -54,8 +54,6 @@ int main()
     trog::session_info sesh(*common_stuff);
 
 
-    common_stuff->text_generator.set_center_alignment();
-
     bool logo_scene = true;
 
     trog::hud hud(sesh, *common_stuff, TROG_TROGMETER_MAX);

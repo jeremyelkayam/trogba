@@ -10,10 +10,8 @@
 #include "bn_sprite_items_firebreath.h"
 #include "bn_sprite_items_troghammer_icon.h"
 #include "bn_sprite_items_trogmeter_degrade_icon.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_regular_bg_items_extras_menu_bg.h"
+
 
 #define SELECTION_ANIM_LENGTH 30
 
@@ -22,17 +20,15 @@ namespace trog {
 extras_scene::extras_scene(common_stuff &common_stuff) : 
         menu_scene(common_stuff, bn::regular_bg_items::extras_menu_bg) {
 
-    common_stuff.text_generator.set_center_alignment();
-
     _menu_options.emplace_back(-56, -40, "ACHIEVE-\nMENTS", 
-        common_stuff.text_generator, scene_type::ACHIEVEMENTS);
+        _red_gen, _gray_gen, _white_gen, scene_type::ACHIEVEMENTS);
 
     _menu_options.emplace_back(56, -40, "HI-SCORES", 
-        common_stuff.text_generator, scene_type::HISCORES);
+        _red_gen, _gray_gen, _white_gen, scene_type::HISCORES);
     _menu_options.emplace_back(-56, 35, "CREDITS", 
-        common_stuff.text_generator, scene_type::CREDITS);
+        _red_gen, _gray_gen, _white_gen, scene_type::CREDITS);
     _menu_options.emplace_back(56, 35, "CUTSCENE\nVIEWER", 
-        common_stuff.text_generator, scene_type::CUTSCENE_VIEWER);
+        _red_gen, _gray_gen, _white_gen, scene_type::CUTSCENE_VIEWER);
 }
 
 bn::optional<scene_type> extras_scene::update(){

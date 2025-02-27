@@ -4,15 +4,16 @@
 #include <bn_sound_items.h>
 
 #include "menu_scene.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
+#include "serif_fonts.h"
 
 namespace trog {
 
 menu_scene::menu_scene(common_stuff &common_stuff,
     const bn::regular_bg_item &bgitem) : 
         _common_stuff(common_stuff),
+        _red_gen(serif_font_red),
+        _gray_gen(serif_font_darkgray),
+        _white_gen(serif_font_white),
         _bg(bgitem.create_bg(0, 0)),
         _selected_option_index(0)
 {
@@ -35,7 +36,9 @@ bn::optional<scene_type> menu_scene::update(){
 }
 
 menu_option::menu_option(const bn::fixed &x, const bn::fixed &y, 
-    const char *text, bn::sprite_text_generator& text_generator, 
+    const char *text, bn::sprite_text_generator& red_generator, 
+    bn::sprite_text_generator& gray_generator, 
+    bn::sprite_text_generator& white_generator, 
     const scene_type &scene_type) :
     _x(x),
     _y(y),
@@ -48,7 +51,9 @@ menu_option::menu_option(const bn::fixed &x, const bn::fixed &y,
 
     BN_LOG("lines size: ", lines.size());
     
-    text_generator.set_center_alignment();
+    red_generator.set_center_alignment();
+    gray_generator.set_center_alignment();
+    white_generator.set_center_alignment();
 
     bn::fixed spacing = 12;
     bn::fixed starting_y = y - spacing * (lines.size() - 1) / 2;
@@ -60,19 +65,13 @@ menu_option::menu_option(const bn::fixed &x, const bn::fixed &y,
         bn::fixed line_width = 9 * current_line.size();
         if(line_width > _width) _width = line_width;
 
-        text_generator.set_palette_item(
-            bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item());
-        text_generator.generate(x - 1, starting_y + spacing*line_num + 1, 
+        gray_generator.generate(x - 1, starting_y + spacing*line_num + 1, 
             current_line, _drop_shadow_sprites);    
     
-        text_generator.set_palette_item(
-            bn::sprite_items::trogdor_variable_8x16_font.palette_item());
-        text_generator.generate(x, starting_y + spacing*line_num, 
+        white_generator.generate(x, starting_y + spacing*line_num, 
             current_line, _text_sprites);    
     
-        text_generator.set_palette_item(
-            bn::sprite_items::trogdor_variable_8x16_font_red.palette_item());
-        text_generator.generate(x, starting_y + spacing*line_num, 
+        red_generator.generate(x, starting_y + spacing*line_num, 
             current_line, _red_text_sprites);       
     }
 
