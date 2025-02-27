@@ -14,6 +14,7 @@
 #include "bn_sprite_items_slider_bar.h"
 #include "bn_sprite_items_volume_graph.h"
 #include "small_fonts.h"
+#include "serif_fonts.h"
 
 namespace trog {
 
@@ -25,9 +26,10 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
         _red_generator(small_font_red),
         _index(0) 
 {
-    _common_stuff.text_generator.set_center_alignment();
-    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    _common_stuff.text_generator.generate(0, -72, "YE OLDE CUTSCENE VIEWER", _header_sprites);
+    
+    bn::sprite_text_generator serif_gen(serif_font_red); 
+    serif_gen.set_center_alignment();
+    serif_gen.generate(0, -72, "YE OLDE CUTSCENE VIEWER", _header_sprites);
 
 
     for(uint8_t z = 0; z < _common_stuff.cutscene_levels.size(); z++){

@@ -8,6 +8,7 @@
 #include "bn_regular_bg_items_titlegraphic.h"
 #include "constants.h"
 #include "small_fonts.h"
+#include "serif_fonts.h"
 
 namespace trog {
 
@@ -74,9 +75,9 @@ void credits_scene::setup_credits(){
     ycor += 30;
 
     credit_line og_team_line;
-    _common_stuff.text_generator.set_center_alignment();
-    _common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    _common_stuff.text_generator.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", og_team_line.sprites);   
+    bn::sprite_text_generator serif_gen(serif_font_red); 
+    serif_gen.set_center_alignment();
+    serif_gen.generate(0, ycor,"THANKS OG TROGDOR TEAM!!", og_team_line.sprites);   
     og_team_line.ycor = ycor;
     _credits.emplace_back(og_team_line);
     ycor += 30;

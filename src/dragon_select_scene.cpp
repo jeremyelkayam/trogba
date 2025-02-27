@@ -7,6 +7,7 @@
 #include "trogdor.h"
 #include "chiaroscuro.h"
 #include "wormdingler.h"
+#include "serif_fonts.h"
 
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -20,15 +21,21 @@
 
 namespace trog {
 
-dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &common_stuff) : 
+dragon_select_scene::dragon_select_scene(session_info &sesh, 
+    common_stuff &common_stuff) : 
         _index(0),
         _selection_timer(0),
         _selection_wait_time(120),
-        _left_arrow(bn::sprite_items::tutorial_arrow.create_sprite(-50,20)),
-        _right_arrow(bn::sprite_items::tutorial_arrow.create_sprite(50,20)),
+        //todo make bespoke arrows for this screen
+        _left_arrow(
+            bn::sprite_items::tutorial_arrow.create_sprite(-50,20)),
+        _right_arrow(
+            bn::sprite_items::tutorial_arrow.create_sprite(50,20)),
+        _serif_white(serif_font_white),
         _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
+    _serif_white.set_center_alignment();
     _selectable_dragons.emplace_back(
         dragon::TROGDOR, "TROGDOR", "none",
         bn::unique_ptr<player>(new trogdor(0,0,_sesh, false, _common_stuff, 0)),
@@ -76,9 +83,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh, common_stuff &commo
 
 void dragon_select_scene::update_text(){
     _selected_text.clear();
-    _common_stuff.text_generator.set_center_alignment();
-    _common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
-    _common_stuff.text_generator.generate(0, -40, _selectable_dragons.at(_index).name, _selected_text);
+    _serif_white.generate(0, -40, _selectable_dragons.at(_index).name, _selected_text);
 }
 
 bn::optional<scene_type> dragon_select_scene::update(){

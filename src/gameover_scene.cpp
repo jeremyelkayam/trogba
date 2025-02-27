@@ -16,12 +16,11 @@
 #include "bn_regular_bg_items_suckdead.h"
 #include "bn_regular_bg_items_wormdead.h"
 #include "bn_regular_bg_items_game_over_menu.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
-#include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_jonathan_howe.h"
 #include "bn_sprite_items_jeremy_elkayam.h"
 #include "small_fonts.h"
+#include "serif_fonts.h"
 
 #define NEW_HISCORE_Y 18
 
@@ -30,6 +29,9 @@ namespace trog {
 gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) : 
         _dead_dragon(bn::regular_bg_items::trogdead.create_bg(TROG_GAMEOVER_BG_X, TROG_GAMEOVER_BG_Y)),
         _small_red_gen(small_font_red),
+        _serif_red_gen(serif_font_red),
+        _serif_white_gen(serif_font_white),
+        _serif_gray_gen(serif_font_darkgray),
         _sesh(sesh),
         _itsover_text(false, TROG_GAMEOVER_BIGTEXT_X, TROG_GAMEOVER_BIGTEXT_Y, "IT'S OVER!",
             bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item(), common_stuff.rand),
@@ -40,6 +42,13 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     _small_red_gen.set_one_sprite_per_character(true);
     _small_red_gen.set_center_alignment();
     _small_red_gen.set_bg_priority(1);
+
+    _serif_red_gen.set_center_alignment();
+    _serif_red_gen.set_bg_priority(1);
+    _serif_white_gen.set_center_alignment();
+    _serif_white_gen.set_bg_priority(1);
+    _serif_gray_gen.set_center_alignment();
+    _serif_gray_gen.set_bg_priority(1);
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE){
 
@@ -83,11 +92,9 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         bn::sound_items::gameover.play(common_stuff.savefile.options.sound_vol);
     }
 
-    common_stuff.text_generator.set_center_alignment();
-    common_stuff.text_generator.set_palette_item(RED_PALETTE);
-    common_stuff.text_generator.set_bg_priority(1);
-    common_stuff.text_generator.generate(1, -51, "CHALLENGE", _challengeagain_text_sprites);
-    common_stuff.text_generator.generate(0, -38, "AGAIN!", _challengeagain_text_sprites);
+
+    _serif_red_gen.generate(1, -51, "CHALLENGE", _challengeagain_text_sprites);
+    _serif_red_gen.generate(0, -38, "AGAIN!", _challengeagain_text_sprites);
 
     bn::fixed ycor_top = -4;
     bn::fixed ycor_bottom = 9;
@@ -97,17 +104,15 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         ycor_bottom -=4;
         _small_red_gen.generate(0, NEW_HISCORE_Y, "new high score!", _new_high_score_text_sprites);
     }
-    common_stuff.text_generator.generate(0, ycor_top, "VIEW", _hiscores_highlight_sprites);
-    common_stuff.text_generator.generate(0, ycor_bottom, "HI-SCORES", _hiscores_highlight_sprites);
+    _serif_red_gen.generate(0, ycor_top, "VIEW", _hiscores_highlight_sprites);
+    _serif_red_gen.generate(0, ycor_bottom, "HI-SCORES", _hiscores_highlight_sprites);
 
-    common_stuff.text_generator.generate(0, 52, "BACK", _back_text_sprites);
+    _serif_red_gen.generate(0, 52, "BACK", _back_text_sprites);
 
-    common_stuff.text_generator.set_palette_item(GRAY_PALETTE);
-    common_stuff.text_generator.generate(-1, ycor_top + 1, "VIEW", _hiscores_text_sprites);
-    common_stuff.text_generator.generate(-1, ycor_bottom + 1, "HI-SCORES", _hiscores_text_sprites);
-    common_stuff.text_generator.set_palette_item(WHITE_PALETTE);
-    common_stuff.text_generator.generate(0, ycor_top, "VIEW", _hiscores_text_sprites);
-    common_stuff.text_generator.generate(0, ycor_bottom, "HI-SCORES", _hiscores_text_sprites);
+    _serif_gray_gen.generate(-1, ycor_top + 1, "VIEW", _hiscores_text_sprites);
+    _serif_gray_gen.generate(-1, ycor_bottom + 1, "HI-SCORES", _hiscores_text_sprites);
+    _serif_white_gen.generate(0, ycor_top, "VIEW", _hiscores_text_sprites);
+    _serif_white_gen.generate(0, ycor_bottom, "HI-SCORES", _hiscores_text_sprites);
 
 
 
