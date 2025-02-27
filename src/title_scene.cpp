@@ -6,6 +6,7 @@
 #include "bn_regular_bg_items_titlegraphic.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "title_scene.h"
+#include "small_fonts.h"
 
 namespace trog {
 
@@ -15,9 +16,8 @@ title_scene::title_scene(common_stuff &common_stuff) :
         _titlegraphic(bn::regular_bg_items::titlegraphic.create_bg(0, TROG_TITLE_TEXT_Y)),
         _frame_counter(0),
         _secret_code_index(0) {
-    _common_stuff.small_generator.set_left_alignment();
-    _common_stuff.small_generator.set_palette_item(WHITE_PALETTE);
-    _common_stuff.small_generator.generate(-120, 77, bn::string<6>("v") + TROG_SEMANTIC_VERSION_NUMBER, _version_label);
+    bn::sprite_text_generator small_gen(small_font_white);
+    small_gen.generate(-120, 77, bn::string<6>("v") + TROG_SEMANTIC_VERSION_NUMBER, _version_label);
 
     bn::sound_items::themesong.play(common_stuff.savefile.options.music_vol);
 

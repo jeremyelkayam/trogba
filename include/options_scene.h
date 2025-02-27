@@ -15,15 +15,21 @@ namespace trog{
             bn::vector<bn::sprite_ptr, 16> _text_sprites;
             bn::string<32> _name;
             bn::string<128> _description;
-            bn::sprite_text_generator &_text_generator;
+            bn::sprite_text_generator &_red_generator, &_black_generator;
+            void regen_text(bn::sprite_text_generator &gen);
+            const bn::fixed _ycor;
         public: 
-            option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor);
+            option(const bn::string<32> &name, const bn::string<128> &description, 
+                bn::sprite_text_generator &red_generator, 
+                bn::sprite_text_generator &black_generator, 
+                const bn::fixed &ycor);
             virtual ~option() = default;
             virtual void update() {}
             virtual void set_selected(const bool &selected);
             void hide(){_text_sprites.clear();}
             virtual bool taller() {return false;}
             bn::string<128> &get_description() {return _description;}
+
     };
 
     // dang ... hope our govt figures out that public option 
@@ -32,7 +38,11 @@ namespace trog{
             bool &_value;
             bn::sprite_ptr _checkbox;
         public:
-            bool_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bool &value);
+            bool_option(const bn::string<32> &name, 
+                const bn::string<128> &description, 
+                bn::sprite_text_generator &red_generator, 
+                bn::sprite_text_generator &black_generator, 
+                const bn::fixed &ycor, bool &value);
             virtual void update();
             virtual void set_selected(const bool &selected);
     };
@@ -44,9 +54,13 @@ namespace trog{
             bn::sprite_ptr _slider_bar;
             uint8_t _hold_timer;
         public:
-            percent_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, bn::fixed &value);
+            percent_option(const bn::string<32> &name, 
+                const bn::string<128> &description, 
+                bn::sprite_text_generator &red_generator, 
+                bn::sprite_text_generator &black_generator, 
+                const bn::fixed &ycor, bn::fixed &value);
             virtual void update();
-            void update_text_and_slider();
+            void update_text_and_slider(const bool &selected);
             virtual void set_selected(const bool &selected);
     };
 
@@ -58,10 +72,15 @@ namespace trog{
             bn::sprite_ptr _left_sprite, _right_sprite;
             bn::vector<uint8_t, 10> _selector_options;
         public:
-            selector_option(const bn::string<32> &name, const bn::string<128> &description, bn::sprite_text_generator &text_generator, const bn::fixed &ycor, uint8_t &value, const bn::ivector<uint8_t> &selector_options);
+            selector_option(const bn::string<32> &name, 
+                const bn::string<128> &description, 
+                bn::sprite_text_generator &red_generator, 
+                bn::sprite_text_generator &black_generator,  
+                const bn::fixed &ycor, uint8_t &value, 
+                const bn::ivector<uint8_t> &selector_options);
             virtual void update();
             virtual void set_selected(const bool &selected);
-            void update_text();
+            void update_text(const bool &is_selected=false);
             uint8_t current_index();
     };
 
@@ -75,13 +94,15 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 64> _notice_sprites;        
         bn::vector<bn::unique_ptr<option>, 8> _options_vec;
         bn::regular_bg_ptr _scroll;
+        bn::sprite_text_generator _black_generator, _red_generator;
 
         uint8_t _index;
         bn::fixed ycor(const uint8_t &index);
         saved_options _old_save;
 
     public:
-        explicit options_scene(common_stuff &common_stuff, const scene_type &last_scene);
+        explicit options_scene(common_stuff &common_stuff, 
+            const scene_type &last_scene);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 
