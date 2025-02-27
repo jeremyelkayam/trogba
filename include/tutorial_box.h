@@ -11,11 +11,12 @@ namespace trog {
             bn::vector<bn::sprite_ptr, 32> _text_sprites;
             bn::regular_bg_ptr _box;
             bn::fixed _speed;
+            bn::sprite_text_generator _small_gen;
 
         public:
-            tutorial_box(bn::sprite_text_generator &text_generator, const char *text);
+            tutorial_box(const char *text);
             tutorial_box();
-            void set_text(bn::sprite_text_generator &text_generator, const char *text);
+            void set_text(const char *text);
             bool is_off_screen() {return _box.y() >= 103;}
 
             void move_on_screen() {_speed = -3;}

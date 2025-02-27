@@ -121,7 +121,7 @@ bn::optional<scene_type> level_win_scene::update(){
     _a_button_anim.update();
     if(_sesh.get_level() == 0 && !_tutorial_box){
         _sesh.reset_score();
-        _tutorial_box.emplace(_common_stuff.small_generator, "There are 100 levels in the game. Try to beat them all while aiming for a high score!");
+        _tutorial_box.emplace("There are 100 levels in the game. Try to beat them all while aiming for a high score!");
     }
 
     if(30 < _timer && !_burningflames.done()){

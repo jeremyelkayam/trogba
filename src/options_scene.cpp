@@ -71,7 +71,7 @@ bn::optional<scene_type> options_scene::update(){
             _options_vec.at(_index)->set_selected(true);
 
             if(_description_box && !_description_box->is_off_screen()){
-                _description_box->set_text(_common_stuff.small_generator, _options_vec.at(_index)->get_description().c_str());
+                _description_box->set_text(_options_vec.at(_index)->get_description().c_str());
             }
 
 
@@ -83,7 +83,7 @@ bn::optional<scene_type> options_scene::update(){
             }
             if(_description_box->is_off_screen()){
                 _description_box->move_on_screen();
-                _description_box->set_text(_common_stuff.small_generator, _options_vec.at(_index)->get_description().c_str());
+                _description_box->set_text(_options_vec.at(_index)->get_description().c_str());
             }else{
                 _description_box->move_off_screen();
             }
