@@ -24,6 +24,9 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
         ));
         ++z;
     }
+    
+    _popups.emplace_back(1, "blah", 0);
+    _popups.emplace_back(1, "blah", 0);
 }
 
 void achievements_mgr::update_achievement(bn::string<8> tag, 
@@ -59,14 +62,12 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
 
 void achievements_mgr::update()
 {
-    if(_popup)
+    for(int z = 0; z < _popups.size(); ++z)
     {
-        _popup->update();
-        if(_popup->done())
-        {
-            _popup.reset();
-        }
-    }    
+        //todo: make them push each other upward....
+        _popups.at(z).update();
+    }
+    bn::erase_if(_popups, popup_done);
 }
 
 bool achievements_mgr::is_achieved(bn::string<8> tag)
@@ -79,7 +80,7 @@ void achievements_mgr::show_popup(bn::string<8> tag)
 {
     const achievement &data = _achievements.at(tag);
 
-    _popup.emplace(_sound_vol, data.name, data.sram_index);
+    _popups.emplace_back(_sound_vol, data.name, data.sram_index);
 
 }
 

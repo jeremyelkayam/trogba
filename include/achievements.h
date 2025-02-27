@@ -27,13 +27,17 @@ namespace trog {
             const bn::fixed &_sound_vol;
 
             
-            bn::optional<achievement_popup> _popup;
+            bn::vector<achievement_popup, 4> _popups;
 
             saved_data &_sram_data;
 
             void show_popup(bn::string<8> tag);
 
             int max_index(long threshold);
+
+            static bool popup_done(achievement_popup &p) 
+                {return p.done();}
+
 
         public:
             achievements_mgr(saved_data &sram_data,
