@@ -18,5 +18,6 @@ namespace trog {
             void update_anim();
             void rotate() {_rotating = true;}
             void plink();
+            bool rotating() const {return _rotating;}
     };
 }

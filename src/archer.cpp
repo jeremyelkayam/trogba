@@ -62,7 +62,7 @@ bool archer::remove_from_map(){
 }
 
 bn::fixed_rect archer::get_hitbox() const {
-    if(_arrow){
+    if(_arrow && !_arrow->rotating()){
         return _arrow->get_hitbox();
     }else{
         //bogus rectangle that's way offscreen  
@@ -85,6 +85,7 @@ void archer::stomp_on(bn::fixed_point foot_pos, uint8_t stomp_radius){
     if(_arrow){
         if(_common_stuff.euclidean_dist(foot_pos, _arrow->get_pos()) <= stomp_radius){
             _arrow->plink();
+            _common_stuff.acm.update_achievement("stompar");
         }
     }else{
         if(_common_stuff.euclidean_dist(foot_pos, get_pos()) <= stomp_radius){
