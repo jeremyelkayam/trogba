@@ -74,7 +74,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     {
         common_stuff.acm.update_achievement("2kbonus",0);
     }
-    if(_sesh.get_score() >= TROG_GAMEOVER_BEAT_THAT_SCORE)
+    else if(_sesh.get_score() >= TROG_GAMEOVER_BEAT_THAT_SCORE)
     {
         common_stuff.acm.update_achievement("1kbonus",0);
     }
