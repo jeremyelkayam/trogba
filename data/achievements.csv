@@ -1,23 +1,23 @@
-tag,name,dscr,is_number,num
-onehut,Jhonka's Riches,Find a treasure hut.,FALSE,1
-allhuts,Aztec Gold,Find the treasure huts on every level layout.,FALSE,3
-konami,The Cheat,Discover the 30 lives cheat.,FALSE,1
-1kbonus,Beat That Score!,A score Strong Sad couldn't beat even if he wanted to play this game.,FALSE,1
-2kbonus,Warren Robinett Jr.,"Discover the coolest secret thing you've ever found in a video game, man.",FALSE,1
-daisies,Smell The Daisies,Spend more than 10 minutes on a single level.,TRUE,36000
-twees,Twees It Out,Watch the Dancin' Time cutscene.,FALSE,1
-loafing,No Loafing,Complete a level without stopping.,FALSE,1
-denial,Denial,"As the S is for Sucks Dragon, die while attempting to stomp.",FALSE,1
-5kbonus,Self-Indulgence,"Discover an even cooler, secreter thing than some dude's name.",FALSE,1
-win,Congraturation,Beat the game.,FALSE,1
-dodongo,Nice Try Dodongo!,Attempt the S is for Sucks secret from version 2.0.,FALSE,1
-chain,Peasant Intern,Burninate a cottage via a peasant.,FALSE,1
-shave,A Real Close Shave,Finish a level where the Troghammer arrived without dying.,FALSE,1
-crap,Crapdangle!,Kick the machine after dying.,FALSE,1
-,And the Trogdor Comes in the niiiiiight!,Defeat a nighttime level,,
-,Meatball Sub,"As Wormdingler, eat a peasant with your extendo-tongue",,
-,Hardybardy,Beat all 100 levels as Trogdor with the same settings as the original Flassh game,,
-,Stonklar,(idk but maybe this should unlock wraparound movement in the settings),,
-,Disk of Healing,Gain an extra life from earning points,,
-,Super Trinket,"As S Is For Sucks, knock an arrow out of the sky with your stomp",,
-,Arch Deluxe,Game Over to the Archer on the first level (probably unlocks S is for Sucks?),,
+tag,name,dscr,is_number,num,secret,implemented?,
+onehut,Jhonka's Riches,Find a treasure hut.,FALSE,1,FALSE,yes,
+allhuts,Aztec Gold,Find the treasure huts on every level layout.,FALSE,3,FALSE,yes,
+konami,The Cheat,Discover the 30 lives cheat.,FALSE,1,FALSE,yes,
+1kbonus,Beat That Score!,A score Strong Sad couldn't beat even if he wanted to play this game.,FALSE,1,FALSE,yes,unlocks chiaroscuro dragon
+2kbonus,Warren Robinett Jr.,"Discover the coolest secret thing you've ever found in a video game, man.",FALSE,1,FALSE,yes,
+daisies,Smell The Daisies,Spend more than 10 minutes on a single level.,TRUE,36000,TRUE,yes,
+twees,Twees It Out,Watch the Dancin' Time cutscene.,FALSE,1,TRUE,yes,
+loafing,No Loafing,Complete a level without stopping.,FALSE,1,TRUE,yes,
+denial,Denial,"As the S is for Sucks Dragon, die while attempting to stomp.",FALSE,1,TRUE,yes,
+5kbonus,Self-Indulgence,"Discover an even cooler, secreter thing than some dude's name.",FALSE,1,TRUE,yes,
+win,Congraturation,Beat the game.,FALSE,1,FALSE,yes,
+dodongo,Nice Try Dodongo!,Attempt the S is for Sucks secret from version 2.0.,FALSE,1,TRUE,yes,
+chain,Peasant Intern,Burninate a cottage via a peasant.,FALSE,1,TRUE,yes,
+shave,A Real Close Shave,Finish a level where the Troghammer arrived without dying.,FALSE,1,TRUE,yes,
+crap,Crapdangle!,Kick the machine after dying.,FALSE,1,TRUE,yes,
+night,And The Trogdor Comes In The...,Beat a nighttime level.,FALSE,1,TRUE,,
+sub,Meatball Sub,"As Wormdingler, eat a peasant with your extendo-tongue.",FALSE,1,TRUE,,
+classic,Hardybardy,Beat all 100 levels as Trogdor with the same settings as the original Flash game.,FALSE,1,FALSE,,
+1up,Disk of Healing,Gain an extra life from earning points.,FALSE,1,FALSE,,
+stompar,Super Trinket,"As the S Is For Sucks Dragon, knock an arrow out of the sky with your stomp.",FALSE,1,TRUE,,
+archdx,Arch Deluxe,Game Over to the archer.,FALSE,1,TRUE,,unlocks s is for sucks
+,Stonklar,(idk but maybe this should unlock wraparound movement in the settings),,,,,

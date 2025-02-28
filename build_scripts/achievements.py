@@ -31,6 +31,7 @@ def cpp():
                     + '",\n\t\t"' + row['name']
                     + '",\n\t\t"' + row['dscr']
                     + '",\n\t\t' + (row['is_number']).lower()
+                    + ',\n\t\t' + (row['secret']).lower()
                     + ',\n\t\t' + threshold + 
                     '\n\t},')
                 achievements_count += 1
@@ -44,7 +45,7 @@ struct achievement_rom_data
     const char *tag;
     const char *name;
     const char *desc;
-    bool is_number;
+    bool is_number,secret;
     long threshold;
 };
 ''' + result

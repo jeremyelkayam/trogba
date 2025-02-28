@@ -44,6 +44,8 @@ namespace trog{
         void update_info_box();
         bool on_last_line();
 
+        void add_all_to_opts_vec(bn::vector<ac_option, 64> &vec);
+
 
     public:
         explicit achievements_scene(common_stuff &common_stuff);

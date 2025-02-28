@@ -30,45 +30,38 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
     _selected(0)
 {
     
+    bn::vector<ac_option, 64> unlocked;
+    bn::vector<ac_option, 64> locked;
+    bn::vector<ac_option, 64> secret;
+
     int z = 0;
     for(const ext::achievement_rom_data &acd : ext::acdata)
     {
 
+        bn::sprite_ptr icon = 
+                bn::sprite_items::lock_icon.create_sprite(0,0);
+        icon.set_z_order(1);
         if(_common_stuff.acm.is_achieved(acd.tag))
         {
-            bn::sprite_ptr icon = 
+            icon = 
                 bn::sprite_items::achievements.create_sprite(0,0,z);
             icon.set_scale(0.5);
-            _opts.emplace_back(acd, icon, z);
+            unlocked.emplace_back(acd, icon, z);
         }
-        ++z;
-    }
-
-    z = 0;
-    //go through the list again, for the locked achievements
-    // this is so that all unlocked achievements appear BEFORE all locked ones
-    for(const ext::achievement_rom_data &acd : ext::acdata)
-    {
-
-        if(!_common_stuff.acm.is_achieved(acd.tag))
+        else if(!acd.secret)
         {
-            bn::sprite_ptr icon = 
-                bn::sprite_items::lock_icon.create_sprite(0,0);
-            icon.set_z_order(1);
-            _opts.emplace_back(acd, icon, z);
+            locked.emplace_back(acd, icon, z);
+        }
+        else
+        {
+            secret.emplace_back(acd, icon, z);
         }
         ++z;
     }
 
-    //todo: it may not be necessary to iterate through this 3 times
-    // but hey, it'll work so w/e
-    for(int g = 0; g < _opts.size(); ++g)
-    {
-        ac_option &current = _opts.at(g);
-        current.icon.set_position(
-            menu_top_left.x() + spacing * (g % items_per_line),
-            menu_top_left.y() + spacing * (g / items_per_line));
-    }
+    add_all_to_opts_vec(unlocked);
+    add_all_to_opts_vec(locked);
+    add_all_to_opts_vec(secret);
 
     bn::sprite_ptr icon = 
         bn::sprite_items::achievements.create_sprite(
@@ -87,6 +80,16 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
 
     update_info_box();
 
+}
+
+void achievements_scene::add_all_to_opts_vec(bn::vector<ac_option, 64> &vec)
+{
+    for(ac_option &opt : vec)
+    {
+        opt.icon.set_x(menu_top_left.x() + spacing * (_opts.size() % items_per_line));
+        opt.icon.set_y(menu_top_left.y() + spacing * (_opts.size() / items_per_line));
+        _opts.push_back(opt);
+    }
 }
 
 
@@ -240,6 +243,11 @@ void achievements_scene::update_info_box()
         _gray_gen.generate(0, -72, name, _text_sprites);
 
         _selected_icon.set_item(bn::sprite_items::lock_icon);
+
+        if(selected_option.data.secret)
+        {
+            desc = "This is a secret achievement. Keep playing and maybe you'll find it!";
+        }
     }
 
 

@@ -11,8 +11,6 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
     _sound_vol(sound_vol),
     _sram_data(sram_data)
 {
-    
-
     int z = 0;
     for(const ext::achievement_rom_data &acd : ext::acdata)
     {
@@ -24,9 +22,6 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
         ));
         ++z;
     }
-    
-    _popups.emplace_back(1, "first", 0);
-    _popups.emplace_back(1, "second", 0);
 }
 
 void achievements_mgr::update_achievement(bn::string<8> tag, 
