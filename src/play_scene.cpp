@@ -338,6 +338,7 @@ bn::optional<scene_type> play_scene::update(){
         for(peasant &p : _peasants) {
             p.update();
             _player->handle_peasant_collision(p);
+            
 
             if(p.remove_from_map()){
                 if(p.onfire()){

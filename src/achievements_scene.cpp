@@ -234,13 +234,13 @@ void achievements_scene::update_info_box()
         _selected_icon.set_item(bn::sprite_items::achievements,
             dex);
         
-        _yellow_gen.generate(0, -72, name, _text_sprites);
+        _yellow_gen.generate(19, -72, name, _text_sprites);
     }
     else
     {
 
         name = "Locked";
-        _gray_gen.generate(0, -72, name, _text_sprites);
+        _gray_gen.generate(19, -72, name, _text_sprites);
 
         _selected_icon.set_item(bn::sprite_items::lock_icon);
 

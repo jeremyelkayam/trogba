@@ -36,6 +36,16 @@ void wormdingler::update_anim(){
     }
 }
 
+void wormdingler::kill_peasant(peasant &peasant)
+{
+    player::kill_peasant(peasant);
+    if(_tongue)
+    {
+        _common_stuff.acm.update_achievement("sub");
+    }
+}
+
+
 void wormdingler::update(){
 
     player::update();

@@ -47,10 +47,14 @@ class tongue : public entity {
             virtual bool collides_with(const entity &e)
                 override final;
 
-            virtual bool can_move() override final {return !_tongue;}
+            virtual bool can_move() override final 
+                {return !_tongue;}
 
             
             virtual void demo_anim() override final;
+
+            virtual void kill_peasant(peasant &peasant) 
+                override final;
 
 
     };

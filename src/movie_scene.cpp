@@ -403,7 +403,12 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_y(-5);
             mytrogdor->set_rotation_angle(30);
 
-            _common_stuff.acm.update_achievement("win", 0);
+            _common_stuff.acm.update_achievement("win");
+            if(_sesh.get_score() > 0 && !_sesh.troghammer_enabled() && 
+                !_sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
+            {
+                _common_stuff.acm.update_achievement("classic");
+            }
         }
     }
 

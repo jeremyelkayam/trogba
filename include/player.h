@@ -56,6 +56,8 @@ namespace trog {
             bn::fixed_point _next_pos;
 
             virtual bool can_move() {return true;}
+
+            virtual void kill_peasant(peasant &peasant);
             
         public:
             player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, 

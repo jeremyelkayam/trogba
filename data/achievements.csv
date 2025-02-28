@@ -4,9 +4,9 @@ allhuts,Aztec Gold,Find the treasure huts on every level layout.,FALSE,3,FALSE,y
 konami,The Cheat,Discover the 30 lives cheat.,FALSE,1,FALSE,yes,
 1kbonus,Beat That Score!,A score Strong Sad couldn't beat even if he wanted to play this game.,FALSE,1,FALSE,yes,unlocks chiaroscuro dragon
 2kbonus,Warren Robinett Jr.,"Discover the coolest secret thing you've ever found in a video game, man.",FALSE,1,FALSE,yes,
-daisies,Smell The Daisies,Spend more than 10 minutes on a single level.,TRUE,36000,TRUE,yes,
+daisies,Smell The Daisies,Spend more than 10 minutes on a single level.,TRUE,36000,FALSE,yes,
 twees,Twees It Out,Watch the Dancin' Time cutscene.,FALSE,1,TRUE,yes,
-loafing,No Loafing,Complete a level without stopping.,FALSE,1,TRUE,yes,
+loafing,No Loafing,Complete a level without stopping.,FALSE,1,FALSE,yes,
 denial,Denial,"As the S is for Sucks Dragon, die while attempting to stomp.",FALSE,1,TRUE,yes,
 5kbonus,Self-Indulgence,"Discover an even cooler, secreter thing than some dude's name.",FALSE,1,TRUE,yes,
 win,Congraturation,Beat the game.,FALSE,1,FALSE,yes,

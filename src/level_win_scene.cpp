@@ -17,6 +17,7 @@
 #include "bn_sprite_items_cottagefire.h"
 #include "bn_sprite_items_a_button_prompt.h"
 #include "serif_fonts.h"
+#include "level_data.h"
 
 
 namespace trog {
@@ -91,6 +92,12 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     serif_white.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
     serif_white.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);
     serif_white.generate(nicework_x - 3, nicework_y + 35, line3, _levelbeated_text_sprites);
+
+    if(levels[_sesh.get_level()][0] == 3)
+    {
+        //night level
+        _common_stuff.acm.update_achievement("night");
+    }    
 
 }
 
