@@ -4,6 +4,7 @@
 #include "small_fonts.h"
 #include <bn_log.h>
 #include <bn_sound_items.h>
+#include "common_stuff.h"
 
 namespace trog { 
 
@@ -32,14 +33,23 @@ achievement_popup::achievement_popup(const bn::fixed &sound_vol,
     yellow_generator.set_center_alignment();
     yellow_generator.generate(_pos.x() + 18, _pos.y() - 8, "Achievement unlocked",
         _text_sprites);
-        
-
 
     bn::sprite_text_generator white_generator = 
     bn::sprite_text_generator(small_font_white);
     white_generator.set_center_alignment();
-    white_generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
-        _text_sprites);
+    
+
+    bn::fixed yoffset = 0;
+    bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(
+        achievement_name.c_str(), 119);
+    yoffset = -9 * lines.size() / 2;
+    for(const bn::string<64> &line : lines)
+    {
+        white_generator.generate(_pos.x() + 18, _pos.y() + 12 + yoffset, 
+            line, _text_sprites);
+        yoffset += 9;
+    }
+
 
 
     //yeah this sucks lol but what can ya do
