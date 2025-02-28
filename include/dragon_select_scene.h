@@ -8,13 +8,53 @@
 #include "tutorial_box.h"
 #include "player.h"
 #include "big_text.h"
+#include "lock_icon.h"
 
 namespace trog{
-    struct dragon_option {
-        dragon dragon_type;
-        bn::string<16> name, ability;
-        bn::unique_ptr<player> player_entity;
-        uint8_t speed, size;
+    class dragon_option {
+        public:
+            dragon dragon_type;
+            bn::string<16> name, ability;
+            bn::unique_ptr<player> player_entity;
+            uint8_t speed, size;
+            bn::optional<lock_icon> lock;
+
+            dragon_option(const dragon &dtype, 
+                session_info &sesh, common_stuff &common_stuff,
+                const uint8_t &spe, const uint8_t &siz, 
+                bool locked);
+
+            bool locked() const {return lock.has_value();}
+            void move_to(const short &time, const bn::fixed &x, 
+                const bn::fixed &y)
+                { player_entity->move_to(time, x, y);
+                if(lock) lock->move_to(time, x, y);}
+        
+            void update()
+            {
+                player_entity->update_anim();
+                if(lock) lock->update_anim();
+            }
+            void scale_to(const int &duration_updates, const bn::fixed &scale_factor)
+            {
+                player_entity->scale_to(duration_updates,
+                    scale_factor);
+                if(lock) lock->scale_to(duration_updates,
+                    scale_factor);
+            }
+            void set_scale(const bn::fixed &scale) {
+                player_entity->set_scale(scale);
+                if(lock) lock->set_scale(scale);
+            }
+            void set_x(const bn::fixed &xcor)
+            {
+                player_entity->set_x(xcor);
+                if(lock) lock->set_x(xcor);
+
+            }
+    
+
+
     };
 
     class dragon_select_scene : public scene{ 

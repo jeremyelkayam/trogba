@@ -1,5 +1,6 @@
 #include <bn_log.h>
 #include <bn_display.h>
+#include <bn_colors.h>
 #include "constants.h"
 #include "entity.h"
 #include "bn_sprite_items_wmg_dustcloud.h"
@@ -109,6 +110,8 @@ void entity::update_anim(){
     }
     if(_gst_action && !_gst_action->done()){
         _gst_action->update();
+        bn::sprite_palette_ptr palette = _sprite.palette();
+        palette.set_fade_intensity(palette.grayscale_intensity() / 2);
     }
 }
 
@@ -126,6 +129,15 @@ void entity::jump(const short &time, const bn::fixed &height, const bool &repeat
 void entity::set_grayscale(const bn::fixed &intensity){
     bn::sprite_palette_ptr palette = _sprite.palette();
     palette.set_grayscale_intensity(intensity);
+    palette.set_fade_color(bn::colors::black);
+    palette.set_fade_intensity(intensity / 2);
+}
+
+void entity::gray_out()
+{
+    bn::sprite_palette_ptr palette = _sprite.palette();
+    palette.set_fade_color(bn::color(8,8,8));
+    palette.set_fade_intensity(1);
 }
 
 
