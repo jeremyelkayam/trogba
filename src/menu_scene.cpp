@@ -17,6 +17,9 @@ menu_scene::menu_scene(common_stuff &common_stuff,
         _bg(bgitem.create_bg(0, 0)),
         _selected_option_index(0)
 {
+    _red_gen.set_z_order(1);
+    _gray_gen.set_z_order(1);
+    _white_gen.set_z_order(1);
 
 }
 

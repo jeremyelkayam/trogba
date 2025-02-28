@@ -17,6 +17,7 @@ credits_scene::credits_scene(common_stuff &common_stuff, const scene_type &last_
     _small_white_gen(small_font_white),
     _common_stuff(common_stuff) {
     setup_credits();
+    _small_white_gen.set_z_order(1);
 
 }
 

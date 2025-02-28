@@ -54,6 +54,7 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         {
             bn::sprite_ptr icon = 
                 bn::sprite_items::lock_icon.create_sprite(0,0);
+            icon.set_z_order(1);
             _opts.emplace_back(acd, icon, z);
         }
         ++z;
@@ -75,6 +76,7 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         menu_top_left.y() + spacing * (_opts.size() / items_per_line),
         63
     );
+    icon.set_z_order(1);
     icon.set_scale(0.5);
     _opts.emplace_back(ext::acdata[0], icon, 11);
 

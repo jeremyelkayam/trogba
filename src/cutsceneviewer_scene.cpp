@@ -22,6 +22,8 @@ cutsceneviewer_scene::cutsceneviewer_scene(session_info &sesh, common_stuff &com
         _red_generator(small_font_red),
         _index(0) 
 {
+    _black_generator.set_z_order(1);
+    _red_generator.set_z_order(1);
     
     bn::sprite_text_generator serif_gen(serif_font_red); 
     serif_gen.set_center_alignment();

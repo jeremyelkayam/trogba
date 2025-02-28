@@ -40,25 +40,22 @@ achievement_popup::achievement_popup(const bn::fixed &sound_vol,
     white_generator.set_center_alignment();
     white_generator.generate(_pos.x() + 18, _pos.y() + 8, achievement_name,
         _text_sprites);
-    
-    _speed = -bn::fixed(HEIGHT) / MOVE_TIME;
 
+
+    //yeah this sucks lol but what can ya do
     for(bn::sprite_ptr &spr : all_sprites())
     {
         spr.set_z_order(0);
+        spr.set_bg_priority(0);
+    }
+    for(bn::sprite_ptr &spr : _box_sprites)
+    {
+        spr.put_below();
     }
 }
 
 void achievement_popup::update()
 {
-    if(_timer == MOVE_TIME)
-    {
-        _speed = 0;
-    }
-    else if(_timer == TOTAL_TIME - MOVE_TIME)
-    {
-        _speed = bn::fixed(HEIGHT) / MOVE_TIME;
-    }
 
     set_position_relative(bn::fixed_point(0, _speed));
     
@@ -91,6 +88,20 @@ void achievement_popup::set_position_relative(const bn::fixed_point &relative_po
     {
         spr.set_position(spr.position() + relative_pos);
     }
+}
+
+bn::fixed achievement_popup::personal_speed()
+{
+    if(_timer < MOVE_TIME)
+    {
+        return -(bn::fixed(HEIGHT) / MOVE_TIME);
+    }
+    else if(_timer >= TOTAL_TIME - MOVE_TIME)
+    {
+        return bn::fixed(HEIGHT) / MOVE_TIME;
+    }
+    else return 0;
+
 }
 
 }

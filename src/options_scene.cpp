@@ -26,6 +26,9 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
     serif_gen.set_center_alignment();
     serif_gen.generate(0, -72, "YE OLDE OPTIONS MENU", _header_sprites);
 
+    _red_generator.set_z_order(1);
+    _black_generator.set_z_order(1);
+
     _options_vec.emplace_back(
         new bool_option("Troghammer", 
             "Toggles the Troghammer: a new, tougher variant of the knight that appears if you take too long to beat a level.", 

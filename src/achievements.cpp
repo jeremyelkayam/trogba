@@ -25,8 +25,8 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
         ++z;
     }
     
-    _popups.emplace_back(1, "blah", 0);
-    _popups.emplace_back(1, "blah", 0);
+    _popups.emplace_back(1, "first", 0);
+    _popups.emplace_back(1, "second", 0);
 }
 
 void achievements_mgr::update_achievement(bn::string<8> tag, 
@@ -62,10 +62,13 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
 
 void achievements_mgr::update()
 {
-    for(int z = 0; z < _popups.size(); ++z)
+    bn::fixed total_speed = 0;
+    for( int z = _popups.size() - 1; z >= 0; --z)
     {
-        //todo: make them push each other upward....
-        _popups.at(z).update();
+        achievement_popup &p = _popups.at(z);
+        total_speed += p.personal_speed();
+        p.set_speed(total_speed);
+        p.update();
     }
     bn::erase_if(_popups, popup_done);
 }

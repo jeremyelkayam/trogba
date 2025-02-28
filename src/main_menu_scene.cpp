@@ -36,6 +36,9 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
     _troghammer_icon.set_visible(false);
     _trogmeter_degrade_icon.set_visible(false);
 
+    _flames.set_z_order(1);
+    _cursor.set_z_order(1);
+
     _flames.set_visible(false);
     _flames.set_scale(0.01);
     _menu_options.emplace_back(0, -52, "CONTINUE", 

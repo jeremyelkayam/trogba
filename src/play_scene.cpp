@@ -63,6 +63,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
     
     _serif_red_gen.set_center_alignment();
     _serif_red_gen.set_bg_priority(0);
+    _serif_red_gen.set_z_order(1);
 
     respawn(false);
 

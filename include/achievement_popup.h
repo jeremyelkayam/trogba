@@ -40,5 +40,11 @@ namespace trog {
 
             bool done() {return _timer >= TOTAL_TIME;}
 
+            bn::fixed personal_speed();
+            void set_speed(const bn::fixed &speed)
+            {
+                _speed = speed;
+            }
+
     };
 }

@@ -29,6 +29,10 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
         _selectable_letters_index(_selectable_letters.size() - 1),
         _blink_timer(0),
         _go_to_credits(false) {
+    
+    _fw_gen.set_z_order(1);
+    _vw_gen.set_z_order(1);
+    _red_gen.set_z_order(1);
 
     if(_sesh.get_level() == 101){
         //101 isn't a real level. If you beat the game, the game ends before you start level 101.
