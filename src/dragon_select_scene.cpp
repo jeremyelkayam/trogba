@@ -2,11 +2,12 @@
 #include "constants.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
-#include "bn_sprite_items_tutorial_arrow.h"
+#include "bn_sprite_items_half_arrow.h"
 #include "sucks.h"
 #include "trogdor.h"
 #include "chiaroscuro.h"
 #include "wormdingler.h"
+#include "question_mark.h"
 #include "serif_fonts.h"
 
 #include <bn_keypad.h>
@@ -28,14 +29,18 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         _selection_wait_time(120),
         //todo make bespoke arrows for this screen
         _left_arrow(
-            bn::sprite_items::tutorial_arrow.create_sprite(-50,20)),
+            bn::sprite_items::half_arrow.create_sprite(-50,20)),
         _right_arrow(
-            bn::sprite_items::tutorial_arrow.create_sprite(50,20)),
+            bn::sprite_items::half_arrow.create_sprite(50,20)),
         _serif_white(serif_font_white),
         _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
     _serif_white.set_center_alignment();
+    
+    _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, 0, 0,
+        false);
+
     _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, 6, 6, 
         false);
     _selectable_dragons.emplace_back(dragon::SUCKS, sesh,  common_stuff, 4, 8, 
@@ -62,8 +67,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
     _selectable_dragons.at(_index).player_entity->set_grayscale(0);
     _selectable_dragons.at(_index).player_entity->set_scale(2);
     _selectable_dragons.at(_index).player_entity->set_y(SELY);
-    _left_arrow.set_rotation_angle(90);
-    _right_arrow.set_rotation_angle(270);  
+    _left_arrow.set_horizontal_flip(true);
     _left_arrow.put_above();  
     _right_arrow.put_above();
 }
@@ -137,9 +141,14 @@ bn::optional<scene_type> dragon_select_scene::update(){
                     vol_modifier = 0.2;
                     _selection_wait_time = 150;
                 }
-                _selectable_dragons.at(_index).player_entity.get()->update_anim_action_when_not_moving(false);
+                _selectable_dragons.at(_index).player_entity->update_anim_action_when_not_moving(false);
+                
+                if(_index != 0)
+                {
+                    ((player *)_selectable_dragons.at(_index).player_entity.get())
+                        ->demo_anim();
 
-                _selectable_dragons.at(_index).player_entity.get()->demo_anim();
+                }
 
                 switch(dtype){
                     case dragon::TROGDOR:
@@ -159,6 +168,14 @@ bn::optional<scene_type> dragon_select_scene::update(){
         }
     }else if(_selection_timer == _selection_wait_time){
         result = scene_type::PLAY;
+        
+        if(_index == 0)
+        {
+
+            _sesh.set_level(0);
+            _selectable_dragons.at(0).player_entity->set_grayscale(0);
+            _selectable_dragons.at(1).player_entity->set_grayscale(0);
+        }
     }
 
     if(_selection_timer) ++_selection_timer;
@@ -185,7 +202,14 @@ dragon_option::dragon_option(const dragon &dtype, session_info &sesh,
         size(siz)
 
 {
-    switch(dtype)
+    if(speed == 0)
+    {
+        player_entity.reset(new question_mark(0,0));
+        name = "HOW TO PLAY";
+        ability = "";
+            
+    }
+    else switch(dtype)
     {
         case dragon::TROGDOR:
             player_entity.reset(new trogdor(0,0,sesh, false, common_stuff, 0));

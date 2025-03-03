@@ -15,7 +15,7 @@ namespace trog{
         public:
             dragon dragon_type;
             bn::string<16> name, ability;
-            bn::unique_ptr<player> player_entity;
+            bn::unique_ptr<entity> player_entity;
             uint8_t speed, size;
             bn::optional<lock_icon> lock;
 
@@ -60,7 +60,7 @@ namespace trog{
     class dragon_select_scene : public scene{ 
     private:
         uint8_t _index, _selection_timer, _selection_wait_time;
-        bn::vector<dragon_option,4> _selectable_dragons;
+        bn::vector<dragon_option,8> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
         bn::sprite_ptr _left_arrow, _right_arrow;
         bn::sprite_text_generator _serif_white;

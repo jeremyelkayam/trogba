@@ -762,6 +762,7 @@ void play_scene::update_tutorial(){
         if(_timer == 240){
             _cottages.emplace_back(65, 5, direction::LEFT, false, false, _common_stuff);
             _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);
+            _tutorial_box.reset();
             _tutorial_box.reset(new tutorial_box("Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it."));
             _timer = 0;
             _tutorial_cutscene_timer = 1;
@@ -777,6 +778,7 @@ void play_scene::update_tutorial(){
             bn::fixed arrow_ycor = _peasants.front().get_y();
             bn::fixed arrow_xcor = _peasants.front().get_x() - 18;
             if(!_tutorial_arrow){
+                _tutorial_box.reset();
                 _tutorial_arrow.reset(new tutorial_arrow(arrow_xcor, arrow_ycor, direction::RIGHT));
             }else{
                 _tutorial_arrow->set_y(arrow_ycor);
@@ -787,7 +789,7 @@ void play_scene::update_tutorial(){
         if(_player->get_trogmeter() >= 1 && 
         //this direction clause is just to make sure this only runs once
                 _tutorial_arrow->get_direction() != direction::UP){
-            
+                _tutorial_box.reset();
             _tutorial_box.reset(new tutorial_box("Stomping peasants fills your TROG-METER. Try and fill the Trog-Meter to its limit!"));
             _tutorial_arrow.reset(new tutorial_arrow(-60, -62, direction::UP));
         }
@@ -800,6 +802,7 @@ void play_scene::update_tutorial(){
             _archers.emplace_front(-50, true, _common_stuff);
             _archers.front().move_from(60, 135, -50);
 
+            _tutorial_box.reset();
             _tutorial_box.reset(new tutorial_box("Archers and knights can, like, hurt you real bad! \nAvoid their arrows and swords."));
 
             _tutorial_cutscene_timer = 1;
@@ -814,6 +817,7 @@ void play_scene::update_tutorial(){
         }
         if(_player->get_burninating_time() == 1) _tutorial_box.reset();
     }else if(!_tutorial_box){
+        _tutorial_box.reset();
         _tutorial_box.reset(new tutorial_box("Fill the Trog-Meter and burninate all cottages to win the level."));
     }
 

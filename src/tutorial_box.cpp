@@ -11,12 +11,12 @@ namespace trog {
 tutorial_box::tutorial_box(const char *text) : 
     _box(bn::regular_bg_items::textbox.create_bg(0, 67)),
     _speed(0),
-    _small_gen(small_font_white) 
+    _small_gen(small_font_white)
 {
-    _box.set_priority(2);
-    set_text(text);
+    _box.set_priority(0);
     _small_gen.set_bg_priority(0);
     _small_gen.set_left_alignment();
+    set_text(text);
 }
 
 tutorial_box::tutorial_box() : 
@@ -24,7 +24,7 @@ tutorial_box::tutorial_box() :
     _speed(0),
     _small_gen(small_font_white)
 {
-    _box.set_priority(2);
+    _box.set_priority(0);
     _small_gen.set_bg_priority(0);
     _small_gen.set_left_alignment();
 }
