@@ -22,6 +22,8 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
         ));
         ++z;
     }
+    show_popup("win");
+    show_popup("night");
 }
 
 void achievements_mgr::update_achievement(bn::string<8> tag, 

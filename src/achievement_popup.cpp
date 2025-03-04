@@ -58,10 +58,6 @@ achievement_popup::achievement_popup(const bn::fixed &sound_vol,
         spr.set_z_order(0);
         spr.set_bg_priority(0);
     }
-    for(bn::sprite_ptr &spr : _box_sprites)
-    {
-        spr.put_below();
-    }
 }
 
 void achievement_popup::update()
@@ -75,11 +71,13 @@ void achievement_popup::update()
 bn::vector<bn::sprite_ptr, 36> achievement_popup::all_sprites()
 {
     bn::vector<bn::sprite_ptr, 36> result;
-    for(bn::sprite_ptr &spr : _text_sprites)
+    //Needs to be in this order for it to display properly,
+    // because we layer the sprites in the order they are placed within the vector
+    for(bn::sprite_ptr &spr : _box_sprites)
     {
         result.emplace_back(spr);
     }
-    for(bn::sprite_ptr &spr : _box_sprites)
+    for(bn::sprite_ptr &spr : _text_sprites)
     {
         result.emplace_back(spr);
     }
