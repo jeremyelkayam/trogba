@@ -29,9 +29,9 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         _selection_wait_time(120),
         //todo make bespoke arrows for this screen
         _left_arrow(
-            bn::sprite_items::half_arrow.create_sprite(-50,20)),
+            bn::sprite_items::half_arrow.create_sprite(-50,40)),
         _right_arrow(
-            bn::sprite_items::half_arrow.create_sprite(50,20)),
+            bn::sprite_items::half_arrow.create_sprite(50,40)),
         _serif_white(serif_font_white),
         _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
@@ -79,6 +79,24 @@ void dragon_select_scene::update_text(){
 
 bn::optional<scene_type> dragon_select_scene::update(){
 
+    if(_left_arrow_move)
+    {
+        _left_arrow_move->update();
+        if(_left_arrow_move->done())
+        {
+            _left_arrow_move.reset();
+        }
+    }
+
+    if(_right_arrow_move)
+    {
+        _right_arrow_move->update();
+        if(_right_arrow_move->done())
+        {
+            _right_arrow_move.reset();
+        }
+    }
+
     for(auto &opt : _selectable_dragons){
         opt.update();
     }
@@ -87,6 +105,8 @@ bn::optional<scene_type> dragon_select_scene::update(){
     if(_selection_timer == 0){
         if(bn::keypad::left_pressed()){
             if(_index != 0) _index--;
+            _left_arrow.set_x(-55);
+            _left_arrow_move.emplace(_left_arrow, 10, -50, _left_arrow.y());
 
             //looping code
             // if(_index == 0)
@@ -94,6 +114,8 @@ bn::optional<scene_type> dragon_select_scene::update(){
             // else _index--;
         }else if(bn::keypad::right_pressed()){
             if(_index != _selectable_dragons.size() - 1) _index++;
+            _right_arrow.set_x(55);
+            _right_arrow_move.emplace(_right_arrow, 10, 50, _right_arrow.y());
 
             //looping code
             // if(_index == _selectable_dragons.size() - 1)

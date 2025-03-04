@@ -63,6 +63,8 @@ namespace trog{
         bn::vector<dragon_option,8> _selectable_dragons;
         bn::vector<bn::sprite_ptr, 4> _selected_text;
         bn::sprite_ptr _left_arrow, _right_arrow;
+        bn::optional<bn::sprite_move_to_action> _left_arrow_move, 
+            _right_arrow_move;
         bn::sprite_text_generator _serif_white;
 
         big_text _title;
