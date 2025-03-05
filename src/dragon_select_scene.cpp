@@ -42,7 +42,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         false);
 
     _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, 6, 6, 
-        false);
+        !common_stuff.acm.is_achieved("learn"));
     _selectable_dragons.emplace_back(dragon::SUCKS, sesh,  common_stuff, 4, 8, 
         !common_stuff.acm.is_achieved("archdx"));
     _selectable_dragons.emplace_back(dragon::WORMDINGLER, sesh, common_stuff, 10, 
@@ -78,6 +78,12 @@ void dragon_select_scene::update_text(){
 }
 
 bn::optional<scene_type> dragon_select_scene::update(){
+
+    if(!_common_stuff.acm.is_achieved("learn"))
+    {
+        _sesh.set_level(0);
+        return scene_type::PLAY;
+    }
 
     if(_left_arrow_move)
     {
@@ -170,21 +176,22 @@ bn::optional<scene_type> dragon_select_scene::update(){
                     ((player *)_selectable_dragons.at(_index).player_entity.get())
                         ->demo_anim();
 
+                    switch(dtype){
+                        case dragon::TROGDOR:
+                            bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+                        break;
+                        case dragon::SUCKS:
+                            bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+                        break;
+                        case dragon::WORMDINGLER:
+    
+                        break;
+                        default:
+                        break;
+                    }
                 }
 
-                switch(dtype){
-                    case dragon::TROGDOR:
-                        bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
-                    break;
-                    case dragon::SUCKS:
-                        bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
-                    break;
-                    case dragon::WORMDINGLER:
 
-                    break;
-                    default:
-                    break;
-                }
                 _selection_timer = 1;
             }
         }

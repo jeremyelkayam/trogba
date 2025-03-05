@@ -15,6 +15,7 @@ tutorial_box::tutorial_box(const char *text) :
 {
     _box.set_priority(0);
     _small_gen.set_bg_priority(0);
+    _small_gen.set_z_order(1);
     _small_gen.set_left_alignment();
     set_text(text);
 }
@@ -26,6 +27,7 @@ tutorial_box::tutorial_box() :
 {
     _box.set_priority(0);
     _small_gen.set_bg_priority(0);
+    _small_gen.set_z_order(1);
     _small_gen.set_left_alignment();
 }
 

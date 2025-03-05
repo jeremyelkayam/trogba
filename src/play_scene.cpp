@@ -212,7 +212,8 @@ bn::optional<scene_type> play_scene::update(){
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
-            _tutorial_box.reset(new tutorial_box("Congrats! You finished the tutorial."));
+            _common_stuff.acm.update_achievement("learn");
+            // _tutorial_box.reset(new tutorial_box("Congrats! You finished the tutorial."));
         }
     }
     if(_autosave_visibility_time != 0){

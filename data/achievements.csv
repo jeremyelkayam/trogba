@@ -14,10 +14,11 @@ dodongo,Nice Try Dodongo!,Attempt the S is for Sucks secret from version 2.0.,FA
 chain,Peasant Intern,Burninate a cottage via a peasant.,FALSE,1,TRUE,yes,
 shave,A Real Close Shave,Finish a level where the Troghammer arrived without dying.,FALSE,1,TRUE,yes,
 crap,Crapdangle!,Kick the machine after dying.,FALSE,1,TRUE,yes,
-night,And The Trogdor Comes In The...,Beat a nighttime level.,FALSE,1,TRUE,,
-sub,Meatball Sub,"As Wormdingler, eat a peasant with your extendo-tongue.",FALSE,1,TRUE,,
-classic,Hardybardy,Beat all 100 levels as Trogdor with the same settings as the original Flash game.,FALSE,1,FALSE,,
-1up,Disk of Healing,Gain an extra life from earning points.,FALSE,1,FALSE,,
-stompar,Super Trinket,"As the S Is For Sucks Dragon, knock an arrow out of the sky with your stomp.",FALSE,1,TRUE,,
-archdx,Arch Deluxe,Game Over to the archer.,FALSE,1,TRUE,,unlocks s is for sucks
+night,And The Trogdor Comes In The...,Beat a nighttime level.,FALSE,1,TRUE,yes,
+sub,Meatball Sub,"As Wormdingler, eat a peasant with your extendo-tongue.",FALSE,1,TRUE,yes,
+classic,Hardybardy,Beat all 100 levels as Trogdor with the same settings as the original Flash game.,FALSE,1,FALSE,yes,
+1up,Disk of Healing,Gain an extra life from earning points.,FALSE,1,FALSE,yes,
+stompar,Super Trinket,"As the S Is For Sucks Dragon, knock an arrow out of the sky with your stomp.",FALSE,1,TRUE,yes,
+archdx,Arch Deluxe,Game Over to the archer.,FALSE,1,TRUE,yes,unlocks s is for sucks
+learn,Simple Step-By-Step Instructions,Complete the tutorial.,FALSE,1,FALSE,yes,Unlocks trogdor
 ,Stonklar,(idk but maybe this should unlock wraparound movement in the settings),,,,,
