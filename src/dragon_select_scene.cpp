@@ -9,6 +9,7 @@
 #include "wormdingler.h"
 #include "question_mark.h"
 #include "serif_fonts.h"
+#include <bn_music_items.h>
 
 #include <bn_keypad.h>
 #include <bn_log.h>
@@ -48,7 +49,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
     _selectable_dragons.emplace_back(dragon::WORMDINGLER, sesh, common_stuff, 10, 
         10, !common_stuff.acm.is_achieved("twees"));
     _selectable_dragons.emplace_back(dragon::CHIAROSCURO, sesh, common_stuff,10, 
-        10, true);
+        10, false);
 
     for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
         dragon_option &opt = _selectable_dragons.at(i);
@@ -178,12 +179,19 @@ bn::optional<scene_type> dragon_select_scene::update(){
 
                     switch(dtype){
                         case dragon::TROGDOR:
-                            bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+                            bn::sound_items::burninate.play(
+                                _common_stuff.savefile.options.sound_vol
+                                 * vol_modifier);
                         break;
                         case dragon::SUCKS:
-                            bn::sound_items::sucks_jingle.play(_common_stuff.savefile.options.sound_vol * vol_modifier);
+                            bn::music_items::sucks.play_jingle(
+                                _common_stuff.savefile.options.sound_vol
+                                 * vol_modifier);
                         break;
                         case dragon::WORMDINGLER:
+                            bn::music_items::wormdingler.play_jingle(
+                                _common_stuff.savefile.options.sound_vol
+                                 * vol_modifier);
     
                         break;
                         default:

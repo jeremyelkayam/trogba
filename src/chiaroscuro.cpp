@@ -7,8 +7,8 @@ chiaroscuro::chiaroscuro(bn::fixed xcor, bn::fixed ycor, session_info &sesh, boo
     player(xcor, ycor, TROG_TROGDOR_WIDTH, TROG_TROGDOR_HEIGHT, TROG_TROGDOR_SPEED, 
         bn::fixed_point(TROG_FIREBREATH_XOFFSET, TROG_FIREBREATH_YOFFSET), sesh, 
         iframes, bn::sprite_items::chiaroscuro, 8, common_stuff, initial_trogmeter), 
-    _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 2, 
-            bn::sprite_items::chiaroscuro.tiles_item(), 0, 0)) {
+    _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 10, 
+            bn::sprite_items::chiaroscuro.tiles_item(), 0, 1, 2, 3)) {
     //TODO: Mess with bg priority on the player sprite to make it appear above the background.
 }
 
@@ -23,7 +23,7 @@ void chiaroscuro::update_anim(){
 
 void chiaroscuro::update(){
     player::update();
-    if(!dead() && any_dpad_input()){
+    if(!dead()){
         _walkcycle.update();
     }
 }
