@@ -51,7 +51,7 @@ namespace trog {
 
             virtual void start_burninating();
             virtual void stop_burninating();
-            void update_firebreath();
+            virtual void update_firebreath();
 
             bn::fixed_point _next_pos;
 
@@ -59,6 +59,9 @@ namespace trog {
 
             virtual void kill_peasant(peasant &peasant);
             
+            void change_walkcycle(const bn::isprite_animate_action &walkcycle);
+
+
         public:
             player(bn::fixed xcor, bn::fixed ycor, bn::fixed width, 
                 bn::fixed height, bn::fixed speed, 

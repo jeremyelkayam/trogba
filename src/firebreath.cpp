@@ -12,7 +12,8 @@ firebreath::firebreath(session_info &sesh, common_stuff &common_stuff) :
                     _sprite, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _sesh(sesh),
         _common_stuff(common_stuff) {
-    _sprite.set_z_order(FRONT_ZORDER);
+    _sprite.set_z_order(0);
+    _sprite.put_above();
     disable();
 
 }
