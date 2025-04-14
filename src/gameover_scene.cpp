@@ -15,6 +15,7 @@
 #include "bn_regular_bg_items_trogdead.h"
 #include "bn_regular_bg_items_suckdead.h"
 #include "bn_regular_bg_items_wormdead.h"
+#include "bn_regular_bg_items_chiarodead.h"
 #include "bn_regular_bg_items_game_over_menu.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_jonathan_howe.h"
@@ -129,6 +130,9 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
         break;
         case dragon::SUCKS:
             _dead_dragon.set_item(bn::regular_bg_items::suckdead);
+        break;
+        case dragon::CHIAROSCURO:
+            _dead_dragon.set_item(bn::regular_bg_items::chiarodead);
         break;
         case dragon::WORMDINGLER:
             _dead_dragon.set_item(bn::regular_bg_items::wormdead);
