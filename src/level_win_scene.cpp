@@ -76,6 +76,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
         break;
         case dragon::CHIAROSCURO:
             _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);
+            _nose_smoke.set_position(10, -10);
         break;
         case dragon::WORMDINGLER:
             _happy_dragon.set_item(bn::regular_bg_items::wormsmile);
