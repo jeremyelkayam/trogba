@@ -10,7 +10,7 @@ namespace trog {
 chiaroscuro::chiaroscuro(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
     player(xcor, ycor, TROG_TROGDOR_WIDTH, TROG_TROGDOR_HEIGHT, TROG_TROGDOR_SPEED, 
         bn::fixed_point(17, -12), sesh, 
-        iframes, bn::sprite_items::chiaroscuro, 8, common_stuff, initial_trogmeter), 
+        iframes, bn::sprite_items::chiaroscuro, 15, common_stuff, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 8, 
             bn::sprite_items::chiaroscuro.tiles_item(), 0, 1, 2, 3, 4, 1)) {
     //TODO: Mess with bg priority on the player sprite to make it appear above the background.
@@ -65,6 +65,11 @@ void chiaroscuro::demo_anim()
     _roar = 
         bn::create_sprite_animate_action_forever(_sprite, 4, 
             bn::sprite_items::chiaroscuro.tiles_item(), 10, 11, 12, 13, 14, 11);
+}
+
+void chiaroscuro::update_win_anim(){
+    player::update_win_anim();
+    change_walkcycle(NORM_WLKCL);
 }
 
 void chiaroscuro::update_firebreath()

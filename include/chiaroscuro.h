@@ -25,6 +25,8 @@ namespace trog {
 
             virtual void update_firebreath() override;
 
+            virtual void update_win_anim() override;
+
 
     };
 }
