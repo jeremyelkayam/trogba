@@ -72,7 +72,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
             _nose_smoke.set_position(30, 30);
             nicework_y = -8;
             nicework_x = 78;
-            jingle = bn::sound_items::sucks_jingle;
+            // jingle = bn::sound_items::sucks_jingle;
         break;
         case dragon::CHIAROSCURO:
             _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);

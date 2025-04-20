@@ -179,9 +179,9 @@ bn::optional<scene_type> dragon_select_scene::update(){
 
                     switch(dtype){
                         case dragon::TROGDOR:
-                            bn::sound_items::burninate.play(
-                                _common_stuff.savefile.options.sound_vol
-                                 * vol_modifier);
+                            bn::music_items::trog.play_jingle(
+                            _common_stuff.savefile.options.sound_vol
+                                * vol_modifier);
                         break;
                         case dragon::SUCKS:
                             bn::music_items::sucks.play_jingle(

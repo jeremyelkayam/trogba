@@ -51,6 +51,9 @@ namespace trog{
     public:
         explicit menu_scene(common_stuff &common_stuff, 
             const bn::regular_bg_item &bgitem);
+
+        bool done() {return false;}
+
         [[nodiscard]] virtual bn::optional<scene_type> update();
     };
 

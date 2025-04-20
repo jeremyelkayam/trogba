@@ -6,7 +6,6 @@
 #include "entity.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_peasantdead.h"
-#include "bn_sprite_items_alert_icon.h"
 
 namespace trog {
 

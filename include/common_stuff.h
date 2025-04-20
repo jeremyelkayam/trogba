@@ -67,6 +67,19 @@ namespace trog {
                     bn::keypad::down_pressed();
             }
 
+        //Given two scale factors and the current coordinate,
+        // and the center of zooming, calculate the new position
+        // of the zoomed coordinate.
+        // Useful for zooming in/out of entire screens of sprites
+            static bn::fixed scale_coord(const bn::fixed &old_scale, 
+                const bn::fixed &new_scale, 
+                const bn::fixed &old_coord, 
+                const bn::fixed &center_coord)
+            {
+                return (new_scale / old_scale) * 
+                    (old_coord - center_coord) + center_coord;
+            }
+
 
         private:
 

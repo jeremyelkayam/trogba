@@ -26,7 +26,8 @@ namespace trog {
         DRAGON_SELECT,
         CUTSCENE_VIEWER,
         EXTRAS,
-        ACHIEVEMENTS
+        ACHIEVEMENTS,
+        CHAR_UNLOCK
     };
     enum class direction
     {

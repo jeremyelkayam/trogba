@@ -32,6 +32,7 @@
 #include "cutsceneviewer_scene.h"
 #include "extras_scene.h"
 #include "achievements_scene.h"
+#include "menu_scene.h"
 
 int main()
 {
@@ -40,6 +41,7 @@ int main()
     bool kicked=false;
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
+    bn::unique_ptr<trog::scene> next_menu_scene;
     bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
     bn::optional<trog::scene_type> last_scene;
 
@@ -62,6 +64,14 @@ int main()
 
     while(true)
     {
+        //MENU TRANSITION CODE
+        // if(next_menu_scene){
+        //     next_scene = next_menu_scene->update();
+        //     if(((trog::menu_scene*)scene.get())->done())
+        //     {
+        //         scene = bn::move(next_menu_scene);
+        //     }
+        // }
         if(scene){
             next_scene = scene->update();
             hud.update();

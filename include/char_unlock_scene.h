@@ -1,0 +1,37 @@
+#pragma once
+#include <bn_regular_bg_ptr.h>
+#include <bn_sprite_text_generator.h>
+#include <bn_sprite_animate_actions.h>
+#include "scene.h"
+#include "session_info.h"
+#include "tutorial_box.h"
+
+
+namespace trog{
+
+    class char_unlock_scene : public scene{ 
+    private:
+        bn::regular_bg_ptr _happy_dragon;
+        // bn::vector<bn::sprite_ptr, 64> _nicework_text_sprites;
+        // bn::vector<bn::sprite_ptr, 64> _levelbeated_text_sprites;
+        bn::sprite_ptr _a_button;
+        // bn::sprite_animate_action<31> _smoke_anim;
+        // bn::sprite_animate_action<4> _burningflames;
+        bn::sprite_animate_action<2> _a_button_anim;
+        
+        session_info &_sesh;
+        common_stuff &_common_stuff;
+
+        scene_type _next_scene;
+
+        void save();
+
+    public:
+        explicit char_unlock_scene(
+            session_info &sesh, 
+            common_stuff &common_stuff,
+            const scene_type &next_scene);
+        [[nodiscard]] virtual bn::optional<scene_type> update() final;
+    };
+
+}
