@@ -2,7 +2,6 @@
 #include <bn_math.h>
 #include <bn_log.h>
 #include "common_stuff.h"
-#include "small_fonts.h"
 #include "trogdor_variable_32x64_sprite_font.h"
 namespace trog { 
 
@@ -286,7 +285,7 @@ void common_stuff::format_save(){
 
 
 bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text,
-    const uint8_t max_line_width){
+    const uint8_t max_line_width, const int8_t *char_widths){
     bn::vector<bn::string<64>, 3>result;
     
     uint8_t line_width = 0;
@@ -295,7 +294,7 @@ bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text,
     uint16_t line_end = 0;
     for(uint16_t pos = 0; text[pos] != '\0'; ++pos){
         char c = text[pos];
-        line_width += small_font_character_widths[c - ' '];
+        line_width += char_widths[c - ' '];
         if(line_width > max_line_width){
             uint16_t last_space = pos;
             while(text[last_space] != ' '){

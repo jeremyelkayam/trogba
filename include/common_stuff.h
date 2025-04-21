@@ -13,6 +13,7 @@
 #include "sb_commentary.h"
 #include "achievements.h"
 #include "sram_data.h"
+#include "small_fonts.h"
 
 namespace trog {
 
@@ -57,7 +58,9 @@ namespace trog {
             * Throws an error if the string is too big to fit into 3 lines (1 text box).
             */
             static bn::vector<bn::string<64>, 3> split_into_lines(
-                const char *text, const uint8_t max_line_width = 220
+                const char *text, 
+                const uint8_t max_line_width = 220,
+                const int8_t *char_widths = small_font_character_widths
             );
 
             static bool any_dpad_input() {

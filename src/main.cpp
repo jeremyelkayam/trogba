@@ -33,6 +33,7 @@
 #include "extras_scene.h"
 #include "achievements_scene.h"
 #include "menu_scene.h"
+#include "char_unlock_scene.h"
 
 int main()
 {
@@ -88,6 +89,8 @@ int main()
                 case trog::scene_type::LOGO: { 
                     hud.hide();
                     scene.reset(new trog::logo_scene(sesh, *common_stuff));
+                    // scene.reset(new trog::char_unlock_scene(sesh, *common_stuff,
+                        // trog::scene_type::TITLE));
                     break;
                 }
                 case trog::scene_type::TITLE: { 
