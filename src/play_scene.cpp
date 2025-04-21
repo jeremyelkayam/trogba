@@ -497,7 +497,15 @@ bn::optional<scene_type> play_scene::update(){
     }
     
     if(level_complete() && _win_pause_time > TROG_WIN_PAUSETIME){
-        result = scene_type::LEVELBEAT;
+        if(_sesh.get_level() == 0)
+        {
+            result = scene_type::DRAGON_SELECT;
+            _common_stuff.unlock_character(dragon::TROGDOR);
+        }
+        else
+        {
+            result = scene_type::LEVELBEAT;
+        }
     }
 
     #ifdef DEBUG 

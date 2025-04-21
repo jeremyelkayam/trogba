@@ -79,6 +79,8 @@ namespace trog {
         bn::array<bool, 13> unlocked_cutscenes;
 
         saved_stats stats;
+
+        bn::array<bool, 4> unlocked_dragons;
     };
 
     //old save formats

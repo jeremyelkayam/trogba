@@ -40,26 +40,24 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         _common_stuff(common_stuff) {
     _serif_white.set_center_alignment();
     
-    _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, 0, 0,
-        false);
+    _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, true, false);
 
-    _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, 6, 6, 
-        !common_stuff.acm.is_achieved("learn"));
-    _selectable_dragons.emplace_back(dragon::SUCKS, sesh,  common_stuff, 4, 8, 
-        !common_stuff.acm.is_achieved("archdx"));
-    _selectable_dragons.emplace_back(dragon::WORMDINGLER, sesh, common_stuff, 10, 
-        10, !common_stuff.acm.is_achieved("twees"));
-    _selectable_dragons.emplace_back(dragon::CHIAROSCURO, sesh, common_stuff,10, 
-        10, false);
+    //conditions
+    // trog: !common_stuff.acm.is_achieved("learn"))
+    // sucks !common_stuff.acm.is_achieved("archdx")
+    // worm twees
 
-    for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
-        dragon_option &opt = _selectable_dragons.at(i);
-
-        if(opt.dragon_type == common_stuff.savefile.last_dragon_used){
-            _index = i;
+    for(int z = 0; z < 4; z++)
+    {
+        _selectable_dragons.emplace_back((dragon)z, sesh, common_stuff, false, 
+            !common_stuff.savefile.unlocked_dragons[z]);
+        if(z == (int)common_stuff.savefile.last_dragon_used)
+        {
+            _index = z;
         }
     }
-    for(uint8_t i = 0; i < _selectable_dragons.size(); ++i){
+
+    for(int i = 0; i < _selectable_dragons.size(); ++i){
         dragon_option &opt = _selectable_dragons.at(i);
         opt.set_x(dragon_xcor(i));
     }
@@ -219,42 +217,41 @@ bn::fixed dragon_select_scene::dragon_xcor(uint8_t index){
 }
 
 dragon_option::dragon_option(const dragon &dtype, session_info &sesh, 
-    common_stuff &common_stuff, const uint8_t &spe, const uint8_t &siz, 
-    bool locked) :
+    common_stuff &common_stuff, const bool &tutorial, 
+    const bool &locked) :
         dragon_type(dtype),
         name(""),
-        ability(""),
-        speed(spe),
-        size(siz)
+        ability("")
 
 {
-    if(speed == 0)
+    if(tutorial)
     {
         player_entity.reset(new question_mark(0,0));
         name = "HOW TO PLAY";
         ability = "";
-            
     }
-    else switch(dtype)
+    else 
     {
-        case dragon::TROGDOR:
-            player_entity.reset(new trogdor(0,0,sesh, false, common_stuff, 0));
-            break;
-        case dragon::WORMDINGLER:
-            player_entity.reset(new wormdingler(0,0,sesh, false, common_stuff, 0));
-            break;
-        case dragon::SUCKS:
-            player_entity.reset(new sucks(0,0,sesh, false, common_stuff, 0));
-            break;
-        case dragon::CHIAROSCURO:
-            player_entity.reset(new chiaroscuro(0,0,sesh, false, common_stuff, 0));
-            break;
-        default:
-            BN_ERROR("Invalid dragon type passed into dragon_option class");
+        switch(dtype)
+        {
+            case dragon::TROGDOR:
+                player_entity.reset(new trogdor(0,0,sesh, false, common_stuff, 0));
+                break;
+            case dragon::WORMDINGLER:
+                player_entity.reset(new wormdingler(0,0,sesh, false, common_stuff, 0));
+                break;
+            case dragon::SUCKS:
+                player_entity.reset(new sucks(0,0,sesh, false, common_stuff, 0));
+                break;
+            case dragon::CHIAROSCURO:
+                player_entity.reset(new chiaroscuro(0,0,sesh, false, common_stuff, 0));
+                break;
+            default:
+                BN_ERROR("Invalid dragon type passed into dragon_option class");
+        }
+        name = dragons[(int)dtype].name;
+        ability = dragons[(int)dtype].ability;
     }
-    
-    name = dragons[(int)dtype].name;
-    ability = dragons[(int)dtype].ability;
 
     player_entity->update_anim_action_when_not_moving(true);
     player_entity->set_grayscale(1);

@@ -24,7 +24,7 @@
 namespace trog {
 
 char_unlock_scene::char_unlock_scene(session_info &sesh, 
-    common_stuff &common_stuff, const scene_type &next_scene) : 
+    common_stuff &common_stuff, const scene_type &next_scene, const dragon &dtype) : 
         _happy_dragon(bn::regular_bg_items::trogsmile.create_bg(8, 61)),
         _a_button(bn::sprite_items::a_button_prompt.create_sprite(113,71)),
         _a_button_anim(bn::create_sprite_animate_action_forever(
@@ -32,8 +32,6 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
         _sesh(sesh),
         _common_stuff(common_stuff),
         _next_scene(next_scene) {
-
-    dragon dtype = dragon::TROGDOR;
 
     _a_button.set_visible(false);
 

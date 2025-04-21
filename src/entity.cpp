@@ -20,7 +20,11 @@ entity::entity(bn::fixed xcor, bn::fixed ycor, bn::fixed width, bn::fixed height
         _keep_jumping(false),
         _jump_timer(0),
         _jump_time(0),
-        _jump_height(0) {
+        _jump_height(0)
+{
+    bn::sprite_palette_ptr palette = _sprite.palette();
+    palette.set_fade_intensity(0);
+    palette.set_grayscale_intensity(0);
 }
 
 void entity::move_to(const short &time, const bn::fixed &x, const bn::fixed &y){

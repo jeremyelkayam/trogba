@@ -26,10 +26,11 @@ common_stuff::common_stuff() :
 
 
     bn::array<bool, 13> base_unlocked_cutscenes;
-    for(bool &unlocked : base_unlocked_cutscenes){
-        unlocked = false;
-    }
     base_unlocked_cutscenes.fill(false);
+
+    bn::array<bool, 4> base_unlocked_dragons;
+    base_unlocked_dragons.fill(false);
+    base_unlocked_dragons[0] = true;
 
     //DEFAULT format tag
     default_format_tag = str_to_format_tag(TROG_FORMAT_TAG);
@@ -74,6 +75,9 @@ common_stuff::common_stuff() :
             savefile.last_dragon_used = dragon::TROGDOR;
 
             savefile.unlocked_cutscenes = base_unlocked_cutscenes;
+            
+            //3.1 save ONLY
+            savefile.unlocked_dragons = base_unlocked_dragons;
 
             uint8_t max_level_reached = savefile.session.level;
             for(const high_score_entry &entry : savefile.high_scores_table) {
@@ -161,6 +165,15 @@ void common_stuff::unlock_cutscene_at_level(const uint8_t &current_level) {
         if(cutscene_levels.at(i).first == current_level){
             savefile.unlocked_cutscenes[i] = true;
         }
+    }
+}
+
+void common_stuff::unlock_character(const dragon &dragon) {
+    if(!savefile.unlocked_dragons[(int)dragon])
+    {
+        savefile.unlocked_dragons[(int)dragon] = true;
+        newly_unlocked.push_back(dragon);
+        save();
     }
 }
 
@@ -266,6 +279,7 @@ void common_stuff::format_save(){
         savefile.achievements.fill(0);
 
         savefile.unlocked_cutscenes.fill(false);
+        savefile.unlocked_dragons.fill(false);
 
         savefile.stats.play_time = 0;
         savefile.stats.points_earned = 0;

@@ -34,7 +34,8 @@ namespace trog{
         explicit char_unlock_scene(
             session_info &sesh, 
             common_stuff &common_stuff,
-            const scene_type &next_scene);
+            const scene_type &next_scene,
+            const dragon &dtype);
         [[nodiscard]] virtual bn::optional<scene_type> update() final;
     };
 

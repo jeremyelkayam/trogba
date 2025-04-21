@@ -16,13 +16,11 @@ namespace trog{
             dragon dragon_type;
             bn::string<16> name, ability;
             bn::unique_ptr<entity> player_entity;
-            uint8_t speed, size;
             bn::optional<lock_icon> lock;
 
             dragon_option(const dragon &dtype, 
                 session_info &sesh, common_stuff &common_stuff,
-                const uint8_t &spe, const uint8_t &siz, 
-                bool locked);
+                const bool &tutorial, const bool &locked);
 
             bool locked() const {return lock.has_value();}
             void move_to(const short &time, const bn::fixed &x, 

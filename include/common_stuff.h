@@ -9,6 +9,7 @@
 #include <bn_unordered_map.h>
 #include <bn_optional.h>
 #include <bn_keypad.h>
+#include <bn_deque.h>
 #include "constants.h"
 #include "sb_commentary.h"
 #include "achievements.h"
@@ -23,6 +24,9 @@ namespace trog {
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
             bn::array<char, 8> default_format_tag;
+
+            //todo make it a queue
+            bn::deque<dragon, 4> newly_unlocked;
 
             achievements_mgr acm;
 
@@ -39,6 +43,7 @@ namespace trog {
 
             bool level_has_cutscene(const uint8_t &current_level) const;
             void unlock_cutscene_at_level(const uint8_t &current_level);
+            void unlock_character(const dragon &dragon);
 
             const char* scene_type_to_string(const scene_type &type) const;
 

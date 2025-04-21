@@ -80,7 +80,14 @@ int main()
         if(next_scene){
             bn::sound::stop_all();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
-            switch(*next_scene){
+            if(!common_stuff->newly_unlocked.empty())
+            {
+                hud.hide();
+                scene.reset(new trog::char_unlock_scene(sesh, 
+                    *common_stuff, *next_scene, 
+                    common_stuff->newly_unlocked.front()));
+                common_stuff->newly_unlocked.pop_front();
+            }else switch(*next_scene){
                 case trog::scene_type::DEVS: { 
                     hud.hide();
                     scene.reset(new trog::devs_scene());
