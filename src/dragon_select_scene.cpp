@@ -186,6 +186,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
         }
     }else if(_selection_timer == _selection_wait_time){
         result = scene_type::PLAY;
+        _sesh.reset();
         
         if(_index == 0)
         {

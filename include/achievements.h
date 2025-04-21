@@ -31,9 +31,9 @@ namespace trog {
 
             saved_data &_sram_data;
 
-            void show_popup(bn::string<8> tag);
+            void show_popup(const bn::string<8> &tag);
 
-            int max_index(long threshold);
+            int max_index(long threshold) const;
 
             static bool popup_done(achievement_popup &p) 
                 {return p.done();}
@@ -43,12 +43,14 @@ namespace trog {
             achievements_mgr(saved_data &sram_data,
                 const bn::fixed &sound_vol);
 
-            void update_achievement(bn::string<8> tag, 
+            void update_achievement(const bn::string<8> &tag, 
                 const long &new_value=0);
 
             void update();
 
-            bool is_achieved(bn::string<8> tag);
+            bool is_achieved(const bn::string<8> &tag) const;
+
+            int total_unlocked() const;
 
 
 

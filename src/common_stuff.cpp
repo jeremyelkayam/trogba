@@ -52,7 +52,6 @@ common_stuff::common_stuff() :
             
             savefile.achievements.fill(0);
 
-            // TODO - Move to achievements
             if(old_save.cheat_unlocked)
             {
                 acm.update_achievement("konami", 0);                

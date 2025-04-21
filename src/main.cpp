@@ -80,6 +80,8 @@ int main()
         if(next_scene){
             bn::sound::stop_all();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
+            scene.reset();
+            bn::core::update();
             if(!common_stuff->newly_unlocked.empty())
             {
                 hud.hide();

@@ -24,7 +24,7 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
     }
 }
 
-void achievements_mgr::update_achievement(bn::string<8> tag, 
+void achievements_mgr::update_achievement(const bn::string<8> &tag, 
     const long &new_value)
 {
     BN_ASSERT(_achievements.contains(tag), 
@@ -55,6 +55,19 @@ void achievements_mgr::update_achievement(bn::string<8> tag,
     }
 }
 
+int achievements_mgr::total_unlocked() const
+{
+    int total = 0;
+    for(bn::pair<bn::string<8>, const achievement> ac : _achievements)
+    {
+        if(is_achieved(ac.first))
+        {
+            ++total;
+        }
+    }
+    return total;
+}
+
 void achievements_mgr::update()
 {
     bn::fixed total_speed = 0;
@@ -68,13 +81,13 @@ void achievements_mgr::update()
     bn::erase_if(_popups, popup_done);
 }
 
-bool achievements_mgr::is_achieved(bn::string<8> tag)
+bool achievements_mgr::is_achieved(const bn::string<8> &tag) const
 {
     return _sram_data.achievements[_achievements.at(tag).sram_index] 
         >= _achievements.at(tag).threshold;
 }
 
-void achievements_mgr::show_popup(bn::string<8> tag)
+void achievements_mgr::show_popup(const bn::string<8> &tag)
 {
     const achievement &data = _achievements.at(tag);
 
@@ -82,7 +95,7 @@ void achievements_mgr::show_popup(bn::string<8> tag)
 
 }
 
-int achievements_mgr::max_index(long threshold)
+int achievements_mgr::max_index(long threshold) const
 {
     threshold += 1;
     BN_ASSERT(bn::power_of_two(threshold), 
