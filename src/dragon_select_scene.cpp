@@ -9,6 +9,7 @@
 #include "wormdingler.h"
 #include "question_mark.h"
 #include "serif_fonts.h"
+#include "dragon_data.h"
 #include <bn_music_items.h>
 
 #include <bn_keypad.h>
@@ -176,27 +177,9 @@ bn::optional<scene_type> dragon_select_scene::update(){
                 {
                     ((player *)_selectable_dragons.at(_index).player_entity.get())
                         ->demo_anim();
-
-                    switch(dtype){
-                        case dragon::TROGDOR:
-                            bn::music_items::trog.play_jingle(
-                            _common_stuff.savefile.options.sound_vol
-                                * vol_modifier);
-                        break;
-                        case dragon::SUCKS:
-                            bn::music_items::sucks.play_jingle(
-                                _common_stuff.savefile.options.sound_vol
-                                 * vol_modifier);
-                        break;
-                        case dragon::WORMDINGLER:
-                            bn::music_items::wormdingler.play_jingle(
-                                _common_stuff.savefile.options.sound_vol
-                                 * vol_modifier);
-    
-                        break;
-                        default:
-                        break;
-                    }
+                    dragons[(int)dtype].jingle.play_jingle(
+                        _common_stuff.savefile.options.sound_vol
+                        * vol_modifier);
                 }
 
 
@@ -214,6 +197,12 @@ bn::optional<scene_type> dragon_select_scene::update(){
             _selectable_dragons.at(1).player_entity->set_grayscale(0);
         }
     }
+
+    BN_LOG("dragons as ints");
+    BN_LOG("trogdor: ", (int)dragon::TROGDOR);
+    BN_LOG("sucks: ", (int)dragon::SUCKS);
+    BN_LOG("chiaroscuro: ", (int)dragon::CHIAROSCURO);
+    BN_LOG("wormdingler: ", (int)dragon::WORMDINGLER);
 
     if(_selection_timer) ++_selection_timer;
 
@@ -250,27 +239,22 @@ dragon_option::dragon_option(const dragon &dtype, session_info &sesh,
     {
         case dragon::TROGDOR:
             player_entity.reset(new trogdor(0,0,sesh, false, common_stuff, 0));
-            name = "TROGDOR";
-            ability = "none";
             break;
         case dragon::WORMDINGLER:
             player_entity.reset(new wormdingler(0,0,sesh, false, common_stuff, 0));
-            name = "WORMDINGLER";
-            ability = "extendo tongue";
             break;
         case dragon::SUCKS:
             player_entity.reset(new sucks(0,0,sesh, false, common_stuff, 0));
-            name = "S IS FOR SUCKS";
-            ability = "ground pound";
             break;
         case dragon::CHIAROSCURO:
             player_entity.reset(new chiaroscuro(0,0,sesh, false, common_stuff, 0));
-            name = "CHIAROSCURO";
-            ability = "speedy";
             break;
         default:
             BN_ERROR("Invalid dragon type passed into dragon_option class");
     }
+    
+    name = dragons[(int)dtype].name;
+    ability = dragons[(int)dtype].ability;
 
     player_entity->update_anim_action_when_not_moving(true);
     player_entity->set_grayscale(1);

@@ -12,16 +12,13 @@
 #include "gameover_scene.h"
 #include "sb_commentary.h"
 
-#include "bn_regular_bg_items_trogdead.h"
-#include "bn_regular_bg_items_suckdead.h"
-#include "bn_regular_bg_items_wormdead.h"
-#include "bn_regular_bg_items_chiarodead.h"
 #include "bn_regular_bg_items_game_over_menu.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_jonathan_howe.h"
 #include "bn_sprite_items_jeremy_elkayam.h"
 #include "small_fonts.h"
 #include "serif_fonts.h"
+#include "dragon_data.h"
 
 #define NEW_HISCORE_Y 18
 
@@ -124,23 +121,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     common_stuff.set_sprite_arr_visible(_back_text_sprites, false);
     common_stuff.set_sprite_arr_visible(_new_high_score_text_sprites, false);
 
-    switch(_sesh.get_dragon()){
-        case dragon::TROGDOR:
-            _dead_dragon.set_item(bn::regular_bg_items::trogdead);
-        break;
-        case dragon::SUCKS:
-            _dead_dragon.set_item(bn::regular_bg_items::suckdead);
-        break;
-        case dragon::CHIAROSCURO:
-            _dead_dragon.set_item(bn::regular_bg_items::chiarodead);
-        break;
-        case dragon::WORMDINGLER:
-            _dead_dragon.set_item(bn::regular_bg_items::wormdead);
-        break;
-        default:
-            BN_ERROR("Invalid dragon type found in session info");
-        break;
-    }
+    _dead_dragon.set_item(dragons[(int)sesh.get_dragon()].dead);
 }
 
 

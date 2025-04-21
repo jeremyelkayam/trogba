@@ -1,0 +1,60 @@
+#pragma once
+
+#include "bn_music_items.h"
+#include "bn_regular_bg_items_trogsmile.h"
+#include "bn_regular_bg_items_trogdead.h"
+#include "bn_regular_bg_items_sucksmile.h"
+#include "bn_regular_bg_items_suckdead.h"
+#include "bn_regular_bg_items_chiarosmile.h"
+#include "bn_regular_bg_items_chiarodead.h"
+#include "bn_regular_bg_items_wormsmile.h"
+#include "bn_regular_bg_items_wormdead.h"
+
+namespace trog
+{
+
+struct dragon_data
+{
+    const char *name, *ability, *join_phrase;
+    const bn::music_item jingle;
+    const bn::regular_bg_item smile, dead;
+};
+
+
+constexpr const dragon_data dragons[4] = 
+{
+    {
+        "TROGDOR",
+        "none",
+        "Strikes Again!",
+        bn::music_items::trog,
+        bn::regular_bg_items::trogsmile,
+        bn::regular_bg_items::trogdead
+    },
+    {
+        "S IS FOR SUCKS",
+        "ground pound",
+        "Joins The Battle",
+        bn::music_items::sucks,
+        bn::regular_bg_items::sucksmile,
+        bn::regular_bg_items::suckdead
+    },
+    {
+        "CHIAROSCURO",
+        "speedy",
+        "Joins The Battle",
+        bn::music_items::trog,
+        bn::regular_bg_items::chiarosmile,
+        bn::regular_bg_items::chiarodead
+    },
+    {
+        "WORMDINGLER",
+        "extendo tongue",
+        "Joins The Battle",
+        bn::music_items::wormdingler,
+        bn::regular_bg_items::wormsmile,
+        bn::regular_bg_items::wormdead
+    }
+};
+
+}

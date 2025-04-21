@@ -18,6 +18,7 @@
 #include "bn_sprite_items_a_button_prompt.h"
 #include "serif_fonts.h"
 #include "level_data.h"
+#include "dragon_data.h"
 
 
 namespace trog {
@@ -61,25 +62,21 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
     }
-    bn::sound_item jingle = bn::sound_items::burninate;
+    
     switch(_sesh.get_dragon()){
         case dragon::TROGDOR:
-            _happy_dragon.set_item(bn::regular_bg_items::trogsmile);
             
         break;
         case dragon::SUCKS:
-            _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
             _nose_smoke.set_position(30, 30);
             nicework_y = -8;
             nicework_x = 78;
             // jingle = bn::sound_items::sucks_jingle;
         break;
         case dragon::CHIAROSCURO:
-            _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);
             _nose_smoke.set_position(10, -10);
         break;
         case dragon::WORMDINGLER:
-            _happy_dragon.set_item(bn::regular_bg_items::wormsmile);
             _nose_smoke.set_position(30, -40);
             nicework_y = -30;
         break;
@@ -88,7 +85,9 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
         break;
     }
 
-    jingle.play(common_stuff.savefile.options.sound_vol);
+
+    _happy_dragon.set_item(dragons[(int)sesh.get_dragon()].smile);
+    dragons[(int)sesh.get_dragon()].jingle.play_jingle(common_stuff.savefile.options.sound_vol);
 
     serif_white.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
     serif_white.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);

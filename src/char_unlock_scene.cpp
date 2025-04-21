@@ -9,15 +9,12 @@
 #include "char_unlock_scene.h"
 #include "sb_commentary.h"
 
-#include "bn_regular_bg_items_trogsmile.h"
-#include "bn_regular_bg_items_sucksmile.h"
-#include "bn_regular_bg_items_chiarosmile.h"
-#include "bn_regular_bg_items_wormsmile.h"
 #include "bn_sprite_items_nose_smoke.h"
 #include "bn_sprite_items_cottagefire.h"
 #include "bn_sprite_items_a_button_prompt.h"
 #include "serif_fonts.h"
 #include "level_data.h"
+#include "dragon_data.h"
 
 
 namespace trog {
@@ -44,29 +41,11 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     if(sesh.get_level() != 0 && sesh.get_level() != 100){
         save();
     }
-    bn::music_item jingle = bn::music_items::trog;
-    switch(_sesh.get_dragon()){
-        case dragon::TROGDOR:
-            _happy_dragon.set_item(bn::regular_bg_items::trogsmile);
-            
-        break;
-        case dragon::SUCKS:
-            _happy_dragon.set_item(bn::regular_bg_items::sucksmile);
 
-            // jingle = bn::sound_items::sucks_jingle;
-        break;
-        case dragon::CHIAROSCURO:
-            _happy_dragon.set_item(bn::regular_bg_items::chiarosmile);
-        break;
-        case dragon::WORMDINGLER:
-            _happy_dragon.set_item(bn::regular_bg_items::wormsmile);
-        break;
-        default:
-            BN_ERROR("Invalid dragon type found in session info");
-        break;
-    }
+    _happy_dragon.set_item(dragons[(int)sesh.get_dragon()].smile);
+    
 
-    jingle.play_jingle(common_stuff.savefile.options.sound_vol);
+    dragons[(int)sesh.get_dragon()].jingle.play_jingle(common_stuff.savefile.options.sound_vol);
 
     // serif_white.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
 
