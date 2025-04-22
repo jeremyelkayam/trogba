@@ -45,7 +45,7 @@ options_scene::options_scene(common_stuff &common_stuff, const scene_type &last_
     lives_options.emplace_back(3);
     lives_options.emplace_back(5);
 
-    if(_common_stuff.acm.is_achieved("konami"))
+    if(_common_stuff.is_achieved("konami"))
         lives_options.emplace_back(30);
 
     _options_vec.emplace_back(

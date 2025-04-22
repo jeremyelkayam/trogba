@@ -24,7 +24,7 @@ void session_info::score(const unsigned int &num_points){
     if(new_multiple - old_multiple)
     {
         
-        _common_stuff.acm.update_achievement("1up");
+        _common_stuff.update_achievement("1up");
         //if the multiple is higher after adding the points, add however many lives you earned
         _mans += (new_multiple - old_multiple);    
     }

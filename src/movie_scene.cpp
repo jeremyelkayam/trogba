@@ -66,7 +66,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 
         //TODO - This crashes the game, need to consolidate
         // other text palettes maybe.
-        _common_stuff.acm.update_achievement("twees", 0);
+        _common_stuff.update_achievement("twees", 0);
 
         for(int z=0; z < 10; z++){
             int xcor = 100 - (z/2)*13;
@@ -403,11 +403,11 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_y(-5);
             mytrogdor->set_rotation_angle(30);
 
-            _common_stuff.acm.update_achievement("win");
+            _common_stuff.update_achievement("win");
             if(_sesh.get_score() > 0 && !_sesh.troghammer_enabled() && 
                 !_sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
             {
-                _common_stuff.acm.update_achievement("classic");
+                _common_stuff.update_achievement("classic");
             }
         }
     }

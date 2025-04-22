@@ -66,22 +66,22 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
 
     if(_sesh.get_score() >= TROG_GAMEOVER_SUPER_SECRET_SCORE)
     {
-        common_stuff.acm.update_achievement("5kbonus",0);
+        common_stuff.update_achievement("5kbonus",0);
     }
     else if(_sesh.get_score() >= TROG_GAMEOVER_SECRET_SCORE)
     {
-        common_stuff.acm.update_achievement("2kbonus",0);
+        common_stuff.update_achievement("2kbonus",0);
     }
     else if(_sesh.get_score() >= TROG_GAMEOVER_BEAT_THAT_SCORE)
     {
-        common_stuff.acm.update_achievement("1kbonus",0);
+        common_stuff.update_achievement("1kbonus",0);
     }
     //todo - add an achievement for dying with zero points
 
 
     //todo: refactor this
     if(_sesh.last_killed_by_archer()){
-        common_stuff.acm.update_achievement("archdx");
+        common_stuff.update_achievement("archdx");
         _common_stuff.commentary.gameover_arch();
         bn::sound_items::gameover.play(common_stuff.savefile.options.sound_vol * bn::fixed(0.2));
     }else if(_common_stuff.commentary.gameover(_sesh.get_score(), sesh.get_dragon()))

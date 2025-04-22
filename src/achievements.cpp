@@ -24,7 +24,7 @@ achievements_mgr::achievements_mgr(saved_data &sram_data,
     }
 }
 
-void achievements_mgr::update_achievement(const bn::string<8> &tag, 
+bool achievements_mgr::update_achievement(const bn::string<8> &tag, 
     const long &new_value)
 {
     BN_ASSERT(_achievements.contains(tag), 
@@ -52,7 +52,9 @@ void achievements_mgr::update_achievement(const bn::string<8> &tag,
     {
         show_popup(tag);
         bn::sram::write(_sram_data);
+        return true;
     }
+    return false;
 }
 
 int achievements_mgr::total_unlocked() const

@@ -96,7 +96,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
     if(levels[_sesh.get_level()][0] == 3)
     {
         //night level
-        _common_stuff.acm.update_achievement("night");
+        _common_stuff.update_achievement("night");
     }    
 
 }

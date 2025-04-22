@@ -7,8 +7,8 @@ namespace trog {
 
 common_stuff::common_stuff() : 
     big_generator(variable_32x64_sprite_font),
-    acm(savefile, savefile.options.sound_vol),
-    commentary(savefile.options.voice_vol, rand){ 
+    commentary(savefile.options.voice_vol, rand),
+    _acm(savefile, savefile.options.sound_vol){ 
 
     cutscene_levels.emplace_back(5, "stompin' good");
     cutscene_levels.emplace_back(9, "fry 'em up dan.");
@@ -54,7 +54,7 @@ common_stuff::common_stuff() :
 
             if(old_save.cheat_unlocked)
             {
-                acm.update_achievement("konami", 0);                
+                _acm.update_achievement("konami", 0);                
             }
 
             //session variables
@@ -174,6 +174,26 @@ void common_stuff::unlock_character(const dragon &dragon) {
         newly_unlocked.push_back(dragon);
         save();
     }
+}
+
+void common_stuff::update_achievement(const bn::string<8> &tag, 
+    const long &new_value)
+{
+    bool newly_achieved = _acm.update_achievement(tag, new_value);
+    if(newly_achieved)
+    {
+        int num_achievements = _acm.total_unlocked();
+
+        if(num_achievements >= 6)
+            unlock_character(dragon::SUCKS);
+
+        if(num_achievements >= 12)
+            unlock_character(dragon::CHIAROSCURO);
+
+        if(num_achievements >= 16)
+            unlock_character(dragon::WORMDINGLER);
+    }
+    
 }
 
 //todo: maybe binary search would be better for this lol
@@ -349,6 +369,19 @@ bn::vector<bn::string<64>, 3> common_stuff::split_into_lines(const char *text,
     }
 
     return result;
+}
+
+void common_stuff::update()
+{
+    // Burn a random number every frame.
+    // This makes it less likely to get the same random numbers every time you play
+    rand.update();
+    
+    //Advance our commentary timer so that we don't commentate over ourself...
+    commentary.update();
+
+    //Update the achievements manager.
+    _acm.update();
 }
 
 }

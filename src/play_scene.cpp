@@ -200,19 +200,19 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_stand_still_time < 10)
         {
-            _common_stuff.acm.update_achievement("loafing");
+            _common_stuff.update_achievement("loafing");
         }
 
         if(!_died_on_this_level && troghammer_arrived)
         {
-            _common_stuff.acm.update_achievement("shave");
+            _common_stuff.update_achievement("shave");
         }
 
         _common_stuff.commentary.level_win_pause(_sesh.get_dragon(), troghammer_arrived);
 
         //tutorial win level thing 
         if(_sesh.get_level() == 0){
-            _common_stuff.acm.update_achievement("learn");
+            _common_stuff.update_achievement("learn");
             // _tutorial_box.reset(new tutorial_box("Congrats! You finished the tutorial."));
         }
     }
@@ -286,7 +286,7 @@ bn::optional<scene_type> play_scene::update(){
 
         if(_player->dead() && bn::keypad::select_pressed())
         {
-            _common_stuff.acm.update_achievement("crap", 0);
+            _common_stuff.update_achievement("crap", 0);
         }
 
         //first update HUD info with trogdor's info from the last frame
@@ -299,7 +299,7 @@ bn::optional<scene_type> play_scene::update(){
         
         ++_total_time;
 
-        _common_stuff.acm.update_achievement("daisies", _total_time);
+        _common_stuff.update_achievement("daisies", _total_time);
 
         //todo: this can be abused by just running into a wall.
         if(!_common_stuff.any_dpad_input())
@@ -346,7 +346,7 @@ bn::optional<scene_type> play_scene::update(){
                     //check if it should burn any cottages
                     bool cottage_burninated = p.get_home().burninate();
                     if(cottage_burninated) {
-                        _common_stuff.acm.update_achievement("chain");
+                        _common_stuff.update_achievement("chain");
                         //bonus points if the peasant burns his house down
                         _sesh.score(TROG_COTTAGE_PEASANTBURN_SCORE);
                     }else{
@@ -450,7 +450,7 @@ bn::optional<scene_type> play_scene::update(){
             if(player->stomp_timer() > 0 
                 && player->stomp_timer() < TROG_SUCK_STOMP_FRAME)
             {
-                _common_stuff.acm.update_achievement("denial", 0);
+                _common_stuff.update_achievement("denial", 0);
             }
         }
 

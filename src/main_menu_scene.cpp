@@ -91,7 +91,7 @@ bn::optional<scene_type> main_menu_scene::update(){
             _selected_option_index == 1)
              && bn::keypad::select_pressed())
         {
-            _common_stuff.acm.update_achievement("dodongo", 0);
+            _common_stuff.update_achievement("dodongo", 0);
         }
     }
 

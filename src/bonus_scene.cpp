@@ -58,22 +58,22 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
     }
 
     // common_stuff.savefile.session.can_visit_treasure_hut = false;
-    common_stuff.acm.update_achievement("onehut", 0);
+    common_stuff.update_achievement("onehut", 0);
 
 
     //the three treasure hut levels
     // TODO - should iterate through the level_data
     if(_sesh.get_level() % 32 == 7)
     {
-        common_stuff.acm.update_achievement("allhuts", 0);
+        common_stuff.update_achievement("allhuts", 0);
     }
     else if(_sesh.get_level() % 32 == 11)
     {
-        common_stuff.acm.update_achievement("allhuts", 1);
+        common_stuff.update_achievement("allhuts", 1);
     }
     else if(_sesh.get_level() % 32 == 16)
     {
-        common_stuff.acm.update_achievement("allhuts", 2);
+        common_stuff.update_achievement("allhuts", 2);
     }
 
 }

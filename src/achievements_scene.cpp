@@ -41,7 +41,7 @@ achievements_scene::achievements_scene(common_stuff &common_stuff) :
         bn::sprite_ptr icon = 
                 bn::sprite_items::lock_icon.create_sprite(0,0);
         icon.set_z_order(1);
-        if(_common_stuff.acm.is_achieved(acd.tag))
+        if(_common_stuff.is_achieved(acd.tag))
         {
             icon = 
                 bn::sprite_items::achievements.create_sprite(0,0,z);
@@ -223,7 +223,7 @@ void achievements_scene::update_info_box()
     }
 
     if(_selected == _opts.size() - 1 || 
-        _common_stuff.acm.is_achieved(selected_option.data.tag))
+        _common_stuff.is_achieved(selected_option.data.tag))
     {    
 
         int dex = selected_option.index;

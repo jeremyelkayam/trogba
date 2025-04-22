@@ -80,8 +80,15 @@ int main()
         if(next_scene){
             bn::sound::stop_all();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
-            scene.reset();
-            bn::core::update();
+
+            if(!(next_scene == trog::scene_type::OPTIONS || 
+                 next_scene == trog::scene_type::BONUS ||
+                 next_scene == trog::scene_type::HISCORES 
+                ))
+            {
+                scene.reset();
+                bn::core::update();
+            }
             if(!common_stuff->newly_unlocked.empty())
             {
                 hud.hide();
@@ -222,11 +229,7 @@ int main()
             bn::core::reset();
         }
 
-        // Burn a random number every frame.
-        // This makes it less likely to get the same random numbers every time you play
-        common_stuff->rand.update();
-        common_stuff->commentary.update();
-        common_stuff->acm.update();
+        common_stuff->update();
 
         //increment our total play time by 1 frame... 
         common_stuff->savefile.stats.play_time++;

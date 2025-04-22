@@ -28,7 +28,6 @@ namespace trog {
             //todo make it a queue
             bn::deque<dragon, 4> newly_unlocked;
 
-            achievements_mgr acm;
 
             sb_commentary commentary;
 
@@ -88,8 +87,17 @@ namespace trog {
                     (old_coord - center_coord) + center_coord;
             }
 
+            void update_achievement(const bn::string<8> &tag, 
+                const long &new_value=0);
+            
+            bool is_achieved(const bn::string<8> &tag) const
+                {return _acm.is_achieved(tag);}
+
+            void update();
 
         private:
+        
+            achievements_mgr _acm;
 
             bn::vector<bn::sprite_ptr, 8> _autosave_text;
             bn::array<char, 8> str_to_format_tag(const char *str);

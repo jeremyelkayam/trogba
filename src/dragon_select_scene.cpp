@@ -79,7 +79,7 @@ void dragon_select_scene::update_text(){
 
 bn::optional<scene_type> dragon_select_scene::update(){
 
-    if(!_common_stuff.acm.is_achieved("learn"))
+    if(!_common_stuff.is_achieved("learn"))
     {
         _sesh.set_level(0);
         return scene_type::PLAY;

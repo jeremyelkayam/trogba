@@ -41,7 +41,7 @@ void wormdingler::kill_peasant(peasant &peasant)
     player::kill_peasant(peasant);
     if(_tongue)
     {
-        _common_stuff.acm.update_achievement("sub");
+        _common_stuff.update_achievement("sub");
     }
 }
 
