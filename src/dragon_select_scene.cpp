@@ -51,7 +51,7 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
     {
         _selectable_dragons.emplace_back((dragon)z, sesh, common_stuff, false, 
             !common_stuff.savefile.unlocked_dragons[z]);
-        if(z == (int)common_stuff.savefile.last_dragon_used)
+        if(z == ((int)common_stuff.savefile.last_dragon_used + 1))
         {
             _index = z;
         }
@@ -162,7 +162,6 @@ bn::optional<scene_type> dragon_select_scene::update(){
             else
             {
                 dragon dtype = _selectable_dragons.at(_index).dragon_type;
-                _sesh.set_dragon(dtype);
                 _common_stuff.savefile.last_dragon_used = dtype;
                 bn::fixed vol_modifier = 1;
                 if(_common_stuff.commentary.select_character(dtype)){
@@ -187,6 +186,7 @@ bn::optional<scene_type> dragon_select_scene::update(){
     }else if(_selection_timer == _selection_wait_time){
         result = scene_type::PLAY;
         _sesh.reset();
+        _sesh.set_dragon(_selectable_dragons.at(_index).dragon_type);
         
         if(_index == 0)
         {
@@ -196,12 +196,6 @@ bn::optional<scene_type> dragon_select_scene::update(){
             _selectable_dragons.at(1).player_entity->set_grayscale(0);
         }
     }
-
-    BN_LOG("dragons as ints");
-    BN_LOG("trogdor: ", (int)dragon::TROGDOR);
-    BN_LOG("sucks: ", (int)dragon::SUCKS);
-    BN_LOG("chiaroscuro: ", (int)dragon::CHIAROSCURO);
-    BN_LOG("wormdingler: ", (int)dragon::WORMDINGLER);
 
     if(_selection_timer) ++_selection_timer;
 
