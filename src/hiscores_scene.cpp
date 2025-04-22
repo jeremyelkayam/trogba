@@ -129,7 +129,13 @@ bn::optional<scene_type> hiscores_scene::update(){
     }else if(bn::keypad::start_pressed() || bn::keypad::a_pressed()|| bn::keypad::b_pressed()){
         if(_go_to_credits){
             result = scene_type::CREDITS;
-        }else{
+        }
+        else if(_last_scene == scene_type::LOSE)
+        {
+            result = scene_type::MENU;
+        }
+        else
+        {
             result = _last_scene;
         }
         _text_sprites.clear();
