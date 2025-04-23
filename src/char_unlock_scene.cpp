@@ -60,9 +60,17 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     bn::fixed xcor = 70;
     bn::fixed ycor = -20;
 
-    serif_yellow.generate(xcor, ycor + 30, dd.name, _text_sprites);
-    
-    bn::fixed yoffset = ycor + 45;
+    bn::fixed yoffset = ycor + 35;
+
+    for(const bn::string<64> &line : _common_stuff.split_into_lines(
+        dd.name, 90, serif_font_character_widths))
+    {
+        serif_yellow.generate(xcor, yoffset,
+            line, _text_sprites);
+        yoffset += 13;
+    }
+    yoffset += 3;
+
     for(const bn::string<64> &line : _common_stuff.split_into_lines(
         dd.join_phrase, 90, serif_font_character_widths))
     {

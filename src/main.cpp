@@ -104,9 +104,9 @@ int main()
                 }
                 case trog::scene_type::LOGO: { 
                     hud.hide();
-                    scene.reset(new trog::logo_scene(sesh, *common_stuff));
-                    // scene.reset(new trog::char_unlock_scene(sesh, *common_stuff,
-                        // trog::scene_type::TITLE));
+                    // scene.reset(new trog::logo_scene(sesh, *common_stuff));
+                    scene.reset(new trog::char_unlock_scene(sesh, *common_stuff,
+                        trog::scene_type::TITLE, trog::dragon::SUCKS));
                     break;
                 }
                 case trog::scene_type::TITLE: { 

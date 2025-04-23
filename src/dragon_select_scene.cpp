@@ -42,11 +42,6 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
     
     _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, true, false);
 
-    //conditions
-    // trog: !common_stuff.acm.is_achieved("learn"))
-    // sucks !common_stuff.acm.is_achieved("archdx")
-    // worm twees
-
     for(int z = 0; z < 4; z++)
     {
         _selectable_dragons.emplace_back((dragon)z, sesh, common_stuff, false, 
