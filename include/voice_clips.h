@@ -75,7 +75,7 @@ const voice_clips all_clips[4] {
         bn::sound_items::ss_animal, //game over
         bn::sound_items::ss_give_up, //archer game over
         bn::sound_items::ss_happiest, //high score
-        bn::sound_items::dummy, // secret score
+        bn::sound_items::ss_finest_hour, // secret score
         bn::sound_items::ss_foodanymore, //arrowed
         bn::sound_items::ss_sadflying, //majesty
         bn::sound_items::dummy, //majesty troghammer
@@ -85,18 +85,18 @@ const voice_clips all_clips[4] {
         {bn::sound_items::ss_aw, 
             bn::sound_items::ss_not_improvement},
         //burninate
-        {bn::sound_items::dummy, 
-            bn::sound_items::dummy, 
+        {bn::sound_items::ss_monster, 
+            bn::sound_items::ss_eatyou, 
             bn::sound_items::dummy},
         //level beat
-        {bn::sound_items::dummy, 
-            bn::sound_items::dummy},
+        {bn::sound_items::ss_works_every_time, 
+            bn::sound_items::ss_great},
         //ignite peasant
         {bn::sound_items::ss_peasantburnination, 
             bn::sound_items::ss_burn_whatever},
         //stomp
         {bn::sound_items::ss_betterplague, 
-            bn::sound_items::dummy, 
+            bn::sound_items::ss_thing_away, 
             bn::sound_items::dummy}
     },
     //wormdingler
