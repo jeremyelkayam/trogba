@@ -62,8 +62,20 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
 
     bn::fixed yoffset = ycor + 35;
 
+
+    bn::string<16> name(dd.name);
+
+    if(dtype == dragon::SUCKS)
+    {
+        serif_white.generate(xcor, yoffset,
+            "THE", _text_sprites);
+            yoffset += 13;
+        name = name + "!";
+    }
+
+
     for(const bn::string<64> &line : _common_stuff.split_into_lines(
-        dd.name, 90, serif_font_character_widths))
+        name.c_str(), 90, serif_font_character_widths))
     {
         serif_yellow.generate(xcor, yoffset,
             line, _text_sprites);

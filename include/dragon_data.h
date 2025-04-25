@@ -34,7 +34,7 @@ constexpr const dragon_data dragons[4] =
     {
         "S IS FOR SUCKS",
         "ground pound",
-        "Joins The Battle",
+        "",
         bn::music_items::sucks,
         bn::regular_bg_items::sucksmile,
         bn::regular_bg_items::suckdead
@@ -42,7 +42,7 @@ constexpr const dragon_data dragons[4] =
     {
         "CHIAROSCURO",
         "speedy",
-        "Joins The Battle",
+        "Improves on your Methods",
         bn::music_items::trog,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead
@@ -50,7 +50,7 @@ constexpr const dragon_data dragons[4] =
     {
         "WORMDINGLER",
         "extendo tongue",
-        "Joins The Battle",
+        "Gives A Care!",
         bn::music_items::wormdingler,
         bn::regular_bg_items::wormsmile,
         bn::regular_bg_items::wormdead

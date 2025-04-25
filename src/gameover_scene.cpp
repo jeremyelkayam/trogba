@@ -75,6 +75,7 @@ gameover_scene::gameover_scene(session_info &sesh, common_stuff &common_stuff) :
     else if(_sesh.get_score() >= TROG_GAMEOVER_BEAT_THAT_SCORE)
     {
         common_stuff.update_achievement("1kbonus",0);
+        common_stuff.unlock_character(dragon::CHIAROSCURO);
     }
     //todo - add an achievement for dying with zero points
 
