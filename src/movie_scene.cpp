@@ -404,6 +404,7 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_rotation_angle(30);
 
             _common_stuff.update_achievement("win");
+            _common_stuff.unlock_character(dragon::WORMDINGLER);
             if(_sesh.get_score() > 0 && !_sesh.troghammer_enabled() && 
                 !_sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
             {

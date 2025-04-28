@@ -231,8 +231,6 @@ int main()
 
         common_stuff->update();
 
-        //increment our total play time by 1 frame... 
-        common_stuff->savefile.stats.play_time++;
 
         bn::core::update();
     }

@@ -382,6 +382,23 @@ void common_stuff::update()
 
     //Update the achievements manager.
     _acm.update();
+    
+    //increment our total play time by 1 frame... 
+    savefile.stats.play_time++;
+
+    //if our play time is above a certain amount just unlock the character...
+    if(savefile.stats.play_time > 108000)
+    {
+        unlock_character(dragon::SUCKS);
+    }
+    if(savefile.stats.play_time > 2 * (108000))
+    {
+        unlock_character(dragon::CHIAROSCURO);
+    }
+    if(savefile.stats.play_time > 3 * (108000))
+    {
+        unlock_character(dragon::WORMDINGLER);
+    }
 }
 
 }
