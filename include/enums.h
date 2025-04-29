@@ -42,4 +42,5 @@ namespace trog {
         CHIAROSCURO,
         WORMDINGLER
     };
+    constexpr const int NUM_DRAGONS = 4;
 }

@@ -43,6 +43,7 @@ namespace trog {
             bool level_has_cutscene(const uint8_t &current_level) const;
             void unlock_cutscene_at_level(const uint8_t &current_level);
             void unlock_character(const dragon &dragon);
+            void unlock_random_character();
 
             const char* scene_type_to_string(const scene_type &type) const;
 

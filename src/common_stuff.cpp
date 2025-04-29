@@ -387,18 +387,24 @@ void common_stuff::update()
     savefile.stats.play_time++;
 
     //if our play time is above a certain amount just unlock the character...
-    if(savefile.stats.play_time > 108000)
+    if(savefile.stats.play_time % 108000 == 107999)
     {
-        unlock_character(dragon::SUCKS);
+        unlock_random_character();
     }
-    if(savefile.stats.play_time > 2 * (108000))
+}
+
+void common_stuff::unlock_random_character()
+{
+    bn::vector<dragon, NUM_DRAGONS> locked_dragons;
+    for(int z = 0; z < NUM_DRAGONS; ++z)
     {
-        unlock_character(dragon::CHIAROSCURO);
+        if(!savefile.unlocked_dragons[z])
+        {
+            locked_dragons.emplace_back((dragon)z);
+        }
     }
-    if(savefile.stats.play_time > 3 * (108000))
-    {
-        unlock_character(dragon::WORMDINGLER);
-    }
+
+    unlock_character(locked_dragons.at(rand.get_int(0, locked_dragons.size())));
 }
 
 }
