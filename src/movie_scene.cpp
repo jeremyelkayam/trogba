@@ -8,6 +8,7 @@
 #include "bn_sprite_items_knight.h"
 #include "bn_sprite_items_firebreath.h"
 #include "serif_fonts.h"
+#include "create_dragon.h"
 
 
 //this class is terrible! But it's the best I've got 
@@ -30,7 +31,8 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }
 
     if(_sesh.get_level() == 5){
-        trogdor* mytrogdor = new trogdor(140,0,_sesh,false,_common_stuff);
+        player* mytrogdor = create_dragon(_sesh.get_dragon(),
+            140,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
         _cutscene_objects.emplace_back(mytrogdor);
@@ -50,7 +52,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }else if(_sesh.get_level() == 9){
         //todo: make the iframes param optional on trogdor.
         // and maybe more optional params in the future
-        trogdor* mytrogdor = new trogdor(20,0,_sesh,false,_common_stuff);
+        player* mytrogdor = new trogdor(20,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 
@@ -85,16 +87,16 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             k->animate_faster();
             _cutscene_objects.emplace_back(k);
         }
-        trogdor *p = new trogdor(0, 0, sesh, false,_common_stuff);
+        player *p = new trogdor(0, 0, sesh, false,_common_stuff);
         p->flip_every(15);
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
-        trogdor* mytrogdor = new trogdor(0,0,_sesh,false,_common_stuff);
-        mytrogdor->flex();
+        player* mytrogdor = new trogdor(0,0,_sesh,false,_common_stuff);
+        mytrogdor->demo_anim();
         _cutscene_objects.emplace_back(mytrogdor);
     }else if(_sesh.get_level() == 25){
-        trogdor* mytrogdor = new trogdor(80,0,_sesh,false,_common_stuff);
+        player* mytrogdor = new trogdor(80,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 
@@ -113,7 +115,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         }
     }else if(_sesh.get_level() == 35){
         for(int z = 0; z < 2; ++z){
-            trogdor *trog = new trogdor(-140, 30*z, sesh, false,_common_stuff);
+            player *trog = new trogdor(-140, 30*z, sesh, false,_common_stuff);
             trog->move_by(1 + 0.5*z, 0);
             _cutscene_objects.emplace_back(trog);
         }
@@ -184,10 +186,10 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 5 ){
         if(_timer == _cutscene_length / 2){
             //stompin good
-            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
             ((peasant *) _cutscene_objects.at(3).get())->squish();        
         }if(_cutscene_objects.at(0)->sprite_x() > 120){
-            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }
     }
     if(_sesh.get_level() == 9){
@@ -199,10 +201,10 @@ bn::optional<scene_type> movie_scene::update(){
                 _cutscene_objects.emplace_back(p);
             }
             if(_timer == _cutscene_length / 4 + 5 + 30*z){
-                ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
+                ((player *) _cutscene_objects.at(0).get())->enable_breath();
             }
             if(_timer == _cutscene_length / 4 + 10 + 30*z){
-                ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
+                ((player *) _cutscene_objects.at(0).get())->disable_breath();
                 peasant *p = (peasant *) _cutscene_objects.at(1 + z).get();
                 p->set_sprite_ablaze();
                 p->move_to(_cutscene_length / 4, -10, 100);
@@ -213,10 +215,10 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 25){
         // peasant dominoes
         if(_timer == 60){
-            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
         }
         if(_timer == 70){
-            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }
         for(int z = 0; z < 8; ++z){
             if(_timer == 70 + 5*z){
@@ -225,7 +227,7 @@ bn::optional<scene_type> movie_scene::update(){
             }
         }
         if(_timer == 140){
-            ((trogdor *) _cutscene_objects.at(0).get())->jump(10, 5, true);
+            ((player *) _cutscene_objects.at(0).get())->jump(10, 5, true);
         }
     }
     if(_sesh.get_level() == 31){
@@ -309,11 +311,11 @@ bn::optional<scene_type> movie_scene::update(){
     if(_sesh.get_level() == 51){
         // kerrek cutscene
         if(_timer == 20){
-            ((trogdor *) _cutscene_objects.at(0).get())->enable_breath();
+            ((player *) _cutscene_objects.at(0).get())->enable_breath();
         }else if(_timer == 30){
             ((kerrek *) _cutscene_objects.at(1).get())->burninate();
         }else if(_timer == 50){
-            ((trogdor *) _cutscene_objects.at(0).get())->disable_breath();
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }else if(_timer == _cutscene_length / 2 + 30){
             _common_stuff.commentary.roast_kerrek();
         }
@@ -397,7 +399,7 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->set_x(30);
             sbad->set_rotation_angle(330);
             sbad->set_frame(3);
-            trogdor *mytrogdor = ((trogdor *) _cutscene_objects.at(1).get());
+            player *mytrogdor = ((player *) _cutscene_objects.at(1).get());
             mytrogdor->set_visible(true);
             mytrogdor->set_x(-35);
             mytrogdor->set_y(-5);

@@ -3,10 +3,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_items_half_arrow.h"
-#include "sucks.h"
-#include "trogdor.h"
-#include "chiaroscuro.h"
-#include "wormdingler.h"
+#include "create_dragon.h"
 #include "question_mark.h"
 #include "serif_fonts.h"
 #include "dragon_data.h"
@@ -222,23 +219,8 @@ dragon_option::dragon_option(const dragon &dtype, session_info &sesh,
     }
     else 
     {
-        switch(dtype)
-        {
-            case dragon::TROGDOR:
-                player_entity.reset(new trogdor(0,0,sesh, false, common_stuff, 0));
-                break;
-            case dragon::WORMDINGLER:
-                player_entity.reset(new wormdingler(0,0,sesh, false, common_stuff, 0));
-                break;
-            case dragon::SUCKS:
-                player_entity.reset(new sucks(0,0,sesh, false, common_stuff, 0));
-                break;
-            case dragon::CHIAROSCURO:
-                player_entity.reset(new chiaroscuro(0,0,sesh, false, common_stuff, 0));
-                break;
-            default:
-                BN_ERROR("Invalid dragon type passed into dragon_option class");
-        }
+        player_entity.reset(create_dragon(dtype,0,0,sesh, false, 
+            common_stuff, 0));
         name = dragons[(int)dtype].name;
         ability = dragons[(int)dtype].ability;
     }

@@ -16,6 +16,7 @@
 #include "sram_data.h"
 #include "small_fonts.h"
 
+
 namespace trog {
 
     class common_stuff { 

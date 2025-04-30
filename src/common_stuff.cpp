@@ -184,14 +184,8 @@ void common_stuff::update_achievement(const bn::string<8> &tag,
     {
         int num_achievements = _acm.total_unlocked();
 
-        if(num_achievements >= 6)
-            unlock_character(dragon::SUCKS);
-
-        if(num_achievements >= 12)
-            unlock_character(dragon::CHIAROSCURO);
-
-        if(num_achievements >= 16)
-            unlock_character(dragon::WORMDINGLER);
+        if(num_achievements % 6 == 0)
+            unlock_random_character();
     }
     
 }

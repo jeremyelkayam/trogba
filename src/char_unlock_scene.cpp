@@ -15,10 +15,7 @@
 #include "serif_fonts.h"
 #include "level_data.h"
 #include "dragon_data.h"
-#include "trogdor.h"
-#include "chiaroscuro.h"
-#include "sucks.h"
-#include "wormdingler.h"
+#include "create_dragon.h"
 
 
 namespace trog {
@@ -98,23 +95,10 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     
     serif_red.generate(0, -74, "NEW CHARACTER UNLOCKED", _text_sprites);
 
-    switch(dtype)
-    {
-        case dragon::TROGDOR:
-            player_entity.reset(new trogdor(xcor,ycor,sesh, false, common_stuff, 0));
-            break;
-        case dragon::WORMDINGLER:
-            player_entity.reset(new wormdingler(xcor,ycor,sesh, false, common_stuff, 0));
-            break;
-        case dragon::SUCKS:
-            player_entity.reset(new sucks(xcor,ycor,sesh, false, common_stuff, 0));
-            break;
-        case dragon::CHIAROSCURO:
-            player_entity.reset(new chiaroscuro(xcor,ycor,sesh, false, common_stuff, 0));
-            break;
-        default:
-            BN_ERROR("Invalid dragon type passed into dragon_option class");
-    }
+    
+    player_entity.reset(create_dragon(dtype,xcor,ycor,sesh, false, 
+        common_stuff, 0));
+
     player_entity->set_horizontal_flip(true);
     player_entity->demo_anim();
 }
