@@ -24,6 +24,7 @@ const voice_clips &sb_commentary::get_clips(const dragon &dragon){
 }
 
 void sb_commentary::play_sound(const bn::sound_item &item){
+    BN_LOG("commentary timer: ", _timer);
     if(_timer == 0 && item != bn::sound_items::dummy){
         item.play(_volume);
         _timer = 255;
@@ -88,6 +89,7 @@ void sb_commentary::ignite_peasant(const dragon &dragon){
 }
 
 void sb_commentary::ignite_cottage(const dragon &dragon){
+    BN_LOG("ignite cottage quote!");
     if(percent_chance(20))
         play_sound(get_clips(dragon).ignitecottage);
 }

@@ -9,6 +9,7 @@
 #include "bn_sprite_items_firebreath.h"
 #include "serif_fonts.h"
 #include "create_dragon.h"
+#include "dragon_data.h"
 
 
 //this class is terrible! But it's the best I've got 
@@ -60,18 +61,24 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }else if(_sesh.get_level() == 13){
         //create a parade of 9 trogdors
         bn::vector<dragon, NUM_DRAGONS> unlocked = common_stuff.available_dragons();
+        if(unlocked.size() > 1)
+        {
+            write_text("parade of dragons");
+        }
+        
+
+        bn::fixed floor_y = dragons[0].height / 2;
         for(int z = 0; z < 9; z++){
+            dragon dtype = unlocked.at(z % unlocked.size());
+            bn::fixed ycor = floor_y - (dragons[(int)dtype].height / 2);
+
             _cutscene_objects.emplace_back(
-                create_player(unlocked.at(z % unlocked.size()), 140 + 40 * z, 
-                    0, sesh, false,_common_stuff));
+                create_player(dtype, 140 + 50 * z, 
+                    ycor, sesh, false,_common_stuff));
             _cutscene_objects.at(z)->set_horizontal_flip(true);                
-            _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
+            _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 50*z, ycor);                
         }
     }else if(_sesh.get_level() == 17){
-        //dancin' time
-
-        //TODO - This crashes the game, need to consolidate
-        // other text palettes maybe.
         _common_stuff.update_achievement("twees", 0);
 
         for(int z=0; z < 10; z++){

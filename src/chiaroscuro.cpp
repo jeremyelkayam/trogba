@@ -1,4 +1,5 @@
 #include "chiaroscuro.h"
+#include "dragon_data.h"
 #include "bn_sprite_items_chiaroscuro.h"
 
 #define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 8, bn::sprite_items::chiaroscuro.tiles_item(), 0, 1, 2, 3, 4, 1)
@@ -8,7 +9,7 @@
 namespace trog { 
 
 chiaroscuro::chiaroscuro(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-    player(xcor, ycor, TROG_TROGDOR_WIDTH, TROG_TROGDOR_HEIGHT, TROG_TROGDOR_SPEED, 
+    player(xcor, ycor, TROG_TROGDOR_WIDTH, dragons[(int)dragon::CHIAROSCURO].height, TROG_TROGDOR_SPEED, 
         bn::fixed_point(17, -12), sesh, 
         iframes, bn::sprite_items::chiaroscuro, 15, common_stuff, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 8, 
@@ -102,10 +103,6 @@ void chiaroscuro::update_firebreath()
     {
         _breath_offset.set_y(-10);
     }
-
-    BN_LOG("graphics index ", index);
-
-    BN_LOG("offset ", _breath_offset.y());
 
     player::update_firebreath();
 }

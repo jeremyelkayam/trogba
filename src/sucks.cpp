@@ -1,4 +1,5 @@
 #include "sucks.h"
+#include "dragon_data.h"
 #include "bn_sprite_items_sucks.h"
 #include "bn_sprite_items_sucksweat.h"
 #include "bn_sprite_items_shockwave.h"
@@ -12,7 +13,7 @@
 namespace trog { 
 
 sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, unsigned int  initial_trogmeter) : 
-    player(xcor, ycor, TROG_SUCKS_WIDTH, TROG_SUCKS_HEIGHT, TROG_SUCKS_SPEED, 
+    player(xcor, ycor, TROG_SUCKS_WIDTH, dragons[(int)dragon::SUCKS].height, TROG_SUCKS_SPEED, 
         bn::fixed_point(42, 1),
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
     _sweat(bn::sprite_items::sucksweat.create_sprite(0,0)),

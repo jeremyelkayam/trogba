@@ -18,6 +18,7 @@ struct dragon_data
     const char *name, *ability, *join_phrase;
     const bn::music_item jingle;
     const bn::regular_bg_item smile, dead;
+    const bn::fixed height;
 };
 
 
@@ -29,7 +30,8 @@ constexpr const dragon_data dragons[4] =
         "Strikes Again!",
         bn::music_items::trog,
         bn::regular_bg_items::trogsmile,
-        bn::regular_bg_items::trogdead
+        bn::regular_bg_items::trogdead,
+        34
     },
     {
         "S IS FOR SUCKS",
@@ -37,7 +39,8 @@ constexpr const dragon_data dragons[4] =
         "",
         bn::music_items::sucks,
         bn::regular_bg_items::sucksmile,
-        bn::regular_bg_items::suckdead
+        bn::regular_bg_items::suckdead,
+        40
     },
     {
         "CHIAROSCURO",
@@ -45,7 +48,8 @@ constexpr const dragon_data dragons[4] =
         "Improves on your Methods",
         bn::music_items::trog,
         bn::regular_bg_items::chiarosmile,
-        bn::regular_bg_items::chiarodead
+        bn::regular_bg_items::chiarodead,
+        34,
     },
     {
         "WORMDINGLER",
@@ -53,7 +57,8 @@ constexpr const dragon_data dragons[4] =
         "Gives A Care!",
         bn::music_items::wormdingler,
         bn::regular_bg_items::wormsmile,
-        bn::regular_bg_items::wormdead
+        bn::regular_bg_items::wormdead,
+        16
     }
 };
 

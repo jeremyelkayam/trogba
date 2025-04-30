@@ -48,20 +48,16 @@
 
 
 #define TROG_TROGDOR_WIDTH  24
-#define TROG_TROGDOR_HEIGHT 34
 #define TROG_TROGDOR_SPEED bn::fixed(0.87)
 
 //todo: edit this
 #define TROG_SUCKS_WIDTH  28
-#define TROG_SUCKS_HEIGHT 40
 #define TROG_SUCKS_SPEED bn::fixed(0.7)
 
 #define TROG_WORM_WIDTH  42
-#define TROG_WORM_HEIGHT 16
 #define TROG_WORM_SPEED bn::fixed(0.87)
 
 #define TROG_CHIARO_WIDTH  24
-#define TROG_CHIARO_HEIGHT 34
 #define TROG_CHIARO_SPEED bn::fixed(0.7)
 
 //the radius of the S is for sucks dragon's stomp's area of effect in pixels 
@@ -183,4 +179,3 @@
 #define TROG_GAMEOVER_BEAT_THAT_SCORE 1000
 #define TROG_GAMEOVER_SECRET_SCORE 2000
 #define TROG_GAMEOVER_SUPER_SECRET_SCORE 5000
-
