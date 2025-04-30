@@ -11,7 +11,7 @@ namespace trog {
 wormdingler::wormdingler(bn::fixed xcor, bn::fixed ycor, 
     session_info &sesh, bool iframes, common_stuff &common_stuff, 
     uint8_t initial_trogmeter) : 
-    player(xcor, ycor, TROG_WORM_WIDTH, dragons[(int)dragon::WORMDINGLER].height, TROG_WORM_SPEED, 
+    player(xcor, ycor, WDATA.width, WDATA.height, WDATA.speed, 
         bn::fixed_point(31, 0), sesh, 
         iframes, bn::sprite_items::wormdingler, 5, common_stuff, 
         initial_trogmeter), 

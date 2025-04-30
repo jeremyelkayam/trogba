@@ -5,7 +5,7 @@
 namespace trog { 
 
 trogdor::trogdor(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-    player(xcor, ycor, TROG_TROGDOR_WIDTH, dragons[(int)dragon::TROGDOR].height, TROG_TROGDOR_SPEED, 
+    player(xcor, ycor, TDATA.width, TDATA.height, TDATA.speed, 
         bn::fixed_point(TROG_FIREBREATH_XOFFSET, TROG_FIREBREATH_YOFFSET), sesh, 
         iframes, bn::sprite_items::trogdor, 8, common_stuff, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 2, 

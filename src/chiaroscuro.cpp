@@ -9,7 +9,7 @@
 namespace trog { 
 
 chiaroscuro::chiaroscuro(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, uint8_t initial_trogmeter) : 
-    player(xcor, ycor, TROG_TROGDOR_WIDTH, dragons[(int)dragon::CHIAROSCURO].height, TROG_TROGDOR_SPEED, 
+    player(xcor, ycor, CDATA.width, CDATA.height, CDATA.speed, 
         bn::fixed_point(17, -12), sesh, 
         iframes, bn::sprite_items::chiaroscuro, 15, common_stuff, initial_trogmeter), 
     _walkcycle(bn::create_sprite_animate_action_forever(_sprite, 8, 

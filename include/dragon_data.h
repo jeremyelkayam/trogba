@@ -10,6 +10,11 @@
 #include "bn_regular_bg_items_wormsmile.h"
 #include "bn_regular_bg_items_wormdead.h"
 
+#define TDATA dragons[(int)dragon::TROGDOR]
+#define SDATA dragons[(int)dragon::SUCKS]
+#define CDATA dragons[(int)dragon::CHIAROSCURO]
+#define WDATA dragons[(int)dragon::WORMDINGLER]
+
 namespace trog
 {
 
@@ -18,7 +23,7 @@ struct dragon_data
     const char *name, *ability, *join_phrase;
     const bn::music_item jingle;
     const bn::regular_bg_item smile, dead;
-    const bn::fixed height;
+    const bn::fixed width, height, speed;
 };
 
 
@@ -31,7 +36,7 @@ constexpr const dragon_data dragons[4] =
         bn::music_items::trog,
         bn::regular_bg_items::trogsmile,
         bn::regular_bg_items::trogdead,
-        34
+        24, 34, TROG_TROGDOR_SPEED //0.87
     },
     {
         "S IS FOR SUCKS",
@@ -40,7 +45,7 @@ constexpr const dragon_data dragons[4] =
         bn::music_items::sucks,
         bn::regular_bg_items::sucksmile,
         bn::regular_bg_items::suckdead,
-        40
+        28, 40, 0.7
     },
     {
         "CHIAROSCURO",
@@ -49,16 +54,16 @@ constexpr const dragon_data dragons[4] =
         bn::music_items::trog,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead,
-        34,
+        24, 34, 0.87
     },
     {
         "WORMDINGLER",
         "extendo tongue",
-        "Gives A Care!",
+        "Uh... Not gonna touch this one",
         bn::music_items::wormdingler,
         bn::regular_bg_items::wormsmile,
         bn::regular_bg_items::wormdead,
-        16
+        42, 16, 0.7
     }
 };
 
