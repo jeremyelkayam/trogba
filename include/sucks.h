@@ -58,8 +58,8 @@ namespace trog {
 
             virtual void demo_anim() override final {stomp();} 
 
-            void enable_breath();
-            void disable_breath();
+            virtual void enable_breath() override final;
+            virtual void disable_breath() override final;
 
             virtual void update_win_anim();
             bn::fixed_point foot_pos();

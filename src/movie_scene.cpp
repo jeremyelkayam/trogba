@@ -59,8 +59,11 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 
     }else if(_sesh.get_level() == 13){
         //create a parade of 9 trogdors
+        bn::vector<dragon, NUM_DRAGONS> unlocked = common_stuff.available_dragons();
         for(int z = 0; z < 9; z++){
-            _cutscene_objects.emplace_back(new trogdor(140 + 40 * z, 0, sesh, false,_common_stuff));
+            _cutscene_objects.emplace_back(
+                create_player(unlocked.at(z % unlocked.size()), 140 + 40 * z, 
+                    0, sesh, false,_common_stuff));
             _cutscene_objects.at(z)->set_horizontal_flip(true);                
             _cutscene_objects.at(z)->move_to(_cutscene_length, -500 + 40*z, 0);                
         }

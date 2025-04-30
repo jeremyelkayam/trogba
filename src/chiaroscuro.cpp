@@ -60,6 +60,16 @@ void chiaroscuro::stop_burninating(){
     change_walkcycle(NORM_WLKCL);
 }
 
+void chiaroscuro::enable_breath(){
+    player::enable_breath();
+    change_walkcycle(BURN_WLKCL);
+}
+
+void chiaroscuro::disable_breath(){
+    player::disable_breath();
+    change_walkcycle(NORM_WLKCL);
+}
+
 void chiaroscuro::demo_anim()
 {
     _roar = 

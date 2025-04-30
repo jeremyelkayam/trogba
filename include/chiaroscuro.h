@@ -27,6 +27,9 @@ namespace trog {
 
             virtual void update_win_anim() override;
 
+            virtual void enable_breath() override final;
+            virtual void disable_breath() override final;
+
 
     };
 }
