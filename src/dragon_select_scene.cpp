@@ -219,7 +219,7 @@ dragon_option::dragon_option(const dragon &dtype, session_info &sesh,
     }
     else 
     {
-        player_entity.reset(create_dragon(dtype,0,0,sesh, false, 
+        player_entity.reset(create_player(dtype,0,0,sesh, false, 
             common_stuff, 0));
         name = dragons[(int)dtype].name;
         ability = dragons[(int)dtype].ability;

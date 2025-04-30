@@ -96,7 +96,7 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     serif_red.generate(0, -74, "NEW CHARACTER UNLOCKED", _text_sprites);
 
     
-    player_entity.reset(create_dragon(dtype,xcor,ycor,sesh, false, 
+    player_entity.reset(create_player(dtype,xcor,ycor,sesh, false, 
         common_stuff, 0));
 
     player_entity->set_horizontal_flip(true);

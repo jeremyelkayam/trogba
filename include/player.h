@@ -92,8 +92,8 @@ namespace trog {
             unsigned int get_burninating_time(){return _burninate_time;}
             unsigned int get_burninating_length(){return _burninate_length;}
             virtual void set_visible(const bool &visible) override;
-            void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
-            void disable_breath(){_breath.disable();}
+            virtual void enable_breath(){_breath.enable(); _breath.set_horizontal_flip(_sprite.horizontal_flip());}
+            virtual void disable_breath(){_breath.disable();}
             virtual void set_horizontal_flip(const bool &horizontal_flip);
 
             void drop_trogmeter(){if(_trogmeter > 0) _trogmeter--;}

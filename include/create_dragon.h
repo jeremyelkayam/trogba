@@ -8,7 +8,7 @@
 
 namespace trog
 {
-    static player * create_dragon(const dragon &dtype,
+    static player * create_player(const dragon &dtype,
         const bn::fixed &xcor, const bn::fixed &ycor,
         session_info &sesh, const bool &iframes, 
         common_stuff &common_stuff, 
@@ -29,7 +29,7 @@ namespace trog
                 return new wormdingler(xcor, ycor, sesh, iframes,
                     common_stuff, initial_trogmeter);
             default:
-                BN_ERROR("Invalid dragon type passed into create_dragon function");
+                BN_ERROR("Invalid dragon type passed into create_player function");
         }
         return nullptr;
     }

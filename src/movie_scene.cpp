@@ -31,11 +31,11 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }
 
     if(_sesh.get_level() == 5){
-        player* mytrogdor = create_dragon(_sesh.get_dragon(),
+        player* mydragon = create_player(_sesh.get_dragon(),
             140,0,_sesh,false,_common_stuff);
-        mytrogdor->set_horizontal_flip(true);
-        mytrogdor->move_to_and_back(_cutscene_length, -50, 0);
-        _cutscene_objects.emplace_back(mytrogdor);
+        mydragon->set_horizontal_flip(true);
+        mydragon->move_to_and_back(_cutscene_length, -50, 0);
+        _cutscene_objects.emplace_back(mydragon);
                 
         knight* redknight = new knight(190,-5,false,_common_stuff.rand);
         redknight->move_to_and_back(_cutscene_length, 0, -5);
@@ -52,7 +52,8 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }else if(_sesh.get_level() == 9){
         //todo: make the iframes param optional on trogdor.
         // and maybe more optional params in the future
-        player* mytrogdor = new trogdor(20,0,_sesh,false,_common_stuff);
+        player* mytrogdor = create_player(_sesh.get_dragon(),
+            20,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 

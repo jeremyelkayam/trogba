@@ -893,7 +893,7 @@ void play_scene::redraw_pause_menu_option(){
 
 void play_scene::respawn(const bool &iframes, const uint8_t &init_trogmeter){
 
-    _player.reset(create_dragon(_sesh.get_dragon(), 
+    _player.reset(create_player(_sesh.get_dragon(), 
         TROG_PLAYER_SPAWN_X, TROG_PLAYER_SPAWN_Y + 
         (_sesh.get_level() == 27 || _sesh.get_level() == 59 ||
              _sesh.get_level() == 91) ? 10 : 0, 

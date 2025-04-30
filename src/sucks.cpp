@@ -136,6 +136,8 @@ void sucks::update_anim(){
         }
     }
 
+    
+    _breath_offset.set_y(attachments_y_offset());
     update_firebreath();
 }
 
@@ -154,6 +156,18 @@ void sucks::start_burninating(){
 
 void sucks::stop_burninating(){
     player::stop_burninating();
+    change_walkcycle(NORM_WLKCL);
+}
+
+void sucks::enable_breath()
+{
+    player::enable_breath();
+    change_walkcycle(FLMTHW_WLKCL);
+}
+
+void sucks::disable_breath()
+{
+    player::disable_breath();
     change_walkcycle(NORM_WLKCL);
 }
 

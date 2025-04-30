@@ -97,6 +97,8 @@ namespace trog {
 
             void update();
 
+            bn::vector<dragon, NUM_DRAGONS> available_dragons();
+
         private:
         
             achievements_mgr _acm;

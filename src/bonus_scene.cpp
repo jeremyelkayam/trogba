@@ -10,7 +10,7 @@ namespace trog {
 bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
         _bg(bn::regular_bg_items::cottageinterior.create_bg(TROG_COTTAGEINTERIOR_BG_X, TROG_COTTAGEINTERIOR_BG_Y)),
         _exit(110,0,20,20),
-        _player(create_dragon(sesh.get_dragon(),
+        _player(create_player(sesh.get_dragon(),
             80,10, sesh, false, common_stuff)),
         _common_stuff(common_stuff),
         _sesh(sesh) {
