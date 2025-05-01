@@ -50,7 +50,7 @@ constexpr const dragon_data dragons[4] =
     {
         "CHIAROSCURO",
         "speedy",
-        "Improves on your Methods",
+        "Improves on your Methods!",
         bn::music_items::trog,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead,

@@ -183,9 +183,14 @@ void common_stuff::update_achievement(const bn::string<8> &tag,
     if(newly_achieved)
     {
         int num_achievements = _acm.total_unlocked();
+        int num_unlocked_chars = available_dragons().size();
 
-        if(num_achievements % 6 == 0)
+
+        if(num_achievements % 6 == 0 && 
+            num_achievements / 6 >= num_unlocked_chars )
+        {
             unlock_random_character();
+        }
     }
     
 }

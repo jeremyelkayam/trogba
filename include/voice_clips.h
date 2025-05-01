@@ -77,7 +77,7 @@ const voice_clips all_clips[4] {
         bn::sound_items::ss_happiest, //high score
         bn::sound_items::ss_finest_hour, // secret score
         bn::sound_items::ss_foodanymore, //arrowed
-        bn::sound_items::ss_sadflying, //majesty
+        bn::sound_items::ss_works_every_time, //majesty
         bn::sound_items::dummy, //majesty troghammer
         bn::sound_items::ss_ohcottage, //ignite cottage
         bn::sound_items::ss_chiaroscuro, //selection
@@ -89,15 +89,15 @@ const voice_clips all_clips[4] {
             bn::sound_items::ss_eatyou, 
             bn::sound_items::ss_burn_whatever},
         //level beat
-        {bn::sound_items::ss_works_every_time, 
+        {bn::sound_items::dummy, 
             bn::sound_items::ss_great},
         //ignite peasant
         {bn::sound_items::ss_peasantburnination, 
             bn::sound_items::ss_hesburninating},
         //stomp
-        {bn::sound_items::ss_betterplague, 
+        {bn::sound_items::dummy, 
             bn::sound_items::ss_thing_away, 
-            bn::sound_items::dummy}
+            bn::sound_items::ss_sadflying}
     },
     //wormdingler
     {

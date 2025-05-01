@@ -91,7 +91,11 @@ int main()
                 scene.reset();
                 bn::core::update();
             }
-            if(!common_stuff->newly_unlocked.empty())
+            if(!common_stuff->newly_unlocked.empty()
+            //don't show the character unlock scene if one of these is next
+                && *next_scene != trog::scene_type::HISCORES
+                && *next_scene != trog::scene_type::CREDITS
+                && *next_scene != trog::scene_type::MOVIE)
             {
                 hud.hide();
                 scene.reset(new trog::char_unlock_scene(sesh, 
