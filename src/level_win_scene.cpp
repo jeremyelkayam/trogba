@@ -87,7 +87,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
 
     _happy_dragon.set_item(dragons[(int)sesh.get_dragon()].smile);
-    dragons[(int)sesh.get_dragon()].jingle.play_jingle(common_stuff.savefile.options.sound_vol);
+    dragons[(int)sesh.get_dragon()].jingle.play(common_stuff.savefile.options.sound_vol);
 
     serif_white.generate(nicework_x, nicework_y, "nice work!", _nicework_text_sprites);
     serif_white.generate(nicework_x - 3, nicework_y + 20, "LEVEL", _levelbeated_text_sprites);

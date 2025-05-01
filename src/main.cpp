@@ -10,6 +10,7 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_sound.h>
+#include <bn_music.h>
 #include <bn_timer.h>
 #include <bn_bg_palettes.h>
 #include "enums.h"
@@ -79,6 +80,7 @@ int main()
         }
         if(next_scene){
             bn::sound::stop_all();
+            bn::music::stop();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
 
             if(!(next_scene == trog::scene_type::OPTIONS || 

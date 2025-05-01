@@ -207,7 +207,8 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         arch->set_bow_drawn(true);
         _cutscene_objects.emplace_back(arch);
     }else if(_sesh.get_level() == 51){
-        _cutscene_objects.emplace_back(new trogdor(-25,10,_sesh,false,_common_stuff));
+        _cutscene_objects.emplace_back(create_player(
+            _sesh.get_dragon(),-25,10,_sesh,false,_common_stuff));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
         _cutscene_length *= 1.75; 
@@ -375,7 +376,11 @@ bn::optional<scene_type> movie_scene::update(){
         }else if(_timer == 50){
             ((player *) _cutscene_objects.at(0).get())->disable_breath();
         }else if(_timer == _cutscene_length / 2 + 30){
-            _common_stuff.commentary.roast_kerrek();
+            if(_sesh.get_dragon() == dragon::TROGDOR || 
+                _sesh.get_dragon() == dragon::SUCKS)
+            {
+                _common_stuff.commentary.roast_kerrek();
+            }
         }
     }
 
@@ -408,8 +413,19 @@ bn::optional<scene_type> movie_scene::update(){
             bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
             write_text("cast");
         }else if(_timer == credits_start_time + credits_interval){
-            write_text("trogdor");
-            _cutscene_objects.emplace_back(new trogdor(0, 0, _sesh, false,_common_stuff));
+            dragon dtype = _sesh.get_dragon();
+            bn::string<64> name = 
+                common_stuff::to_lower(
+                    dragons[(int)dtype].name);
+            if(dtype == dragon::CHIAROSCURO ||
+                dtype == dragon::SUCKS)
+            {
+                name = "the " + name + " dragon";
+            }
+            write_text(name);
+            _cutscene_objects.emplace_back(
+                create_player(dtype, 0, 0, _sesh, 
+                false,_common_stuff));
         }else if(_timer == credits_start_time + credits_interval*2){
             _cutscene_objects.at(1)->set_visible(false);
             write_text("perez");
