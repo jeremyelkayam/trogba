@@ -166,9 +166,9 @@ bn::optional<scene_type> dragon_select_scene::update(){
                 {
                     ((player *)_selectable_dragons.at(_index).player_entity.get())
                         ->demo_anim();
-                    dragons[(int)dtype].jingle.play_jingle(
+                    dragons[(int)dtype].jingle.play(
                         _common_stuff.savefile.options.sound_vol
-                        * vol_modifier);
+                        * vol_modifier, false);
                 }
 
 
