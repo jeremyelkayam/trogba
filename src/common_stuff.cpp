@@ -414,4 +414,38 @@ bn::vector<dragon, NUM_DRAGONS> common_stuff::available_dragons()
     return result;
 }
 
+bn::string<64> common_stuff::to_lower(const bn::string<64> &s)
+{
+    bn::string<64> result;
+    for(const char &c : s)
+    {
+        if('A' <= c && c <= 'Z')
+        {
+            result.push_back(c - ('Z' - 'z'));
+        }
+        else
+        {
+            result.push_back(c);
+        }
+    }
+    return result;
+}
+
+bn::string<64> common_stuff::to_upper(const bn::string<64> &s)
+{
+    bn::string<64> result;
+    for(const char &c : s)
+    {
+        if('a' <= c && c <= 'z')
+        {
+            result.push_back(c + ('Z' - 'z'));
+        }
+        else
+        {
+            result.push_back(c);
+        }
+    }
+    return result;
+}
+
 }

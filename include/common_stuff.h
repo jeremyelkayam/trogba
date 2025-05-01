@@ -99,6 +99,9 @@ namespace trog {
 
             bn::vector<dragon, NUM_DRAGONS> available_dragons();
 
+            static bn::string<64> to_lower(const bn::string<64> &s);
+            static bn::string<64> to_upper(const bn::string<64> &s);
+
         private:
         
             achievements_mgr _acm;

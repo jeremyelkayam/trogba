@@ -59,8 +59,9 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _cutscene_objects.emplace_back(mytrogdor);
 
     }else if(_sesh.get_level() == 13){
-        //create a parade of 9 trogdors
-        bn::vector<dragon, NUM_DRAGONS> unlocked = common_stuff.available_dragons();
+        //create a parade of 9 of the available dragons
+        bn::vector<dragon, NUM_DRAGONS> unlocked = 
+            common_stuff.available_dragons();
         if(unlocked.size() > 1)
         {
             write_text("parade of dragons");
@@ -98,16 +99,33 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             k->animate_faster();
             _cutscene_objects.emplace_back(k);
         }
-        player *p = new trogdor(0, 0, sesh, false,_common_stuff);
+        player *p = create_player(_sesh.get_dragon(), 0, 0, sesh, false,_common_stuff);
         p->flip_every(15);
         _cutscene_objects.emplace_back(p);
 
     }else if(_sesh.get_level() == 21){
-        player* mytrogdor = new trogdor(0,0,_sesh,false,_common_stuff);
+
+        switch(sesh.get_dragon())
+        {
+            case dragon::SUCKS:
+                write_text("stomp it out, sucka");
+                break;
+            case dragon::CHIAROSCURO:
+                write_text("chiaro scream!!");
+                break;
+            case dragon::WORMDINGLER:
+                write_text("what is wrong with that thing");
+                break;
+            default:
+                break;
+        }
+
+        player* mytrogdor = create_player(_sesh.get_dragon(), 0,0,_sesh,false,_common_stuff);
         mytrogdor->demo_anim();
         _cutscene_objects.emplace_back(mytrogdor);
     }else if(_sesh.get_level() == 25){
-        player* mytrogdor = new trogdor(80,0,_sesh,false,_common_stuff);
+        player* mytrogdor = create_player(_sesh.get_dragon(), 
+            80,0,_sesh,false,_common_stuff);
         mytrogdor->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(mytrogdor);
 
@@ -119,17 +137,46 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }else if(_sesh.get_level() == 31){
         for(int z = 0; z < 2 ; ++z){
             int sign = z == 0 ? 1 : -1;
-            peasant *p = new peasant(130*sign, 0, 0, 0, _dummy_cottage);
-            p->move_to(_cutscene_length / 3, 20*sign, 0);
+            peasant *p = new peasant(130 * sign, 0, 0, 0, _dummy_cottage);
+            p->move_to(_cutscene_length / 3, 20 * sign, 0);
             p->update_anim_action_when_not_moving(true);
             _cutscene_objects.emplace_back(p);
         }
     }else if(_sesh.get_level() == 35){
-        for(int z = 0; z < 2; ++z){
-            player *trog = new trogdor(-140, 30*z, sesh, false,_common_stuff);
-            trog->move_by(1 + 0.5*z, 0);
-            _cutscene_objects.emplace_back(trog);
+        
+        bn::vector<dragon, NUM_DRAGONS> unlocked = 
+            common_stuff.available_dragons();
+
+
+        player *first_dragon = create_player(_sesh.get_dragon(),
+        -140, 0, sesh, false,_common_stuff);
+        first_dragon->move_by(1, 0);
+        _cutscene_objects.emplace_back(first_dragon);
+
+        dragon dtype = _sesh.get_dragon();
+
+        if(unlocked.size() > 1)
+        {
+            //DELETE the current dragon from our vector
+            for(auto it = unlocked.begin(); it != unlocked.end(); ++it)
+            {
+                if(*it == _sesh.get_dragon())
+                {
+                    unlocked.erase(it);
+                }
+            }
+            dtype = unlocked.at(common_stuff.rand.get_int(unlocked.size()));
+
+            bn::string<64> title = "go ";
+            title += dragons[(int)_sesh.get_dragon()].name;
+            title += "!";
+            write_text(common_stuff::to_lower(title));
         }
+        player *second_dragon = create_player(dtype,
+            -140, 30, sesh, false,_common_stuff);
+        second_dragon->move_by(1.5, 0);
+        _cutscene_objects.emplace_back(second_dragon);
+        
         for(int z = 0; z < 7 ; ++z){
             peasant *p = new peasant(-60 + 20*z, -25 + (13*z) % 5, 0, 0, _dummy_cottage);
             p->jump(10 + z*2, 5, true);
