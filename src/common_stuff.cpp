@@ -398,7 +398,10 @@ void common_stuff::unlock_random_character()
         }
     }
 
-    unlock_character(locked_dragons.at(rand.get_int(0, locked_dragons.size())));
+    if(locked_dragons.size() > 0)
+    {
+        unlock_character(locked_dragons.at(rand.get_int(0, locked_dragons.size())));
+    }
 }
 
 bn::vector<dragon, NUM_DRAGONS> common_stuff::available_dragons()
