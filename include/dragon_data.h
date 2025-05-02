@@ -54,7 +54,7 @@ constexpr const dragon_data dragons[4] =
         bn::music_items::trog,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead,
-        36, 40, 1.1
+        36, 40, 1
     },
     {
         "WORMDINGLER",

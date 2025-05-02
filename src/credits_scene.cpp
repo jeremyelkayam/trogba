@@ -16,9 +16,9 @@ credits_scene::credits_scene(common_stuff &common_stuff, const scene_type &last_
     _last_scene(last_scene),
     _small_white_gen(small_font_white),
     _common_stuff(common_stuff) {
-    setup_credits();
     _small_white_gen.set_z_order(1);
 
+    setup_credits();
 }
 
 void credits_scene::setup_credits(){
@@ -39,9 +39,9 @@ void credits_scene::setup_credits(){
         bn::string<64>("version ") + TROG_SEMANTIC_VERSION_NUMBER,
         "created by Arkbuilder Interactive",
         "",
-        // "Programming by Jeremy Elkayam",
-        // "New graphics & sound by Jeremy Elkayam",
-        // "New design elements by Jeremy Elkayam",
+        "Programming by Jeremy Elkayam",
+        "New graphics & sound by Jeremy Elkayam",
+        "New design elements by Jeremy Elkayam",
         "",
         "",
         "Dust effects by WeenterMakesGames",
@@ -119,7 +119,6 @@ bn::optional<scene_type> credits_scene::update(){
     //have to do this because we construct the new scene before discarding the old one
     //and if we do that, then we risk taking up too much ram
 
-
     bn::optional<scene_type> result;
 
     bn::fixed speed = 0.5;
@@ -140,10 +139,14 @@ bn::optional<scene_type> credits_scene::update(){
     for(credit_line &line : _credits ){
         line.ycor = line.ycor - speed;
 
-        if(line.ycor < -100 && !line.sprites.empty()){
-            line.sprites.clear();
-        }else if(line.ycor > 90 && line.sprites.empty()){
-            _small_white_gen.generate(0, line.ycor,line.str, line.sprites);
+        if(line.ycor < -100){
+            if(!line.sprites.empty())
+                line.sprites.clear();
+        }else if(line.ycor < 90 && line.sprites.empty()
+                && line.str != bn::string<64>("")){
+            BN_LOG("drawing line: ", line.str);
+            BN_LOG("at ycor: ", line.ycor);
+            _small_white_gen.generate(0, line.ycor,line.str, line.sprites);    
         }
         //todo refactor this into a method of the class
         for(bn::sprite_ptr &sprite : line.sprites) {
