@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_display.h>
 #include <bn_colors.h>
 #include "constants.h"
@@ -106,7 +105,6 @@ void entity::update_anim(){
         }
     }
     if(_move_by_action){
-        BN_LOG("updating move by action");
         _move_by_action->update();
     }
     if(_scale_action && !_scale_action->done()){
@@ -199,7 +197,6 @@ bool entity::going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &bo
 }
 
 void entity::move_by(const bn::fixed &x, const bn::fixed &y){
-    BN_LOG("help me");
     _move_by_action.reset(new bn::sprite_move_by_action(_sprite, x, y));
 }
 

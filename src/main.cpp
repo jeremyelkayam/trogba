@@ -6,7 +6,6 @@
  */
 
 #include <bn_core.h>
-#include <bn_log.h>
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
 #include <bn_sound.h>
@@ -220,7 +219,6 @@ int main()
         }
 
         if(!kicked && bn::keypad::select_pressed()){
-            BN_LOG("kick. TROGADOR");
             bn::sound_items::kick.play(common_stuff->savefile.options.sound_vol);
             kicktimer.restart();
             kicked=true;

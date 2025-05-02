@@ -1,6 +1,5 @@
 #include <bn_keypad.h>
 #include <bn_string.h>
-#include <bn_log.h>
 
 #include "options_scene.h"
 #include "constants.h"

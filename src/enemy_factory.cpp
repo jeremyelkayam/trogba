@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_string.h>
 #include "enemy_factory.h"
 

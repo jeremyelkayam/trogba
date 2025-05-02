@@ -1,5 +1,4 @@
 #include "kerrek.h"
-#include <bn_log.h>
 
 namespace trog { 
 

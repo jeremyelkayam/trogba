@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include "moneybag.h"
 #include "bn_sprite_items_moneybag.h"
 #include "constants.h"

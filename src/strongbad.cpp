@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include "strongbad.h"
 
 namespace trog { 

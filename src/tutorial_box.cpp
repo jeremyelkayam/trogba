@@ -1,7 +1,6 @@
 #include "tutorial_box.h"
 #include "constants.h"
 #include "common_stuff.h"
-#include <bn_log.h>
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "small_fonts.h"

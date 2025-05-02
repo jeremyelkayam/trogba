@@ -1,6 +1,5 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
-#include <bn_log.h>
 #include <bn_string.h>
 
 #include "bn_regular_bg_items_hi_scores_bg.h"
@@ -47,7 +46,6 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
 
         //Propagate the player's score within the scores list (if applicable)
         if(_sesh.get_score() > _high_scores_table[7].get_score()){
-            BN_LOG("you got a high score: ", _sesh.get_score());
             _high_scores_table[7] = high_score_entry("         ", _sesh.get_level(), _sesh.get_score());
             _table_index=7;
             for(int z = 6; z >= 0; --z){
@@ -61,10 +59,6 @@ hiscores_scene::hiscores_scene(session_info &sesh, common_stuff &common_stuff, c
             //move our cursor into position
             _cursor_sprite.set_y(-42 + _table_index*15);
         }
-
-
-        BN_LOG("score", _sesh.get_score());
-        BN_LOG("score entry at index ", _table_index);
         _cursor_sprite.set_visible(false);
 
         _sesh.reset();

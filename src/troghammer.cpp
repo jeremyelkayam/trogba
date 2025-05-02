@@ -96,7 +96,6 @@ void troghammer::init_current_state(){
         _sprite.set_visible(true);
         //spawn at the top of the screen
         unsigned int spawnpos = _random.get_int(4);
-        BN_LOG("spawn position: ", spawnpos);
         switch(spawnpos){
             case 0:
                 short ycor;

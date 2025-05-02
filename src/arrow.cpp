@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include "arrow.h"
 
 namespace trog { 
@@ -41,7 +40,6 @@ void arrow::update_anim(){
         move_to(30, _sprite.x() + (40 * sign), _sprite.y() + 160);  
     }
 
-    // BN_LOG("update arrow anim");
     if(_rotating){
         int8_t sign = _sprite.horizontal_flip() ? 1 : -1;
         short new_angle = _sprite.rotation_angle().integer() - (10 * sign);

@@ -1,6 +1,5 @@
 #include <bn_string.h>
 #include <bn_keypad.h>
-#include <bn_log.h>
 #include <bn_sound_items.h>
 
 #include "menu_scene.h"
@@ -51,8 +50,6 @@ menu_option::menu_option(const bn::fixed &x, const bn::fixed &y,
     //split into lines doesn't *quite* apply here b/c it's based on the 8x8 font 
     //but for our purposes it's fine
     bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(text);
-
-    BN_LOG("lines size: ", lines.size());
     
     red_generator.set_center_alignment();
     gray_generator.set_center_alignment();

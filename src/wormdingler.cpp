@@ -60,9 +60,6 @@ void wormdingler::update(){
         _breath_offset.set_x(32 - 2 * 
             abs(_walkcycle.current_index() - 
                 (_walkcycle.graphics_indexes().size()) / 2) - 2);
-
-        BN_LOG(_walkcycle.current_index());
-
     }
     else if(!_tongue && !dead() && bn::keypad::a_pressed())
     {

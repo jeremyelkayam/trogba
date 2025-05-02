@@ -1,5 +1,4 @@
 #include <bn_keypad.h>
-#include <bn_log.h>
 #include <bn_bg_palettes.h>
 #include <bn_blending.h>
 

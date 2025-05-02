@@ -2,7 +2,6 @@
 #include "bn_regular_bg_items_cottageinterior.h"
 #include "create_dragon.h"
 
-#include <bn_log.h>
 #include <bn_sound_items.h>
 
 namespace trog {
@@ -66,7 +65,6 @@ bn::optional<scene_type> bonus_scene::update(){
 
     //if you walk to the exit you must return to play scene
     if(_player->get_hitbox().intersects(_exit) && _money.empty()){
-        BN_LOG("return to play scene");
         result = scene_type::PLAY;
     }
 

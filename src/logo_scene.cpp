@@ -1,6 +1,5 @@
 #include <bn_keypad.h>
 #include <bn_sound_items.h>
-#include <bn_log.h>
 #include <bn_sprite_palettes.h>
 
 #include "bn_regular_bg_items_videlectrix.h"

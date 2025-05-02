@@ -2,7 +2,6 @@
 #include "constants.h"
 #include "bn_sprite_items_achievement_box_narrow.h"
 #include "small_fonts.h"
-#include <bn_log.h>
 #include <bn_sound_items.h>
 #include "common_stuff.h"
 

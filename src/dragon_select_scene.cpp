@@ -10,7 +10,6 @@
 #include <bn_music_items.h>
 
 #include <bn_keypad.h>
-#include <bn_log.h>
 
 #define SPACING 70
 #define BACK_SPACING 45

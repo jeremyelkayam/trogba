@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include "heart.h"
 
 namespace trog { 

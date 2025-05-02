@@ -1,5 +1,3 @@
-#include <bn_log.h>
-
 #include "bloody_text.h"
 #include "bn_sprite_items_blood_droplet_short_16px.h"
 #include "bn_sprite_items_blood_droplet_long_16px.h"

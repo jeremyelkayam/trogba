@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_string.h>
 #include "archer_factory.h"
 
@@ -22,7 +21,6 @@ namespace trog
     {
         if (_archers.full())
         {
-            BN_LOG("NO MORE SPACE FOR NEW ARCHERS. TRY AGAIN LATER");
         }
         else
         {

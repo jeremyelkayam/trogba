@@ -1,4 +1,3 @@
-#include <bn_log.h>
 #include <bn_color_effect.h>
 #include <bn_sprite_palette_ptr.h>
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "entity.h"
 #include <bn_assert.h>
-#include <bn_log.h>
 
 namespace trog {
     class freezable : public entity { 

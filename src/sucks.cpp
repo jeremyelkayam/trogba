@@ -4,7 +4,6 @@
 #include "bn_sprite_items_sucksweat.h"
 #include "bn_sprite_items_shockwave.h"
 #include <bn_keypad.h>
-#include <bn_log.h>
 #include <bn_colors.h>
 
 #define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 1, 2, 3, 2, 1, 0)

@@ -1,6 +1,5 @@
 #include <bn_string.h>
 #include <bn_keypad.h>
-#include <bn_log.h>
 #include <bn_sound_items.h>
 
 #include "main_menu_scene.h"

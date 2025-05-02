@@ -1,5 +1,4 @@
 #include <bn_math.h>
-#include <bn_log.h>
 #include "firebreath.h"
 #include "bn_assert.h"
 #include "sb_commentary.h"

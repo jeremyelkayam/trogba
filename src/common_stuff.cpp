@@ -1,6 +1,5 @@
 #include <bn_blending.h>
 #include <bn_math.h>
-#include <bn_log.h>
 #include "common_stuff.h"
 #include "trogdor_variable_32x64_sprite_font.h"
 namespace trog { 
