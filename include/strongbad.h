@@ -16,7 +16,6 @@ namespace trog {
             bn::sprite_animate_action<2> _anim;
             bool _advance_anim;
 
-            
         public:
             strongbad(int xcor, int ycor);
 			virtual void update() final;

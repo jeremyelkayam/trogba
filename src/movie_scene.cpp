@@ -1,11 +1,9 @@
 #include <bn_keypad.h>
 #include <bn_sram.h>
 #include "movie_scene.h"
+#include "bubs.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
-#include "bn_sprite_items_strongbad.h"
-#include "bn_sprite_items_knight.h"
-#include "bn_sprite_items_firebreath.h"
 #include "serif_fonts.h"
 #include "create_dragon.h"
 #include "dragon_data.h"
@@ -209,7 +207,11 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             _sesh.get_dragon(),-25,10,_sesh,false,_common_stuff));
         _cutscene_objects.emplace_back(new kerrek(25, 0));   
 
-        _cutscene_length *= 1.75; 
+        if(_sesh.get_dragon() == dragon::TROGDOR || 
+        _sesh.get_dragon() == dragon::SUCKS)
+        {
+            _cutscene_length *= 1.75;
+        }
     }else if(_sesh.get_level() == 101){
         // CREDITS
 
@@ -223,6 +225,19 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _common_stuff.commentary.im_in_this_game();
 
         _cutscene_length = 1350;
+    }else if(_sesh.get_level() == 60){
+
+
+        player* mydragon = create_player(_sesh.get_dragon(),
+            -140,12,_sesh,false,_common_stuff);
+        // mydragon->set_horizontal_flip(true);
+        mydragon->move_to(_cutscene_length, 150, 12);
+        _cutscene_objects.emplace_back(mydragon);
+
+        
+        bubs *b = new bubs(0, -12);
+        _cutscene_objects.emplace_back(b);
+
     }else BN_ERROR("Provided level does not have an associated cutscene: ",
         _sesh.get_level());
 }

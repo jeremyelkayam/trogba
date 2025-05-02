@@ -23,8 +23,11 @@ common_stuff::common_stuff() :
     cutscene_levels.emplace_back(51, "smote that kerrek!");
     cutscene_levels.emplace_back(101, "ending");
 
+    //NEW ONES...
+    cutscene_levels.emplace_back(60, "checkitout checkitout");
 
-    bn::array<bool, 13> base_unlocked_cutscenes;
+
+    bn::array<bool, 20> base_unlocked_cutscenes;
     base_unlocked_cutscenes.fill(false);
 
     bn::array<bool, 4> base_unlocked_dragons;
@@ -149,7 +152,7 @@ bn::string<9> high_score_entry::get_name() const {
 }
 
 //N.B. : yes, binary search WOULD be faster here. However, this is running on an array
-// of 13 elements and only runs once per level on the completion screen. 
+// of 20 elements and only runs once per level on the completion screen. 
 // I think linear search will be fine for our purposes. 
 bool common_stuff::level_has_cutscene(const uint8_t &current_level) const {
     for(const bn::pair<uint8_t, bn::string<64>> entry : cutscene_levels) {

@@ -76,7 +76,7 @@ namespace trog {
 
         bn::array<long, 64> achievements;
 
-        bn::array<bool, 13> unlocked_cutscenes;
+        bn::array<bool, 20> unlocked_cutscenes;
 
         saved_stats stats;
 

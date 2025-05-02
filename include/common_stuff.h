@@ -23,7 +23,7 @@ namespace trog {
         public:
             bn::sprite_text_generator big_generator;
             bn::random rand;
-            bn::vector<bn::pair<uint8_t, bn::string<32>>, 13> cutscene_levels;
+            bn::vector<bn::pair<uint8_t, bn::string<32>>, 20> cutscene_levels;
             bn::array<char, 8> default_format_tag;
 
             //todo make it a queue

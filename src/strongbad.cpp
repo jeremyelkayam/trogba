@@ -14,6 +14,7 @@ strongbad::strongbad(int xcor, int ycor) :
 void strongbad::update(){
     entity::update();
 }
+
 void strongbad::update_anim(){
     entity::update_anim();
 
