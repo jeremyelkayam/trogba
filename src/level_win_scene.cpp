@@ -50,7 +50,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
 
     bn::string<7> line3 = "BEATEN!";
     //3% chance that the game misspells it lol
-    if(common_stuff.percent_chance(3) == 0){
+    if(common_stuff.percent_chance(3)){
         line3 = "BEATED!";
     }
 
@@ -70,7 +70,6 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
             _nose_smoke.set_position(30, 30);
             nicework_y = -8;
             nicework_x = 78;
-            // jingle = bn::sound_items::sucks_jingle;
         break;
         case dragon::CHIAROSCURO:
             _nose_smoke.set_position(10, -10);
@@ -78,6 +77,7 @@ level_win_scene::level_win_scene(session_info &sesh, common_stuff &common_stuff)
         case dragon::WORMDINGLER:
             _nose_smoke.set_position(30, -40);
             nicework_y = -30;
+            nicework_x = 80;
         break;
         default:
             BN_ERROR("Invalid dragon type found in session info");
