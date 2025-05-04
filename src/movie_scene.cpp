@@ -28,6 +28,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }
 
     if(_sesh.get_level() == 5){
+        //stompin' good
         player* mydragon = create_player(_sesh.get_dragon(),
             140,0,_sesh,false,_common_stuff);
         mydragon->set_horizontal_flip(true);
@@ -131,6 +132,10 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         }
 
     }else if(_sesh.get_level() == 31){
+
+        write_text(common_stuff::to_lower(
+            dragons[(int)_sesh.get_dragon()].name) + " incognito");
+
         for(int z = 0; z < 2 ; ++z){
             int sign = z == 0 ? 1 : -1;
             peasant *p = new peasant(130 * sign, 0, 0, 0, _dummy_cottage);
@@ -225,8 +230,9 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _common_stuff.commentary.im_in_this_game();
 
         _cutscene_length = 1350;
-    }else if(_sesh.get_level() == 60){
+    }else if(_sesh.get_level() == 55){
 
+        _serif_white.generate(0, -48, "checkitout", _text_sprites);
 
         player* mydragon = create_player(_sesh.get_dragon(),
             -140,12,_sesh,false,_common_stuff);
@@ -235,6 +241,39 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _cutscene_objects.emplace_back(mydragon);
 
         
+        bubs *b = new bubs(0, -12);
+        _cutscene_objects.emplace_back(b);
+
+    }else if(_sesh.get_level() == 59){
+        //stompin' not so good
+        player* mydragon = create_player(_sesh.get_dragon(),
+            -50,0,_sesh,false,_common_stuff);
+        mydragon->move_to_and_back(_cutscene_length, 140, 0);
+        mydragon->enable_breath();
+        _cutscene_objects.emplace_back(mydragon);
+                
+        knight* redknight = new knight(0,-5,false,_common_stuff.rand);
+        redknight->move_to_and_back(_cutscene_length, 190, -5);
+        redknight->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(redknight);
+
+        knight* blueknight = new knight(30, 5,false,_common_stuff.rand);
+        blueknight->move_to_and_back(_cutscene_length, 220, 5);
+        blueknight->set_horizontal_flip(true);
+        _cutscene_objects.emplace_back(blueknight);
+
+    }else if(_sesh.get_level() == 71){
+
+        write_text("checkitout checkitout");
+
+        _serif_white.generate(0, -48, "checkitout checkitout", _text_sprites);
+
+        player* mydragon = create_player(_sesh.get_dragon(),
+            140,12,_sesh,false,_common_stuff);
+        mydragon->set_horizontal_flip(true);
+        mydragon->move_to(_cutscene_length, -150, 12);
+        _cutscene_objects.emplace_back(mydragon);
+
         bubs *b = new bubs(0, -12);
         _cutscene_objects.emplace_back(b);
 

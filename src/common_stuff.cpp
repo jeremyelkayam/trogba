@@ -24,7 +24,11 @@ common_stuff::common_stuff() :
     cutscene_levels.emplace_back(101, "ending");
 
     //NEW ONES...
-    cutscene_levels.emplace_back(60, "checkitout checkitout");
+    cutscene_levels.emplace_back(55, "checkitout checkitout");
+    cutscene_levels.emplace_back(59, "stompin' not so good");
+    cutscene_levels.emplace_back(63, "stack 'em to the heavens");
+    cutscene_levels.emplace_back(67, "i'll upset your balance!");
+    cutscene_levels.emplace_back(71, "checkitout 2");
 
 
     bn::array<bool, 20> base_unlocked_cutscenes;
