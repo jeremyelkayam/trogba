@@ -247,8 +247,8 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
     }else if(_sesh.get_level() == 59){
         //stompin' not so good
         player* mydragon = create_player(_sesh.get_dragon(),
-            -50,0,_sesh,false,_common_stuff);
-        mydragon->move_to_and_back(_cutscene_length, 140, 0);
+            -70,0,_sesh,false,_common_stuff);
+        mydragon->move_to_and_back(_cutscene_length, 120, 0);
         mydragon->enable_breath();
         _cutscene_objects.emplace_back(mydragon);
                 
@@ -433,6 +433,26 @@ bn::optional<scene_type> movie_scene::update(){
             {
                 _common_stuff.commentary.roast_kerrek();
             }
+        }
+    }
+
+    if(_sesh.get_level() == 59 ){
+        if(_timer == (_cutscene_length / 2) - 1){
+            ((player *) _cutscene_objects.at(0).get())->disable_breath();
+            troghammer *t = new troghammer(bn::fixed_point(160, 0), false,
+                59,_common_stuff.rand);      
+            t->set_visible(true);
+            t->set_scale(1);
+            t->move_to(_cutscene_length / 2, -30, 0);
+            _cutscene_objects.emplace_back(t);
+        }
+        //brute force fix to a shit bug
+        if(_timer >= _cutscene_length - 1)
+        {
+
+            _cutscene_objects.at(0)->set_horizontal_flip(true);
+            _cutscene_objects.at(1)->set_horizontal_flip(false);
+            _cutscene_objects.at(2)->set_horizontal_flip(false);
         }
     }
 
