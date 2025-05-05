@@ -25,8 +25,8 @@ namespace trog{
         bn::vector<cvoption, 20> _options_vec;
         bn::regular_bg_ptr _scroll;
         bn::sprite_text_generator _black_generator, _red_generator;
-
-        uint8_t _index;
+        int _top_line, _index;
+        static constexpr const int MAX_LINES_VISIBLE = 13;
 
         void update_selection();
         void create_line(bn::sprite_text_generator &gen, int index);
