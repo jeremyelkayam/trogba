@@ -2,6 +2,8 @@
 #include <bn_sram.h>
 #include "movie_scene.h"
 #include "bubs.h"
+#include "king.h"
+#include "ratherdashing.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "serif_fonts.h"
@@ -232,7 +234,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _cutscene_length = 1350;
     }else if(_sesh.get_level() == 55){
 
-        _serif_white.generate(0, -48, "checkitout", _text_sprites);
+        _serif_white.generate(0, -46, "checkitout", _text_sprites);
 
         player* mydragon = create_player(_sesh.get_dragon(),
             -140,12,_sesh,false,_common_stuff);
@@ -262,11 +264,24 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         blueknight->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(blueknight);
 
+    }else if(_sesh.get_level() == 67){
+
+        
+        write_text("i'll upset your balance,");
+
+        _serif_white.generate(0, -46, "my lord!", _text_sprites);
+        _cutscene_objects.emplace_back(
+            new king(-30, 0)
+        );
+        _cutscene_objects.emplace_back(
+            new ratherdashing(30, 10)
+        );
+
     }else if(_sesh.get_level() == 71){
 
         write_text("checkitout checkitout");
 
-        _serif_white.generate(0, -48, "checkitout checkitout", _text_sprites);
+        _serif_white.generate(0, -46, "checkitout checkitout", _text_sprites);
 
         player* mydragon = create_player(_sesh.get_dragon(),
             140,12,_sesh,false,_common_stuff);
