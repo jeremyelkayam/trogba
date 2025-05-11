@@ -21,14 +21,16 @@ common_stuff::common_stuff() :
     cutscene_levels.emplace_back(43, "2 cottages");
     cutscene_levels.emplace_back(47, "a funny joke");
     cutscene_levels.emplace_back(51, "smote that kerrek!");
-    cutscene_levels.emplace_back(101, "ending");
 
     //NEW ONES...
     cutscene_levels.emplace_back(55, "checkitout checkitout");
     cutscene_levels.emplace_back(59, "stompin' not so good");
-    cutscene_levels.emplace_back(63, "stack 'em to the heavens");
+    cutscene_levels.emplace_back(63, "stack 'em to the...");
     cutscene_levels.emplace_back(67, "i'll upset your balance!");
     cutscene_levels.emplace_back(71, "checkitout 2");
+
+    //old one
+    cutscene_levels.emplace_back(101, "ending");
 
 
     bn::array<bool, 20> base_unlocked_cutscenes;

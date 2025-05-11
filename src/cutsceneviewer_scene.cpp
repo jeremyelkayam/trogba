@@ -11,6 +11,7 @@
 #include "bn_sprite_items_volume_graph.h"
 #include "small_fonts.h"
 #include "serif_fonts.h"
+#include "dragon_data.h"
 
 namespace trog {
 
@@ -63,11 +64,20 @@ cutsceneviewer_scene::cutsceneviewer_scene(
                 _trans_atts
             )
         ),
+        _left_icon(bn::sprite_items::small_font_red.create_sprite(70, 0, 27)),
+        _right_icon(bn::sprite_items::small_font_red.create_sprite(94, 0, 29)),
+        _head_icon(dragons[(int)sesh.get_dragon()].head_icon.create_sprite(80,0)),
         _index(0),
         _top_ycor(top_ycor)
 {
     _black_generator.set_z_order(1);
     _selected_palette.set_rotate_count(2);
+
+    _left_icon.set_blending_enabled(true);
+    _left_icon.set_palette(_norm_palette);
+    _right_icon.set_blending_enabled(true);
+    _right_icon.set_palette(_norm_palette);
+    _head_icon.set_blending_enabled(true);
     
     bn::sprite_text_generator serif_gen(serif_font_red); 
     serif_gen.set_center_alignment();
@@ -127,6 +137,19 @@ void cutsceneviewer_scene::update_selection(){
             s.set_palette(pal);
         }
     }
+
+    bn::fixed ycor = _options_vec.at(_index).lv_text_sprites.at(0).y();
+
+    _left_icon.set_y(ycor);
+    _right_icon.set_y(ycor);
+    _head_icon.set_y(ycor);
+
+    bool visible = (_index != _options_vec.size() - 1 
+        && _common_stuff.available_dragons().size() > 1);
+
+    _left_icon.set_visible(visible);
+    _right_icon.set_visible(visible);
+    _head_icon.set_visible(visible);
 }
 
 bn::optional<scene_type> cutsceneviewer_scene::update(){
@@ -143,6 +166,41 @@ bn::optional<scene_type> cutsceneviewer_scene::update(){
             if(_index == _options_vec.size()) _index = 0;
         }
         update_selection();
+    }
+
+    if(bn::keypad::left_pressed() || bn::keypad::right_pressed())
+    {
+        bn::vector<dragon, NUM_DRAGONS> avail_dragons = 
+            _common_stuff.available_dragons();
+        int current_dragon_index = 0;
+        while(avail_dragons.at(current_dragon_index) != 
+            _sesh.get_dragon())
+        {
+            ++current_dragon_index;
+        }
+
+        if(bn::keypad::left_pressed())
+        {
+            --current_dragon_index;
+        }
+        else if(bn::keypad::right_pressed())
+        {
+            ++current_dragon_index;
+        }
+
+        if(current_dragon_index < 0)
+        {
+            current_dragon_index += avail_dragons.size();
+        }
+        else if(current_dragon_index >= avail_dragons.size())
+        {
+            current_dragon_index -= avail_dragons.size();
+        }
+
+        _sesh.set_dragon(avail_dragons.at(current_dragon_index));
+
+        _head_icon.set_item(dragons[(int)avail_dragons.at(current_dragon_index)].head_icon);
+
     }
 
     if(bn::keypad::a_pressed()){
@@ -202,7 +260,12 @@ void cutsceneviewer_scene::move_all(const bn::fixed &move_by)
         {
             s.set_y(s.y() + move_by);
         }
-    }
+    }    
+
+    _left_icon.set_y(_left_icon.y() + move_by);
+    _right_icon.set_y(_right_icon.y() + move_by);
+    _head_icon.set_y(_head_icon.y() + move_by);
+
 }
 
 

@@ -31,6 +31,7 @@ namespace trog{
         bn::sprite_palette_ptr _norm_palette, _selected_palette;
         bn::array<bn::blending_transparency_attributes, bn::display::height()> _trans_atts;
         bn::blending_transparency_attributes_hbe_ptr _bta_hbe;
+        bn::sprite_ptr _left_icon, _right_icon, _head_icon;
 
         int _index;
         static constexpr const int SPACING = 12;
