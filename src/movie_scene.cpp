@@ -163,7 +163,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         if(unlocked.size() > 1)
         {
             //DELETE the current dragon from our vector
-            for(auto it = unlocked.begin(); it != unlocked.end(); ++it)
+            for(auto it = unlocked.begin(); it < unlocked.end(); ++it)
             {
                 if(*it == _sesh.get_dragon())
                 {
@@ -267,6 +267,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _cutscene_objects.emplace_back(blueknight);
 
     }else if(_sesh.get_level() == 63){
+        write_text("stack 'em to the heavens!");
 
         _cutscene_objects.emplace_back(
             new marshie(0, 300)
@@ -528,6 +529,11 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
     if(_sesh.get_level() == 101){
+        if(_timer == 0)
+        {
+            _common_stuff.unlock_cutscene_at_level(101);
+            _common_stuff.save();
+        }
         strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
         short credits_start_time = 560, credits_interval = 70;
         if(_timer == 120){
