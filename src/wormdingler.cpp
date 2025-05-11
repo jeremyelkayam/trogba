@@ -57,9 +57,8 @@ void wormdingler::update(){
     
     if(burninating()){
         _tongue.reset();
-        _breath_offset.set_x(32 - 2 * 
-            abs(_walkcycle.current_index() - 
-                (_walkcycle.graphics_indexes().size()) / 2) - 2);
+
+
     }
     else if(!_tongue && !dead() && bn::keypad::a_pressed())
     {
@@ -218,6 +217,15 @@ void tongue::set_visible(const bool &visible)
     {
         sprite.set_visible(visible);
     }
+}
+
+void wormdingler::update_firebreath()
+{
+    _breath_offset.set_x(32 - 2 * 
+        abs(_walkcycle.current_index() - 
+        (_walkcycle.graphics_indexes().size()) / 2) - 2);
+    
+    player::update_firebreath();
 }
 
 }

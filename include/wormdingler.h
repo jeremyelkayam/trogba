@@ -55,6 +55,8 @@ class tongue : public entity {
 
             virtual void kill_peasant(peasant &peasant) 
                 override final;
+                
+            virtual void update_firebreath() override final;
 
 
     };
