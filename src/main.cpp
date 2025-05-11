@@ -43,7 +43,8 @@ int main()
     bn::unique_ptr<trog::scene> scene;
     bn::unique_ptr<trog::scene> previous_play_scene;
     bn::unique_ptr<trog::scene> next_menu_scene;
-    bn::optional<trog::scene_type> next_scene = trog::scene_type::LOGO;
+    bn::optional<trog::scene_type> next_scene = 
+        trog::scene_type::LOGO;
     bn::optional<trog::scene_type> last_scene;
 
     
@@ -61,6 +62,8 @@ int main()
 
     trog::hud hud(sesh, *common_stuff, TROG_TROGMETER_MAX);
     hud.hide();
+
+    bn::unique_ptr<bn::fixed> cv_scene_top_y;
 
 
     while(true)
@@ -82,9 +85,18 @@ int main()
             bn::music::stop();
             logo_scene = (*next_scene == trog::scene_type::LOGO);
 
-            if(!(next_scene == trog::scene_type::OPTIONS || 
-                 next_scene == trog::scene_type::BONUS ||
-                 next_scene == trog::scene_type::HISCORES 
+            
+            if(last_scene == trog::scene_type::CUTSCENE_VIEWER
+                && *next_scene == trog::scene_type::MOVIE)
+            {
+                cv_scene_top_y.reset(new bn::fixed(
+                    ((trog::cutsceneviewer_scene *) scene.get()
+                )->top_ycor()));
+            }
+
+            if(!(*next_scene == trog::scene_type::OPTIONS || 
+                 *next_scene == trog::scene_type::BONUS ||
+                 *next_scene == trog::scene_type::HISCORES 
                 ))
             {
                 scene.reset();
@@ -197,7 +209,16 @@ int main()
                 }
                 case trog::scene_type::CUTSCENE_VIEWER: {
                     hud.hide();
-                    scene.reset(new trog::cutsceneviewer_scene(sesh, *common_stuff));
+                    if(!cv_scene_top_y)
+                    {
+                        cv_scene_top_y.reset(new bn::fixed(
+                            -48
+                        ));
+                    }
+                    scene.reset(
+                        new trog::cutsceneviewer_scene(sesh, 
+                            *common_stuff, *cv_scene_top_y));
+                    cv_scene_top_y.reset();
                     break;
                 }
                 case trog::scene_type::EXTRAS: {
