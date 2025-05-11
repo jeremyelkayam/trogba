@@ -1,9 +1,11 @@
 #include <bn_keypad.h>
 #include <bn_sram.h>
+#include <bn_log.h>
 #include "movie_scene.h"
 #include "bubs.h"
 #include "king.h"
 #include "ratherdashing.h"
+#include "marshie.h"
 #include "sb_commentary.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "serif_fonts.h"
@@ -264,6 +266,12 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         blueknight->set_horizontal_flip(true);
         _cutscene_objects.emplace_back(blueknight);
 
+    }else if(_sesh.get_level() == 63){
+
+        _cutscene_objects.emplace_back(
+            new marshie(0, 300)
+        );
+
     }else if(_sesh.get_level() == 67){
 
         
@@ -470,7 +478,55 @@ bn::optional<scene_type> movie_scene::update(){
             _cutscene_objects.at(2)->set_horizontal_flip(false);
         }
     }
+    if(_sesh.get_level() == 63 )
+    {
+        int delay_time = 4;
+        if(_timer % delay_time == 0)
+        {
+            int t = _timer / delay_time;
+            BN_LOG("t", t);
 
+
+            for(int z = 0; z < t / 2; ++z){
+                bn::fixed xcor = 105 - (30 * z);
+                bn::fixed ycor = 90 - (20 * bn::fixed(t / 2).floor_integer()) + 
+                    (20 * z);
+
+                if(xcor > 0 && ycor > -50)
+                {
+                    if(t % 2 == 0)
+                    {
+                        xcor = -xcor;
+                    }
+                    BN_LOG("MAKE KNIGHT AT ", xcor,", ", ycor);
+                    
+                    entity* e;
+                    int rn = t % 6;
+                    
+                    if(rn == 0 || rn == 1)
+                    {
+                        e = new knight(xcor, ycor, false, _common_stuff.rand);
+                    }
+                    else if(rn == 2)
+                    {
+                        e = new troghammer(bn::fixed_point(xcor, ycor),
+                            59, false, _common_stuff.rand);
+                        e->set_visible(true);
+                        e->set_scale(1);
+                    }
+                    else
+                    {
+                        e = new peasant(xcor, ycor, 0, 0, _dummy_cottage);
+                    }
+                    e->put_above();
+                    e->squish(8);
+                    e->set_z_order(BACK_ZORDER);
+                    _cutscene_objects.emplace_back(e);
+
+                }                
+            }
+        }
+    }
     if(_sesh.get_level() == 101){
         strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
         short credits_start_time = 560, credits_interval = 70;

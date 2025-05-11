@@ -21,7 +21,7 @@ namespace trog{
     class movie_scene : public scene{ 
     protected:
 
-        bn::vector<bn::unique_ptr<entity>, 20> _cutscene_objects;
+        bn::vector<bn::unique_ptr<entity>, 60> _cutscene_objects;
         bn::vector<bn::sprite_ptr, 20> _text_sprites;
 
         bn::sprite_text_generator _serif_white;

@@ -59,6 +59,10 @@ namespace trog{
         void set_scale(const bn::fixed &scale) {_sprite.set_scale(scale);}
 
         void put_above() {_sprite.put_above();}
+        void put_below() {_sprite.put_below();}
+
+        
+        void set_z_order(const int &zorder) {_sprite.set_z_order(zorder);}
 
         void gray_out();
 
