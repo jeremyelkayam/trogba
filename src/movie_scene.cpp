@@ -1,6 +1,7 @@
 #include <bn_keypad.h>
 #include <bn_sram.h>
 #include <bn_log.h>
+#include <bn_sound.h>
 #include "movie_scene.h"
 #include "bubs.h"
 #include "king.h"
@@ -543,19 +544,26 @@ bn::optional<scene_type> movie_scene::update(){
         }
     }
     if(_sesh.get_level() == 101){
+        int delay = (_sesh.get_dragon() == dragon::TROGDOR) ? 0 :
+             _common_stuff.available_dragons().size();
+        unsigned int credits_start_time = 560, credits_interval = 70;
         if(_timer == 0)
         {
             _common_stuff.unlock_cutscene_at_level(101);
             _common_stuff.save();
+            
+            _cutscene_length = 1350 + credits_interval * (delay 
+                + (_sesh.get_dragon() != dragon::TROGDOR
+                 && _sesh.troghammer_enabled()));
         }
         strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
-        short credits_start_time = 560, credits_interval = 70;
         if(_timer == 120){
             sbad->talk();
             sbad->stop_animating();
         }else if(_timer == 180){
             sbad->start_animating();
-            bn::sound_items::cutscene_congrats.play(_common_stuff.savefile.options.sound_vol);
+            bn::sound_items::cutscene_congrats.play(
+                _common_stuff.savefile.options.sound_vol);
             write_text("congratulations.");
         }else if(_timer == 250){
             sbad->stop_animating();
@@ -578,7 +586,8 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400
             sbad->set_visible(false);
-            bn::sound_items::cutscene_credits.play(_common_stuff.savefile.options.music_vol);
+            bn::sound_items::cutscene_credits.play(
+                _common_stuff.savefile.options.music_vol);
             write_text("cast");
         }else if(_timer == credits_start_time + credits_interval){
             dragon dtype = _sesh.get_dragon();
@@ -594,32 +603,49 @@ bn::optional<scene_type> movie_scene::update(){
             _cutscene_objects.emplace_back(
                 create_player(dtype, 0, 0, _sesh, 
                 false,_common_stuff));
-        }else if(_timer == credits_start_time + credits_interval*2){
+        }else if(_timer == credits_start_time + 
+                credits_interval*(delay + 2)){
             _cutscene_objects.at(1)->set_visible(false);
             write_text("perez");
             _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, _dummy_cottage));
-        }else if(_timer == credits_start_time + credits_interval*3){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 3)){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             _text_sprites.clear();
             write_text("hackworth");
             peasant *hackworth = new peasant(0, 0, 0, 0, _dummy_cottage);
             hackworth->set_frame(1);
             _cutscene_objects.emplace_back(hackworth);
-        }else if(_timer == credits_start_time + credits_interval*4){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 4)){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("'the steve'");
             peasant *the_steve = new peasant(0, 0, 0, 0, _dummy_cottage);
             the_steve->set_sprite_ablaze();
             _cutscene_objects.emplace_back(the_steve);
-        }else if(_timer == credits_start_time + credits_interval*5){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 5)){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("the blue knight");
             _cutscene_objects.emplace_back(new knight(0, 0, true, _common_stuff.rand));
-        }else if(_timer == credits_start_time + credits_interval*6){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 6)){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("the red knight");
             _cutscene_objects.emplace_back(new knight(0, 0, false, _common_stuff.rand));
-        }else if(_timer == credits_start_time + credits_interval*7){
+        }else if(_sesh.get_dragon() != dragon::TROGDOR && _sesh.troghammer_enabled() && _timer == credits_start_time + credits_interval*
+            (delay + 6 + _sesh.troghammer_enabled())){
+            _cutscene_objects.erase(_cutscene_objects.begin() + 2);
+            write_text("sir tiberius \"trog\" hammer");
+            troghammer *t = new troghammer(
+                bn::fixed_point(0, 0), false,
+                59, _common_stuff.rand);      
+            t->set_visible(true);
+            t->set_scale(1);
+            _cutscene_objects.emplace_back(t);
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 7 + (_sesh.get_dragon() != dragon::TROGDOR
+             && _sesh.troghammer_enabled()))){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("the conjoined");
             _serif_white.generate(0, -48, "archers", _text_sprites);
@@ -628,13 +654,21 @@ bn::optional<scene_type> movie_scene::update(){
                 arch->set_x(10 - 20*i);
                 _cutscene_objects.emplace_back(arch);
             }
-        }else if(_timer == credits_start_time + credits_interval*8){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 8 + (_sesh.get_dragon() != dragon::TROGDOR
+             && _sesh.troghammer_enabled()))){
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("and WorldlyWise");
             _serif_white.generate(0, -48, "as The Kerrek", _text_sprites);
             _cutscene_objects.emplace_back(new kerrek(0, 0));
-        }else if(_timer == credits_start_time + credits_interval*9 + 25){
+        }else if(_timer == credits_start_time + credits_interval*
+            (delay + 9 + (_sesh.get_dragon() != dragon::TROGDOR
+             && _sesh.troghammer_enabled())) + 40){
+            bn::sound::stop_all();
+            bn::sound_items::trogador.play(
+                _common_stuff.savefile.options.sound_vol
+            );
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("keep playing!");
             sbad->set_visible(true);
@@ -648,7 +682,6 @@ bn::optional<scene_type> movie_scene::update(){
             mytrogdor->set_rotation_angle(30);
 
             _common_stuff.update_achievement("win");
-            _common_stuff.unlock_character(dragon::WORMDINGLER);
             if(_sesh.get_score() > 0 && !_sesh.troghammer_enabled() && 
                 _sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
             {
