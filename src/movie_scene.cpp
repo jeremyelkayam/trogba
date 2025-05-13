@@ -63,15 +63,20 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         //create a parade of 9 of the available dragons
         bn::vector<dragon, NUM_DRAGONS> unlocked = 
             common_stuff.available_dragons();
-        if(unlocked.size() > 1)
+        
+        if(_sesh.get_dragon() == dragon::TROGDOR)
         {
-            write_text("parade of dragons");
+            write_text("parade of trogdors");
         }
         
 
         bn::fixed floor_y = dragons[0].height / 2;
         for(int z = 0; z < 9; z++){
-            dragon dtype = unlocked.at(z % unlocked.size());
+            dragon dtype = dragon::TROGDOR;
+            if(_sesh.get_dragon() != dragon::TROGDOR)
+            {
+                dtype = unlocked.at(z % unlocked.size());
+            } 
             bn::fixed ycor = floor_y - (dragons[(int)dtype].height / 2);
 
             _cutscene_objects.emplace_back(
@@ -152,15 +157,15 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         bn::vector<dragon, NUM_DRAGONS> unlocked = 
             common_stuff.available_dragons();
 
+        dragon dtype = _sesh.get_dragon();
 
-        player *first_dragon = create_player(_sesh.get_dragon(),
+        player *first_dragon = create_player(dtype,
         -140, 0, sesh, false,_common_stuff);
         first_dragon->move_by(1, 0);
         _cutscene_objects.emplace_back(first_dragon);
 
-        dragon dtype = _sesh.get_dragon();
 
-        if(unlocked.size() > 1)
+        if(unlocked.size() > 1 && dtype != dragon::TROGDOR)
         {
             //DELETE the current dragon from our vector
             for(auto it = unlocked.begin(); it < unlocked.end(); ++it)
