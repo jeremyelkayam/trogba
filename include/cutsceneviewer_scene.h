@@ -34,6 +34,7 @@ namespace trog{
         bn::sprite_ptr _left_icon, _right_icon, _head_icon;
 
         int _index;
+        unsigned int _hold_timer;
         static constexpr const int SPACING = 12;
         static constexpr const int OPAQUE_START = 26;
         static constexpr const int OPAQUE_END = 143;

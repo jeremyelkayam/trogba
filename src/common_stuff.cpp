@@ -11,7 +11,7 @@ common_stuff::common_stuff() :
 
     cutscene_levels.emplace_back(5, "stompin' good");
     cutscene_levels.emplace_back(9, "fry 'em up dan.");
-    cutscene_levels.emplace_back(13, "parade of trogdors");
+    cutscene_levels.emplace_back(13, "parade of dragons");
     cutscene_levels.emplace_back(17, "dancin' time");
     cutscene_levels.emplace_back(21, "flex it, troggie");
     cutscene_levels.emplace_back(25, "peasant dominoes");

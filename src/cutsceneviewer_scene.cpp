@@ -68,6 +68,7 @@ cutsceneviewer_scene::cutsceneviewer_scene(
         _right_icon(bn::sprite_items::small_font_red.create_sprite(94, 0, 29)),
         _head_icon(dragons[(int)sesh.get_dragon()].head_icon.create_sprite(80,0)),
         _index(0),
+        _hold_timer(0),
         _top_ycor(top_ycor)
 {
     _black_generator.set_z_order(1);
@@ -155,13 +156,23 @@ void cutsceneviewer_scene::update_selection(){
 bn::optional<scene_type> cutsceneviewer_scene::update(){
     bn::optional<scene_type> result;
 
-    //this logic pattern is kinda lame but idk what to do bout it 
-    if(bn::keypad::up_pressed() || bn::keypad::down_pressed()){
+    if(bn::keypad::up_released() || bn::keypad::down_released())
+    {
+        _hold_timer = 0;
+    }
+    if(bn::keypad::up_held() || bn::keypad::down_held())
+    {
+        ++_hold_timer;
+    }
 
-        if(bn::keypad::up_pressed()){
+    //this logic pattern is kinda lame but idk what to do bout it 
+    if(bn::keypad::up_pressed() || bn::keypad::down_pressed() 
+        || (_hold_timer % 5 == 0 && _hold_timer > 10)){
+
+        if(bn::keypad::up_held()){
             if(_index == 0) _index = _options_vec.size();
             _index--;
-        }else if(bn::keypad::down_pressed()){
+        }else if(bn::keypad::down_held()){
             _index++;
             if(_index == _options_vec.size()) _index = 0;
         }
