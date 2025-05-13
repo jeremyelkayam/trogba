@@ -241,7 +241,11 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         strongbad *s = new strongbad(135, 0);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
-        _common_stuff.commentary.im_in_this_game();
+        if(_sesh.get_dragon() == dragon::TROGDOR ||
+            _sesh.get_dragon() == dragon::SUCKS)
+        {
+            _common_stuff.commentary.im_in_this_game();
+        }
 
         _cutscene_length = 1350;
     }else if(_sesh.get_level() == 55){
@@ -564,7 +568,12 @@ bn::optional<scene_type> movie_scene::update(){
             sbad->start_animating();
             _serif_white.generate(0, -36, "good score", _text_sprites);
         }else if(_timer == 380){
-            _common_stuff.commentary.i_sound_realistic();
+            
+            if(_sesh.get_dragon() == dragon::TROGDOR ||
+                _sesh.get_dragon() == dragon::SUCKS)
+            {
+                _common_stuff.commentary.i_sound_realistic();
+            }
         }else if(_timer == 390){
             sbad->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400
@@ -641,7 +650,7 @@ bn::optional<scene_type> movie_scene::update(){
             _common_stuff.update_achievement("win");
             _common_stuff.unlock_character(dragon::WORMDINGLER);
             if(_sesh.get_score() > 0 && !_sesh.troghammer_enabled() && 
-                !_sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
+                _sesh.can_lose_trogmeter() && _sesh.get_dragon() == dragon::TROGDOR)
             {
                 _common_stuff.update_achievement("classic");
             }
