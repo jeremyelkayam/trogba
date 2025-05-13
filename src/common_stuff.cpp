@@ -16,7 +16,7 @@ common_stuff::common_stuff() :
     cutscene_levels.emplace_back(21, "flex it, troggie");
     cutscene_levels.emplace_back(25, "peasant dominoes");
     cutscene_levels.emplace_back(31, "trogdor incognito");
-    cutscene_levels.emplace_back(35, "go trogdor #2!");
+    cutscene_levels.emplace_back(35, "the race");
     cutscene_levels.emplace_back(39, "forbidden peasant love");
     cutscene_levels.emplace_back(43, "2 cottages");
     cutscene_levels.emplace_back(47, "a funny joke");

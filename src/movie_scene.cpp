@@ -165,7 +165,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         _cutscene_objects.emplace_back(first_dragon);
 
 
-        if(unlocked.size() > 1 && dtype != dragon::TROGDOR)
+        if(dtype != dragon::TROGDOR)
         {
             //DELETE the current dragon from our vector
             for(auto it = unlocked.begin(); it < unlocked.end(); ++it)
@@ -181,6 +181,11 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             title += dragons[(int)_sesh.get_dragon()].name;
             title += "!";
             write_text(common_stuff::to_lower(title));
+        }
+        else
+        {
+            
+            write_text("go trogdor #2!");
         }
         player *second_dragon = create_player(dtype,
             -140, 30, sesh, false,_common_stuff);
