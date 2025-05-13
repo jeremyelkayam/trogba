@@ -42,6 +42,8 @@ namespace trog{
         
         void write_text(bn::string<32> str);
 
+        void draw_dragon(const dragon &dtype);
+
     public:
         [[nodiscard]] virtual bn::optional<scene_type> update();
         explicit movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene);

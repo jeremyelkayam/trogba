@@ -545,7 +545,7 @@ bn::optional<scene_type> movie_scene::update(){
     }
     if(_sesh.get_level() == 101){
         int delay = (_sesh.get_dragon() == dragon::TROGDOR) ? 0 :
-             _common_stuff.available_dragons().size();
+             _common_stuff.available_dragons().size() - 2;
         unsigned int credits_start_time = 560, credits_interval = 70;
         if(_timer == 0)
         {
@@ -590,22 +590,48 @@ bn::optional<scene_type> movie_scene::update(){
                 _common_stuff.savefile.options.music_vol);
             write_text("cast");
         }else if(_timer == credits_start_time + credits_interval){
-            dragon dtype = _sesh.get_dragon();
-            bn::string<64> name = 
-                common_stuff::to_lower(
-                    dragons[(int)dtype].name);
-            if(dtype == dragon::CHIAROSCURO ||
-                dtype == dragon::SUCKS)
+            draw_dragon(_sesh.get_dragon());
+        }else if(_sesh.get_dragon() != dragon::TROGDOR && 
+            _timer == credits_start_time + credits_interval*2){
+            _cutscene_objects.at(1)->set_visible(false);
+            draw_dragon(dragon::TROGDOR);
+        }else if(_sesh.get_dragon() != dragon::TROGDOR && 
+            _common_stuff.available_dragons().size() >= 3 &&
+            _timer == credits_start_time + credits_interval*3){
+            _cutscene_objects.erase(_cutscene_objects.begin() + 2);
+            dragon dtype = dragon::TROGDOR;
+            for(int z = 0; z < 3; ++z)
             {
-                name = "the " + name + " dragon";
+                if(_common_stuff.available_dragons().at(z) !=_sesh.get_dragon())
+                {
+                    dtype = _common_stuff.available_dragons().at(z);
+                }
             }
-            write_text(name);
-            _cutscene_objects.emplace_back(
-                create_player(dtype, 0, 0, _sesh, 
-                false,_common_stuff));
+            draw_dragon(dtype);
+        }
+        else if(_sesh.get_dragon() != dragon::TROGDOR && 
+            _common_stuff.available_dragons().size() >= 4 &&
+            _timer == credits_start_time + credits_interval*4){
+            _cutscene_objects.erase(_cutscene_objects.begin() + 2);
+            dragon dtype = dragon::TROGDOR;
+            for(int z = 0; z < 4; ++z)
+            {
+                if(_common_stuff.available_dragons().at(z) !=_sesh.get_dragon())
+                {
+                    dtype = _common_stuff.available_dragons().at(z);
+                }
+            }
+            draw_dragon(dtype);
         }else if(_timer == credits_start_time + 
                 credits_interval*(delay + 2)){
-            _cutscene_objects.at(1)->set_visible(false);
+            if(_sesh.get_dragon() == dragon::TROGDOR)
+            {
+                _cutscene_objects.at(1)->set_visible(false);
+            }
+            else
+            {
+                _cutscene_objects.erase(_cutscene_objects.begin() + 2);
+            }
             write_text("perez");
             _cutscene_objects.emplace_back(new peasant(0, 0, 0, 0, _dummy_cottage));
         }else if(_timer == credits_start_time + credits_interval*
@@ -706,6 +732,22 @@ bn::optional<scene_type> movie_scene::update(){
 
 bool movie_scene::cutscene_over(){
     return _timer >= _cutscene_length;
+}
+
+void movie_scene::draw_dragon(const dragon &dtype)
+{
+    bn::string<64> name = 
+        common_stuff::to_lower(
+            dragons[(int)dtype].name);
+    if(dtype == dragon::CHIAROSCURO ||
+        dtype == dragon::SUCKS)
+    {
+        name = "the " + name + " dragon";
+    }
+    write_text(name);
+    _cutscene_objects.emplace_back(
+        create_player(dtype, 0, 0, _sesh, 
+        false,_common_stuff));
 }
 
 }
