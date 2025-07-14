@@ -12,10 +12,13 @@
 #include "serif_fonts.h"
 #include "create_dragon.h"
 #include "dragon_data.h"
+#include "bn_sprite_items_strongsad.h"
+#include "bn_sprite_items_coach_z.h"
 
 
 //this class is terrible! But it's the best I've got 
-namespace trog{
+namespace trog
+{
 
 movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const scene_type &last_scene) : 
     _serif_white(serif_font_white),
@@ -239,7 +242,18 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         common_stuff.savefile.session.exists = false;
         common_stuff.save();
 
-        strongbad *s = new strongbad(135, 0);
+        //pointer because we can't initialize this
+        bn::sprite_item item = bn::sprite_items::strongbad;
+
+        if(_sesh.get_dragon() == dragon::WORMDINGLER)
+        {
+            item = bn::sprite_items::coach_z;
+        }else if(_sesh.get_dragon() == dragon::CHIAROSCURO)
+        {
+            item = bn::sprite_items::strongsad;
+        }
+
+        end_char *s = new end_char(135, 0, item);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
         if(_sesh.get_dragon() == dragon::TROGDOR ||
@@ -556,24 +570,24 @@ bn::optional<scene_type> movie_scene::update(){
                 + (_sesh.get_dragon() != dragon::TROGDOR
                  && _sesh.troghammer_enabled()));
         }
-        strongbad *sbad = ((strongbad *) _cutscene_objects.at(0).get());
+        end_char *character = ((end_char *) _cutscene_objects.at(0).get());
         if(_timer == 120){
-            sbad->talk();
-            sbad->stop_animating();
+            character->talk();
+            character->stop_animating();
         }else if(_timer == 180){
-            sbad->start_animating();
+            character->start_animating();
             bn::sound_items::cutscene_congrats.play(
                 _common_stuff.savefile.options.sound_vol);
             write_text("congratulations.");
         }else if(_timer == 250){
-            sbad->stop_animating();
+            character->stop_animating();
         }else if(_timer == 280){
-            sbad->start_animating();
+            character->start_animating();
             _serif_white.generate(0, -48, "you got", _text_sprites);
         }else if(_timer == 320){
-            sbad->stop_animating();
+            character->stop_animating();
         }else if(_timer == 340){
-            sbad->start_animating();
+            character->start_animating();
             _serif_white.generate(0, -36, "good score", _text_sprites);
         }else if(_timer == 380){
             
@@ -583,9 +597,9 @@ bn::optional<scene_type> movie_scene::update(){
                 _common_stuff.commentary.i_sound_realistic();
             }
         }else if(_timer == 390){
-            sbad->stop_animating();
+            character->stop_animating();
         }else if(_timer == credits_start_time){ // previously 400
-            sbad->set_visible(false);
+            character->set_visible(false);
             bn::sound_items::cutscene_credits.play(
                 _common_stuff.savefile.options.music_vol);
             write_text("cast");
@@ -697,10 +711,10 @@ bn::optional<scene_type> movie_scene::update(){
             );
             _cutscene_objects.erase(_cutscene_objects.begin() + 2);
             write_text("keep playing!");
-            sbad->set_visible(true);
-            sbad->set_x(30);
-            sbad->set_rotation_angle(330);
-            sbad->set_frame(3);
+            character->set_visible(true);
+            character->set_x(30);
+            character->set_rotation_angle(330);
+            character->set_frame(3);
             player *mytrogdor = ((player *) _cutscene_objects.at(1).get());
             mytrogdor->set_visible(true);
             mytrogdor->set_x(-35);
