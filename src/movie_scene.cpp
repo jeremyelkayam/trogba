@@ -12,8 +12,6 @@
 #include "serif_fonts.h"
 #include "create_dragon.h"
 #include "dragon_data.h"
-#include "bn_sprite_items_strongsad.h"
-#include "bn_sprite_items_coach_z.h"
 
 
 //this class is terrible! But it's the best I've got 
@@ -242,18 +240,9 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
         common_stuff.savefile.session.exists = false;
         common_stuff.save();
 
-        //pointer because we can't initialize this
-        bn::sprite_item item = bn::sprite_items::strongbad;
 
-        if(_sesh.get_dragon() == dragon::WORMDINGLER)
-        {
-            item = bn::sprite_items::coach_z;
-        }else if(_sesh.get_dragon() == dragon::CHIAROSCURO)
-        {
-            item = bn::sprite_items::strongsad;
-        }
-
-        end_char *s = new end_char(135, 0, item);
+        end_char *s = new end_char(135, 0, 
+            dragons[(int)_sesh.get_dragon()].artist_sprite);
         s->move_to(120, 0, 0);
         _cutscene_objects.emplace_back(s);
         if(_sesh.get_dragon() == dragon::TROGDOR ||
@@ -561,6 +550,7 @@ bn::optional<scene_type> movie_scene::update(){
         int delay = (_sesh.get_dragon() == dragon::TROGDOR) ? 0 :
              _common_stuff.available_dragons().size() - 2;
         unsigned int credits_start_time = 560, credits_interval = 70;
+        int idtype = (int)_sesh.get_dragon();
         if(_timer == 0)
         {
             _common_stuff.unlock_cutscene_at_level(101);
@@ -576,19 +566,21 @@ bn::optional<scene_type> movie_scene::update(){
             character->stop_animating();
         }else if(_timer == 180){
             character->start_animating();
-            bn::sound_items::cutscene_congrats.play(
+
+            write_text(dragons[idtype].end_phrase[0]);
+            dragons[idtype].congrats.play(
                 _common_stuff.savefile.options.sound_vol);
-            write_text("congratulations.");
         }else if(_timer == 250){
             character->stop_animating();
         }else if(_timer == 280){
             character->start_animating();
-            _serif_white.generate(0, -48, "you got", _text_sprites);
+            _serif_white.generate(0, -48, dragons[idtype].end_phrase[1], _text_sprites);
         }else if(_timer == 320){
             character->stop_animating();
         }else if(_timer == 340){
             character->start_animating();
-            _serif_white.generate(0, -36, "good score", _text_sprites);
+            
+            _serif_white.generate(0, -36, dragons[idtype].end_phrase[2], _text_sprites);
         }else if(_timer == 380){
             
             if(_sesh.get_dragon() == dragon::TROGDOR ||

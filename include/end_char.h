@@ -17,7 +17,7 @@ namespace trog {
             const bn::sprite_item _item;
 
         public:
-            end_char(int xcor, int ycor, const bn::sprite_item item);
+            end_char(int xcor, int ycor, const bn::sprite_item &item);
 			virtual void update() final;
             virtual void update_anim() final;
             void talk();

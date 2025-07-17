@@ -2,7 +2,7 @@
 
 namespace trog { 
 
-end_char::end_char(int xcor, int ycor, const bn::sprite_item item) : 
+end_char::end_char(int xcor, int ycor, const bn::sprite_item &item) : 
         entity(xcor, ycor, 0, 0, item.create_sprite(xcor, ycor)),
         _anim(bn::create_sprite_animate_action_forever(
                 _sprite, 5, item.tiles_item(),
