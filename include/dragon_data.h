@@ -70,7 +70,7 @@ constexpr const dragon_data dragons[4] =
         "speedy",
         "Improves on your Methods!",
         {"i guess you won.", "you beat", "that score"},
-        bn::music_items::trog,
+        bn::music_items::saddoomy,
         bn::sound_items::ss_congrats,
         bn::sprite_items::chiarohead,
         bn::sprite_items::strongsad,
