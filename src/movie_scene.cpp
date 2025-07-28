@@ -503,35 +503,32 @@ bn::optional<scene_type> movie_scene::update(){
         if(_timer % delay_time == 0)
         {
             int t = _timer / delay_time;
-            BN_LOG("t", t);
-
 
             for(int z = 0; z < t / 2; ++z){
-                bn::fixed xcor = 105 - (30 * z);
-                bn::fixed ycor = 90 - (20 * bn::fixed(t / 2).floor_integer()) + 
-                    (20 * z);
 
-                if(xcor > 0 && ycor > -50)
+                int row = bn::fixed(t / 2).floor_integer() - z;
+                bn::fixed xcor = 105 - (30 * z);
+                bn::fixed ycor = 90 - (20 * row);
+
+                    if(xcor > 0 && ycor > -50)
                 {
                     if(t % 2 == 0)
                     {
                         xcor = -xcor;
                     }
-                    BN_LOG("MAKE KNIGHT AT ", xcor,", ", ycor);
                     
                     entity* e;
-                    int rn = t % 6;
                     
-                    if(rn == 0 || rn == 1)
-                    {
-                        e = new knight(xcor, ycor, false, _common_stuff.rand);
-                    }
-                    else if(rn == 2)
+                    if(row == 4)
                     {
                         e = new troghammer(bn::fixed_point(xcor, ycor),
                             59, false, _common_stuff.rand);
                         e->set_visible(true);
                         e->set_scale(1);
+                    }
+                    else if(row % 2 == 0)
+                    {
+                        e = new knight(xcor, ycor, false, _common_stuff.rand);
                     }
                     else
                     {
