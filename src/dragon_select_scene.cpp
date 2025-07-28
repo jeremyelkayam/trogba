@@ -14,7 +14,7 @@
 #define SPACING 70
 #define BACK_SPACING 45
 #define MSATIME 10 //move selection animation time 
-#define SELY 20
+#define SELY 15
 #define SELSCALE 2
 
 
@@ -26,14 +26,16 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         _selection_timer(0),
         _selection_wait_time(120),
         _left_arrow(
-            bn::sprite_items::half_arrow.create_sprite(-50,40)),
+            bn::sprite_items::half_arrow.create_sprite(-50,35)),
         _right_arrow(
-            bn::sprite_items::half_arrow.create_sprite(50,40)),
+            bn::sprite_items::half_arrow.create_sprite(50,35)),
         _serif_white(serif_font_white),
-        _title(false, 0, -65, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
+        _small_white(small_font_white),
+        _title(false, 0, -68, "CHOOSE A DRAGON", bn::sprite_items::trogdor_variable_8x16_font_gray.palette_item()),
         _sesh(sesh),
         _common_stuff(common_stuff) {
     _serif_white.set_center_alignment();
+    _small_white.set_center_alignment();
     
     _selectable_dragons.emplace_back(dragon::TROGDOR, sesh, common_stuff, true, false);
 
@@ -66,7 +68,12 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
 
 void dragon_select_scene::update_text(){
     _selected_text.clear();
-    _serif_white.generate(0, -40, _selectable_dragons.at(_index).name, _selected_text);
+    _serif_white.generate(0, -43, _selectable_dragons.at(_index).name, _selected_text);
+    if(_index != 0 && !_selectable_dragons.at(_index).locked())
+    {
+        _small_white.generate(0, 73, bn::string<64>("ability: ") 
+            + bn::string<64>(_selectable_dragons.at(_index).ability), _selected_text);
+    }
 }
 
 bn::optional<scene_type> dragon_select_scene::update(){
