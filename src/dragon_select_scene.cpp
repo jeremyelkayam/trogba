@@ -25,7 +25,6 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         _index(0),
         _selection_timer(0),
         _selection_wait_time(120),
-        //todo make bespoke arrows for this screen
         _left_arrow(
             bn::sprite_items::half_arrow.create_sprite(-50,40)),
         _right_arrow(
@@ -52,6 +51,8 @@ dragon_select_scene::dragon_select_scene(session_info &sesh,
         dragon_option &opt = _selectable_dragons.at(i);
         opt.set_x(dragon_xcor(i));
     }
+
+    _selectable_dragons.at(3).player_entity->put_above();
 
     update_text();
 
