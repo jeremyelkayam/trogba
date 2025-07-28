@@ -12,7 +12,8 @@ namespace trog{
 
         unsigned int _last_line2_option;
 
-        bn::sprite_ptr _cursor, _flames, _troghammer_icon, _trogmeter_degrade_icon;
+        bn::sprite_ptr _cursor, _flames, _troghammer_icon, 
+            _trogmeter_degrade_icon, _char_icon;
         bn::sprite_animate_action<4> _flames_anim;
         bn::sprite_scale_to_action _flames_scale;
         bn::optional<bn::sprite_move_to_action> _flames_translate;

@@ -12,6 +12,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_red.h"
 #include "bn_regular_bg_items_main_menu.h"
 #include "small_fonts.h"
+#include "dragon_data.h"
 
 #define SELECTION_ANIM_LENGTH 30
 
@@ -22,8 +23,9 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
         _last_line2_option(2),
         _cursor(bn::sprite_items::trogdorhead.create_sprite(-100,-52)),
         _flames(bn::sprite_items::firebreath.create_sprite(-100,-30)),
-        _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(55,-50)),
-        _trogmeter_degrade_icon(bn::sprite_items::trogmeter_degrade_icon.create_sprite(65,-50)),
+        _troghammer_icon(bn::sprite_items::troghammer_icon.create_sprite(65,-47)),
+        _trogmeter_degrade_icon(bn::sprite_items::trogmeter_degrade_icon.create_sprite(75,-47)),
+        _char_icon(bn::sprite_items::trogdorhead.create_sprite(53,-50)),
         _flames_anim(bn::create_sprite_animate_action_forever(
                     _flames, 10, bn::sprite_items::firebreath.tiles_item(), 0, 1, 2, 3)),
         _flames_scale(_flames, SELECTION_ANIM_LENGTH, 4),
@@ -34,6 +36,7 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
 
     _troghammer_icon.set_visible(false);
     _trogmeter_degrade_icon.set_visible(false);
+    _char_icon.set_visible(false);
 
     _flames.set_z_order(1);
     _cursor.set_z_order(1);
@@ -59,6 +62,10 @@ main_menu_scene::main_menu_scene(session_info &sesh, common_stuff &common_stuff)
 
         _troghammer_icon.set_visible(loaded_sesh.troghammer);
         _trogmeter_degrade_icon.set_visible(loaded_sesh.can_lose_trogmeter);
+
+        _char_icon.set_item(dragons[(int)loaded_sesh.current_dragon].head_icon);
+        _char_icon.set_visible(true);
+
     }else{
         small_gen.generate(0, -26, "no data saved.", _menu_text_sprites);
     }
