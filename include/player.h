@@ -55,8 +55,6 @@ namespace trog {
 
             bn::fixed_point _next_pos;
 
-            virtual bool can_move() {return true;}
-
             virtual void kill_peasant(peasant &peasant);
             
             void change_walkcycle(const bn::isprite_animate_action &walkcycle);
@@ -101,6 +99,10 @@ namespace trog {
             virtual void update_win_anim();
             virtual void demo_anim() {}
 
+            bool moving()
+                {update_next_pos(); return _next_pos != _pos;}
+
+            virtual bool can_move() {return true;}
 
     };
 }

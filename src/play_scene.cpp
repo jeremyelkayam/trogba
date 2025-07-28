@@ -12,6 +12,7 @@
 #include <bn_music_items.h>
 #include <bn_music.h>
 #include <bn_bg_palette_ptr.h>
+#include <bn_log.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
@@ -45,6 +46,7 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
         _total_time(0),
+        _stand_still_time(0),
         _died_on_this_level(false),
         _serif_red_gen(serif_font_red),
         _burninate_pause_time(0),
@@ -194,8 +196,9 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
         bool troghammer_arrived = _troghammer && _troghammer->in_play();
+        BN_LOG("stand still time: ", _stand_still_time);
 
-        if(_stand_still_time < 10)
+        if(_stand_still_time < 20)
         {
             _common_stuff.update_achievement("loafing");
         }
@@ -299,8 +302,9 @@ bn::optional<scene_type> play_scene::update(){
         _common_stuff.update_achievement("daisies", _total_time);
 
         //todo: this can be abused by just running into a wall.
-        if(!_common_stuff.any_dpad_input())
+        if(_player->can_move() && !_player->moving())
         {
+            BN_LOG("stand still time: ", _stand_still_time);
             ++_stand_still_time;
         }
 
