@@ -4,6 +4,7 @@
 
 #include "menu_scene.h"
 #include "serif_fonts.h"
+#include "common_functions.h"
 
 namespace trog {
 
@@ -49,7 +50,7 @@ menu_option::menu_option(const bn::fixed &x, const bn::fixed &y,
 
     //split into lines doesn't *quite* apply here b/c it's based on the 8x8 font 
     //but for our purposes it's fine
-    bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(text);
+    bn::vector<bn::string<64>, 3> lines = split_into_lines(text);
     
     red_generator.set_center_alignment();
     gray_generator.set_center_alignment();

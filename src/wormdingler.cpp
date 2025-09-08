@@ -4,6 +4,7 @@
 #include "bn_sprite_items_wormdingler_tongue.h"
 #include <bn_math.h>
 #include <bn_keypad.h>
+#include "common_functions.h"
 
 namespace trog { 
 

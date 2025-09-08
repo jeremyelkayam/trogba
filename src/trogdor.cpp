@@ -1,6 +1,7 @@
 #include "trogdor.h"
 #include "dragon_data.h"
 #include "bn_sprite_items_trogdor.h"
+#include "common_functions.h"
 
 namespace trog { 
 

@@ -100,15 +100,6 @@ void player::update(){
 
 }
 
-bool player::any_dpad_input() {
-    return (
-        bn::keypad::up_held() ||
-        bn::keypad::down_held() ||
-        bn::keypad::left_held() ||
-        bn::keypad::right_held()
-    );
-}
-
 void player::update_next_pos(){
     _next_pos = _pos;
 

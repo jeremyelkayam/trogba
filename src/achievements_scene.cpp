@@ -7,6 +7,7 @@
 #include "bn_sprite_items_trogdor_variable_8x16_font_gray.h"
 #include "bn_sprite_palette_items_font_yellow.h"
 #include "small_fonts.h"
+#include "common_functions.h"
 
 namespace trog {
 
@@ -165,7 +166,7 @@ bn::optional<scene_type> achievements_scene::update()
         }
     }
 
-    if(_common_stuff.any_dpad_input())
+    if(any_dpad_input())
     {
         update_info_box();
     }
@@ -252,7 +253,8 @@ void achievements_scene::update_info_box()
 
 
     bn::fixed yoffset = 0;
-    for(const bn::string<64> &line : _common_stuff.split_into_lines(
+    for(const bn::string<64> &line : 
+        split_into_lines(
         desc.c_str(), 185))
     {
         _white_gen.generate(-77, -63 + yoffset,

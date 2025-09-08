@@ -15,6 +15,7 @@
 #include "level_data.h"
 #include "dragon_data.h"
 #include "create_dragon.h"
+#include "common_functions.h"
 
 
 namespace trog {
@@ -70,7 +71,8 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     }
 
 
-    for(const bn::string<64> &line : _common_stuff.split_into_lines(
+    //todo: this sucks and should be refactored... 
+    for(const bn::string<64> &line : split_into_lines(
         name.c_str(), 90, serif_font_character_widths))
     {
         serif_yellow.generate(xcor, yoffset,
@@ -79,7 +81,7 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
     }
     yoffset += 3;
 
-    for(const bn::string<64> &line : _common_stuff.split_into_lines(
+    for(const bn::string<64> &line : split_into_lines(
         dd.join_phrase, 90, serif_font_character_widths))
     {
         serif_white.generate(xcor, yoffset,

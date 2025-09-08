@@ -12,6 +12,7 @@
 #include "serif_fonts.h"
 #include "create_dragon.h"
 #include "dragon_data.h"
+#include "common_functions.h"
 
 
 //this class is terrible! But it's the best I've got 
@@ -144,7 +145,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
 
     }else if(_sesh.get_level() == 31){
 
-        write_text(common_stuff::to_lower(
+        write_text(to_lower(
             dragons[(int)_sesh.get_dragon()].name) + " incognito");
 
         for(int z = 0; z < 2 ; ++z){
@@ -182,7 +183,7 @@ movie_scene::movie_scene(session_info &sesh, common_stuff &common_stuff, const s
             bn::string<64> title = "go ";
             title += dragons[(int)_sesh.get_dragon()].name;
             title += "!";
-            write_text(common_stuff::to_lower(title));
+            write_text(to_lower(title));
         }
         else
         {
@@ -740,7 +741,7 @@ bool movie_scene::cutscene_over(){
 void movie_scene::draw_dragon(const dragon &dtype)
 {
     bn::string<64> name = 
-        common_stuff::to_lower(
+        to_lower(
             dragons[(int)dtype].name);
     if(dtype == dragon::CHIAROSCURO ||
         dtype == dragon::SUCKS)

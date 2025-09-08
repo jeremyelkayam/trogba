@@ -1,9 +1,9 @@
 #include "tutorial_box.h"
 #include "constants.h"
-#include "common_stuff.h"
 #include "bn_regular_bg_items_textbox.h"
 #include "bn_sprite_items_trogdor_variable_8x16_font.h"
 #include "small_fonts.h"
+#include "common_functions.h"
 
 namespace trog { 
 
@@ -32,7 +32,7 @@ tutorial_box::tutorial_box() :
 
 void tutorial_box::set_text(const char *text){
     _text_sprites.clear();
-    bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(text);
+    bn::vector<bn::string<64>, 3> lines = split_into_lines(text);
 
     for(uint8_t i = 0; i < lines.size(); i++ ){    
         _small_gen.generate(_box.x() - 115, _box.y() - 12 + i*9, lines.at(i), _text_sprites);

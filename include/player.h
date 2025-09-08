@@ -40,10 +40,7 @@ namespace trog {
 
             bool invincible();
             virtual void die(const unsigned int &death_index);
-
-            //todo: this doesn't need to be in this class
-            bool any_dpad_input();
-
+            
             void free_from_collisionbox(const bn::fixed_rect &box);
 
             void update_next_pos();

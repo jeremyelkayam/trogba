@@ -56,39 +56,6 @@ namespace trog {
 
             bn::string<10> play_time();            
 
-            /*
-
-            * Formats a longer string into up to 3 separate strings, separated
-            * automatically based on width.
-            * 
-            * Throws an error if the string is too big to fit into 3 lines (1 text box).
-            */
-            static bn::vector<bn::string<64>, 3> split_into_lines(
-                const char *text, 
-                const uint8_t max_line_width = 220,
-                const int8_t *char_widths = small_font_character_widths
-            );
-
-            static bool any_dpad_input() {
-                return bn::keypad::right_pressed() ||
-                    bn::keypad::left_pressed() ||
-                    bn::keypad::up_pressed() ||
-                    bn::keypad::down_pressed();
-            }
-
-        //Given two scale factors and the current coordinate,
-        // and the center of zooming, calculate the new position
-        // of the zoomed coordinate.
-        // Useful for zooming in/out of entire screens of sprites
-            static bn::fixed scale_coord(const bn::fixed &old_scale, 
-                const bn::fixed &new_scale, 
-                const bn::fixed &old_coord, 
-                const bn::fixed &center_coord)
-            {
-                return (new_scale / old_scale) * 
-                    (old_coord - center_coord) + center_coord;
-            }
-
             void update_achievement(const bn::string<8> &tag, 
                 const long &new_value=0);
             
@@ -98,9 +65,6 @@ namespace trog {
             void update();
 
             bn::vector<dragon, NUM_DRAGONS> available_dragons();
-
-            static bn::string<64> to_lower(const bn::string<64> &s);
-            static bn::string<64> to_upper(const bn::string<64> &s);
 
         private:
         

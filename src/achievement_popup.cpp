@@ -3,7 +3,7 @@
 #include "bn_sprite_items_achievement_box_narrow.h"
 #include "small_fonts.h"
 #include <bn_sound_items.h>
-#include "common_stuff.h"
+#include "common_functions.h"
 
 namespace trog { 
 
@@ -39,7 +39,7 @@ achievement_popup::achievement_popup(const bn::fixed &sound_vol,
     
 
     bn::fixed yoffset = 0;
-    bn::vector<bn::string<64>, 3> lines = common_stuff::split_into_lines(
+    bn::vector<bn::string<64>, 3> lines = split_into_lines(
         achievement_name.c_str(), 119);
     yoffset = -9 * lines.size() / 2;
     for(const bn::string<64> &line : lines)
