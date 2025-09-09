@@ -166,7 +166,7 @@ bn::optional<scene_type> achievements_scene::update()
         }
     }
 
-    if(any_dpad_input())
+    if(any_dpad_pressed())
     {
         update_info_box();
     }

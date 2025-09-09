@@ -30,6 +30,12 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
         _common_stuff(common_stuff),
         _next_scene(next_scene) {
 
+
+    if(dtype == dragon::TROGDOR)
+    {
+        _common_stuff.dialog.reset(new trog::dialog("This version of Trogdor has many different playable dragons, each with their own unique traits and abilities. Try to get them all!"));
+    }
+    
     _a_button.set_visible(false);
 
     bn::sprite_text_generator serif_white(serif_font_white);

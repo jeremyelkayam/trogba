@@ -12,13 +12,13 @@ namespace trog {
     * 
     * Throws an error if the string is too big to fit into 3 lines (1 text box).
     */
-    static bn::vector<bn::string<64>, 3> split_into_lines(
+    inline bn::vector<bn::string<64>, 6> split_into_lines(
         const char *text, 
         const uint8_t max_line_width = 220,
         const int8_t *char_widths = small_font_character_widths
     )
     {
-        bn::vector<bn::string<64>, 3>result;
+        bn::vector<bn::string<64>, 6> result;
         
         uint8_t line_width = 0;
         uint8_t line_num = 0;
@@ -70,7 +70,15 @@ namespace trog {
         return result;
     }
 
-    static bool any_dpad_input() {
+    inline bool any_dpad_input() {
+        return bn::keypad::right_held() ||
+            bn::keypad::left_held() ||
+            bn::keypad::up_held() ||
+            bn::keypad::down_held();
+    }
+
+    
+    inline bool any_dpad_pressed() {
         return bn::keypad::right_pressed() ||
             bn::keypad::left_pressed() ||
             bn::keypad::up_pressed() ||
@@ -81,7 +89,7 @@ namespace trog {
 // and the center of zooming, calculate the new position
 // of the zoomed coordinate.
 // Useful for zooming in/out of entire screens of sprites
-    static bn::fixed scale_coord(const bn::fixed &old_scale, 
+    inline bn::fixed scale_coord(const bn::fixed &old_scale, 
         const bn::fixed &new_scale, 
         const bn::fixed &old_coord, 
         const bn::fixed &center_coord)
@@ -91,7 +99,7 @@ namespace trog {
     }
 
 
-    static bn::string<64> to_lower(const bn::string<64> &s)
+    inline bn::string<64> to_lower(const bn::string<64> &s)
     {
     bn::string<64> result;
     for(const char &c : s)
@@ -108,7 +116,7 @@ namespace trog {
     return result;
     }   
 
-    static bn::string<64> to_upper(const bn::string<64> &s)
+    inline bn::string<64> to_upper(const bn::string<64> &s)
     {
         bn::string<64> result;
         for(const char &c : s)

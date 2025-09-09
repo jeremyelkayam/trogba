@@ -15,6 +15,7 @@
 #include "achievements.h"
 #include "sram_data.h"
 #include "small_fonts.h"
+#include "dialog.h"
 
 
 namespace trog {
@@ -25,8 +26,10 @@ namespace trog {
             bn::random rand;
             bn::vector<bn::pair<uint8_t, bn::string<32>>, 20> cutscene_levels;
             bn::array<char, 8> default_format_tag;
+            
+            bn::unique_ptr<trog::dialog> dialog;
 
-            //todo make it a queue
+
             bn::deque<dragon, 4> newly_unlocked;
 
 

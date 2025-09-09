@@ -12,7 +12,8 @@ class dialog
         dialog(const char *text);
 
     private:
-        bn::vector<bn::sprite_ptr, 16> _text_sprites;
+        bn::vector<bn::sprite_ptr, 64> _text_sprites;
+        bn::regular_bg_ptr _box;
     
 };
     

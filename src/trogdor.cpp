@@ -2,6 +2,7 @@
 #include "dragon_data.h"
 #include "bn_sprite_items_trogdor.h"
 #include "common_functions.h"
+#include "bn_log.h"
 
 namespace trog { 
 
@@ -55,6 +56,7 @@ void trogdor::update_anim(){
 void trogdor::update(){
     player::update();
     if(!dead() && any_dpad_input()){
+        BN_LOG("UPDATE WALKCYCLE");
         _walkcycle.update();
     }
 }
