@@ -18,6 +18,7 @@ namespace trog{
         bn::vector<bn::sprite_ptr, 64> _text_sprites;
         bn::sprite_ptr _a_button;
         bn::sprite_animate_action<2> _a_button_anim;
+        const dragon _dtype;
 
         // bn::optional<bn::sprite_palette_ptr> _flashing_palette;
         bn::optional<bn::sprite_palette_hue_shift_loop_action> 
