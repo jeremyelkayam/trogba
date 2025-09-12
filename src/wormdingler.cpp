@@ -137,7 +137,7 @@ void tongue::update(){
     bn::fixed dx = 0.25;
     if(_sprite.horizontal_flip()) dx *= -1;
 
-    if(_retracting) dx *= -1;
+    if(_retracting) dx *= -2;
 
     _speed += dx;
 
