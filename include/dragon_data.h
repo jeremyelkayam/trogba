@@ -76,7 +76,7 @@ constexpr const dragon_data dragons[4] =
         bn::sprite_items::strongsad,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead,
-        36, 40, 1
+        36, 40, 1.1
     },
     {
         "WORMDINGLER",
@@ -89,7 +89,7 @@ constexpr const dragon_data dragons[4] =
         bn::sprite_items::coach_z,
         bn::regular_bg_items::wormsmile,
         bn::regular_bg_items::wormdead,
-        42, 16, 0.7
+        40, 16, 0.7
     }
 };
 

@@ -5,6 +5,7 @@
 #include "bn_sprite_items_shockwave.h"
 #include <bn_keypad.h>
 #include <bn_colors.h>
+#include <bn_log.h>
 #include "common_functions.h"
 
 #define NORM_WLKCL bn::create_sprite_animate_action_forever(_sprite, 5, bn::sprite_items::sucks.tiles_item(), 1, 2, 3, 2, 1, 0)
@@ -21,8 +22,6 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     _sweat_anim(bn::create_sprite_animate_action_forever(_sweat, 4, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3, 0, 0)),
     _stomp_timer(0),
     _shockwave(0,0),
-    _hi(0.6),
-    _lo(0.3),
     _oscillate_time(1) {
     _shockwave.set_visible(false);
     _sweat.set_visible(false);
@@ -100,6 +99,7 @@ void sucks::update(){
         if(_fade_action->done()){
             _fade_action.reset();
         }else{
+            // BN_LOG("updating fade action. fade intensity ", get_palette().fade_intensity());
             _fade_action->update();
         }
     }
@@ -191,6 +191,11 @@ void sucks::update_win_anim(){
 void sucks::die(const unsigned int &death_index){
     player::die(death_index);
     reset_fade();
+}
+
+void sucks::set_visible(const bool &visible){
+    player::set_visible(visible);
+    _sweat.set_visible(visible);
 }
 
 void sucks::reset_fade(){

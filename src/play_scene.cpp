@@ -196,7 +196,6 @@ bn::optional<scene_type> play_scene::update(){
 
     if(_win_pause_time == 1){
         bool troghammer_arrived = _troghammer && _troghammer->in_play();
-        BN_LOG("stand still time: ", _stand_still_time);
 
         if(_stand_still_time < 20)
         {
@@ -304,7 +303,6 @@ bn::optional<scene_type> play_scene::update(){
         //todo: this can be abused by just running into a wall.
         if(_player->can_move() && !_player->moving())
         {
-            BN_LOG("stand still time: ", _stand_still_time);
             ++_stand_still_time;
         }
 

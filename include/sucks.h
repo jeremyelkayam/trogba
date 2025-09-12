@@ -27,7 +27,8 @@ namespace trog {
             unsigned int _stomp_timer;
             shockwave _shockwave;
             bn::optional<bn::sprite_palette_fade_to_action> _fade_action;
-            const bn::fixed _hi,_lo;
+            static constexpr bn::fixed _hi = 0.6;
+            static constexpr bn::fixed _lo = 0.3;
             unsigned int _oscillate_time;
 
 
@@ -63,5 +64,7 @@ namespace trog {
 
             virtual void update_win_anim();
             bn::fixed_point foot_pos();
+
+            virtual void set_visible(const bool &visible) override final;
     };
 }

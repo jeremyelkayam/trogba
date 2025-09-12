@@ -110,11 +110,17 @@ void player::update_next_pos(){
         _next_pos.set_y(_pos.y() + _speed);
     }
     if(bn::keypad::left_held()){
-        set_horizontal_flip(true);
+        if(!dead())
+        {
+            set_horizontal_flip(true);
+        }
         _next_pos.set_x(_pos.x() - _speed);
     }
     if(bn::keypad::right_held()){
-        set_horizontal_flip(false);
+        if(!dead())
+        {
+            set_horizontal_flip(false);
+        }
         _next_pos.set_x(_pos.x() + _speed);
     }
 
