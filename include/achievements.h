@@ -52,6 +52,11 @@ namespace trog {
 
             int total_unlocked() const;
 
+            void clear_popups()
+            {
+                _popups.clear();
+            }
+
 
 
     };

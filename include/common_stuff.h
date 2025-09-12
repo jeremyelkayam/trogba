@@ -61,6 +61,11 @@ namespace trog {
 
             void update_achievement(const bn::string<8> &tag, 
                 const long &new_value=0);
+
+            void clear_popups()
+            {
+                _acm.clear_popups();
+            }
             
             bool is_achieved(const bn::string<8> &tag) const
                 {return _acm.is_achieved(tag);}

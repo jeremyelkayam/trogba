@@ -13,6 +13,7 @@
 #include <bn_music.h>
 #include <bn_bg_palette_ptr.h>
 #include <bn_log.h>
+#include <bn_sprite_tiles.h>
 
 #include "bn_regular_bg_items_day.h"
 #include "bn_regular_bg_items_night.h"
@@ -362,8 +363,20 @@ bn::optional<scene_type> play_scene::update(){
         if(_player->burninating() && !was_burninating){
             _burninate_pause_time = 1;
             _common_stuff.commentary.burninate(_sesh.get_dragon());
-            
+
+            if(bn::sprite_tiles::available_tiles_count() < 300)
+            {
+                //To be safe, if we don't have at least 300 tiles available,
+                // let's hide achievement popups.
+                _common_stuff.clear_popups();
+            }
+
+            BN_LOG("available tiles before burninating: ", 
+                bn::sprite_tiles::available_tiles_count());
             _overlay_text.reset(new burninate_text());
+            
+            BN_LOG("available tiles after burninating: ", 
+                bn::sprite_tiles::available_tiles_count());
         }else if(!_player->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
@@ -394,6 +407,15 @@ bn::optional<scene_type> play_scene::update(){
         }
         
         if(_player->dead() && !was_dead) {
+
+            if(bn::sprite_tiles::available_tiles_count() < 240)
+            {
+                //To be safe, if we don't have at least 240 tiles available,
+                // let's hide achievement popups.
+
+                _common_stuff.clear_popups();
+            }
+
             if(_sesh.get_mans() != 0){
                 _common_stuff.commentary.sworded(_sesh.get_dragon());
             }
@@ -471,6 +493,13 @@ bn::optional<scene_type> play_scene::update(){
 
 
         if(_player->ready_to_respawn()){
+
+            if(bn::sprite_tiles::available_tiles_count() < 160)
+            {
+                //To be safe, if we don't have at least 160 tiles available,
+                // let's hide achievement popups.
+                _common_stuff.clear_popups();
+            }
             _overlay_text.reset();
             if(_sesh.get_mans() == 0) {
                 result = scene_type::LOSE;
