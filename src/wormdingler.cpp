@@ -135,9 +135,14 @@ tongue::tongue(bn::fixed_point pos, bool facing_left,
 void tongue::update(){
 
     bn::fixed dx = 0.25;
+    bn::fixed speed_cap = 5;
     if(_sprite.horizontal_flip()) dx *= -1;
 
-    if(_retracting) dx *= -2;
+    if(_retracting)
+    {
+        dx *= -2;
+        speed_cap *= 2;
+    }
 
     _speed += dx;
 
@@ -150,8 +155,8 @@ void tongue::update(){
         bn::sound_items::hiss_rev.play(_vol, 2, 0);
     }
 
-    if(_speed < -5) _speed = -5;
-    else if(_speed > 5) _speed = 5;
+    if(_speed < -speed_cap) _speed = -speed_cap;
+    else if(_speed > speed_cap) _speed = speed_cap;
 
     _sprite.set_x(_sprite.x() + _speed);
 
