@@ -26,7 +26,7 @@ namespace trog {
 
         public:
             constexpr const static unsigned int MOVE_TIME = 20;
-            constexpr const static unsigned int TOTAL_TIME = 400;
+            constexpr const static unsigned int TOTAL_TIME = 210;
             constexpr const static unsigned int HEIGHT = 42;
             achievement_popup(const bn::fixed &sound_vol,
                 const bn::string<32> &achievement_name,

@@ -371,12 +371,8 @@ bn::optional<scene_type> play_scene::update(){
                 _common_stuff.clear_popups();
             }
 
-            BN_LOG("available tiles before burninating: ", 
-                bn::sprite_tiles::available_tiles_count());
             _overlay_text.reset(new burninate_text());
             
-            BN_LOG("available tiles after burninating: ", 
-                bn::sprite_tiles::available_tiles_count());
         }else if(!_player->burninating() && was_burninating){
             //our trogmeter is at 0 now, so this is a good time to autosave
             autosave(false);
