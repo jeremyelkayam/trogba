@@ -157,12 +157,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                 );
             }
         }
-    }
 
-
-    if(_sesh.get_level() != 0){
         _knights.emplace_front(-59, 31, false, common_stuff.rand);
         _knights.emplace_front(33, -50, true, common_stuff.rand);
+
     }
 
     if(_sesh.troghammer_enabled()){
@@ -173,6 +171,10 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         if(saved_sesh.exists && saved_sesh.thinfo.current_state != troghammer_state::UNALERTED){
             _troghammer.reset(new troghammer(saved_sesh.thinfo, true, _sesh.get_level(), common_stuff.rand));
             _void_tower->set_item(bn::sprite_items::voidtower, 1);
+        }
+
+        if(_sesh.get_level() >= 90){
+            spawn_troghammer(false);
         }
     }
 

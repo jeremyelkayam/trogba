@@ -28,7 +28,7 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, 
     _hitbox.set_height(TROG_HAMMER_HEIGHT);
 
     //for every 10 levels the waiting time gets 10% lower.
-    _total_wait_time -= _total_wait_time * (level / 9) * 0.1;
+    _total_wait_time -= _total_wait_time * ((level) / 9) * 0.1;
     _states.push_back(troghammer_state::ARRIVED);
 
 
@@ -62,7 +62,7 @@ troghammer::troghammer(const bn::fixed_point &pos, bool facingRight, int level, 
 }
 troghammer::troghammer(troghammer_status status, bool facingRight, int level, bn::random &rand) : 
     troghammer(status.pos, facingRight, level, rand) {
-    while(_current_state != status.current_state){ 
+    while(!_states.empty() && _current_state != status.current_state){ 
         _current_state = _states.back(); 
         _states.pop_back();
     }
@@ -82,6 +82,7 @@ troghammer::troghammer(troghammer_status status, bool facingRight, int level, bn
 
 
 void troghammer::advance_to_next_state(){
+    BN_ASSERT(!_states.empty(), "State queue must not be empty when advancing");
     _new_state = true;
     _current_state = _states.back();
     _states.pop_back();
