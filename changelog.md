@@ -1,5 +1,29 @@
 # Changelog
 
+## v3.1 : Trogdor and Friends Update
+
+### New features 
+
+- Added achievements. When an achievement is unlocked, a popup will appear to notify the player. Achievements can be viewed under the new Extras menu.
+- Added cutscene viewer menu. Any cutscenes that have been previously viewed can be rewatched as many times as you like.
+- Added new cutscenes for levels between 50 and 100. The original Trogdor did not have any cutscenes in the back half of the game.
+- New playable characters: Strong Sad's chiaroscuro dragon, Wormdingler, and the S is for Sucks Dragon.
+  - When you start a new game, you can select which character you'd like to play as. This is also where you can choose to play the tutorial.
+  - These characters have tweaked stats and unique abilities compared to Trogdor.
+  - Each character has unique voice commentary sampled from various HSR media, corresponding to whichever character drew them (e.g. Coach Z for Wormdingler, etc). 
+  - Each character also has a new jingle that plays when they win a level, composed by the lovely Dot Maetrix. Thanks!
+  - For most cutscenes, each character has their own cutscene variant. These variations can be selected from the cutscene viewer menu.
+  - Characters can be unlocked by gaining achievements or simply accruing play time.
+
+### Changes and tweaks
+- Menu system has been reworked. Default menu now allows you to easily start a new game or continue an existing one, with submenus to navigate through additional content.
+- The first time you start up the game, the tutorial level will play automatically. Afterward, it can be selected from the character select screen.
+- When enabled, the Troghammer now appears immediately on levels 90 and above.
+
+### Fixes
+- Numerous VRAM crashes and visual bugs fixed. Too many to count.
+- Removed Large Bean
+
 ## v2.1
 
 ### New features
@@ -18,6 +42,7 @@
 - Fixed a bug where, after changing direction while burninating, Trogdor's fire breath would appear on the wrong side of his body for 1 frame.
 - Fixed a graphical bug in the "stompin' good!" cutscene where Trogdor's fire breath would appear on screen after Trogdor ran away.
 - Fixed a bug where, if a burning peasant returned to a cottage that was close to another cottage, both cottages would burn.
+- Removed Large Bean
 
 ## v2.0 : Troghammer Update
 
