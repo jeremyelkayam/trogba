@@ -5,6 +5,7 @@
 ### New features 
 
 - Added achievements. When an achievement is unlocked, a popup will appear to notify the player. Achievements can be viewed under the new Extras menu.
+- The achievement system is extensible and supports many different types of unlockable achievements. Some achievements' unlock conditions are shown to the player, while others are not. Watch this space, because I'll probably be adding more achievements in future updates!
 - Added cutscene viewer menu. Any cutscenes that have been previously viewed can be rewatched as many times as you like.
 - Added new cutscenes for levels between 50 and 100. The original Trogdor did not have any cutscenes in the back half of the game.
 - New playable characters: Strong Sad's chiaroscuro dragon, Wormdingler, and the S is for Sucks Dragon.
@@ -16,12 +17,14 @@
   - Characters can be unlocked by gaining achievements or simply accruing play time.
 
 ### Changes and tweaks
-- Menu system has been reworked. Default menu now allows you to easily start a new game or continue an existing one, with submenus to navigate through additional content.
+- Menu system has been reworked. Default menu now allows you to quickly start a new game or continue an existing one, with submenus to navigate through additional content.
 - The first time you start up the game, the tutorial level will play automatically. Afterward, it can be selected from the character select screen.
-- When enabled, the Troghammer now appears immediately on levels 90 and above.
+- When enabled, the Troghammer now appears immediately on levels 90 and above, providing additional challenge.
+- Save format has been changed. Existing saves will be upconverted to v3.1 format upon boot.
+- Peasant and archer spawn rates, as well as hitboxes, have been further adjusted to improve balance.
 
 ### Fixes
-- Numerous VRAM crashes and visual bugs fixed. Too many to count.
+- Numerous VRAM crashes and minor visual bugs fixed. Too many to count.
 - Removed Large Bean
 
 ## v2.1
