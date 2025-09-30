@@ -1,6 +1,10 @@
 #include "achievements.h"
 #include <bn_math.h>
 #include <bn_sram.h>
+#include <bn_log.h>
+#include <bn_sprite_tiles.h>
+#include <bn_keypad.h>
+#include "constants.h"
 #include "achievement_rom_data.h"
 
 namespace trog
@@ -50,7 +54,7 @@ bool achievements_mgr::update_achievement(const bn::string<8> &tag,
 
     if(!was_achieved && is_achieved(tag))
     {
-        show_popup(tag);
+        enqueue_popup(tag);
         bn::sram::write(_sram_data);
         return true;
     }
@@ -81,6 +85,26 @@ void achievements_mgr::update()
         p.update();
     }
     bn::erase_if(_popups, popup_done);
+
+
+    while(!_popup_queue.empty() && 
+        bn::sprite_tiles::available_tiles_count() > 300 && 
+        !_popups.full())
+    {
+        const achievement &data = _achievements.at(_popup_queue.front());
+
+        _popups.emplace_back(_sound_vol, data.name, data.sram_index);
+
+        _popup_queue.pop_front();
+    }
+
+    
+    #ifdef DEBUG
+        if(bn::keypad::r_pressed())
+        {
+            enqueue_popup("night");
+        }
+    #endif
 }
 
 bool achievements_mgr::is_achieved(const bn::string<8> &tag) const
@@ -89,12 +113,9 @@ bool achievements_mgr::is_achieved(const bn::string<8> &tag) const
         >= _achievements.at(tag).threshold;
 }
 
-void achievements_mgr::show_popup(const bn::string<8> &tag)
+void achievements_mgr::enqueue_popup(const bn::string<8> &tag)
 {
-    const achievement &data = _achievements.at(tag);
-
-    _popups.emplace_back(_sound_vol, data.name, data.sram_index);
-
+    _popup_queue.push_back(tag);
 }
 
 int achievements_mgr::max_index(long threshold) const

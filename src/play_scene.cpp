@@ -536,8 +536,7 @@ bn::optional<scene_type> play_scene::update(){
 
     #ifdef DEBUG 
         //Instantly win level by pressing L or R
-        if(bn::keypad::l_pressed() || 
-            bn::keypad::r_pressed()) result = 
+        if(bn::keypad::l_pressed()) result = 
             scene_type::LEVELBEAT;
     #endif
 

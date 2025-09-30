@@ -3,6 +3,7 @@
 #include <bn_string.h>
 #include <bn_sprite_item.h>
 #include <bn_unordered_map.h>
+#include <bn_deque.h>
 
 #include "achievement_popup.h"
 #include "sram_data.h"
@@ -28,10 +29,11 @@ namespace trog {
 
             
             bn::vector<achievement_popup, 4> _popups;
+            bn::deque<bn::string<8>, 16> _popup_queue;
 
             saved_data &_sram_data;
 
-            void show_popup(const bn::string<8> &tag);
+            void enqueue_popup(const bn::string<8> &tag);
 
             int max_index(long threshold) const;
 
