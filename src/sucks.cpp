@@ -101,17 +101,16 @@ void sucks::update(){
         if(_fade_action->done()){
             _fade_action.reset();
         }else{
-            // BN_LOG("updating fade action. fade intensity ", get_palette().fade_intensity());
+            BN_LOG("updating fade action. fade intensity ", get_palette().fade_intensity());
             _fade_action->update();
+            BN_LOG("fade action updated");
         }
     }
     if(_sweat){
         if(any_dpad_input()){
             update_sweat_pos(attachments_y_offset() - 13);
         }
-        BN_LOG("update sweat anim...");
         _sweat_anim->update();
-        BN_LOG("sweat anim updated...");
     }
 }
 
@@ -119,6 +118,8 @@ bn::fixed_point sucks::foot_pos(){
     bn::fixed xoffset = 13 * (_sprite.horizontal_flip() ? -1 : 1);
     return bn::fixed_point(get_x() + xoffset, get_y() + 20);
 }
+
+
 
 void sucks::update_anim(){
     entity::update_anim();
@@ -200,6 +201,9 @@ void sucks::set_visible(const bool &visible){
     player::set_visible(visible);
     if(_sweat) _sweat->set_visible(visible);
     if(_shockwave) _shockwave->set_visible(visible);
+    //This makes things look a little weird 
+    // when you're returning from a submenu or a pause screen, but w/e
+    reset_fade();
 }
 
 void sucks::reset_fade(){

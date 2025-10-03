@@ -3,6 +3,7 @@
 #include "create_dragon.h"
 
 #include <bn_sound_items.h>
+#include <bn_log.h>
 
 namespace trog {
 
@@ -55,6 +56,8 @@ bonus_scene::bonus_scene(session_info &sesh, common_stuff &common_stuff) :
     {
         common_stuff.update_achievement("allhuts", 2);
     }
+
+    BN_LOG("TREASURE HUT ENTERED.");
 
 }
 

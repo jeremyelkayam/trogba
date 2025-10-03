@@ -31,7 +31,6 @@ namespace trog {
             static constexpr bn::fixed _lo = 0.3;
             unsigned int _oscillate_time;
 
-
             virtual void start_burninating();
             virtual void stop_burninating();
 
