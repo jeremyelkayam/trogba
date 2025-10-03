@@ -17,14 +17,16 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     player(xcor, ycor, SDATA.width, SDATA.height, SDATA.speed, 
         bn::fixed_point(42, 1),
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
-    _sweat(bn::sprite_items::sucksweat.create_sprite(0,0)),
     _walkcycle(NORM_WLKCL),
-    _sweat_anim(bn::create_sprite_animate_action_forever(_sweat, 4, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3, 0, 0)),
     _stomp_timer(0),
-    _shockwave(0,0),
     _oscillate_time(1) {
-    _shockwave.set_visible(false);
-    _sweat.set_visible(false);
+}
+
+void sucks::init_sweat(bn::fixed yoffset)
+{
+    _sweat = bn::sprite_items::sucksweat.create_sprite(0,0);
+    _sweat_anim = bn::create_sprite_animate_action_forever(*_sweat, 4, bn::sprite_items::sucksweat.tiles_item(), 0, 0, 0, 1, 2, 3, 0, 0);
+    update_sweat_pos(yoffset);
 }
 
 void sucks::update(){
@@ -45,34 +47,33 @@ void sucks::update(){
 
         if(_stomp_timer == TROG_SUCK_STOMP_FRAME){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
-            _shockwave.set_position(foot_pos());
-            _shockwave.set_visible(true);
+            
+            _shockwave = shockwave(foot_pos());
 
 
             get_palette().set_fade(bn::colors::red, 0);
             _fade_action.emplace(get_palette(), 30, _hi);
         }
-        if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && !_shockwave.done()){
-            _shockwave.update();
+        if(_stomp_timer >= TROG_SUCK_STOMP_FRAME && _shockwave && 
+            !_shockwave->done()){
+            
+                _shockwave->update();
         }
-        if(_shockwave.done()){
-            if(_shockwave.visible()){
-                _shockwave.set_visible(false);
+        if(_shockwave && _shockwave->done()){
+            _shockwave.reset();
 
-                get_palette().set_fade(bn::colors::red, _hi);
-                _oscillate_time = 10;
-                _fade_action.emplace(get_palette(), _oscillate_time, _lo);
-                if(!_iframes) _sweat.set_visible(true);
-                update_sweat_pos(-12);
-                _sweat_anim.reset();
-            }
+            get_palette().set_fade(bn::colors::red, _hi);
+            _oscillate_time = 10;
+            _fade_action.emplace(get_palette(), _oscillate_time, _lo);
+            if(!_iframes) init_sweat(-12);
+            
         }
 
         // if we are here, we have control of the suck dragon again
 
 
         if(_iframes == 1){
-            _sweat.set_visible(true);
+            init_sweat(attachments_y_offset() - 13);
         }
 
 
@@ -103,11 +104,13 @@ void sucks::update(){
             _fade_action->update();
         }
     }
-    if(_sweat.visible()){
+    if(_sweat){
         if(any_dpad_input()){
             update_sweat_pos(attachments_y_offset() - 13);
         }
-        _sweat_anim.update();
+        BN_LOG("update sweat anim...");
+        _sweat_anim->update();
+        BN_LOG("sweat anim updated...");
     }
 }
 
@@ -195,28 +198,30 @@ void sucks::die(const unsigned int &death_index){
 
 void sucks::set_visible(const bool &visible){
     player::set_visible(visible);
-    _sweat.set_visible(visible);
+    if(_sweat) _sweat->set_visible(visible);
+    if(_shockwave) _shockwave->set_visible(visible);
 }
 
 void sucks::reset_fade(){
     _fade_action.emplace(get_palette(), 20, 0);
-    _sweat.set_visible(false);
+    _sweat.reset();
+    _sweat_anim.reset();
 }
 
 
 void sucks::update_sweat_pos(bn::fixed yoffset){
-    _sweat.set_x(_pos.x() + (_sprite.horizontal_flip() ? -1 : 1) * 6);
-    _sweat.set_y(_pos.y() + yoffset);
-    _sweat.set_horizontal_flip(_sprite.horizontal_flip());    
+    _sweat->set_x(_pos.x() + (_sprite.horizontal_flip() ? -1 : 1) * 6);
+    _sweat->set_y(_pos.y() + yoffset);
+    _sweat->set_horizontal_flip(_sprite.horizontal_flip());    
 }
 
-shockwave::shockwave(const bn::fixed &x, const bn::fixed &y) {
+shockwave::shockwave(const bn::fixed_point &pos) {
     for(bn::fixed angle = 0; angle < 360;  angle += 90){
         bn::sprite_ptr sprite = bn::sprite_items::shockwave.create_sprite(0,0);
         sprite.set_rotation_angle(angle);
         _sprites.emplace_back(sprite);
     }
-    set_position(bn::fixed_point(x, y));
+    set_position(pos);
     
     for(bn::sprite_ptr &sprite : _sprites) {
         _anims.emplace_back(bn::create_sprite_animate_action_once(sprite, 0, bn::sprite_items::shockwave.tiles_item(),
