@@ -58,6 +58,12 @@ class tongue : public entity {
                 
             virtual void update_firebreath() override final;
 
+            virtual void set_visible(const bool &visible) override final
+            {
+                player::set_visible(visible);
+                if(_tongue) _tongue->set_visible(visible);
+            }
+
 
     };
 

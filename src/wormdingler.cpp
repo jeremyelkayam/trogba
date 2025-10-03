@@ -79,11 +79,6 @@ void wormdingler::update(){
             _tongue->retract();
         }
 
-        if(_iframes)
-        {
-            _tongue->set_visible(_sprite.visible());
-        }
-
         if(_tongue->done() || dead())
         {
             _tongue.reset();
