@@ -52,7 +52,7 @@ char_unlock_scene::char_unlock_scene(session_info &sesh,
 
     _happy_dragon.set_item(dd.smile);
     
-    dd.jingle.play(common_stuff.savefile.options.sound_vol, false);
+    dd.jingle.play(common_stuff.savefile.options.music_vol, false);
 
     
     bn::fixed xcor = 70;

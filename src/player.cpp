@@ -235,7 +235,7 @@ void player::kill_peasant(peasant &peasant)
 void player::start_burninating(){
     _burninate_time = _burninate_length;
     enable_breath();
-    bn::sound_items::burninate.play(_common_stuff.savefile.options.sound_vol);
+    bn::sound_items::burninate.play(_common_stuff.savefile.options.music_vol);
 }
 
 void player::stop_burninating(){
