@@ -49,6 +49,7 @@ void sucks::update(){
             _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 8);
             
             _shockwave = shockwave(foot_pos());
+            bn::sound_items::heavy_crash.play(_common_stuff.savefile.options.sound_vol);
 
 
             get_palette().set_fade(bn::colors::red, 0);
@@ -148,7 +149,6 @@ void sucks::update_anim(){
 void sucks::stomp(){
     _stomp_timer = 1;
     _sprite.set_tiles(bn::sprite_items::sucks.tiles_item(), 7);
-    _shockwave.reset();
 }
 
 void sucks::start_burninating(){

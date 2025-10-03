@@ -67,6 +67,7 @@ troghammer::troghammer(troghammer_status status, bool facingRight, int level, bn
         _states.pop_back();
     }
 
+
     if(_current_state == troghammer_state::COMING){
         _sprite.set_scale(0.5);
         _sprite.set_horizontal_flip(!_sprite.horizontal_flip());
@@ -74,10 +75,13 @@ troghammer::troghammer(troghammer_status status, bool facingRight, int level, bn
         _sprite.set_scale(1);
         _sprite.set_z_order(FRONT_ZORDER);
         _sprite.put_above();
+        _sprite.set_visible(true);
     }
+
     
     _new_state = false;
     _timer = status.timer;
+
 }
 
 

@@ -332,7 +332,6 @@ bn::optional<scene_type> play_scene::update(){
 
                 
                 shake_screen(4, 4, 4);
-                bn::sound_items::heavy_crash.play(_common_stuff.savefile.options.sound_vol);
             }
         }       
         
@@ -433,7 +432,7 @@ bn::optional<scene_type> play_scene::update(){
         }
 
         if(_troghammer){
-            was_dead = _player->dead();  
+            was_dead = _player->dead(); 
             _troghammer->update();
 
             if(_troghammer->in_play()){
