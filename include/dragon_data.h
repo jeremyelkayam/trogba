@@ -63,7 +63,7 @@ constexpr const dragon_data dragons[4] =
         bn::sprite_items::strongbad,
         bn::regular_bg_items::sucksmile,
         bn::regular_bg_items::suckdead,
-        26, 40, 0.7
+        26, 36, 0.7
     },
     {
         "CHIAROSCURO",
@@ -76,7 +76,7 @@ constexpr const dragon_data dragons[4] =
         bn::sprite_items::strongsad,
         bn::regular_bg_items::chiarosmile,
         bn::regular_bg_items::chiarodead,
-        36, 40, 1.1
+        36, 36, 1.1
     },
     {
         "WORMDINGLER",

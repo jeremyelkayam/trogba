@@ -20,6 +20,9 @@ sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, c
     _walkcycle(NORM_WLKCL),
     _stomp_timer(0),
     _oscillate_time(1) {
+
+    set_y_offset(-2);
+
 }
 
 void sucks::init_sweat(bn::fixed yoffset)
@@ -108,7 +111,7 @@ void sucks::update(){
     }
     if(_sweat){
         if(any_dpad_input()){
-            update_sweat_pos(attachments_y_offset() - 13);
+            update_sweat_pos(attachments_y_offset() - 15);
         }
         _sweat_anim->update();
     }
