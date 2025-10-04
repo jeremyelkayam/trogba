@@ -4,6 +4,7 @@
 namespace trog
 {
     enemy_factory::enemy_factory(bn::random &random, int min, int max) : 
+        _time_since_last_spawn(0),
         _min_spawn_interval(min),
         _max_spawn_interval(max),
         _random(random)
@@ -12,7 +13,9 @@ namespace trog
             _min_spawn_interval = 60;
             _max_spawn_interval = 180;
         }
-        reset_spawn_clock();
+        //start at 0 just so that there's no spawning 
+        // pause at the beginning of the level 
+        _next_spawn = _random.get_int(0, _max_spawn_interval);
     }
 
     void enemy_factory::update()
