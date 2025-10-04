@@ -101,7 +101,7 @@ void wormdingler::demo_anim()
         8, 13, 14, 15, 0, 16, 17, 18, 19, 18, 17, 16, 0, 15, 14, 13);
 }
 
-bool wormdingler::collides_with(const entity &e){
+bool wormdingler::collides_with(const entity &e) const {
     return _hitbox.intersects(e.get_hitbox()) || 
         (_tongue && _tongue->get_hitbox().intersects(e.get_hitbox()));
 }

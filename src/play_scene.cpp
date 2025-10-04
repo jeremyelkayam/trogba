@@ -44,7 +44,6 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
         _sesh(sesh),
         _common_stuff(common_stuff),
         _hud(hud),
-        _pfact(_cottages,_peasants, common_stuff.rand),
         _afact(_archers, sesh.get_level(), common_stuff),
         _total_time(0),
         _stand_still_time(0),
@@ -155,6 +154,9 @@ play_scene::play_scene(session_info& sesh, hud& hud, common_stuff &common_stuff)
                     saved_sesh.exists && saved_sesh.cottage_burnination_status[i],
                     _common_stuff
                 );
+                
+                _pfacts.emplace_back(_cottages.back(),
+                    _peasants, common_stuff.rand);
             }
         }
 
@@ -477,9 +479,10 @@ bn::optional<scene_type> play_scene::update(){
         _peasants.remove_if(peasant_deletable);
         _archers.remove_if(archer_deletable);
 
-        //only spawn peasants if there are cottages
-        if(_cottages.size() > 0)
-            _pfact.update();
+        for(peasant_factory &pfact : _pfacts)
+        {
+            pfact.update();
+        }
         
         //only spawn archers if there are knights
         if(_knights.size() > 0)
@@ -794,7 +797,13 @@ void play_scene::update_tutorial(){
 
         if(_timer == 240){
             _cottages.emplace_back(65, 5, direction::LEFT, false, false, _common_stuff);
-            _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);
+            _pfacts.emplace_back(_cottages.back(),
+                _peasants, _common_stuff.rand);
+
+            _cottages.emplace_back(-65, -45, direction::DOWN, false, false, _common_stuff);                
+            _pfacts.emplace_back(_cottages.back(),
+                _peasants, _common_stuff.rand);
+
             _tutorial_box.reset();
             _tutorial_box.reset(new tutorial_box("Terrorize the populace by squishing PEASANTS as they leave their homes! To STOMP a peasant, move Trogdor into it."));
             _timer = 0;

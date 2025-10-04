@@ -9,12 +9,13 @@ namespace trog{
     class peasant_factory : public enemy_factory { 
     private:
             
-        bn::vector<cottage, TROG_MAX_COTTAGES>& _cottages; 
+        cottage &_cottage; 
         bn::forward_list<peasant, 20>& _peasants;
         virtual void spawn() final;
 
     public:
-        peasant_factory(bn::vector<cottage, TROG_MAX_COTTAGES>& cottages, bn::forward_list<peasant, 20>& peasants, bn::random &rand);
+        peasant_factory(cottage& cottage, 
+            bn::forward_list<peasant, 20>& peasants, bn::random &rand);
     };
 
 }

@@ -18,16 +18,16 @@ namespace trog{
         virtual ~entity() = default;
         virtual void update();
         virtual bn::fixed_rect get_hitbox() const { return _hitbox; }
-        virtual bool collides_with(const entity &e);
-        bn::fixed get_x() { return _pos.x();}
-        bn::fixed get_y() { return _pos.y();}
-        bn::fixed_point get_pos() { return _pos; }
-        bn::fixed sprite_x() { return _sprite.x();}
-        bn::fixed sprite_y() { return _sprite.y();}
+        virtual bool collides_with(const entity &e) const;
+        bn::fixed get_x() const { return _pos.x();}
+        bn::fixed get_y() const { return _pos.y();}
+        bn::fixed_point get_pos() const { return _pos; }
+        bn::fixed sprite_x() const { return _sprite.x();}
+        bn::fixed sprite_y() const { return _sprite.y();}
         void set_x(const bn::fixed &x) { _pos.set_x(x); _sprite.set_x(x);}
         void set_y(const bn::fixed &y) { _pos.set_y(y); _sprite.set_y(y);}
         void set_y_offset(const bn::fixed &y) {_offset.set_y(y); _sprite.set_y(_pos.y() + y);}
-        bool out_of_bounds();
+        bool out_of_bounds() const;
         void set_rotation_angle(const short &angle){_sprite.set_rotation_angle(angle);}
 
         virtual void set_visible(const bool &visible) {_sprite.set_visible(visible);}
@@ -72,19 +72,22 @@ namespace trog{
             bn::sprite_ptr sprite);
         
 
-        bool going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox);   
-        bool going_to_go_offscreen_x(const bn::fixed &new_x);  
+        bool going_to_go_offscreen_x(const bn::fixed_rect &new_hitbox) const;   
+        bool going_to_go_offscreen_x(const bn::fixed &new_x) const;  
         
-        bool going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox);  
-        bool going_to_go_offscreen_y(const bn::fixed &new_y);  
+        bool going_to_go_offscreen_y(const bn::fixed_rect &new_hitbox) const;  
+        bool going_to_go_offscreen_y(const bn::fixed &new_y) const;  
 
-        bool going_to_collide_x(const bn::fixed &new_x, const bn::fixed_rect &box);
-        bool going_to_collide_y(const bn::fixed &new_y, const bn::fixed_rect &box);
+        bool going_to_collide_x(const bn::fixed &new_x, 
+            const bn::fixed_rect &box) const;
+        bool going_to_collide_y(const bn::fixed &new_y, 
+            const bn::fixed_rect &box) const ;
 
-        bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction); 
+        bool going_to_go_offscreen(const bn::fixed &speed, const bn::fixed &direction) const; 
 
-        bn::fixed_point unit_vector(bn::fixed angle)
-            {return bn::fixed_point(bn::degrees_cos(angle),bn::degrees_sin(angle));}
+        bn::fixed_point unit_vector(bn::fixed angle) const 
+            {return bn::fixed_point(bn::degrees_cos(angle),
+                bn::degrees_sin(angle));}
 
         bn::sprite_palette_ptr get_palette() {return _sprite.palette();}
 

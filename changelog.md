@@ -21,7 +21,7 @@
 - The first time you start up the game, the tutorial level will play automatically. Afterward, it can be selected from the character select screen.
 - When enabled, the Troghammer now appears immediately on levels 90 and above, providing additional challenge.
 - Save format has been changed. Existing saves will be upconverted to v3.1 format upon boot.
-- Peasant and archer spawn rates, as well as hitboxes, have been further adjusted to improve balance.
+- Peasant spawning system has been overhauled to more closely mimic the original browser game. This should also improve balance, as peasant spawning is now tied to individual cottages. Compared to previous updates, levels with more cottages will be easier and levels with fewer cottages will be harder (as originally intended).
 
 ### Fixes
 - Numerous VRAM crashes and minor visual bugs fixed. Too many to count.

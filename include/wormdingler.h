@@ -44,7 +44,7 @@ class tongue : public entity {
 
             virtual void update_anim() override final;
 
-            virtual bool collides_with(const entity &e)
+            virtual bool collides_with(const entity &e) const
                 override final;
 
             virtual bool can_move() override final 

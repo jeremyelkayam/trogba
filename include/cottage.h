@@ -20,9 +20,9 @@ namespace trog {
             cottage(bn::fixed xcor, bn::fixed ycor, direction direction, bool has_treasure, bool burninated, common_stuff &common_stuff);
             virtual void update() final;
             bool burninate();
-            bool burninated() {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
-            direction get_direction() {return _direction;}
-            bool has_treasure();
+            bool burninated() const {return _time_burning > (TROG_COTTAGEFIRE_TIME / 2);}
+            direction get_direction() const {return _direction;}
+            bool has_treasure() const;
             void visit() {BN_ASSERT(_has_treasure); _has_treasure = false;}
             virtual void set_visible(const bool &visible) override;
     };

@@ -40,7 +40,6 @@ namespace trog{
         common_stuff &_common_stuff;
         bn::unique_ptr<player> _player;
         hud& _hud;
-        peasant_factory _pfact;
         archer_factory _afact;
 
         unsigned long _total_time, _stand_still_time;
@@ -64,6 +63,7 @@ namespace trog{
         
 
         bn::vector<cottage, TROG_MAX_COTTAGES> _cottages; 
+        bn::vector<peasant_factory, TROG_MAX_COTTAGES> _pfacts;
         bn::forward_list<peasant, 20> _peasants;
         bn::forward_list<archer, 4> _archers;
 

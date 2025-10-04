@@ -201,8 +201,8 @@ void sucks::set_visible(const bool &visible){
     player::set_visible(visible);
     if(_sweat) _sweat->set_visible(visible);
     if(_shockwave) _shockwave->set_visible(visible);
-    //This makes things look a little weird 
-    // when you're returning from a submenu or a pause screen, but w/e
+    //This makes things look a little weird when you're
+    // returning from a submenu or a pause screen, but w/e
     reset_fade();
 }
 
