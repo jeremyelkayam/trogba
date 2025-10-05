@@ -67,7 +67,7 @@ void sucks::update(){
             get_palette().set_fade(bn::colors::red, _hi);
             _oscillate_time = 10;
             _fade_action.emplace(get_palette(), _oscillate_time, _lo);
-            if(!_iframes) init_sweat(-12);
+            if(!_iframes) init_sweat(attachments_y_offset() - 14);
             
         }
 
@@ -75,7 +75,7 @@ void sucks::update(){
 
 
         if(_iframes == 1){
-            init_sweat(attachments_y_offset() - 13);
+            init_sweat(attachments_y_offset() - 14);
         }
 
 
