@@ -15,7 +15,7 @@ namespace trog {
 
 sucks::sucks(bn::fixed xcor, bn::fixed ycor, session_info &sesh, bool iframes, common_stuff &common_stuff, unsigned int  initial_trogmeter) : 
     player(xcor, ycor, SDATA.width, SDATA.height, SDATA.speed, 
-        bn::fixed_point(42, 1),
+        bn::fixed_point(30, 1),
         sesh, iframes, bn::sprite_items::sucks, 4, common_stuff, initial_trogmeter), 
     _walkcycle(NORM_WLKCL),
     _stomp_timer(0),
@@ -39,9 +39,7 @@ void sucks::update(){
         _walkcycle.update();
     }
 
-    if(burninating()){
-        _breath_offset.set_y(attachments_y_offset());
-    }
+    _breath_offset.set_y(attachments_y_offset());
     
     if(_stomp_timer){
         ++_stomp_timer;
